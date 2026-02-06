@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journey Across India - Spiral Quest</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>Journey Across India - Spiral Quest</h1>
+      <p class="subtitle">
+        Travel from one corner of India to the other through cities, states, and sacred sites. 
+        Boost ahead at holy places, face delays in bustling metros or remote frontiers, and reach the central square first!
+      </p>
+    </header>
+
+    <main class="app-main">
+      <section class="board-wrapper">
+        <div id="board" class="board" aria-label="India spiral journey board">
+          <!-- Tiles will be injected by JavaScript -->
+        </div>
+      </section>
+
+      <section class="sidebar">
+        <div class="controls">
+          <h2>Turn & Dice</h2>
+          <div class="current-player">
+            <span>Current Player:</span>
+            <strong id="currentPlayerLabel"></strong>
+          </div>
+          <div class="dice-display">
+            <button id="rollButton" class="primary-btn">Roll Dice</button>
+            <div class="dice-result" id="diceResult">🎲 -</div>
+          </div>
+          <div class="players-config">
+            <label>
+              Players:
+              <select id="playerCountSelect">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </label>
+            <button id="restartButton" class="secondary-btn">Restart Game</button>
+          </div>
+        </div>
+
+        <div class="legend">
+          <h2>Legend</h2>
+          <ul>
+            <li><span class="legend-color legend-boost"></span> Holy / spiritual site – move forward 5–10 squares</li>
+            <li><span class="legend-color legend-penalty"></span> Busy metro or harsh frontier – move backward or skip next turn</li>
+            <li><span class="legend-color legend-normal"></span> Major city, state, or landmark – normal stop</li>
+          </ul>
+        </div>
+
+        <div class="location-info" id="locationInfo">
+          <h2>Current Tile</h2>
+          <p class="location-name" id="locationName">Roll the dice to begin your journey from Kanyakumari!</p>
+          <p class="location-effect" id="locationEffect"></p>
+        </div>
+
+        <div class="log">
+          <h2>Travel Log</h2>
+          <div id="logEntries" class="log-entries" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Tip: Imagine tracing India from the southern tip at Kanyakumari, spiraling through coasts, plains, and the Himalayas until you reach the heart of the country.
+      </p>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
+

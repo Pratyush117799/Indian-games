@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply min-h-screen bg-parchment text-slate-900 antialiased;
+}
+
+#root {
+  @apply min-h-screen flex items-stretch;
+}
+
+.parchment-panel {
+  background-image: radial-gradient(circle at 0 0, rgba(251, 191, 36, 0.18), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(234, 179, 8, 0.16), transparent 55%);
+}
+
+.map-background {
+  background: radial-gradient(circle at 30% 0, #0f766e 0, transparent 60%),
+    radial-gradient(circle at 70% 100%, #1e3a8a 0, transparent 60%),
+    linear-gradient(to bottom, #0f766e, #1e3a8a);
+}
+
+.ship-bob {
+  animation: ship-bob 3.5s ease-in-out infinite;
+}
+
+@keyframes ship-bob {
+  0%,
+  100% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+

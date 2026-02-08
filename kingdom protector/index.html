@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharatiya Games and Esports | Indian Games</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #0c2461 100%);
+            color: #f7f7f7;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #f39c12;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .logo h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(to right, #ff9f43, #feca57);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo i { color: #f39c12; font-size: 2rem; }
+        .tagline {
+            margin-top: 8px;
+            color: #bdc3c7;
+            font-size: 1.05rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .section-title {
+            color: #feca57;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .game-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid #34495e;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+            border-color: #f39c12;
+        }
+        .game-card-image {
+            height: 180px;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #f1c40f;
+            position: relative;
+        }
+        .game-card-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7) 100%);
+        }
+        .game-card-body {
+            padding: 1.25rem;
+            flex: 1;
+        }
+        .game-card-title {
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .game-card-desc {
+            color: #bdc3c7;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .game-card-meta {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            margin-bottom: 1rem;
+        }
+        .btn-play {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-play:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
+        }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-gamepad"></i>
+            <h1>Bharatiya Games and Esports</h1>
+        </div>
+        <p class="tagline">Experience the rich heritage of India through gaming</p>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title">Featured Games</h2>
+        <div class="games-grid">
+            <article class="game-card">
+                <div class="game-card-image">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="game-card-body">
+                    <h3 class="game-card-title">Kingdom Protector</h3>
+                    <p class="game-card-desc">
+                        Play as an Indian prince defending his kingdom from demons and thieves. Choose your weapon, defeat 25 demons, and become king—or face exile. One life, one destiny.
+                    </p>
+                    <p class="game-card-meta">Single player · Easy mode · Sword, Knives, Bow, Mace</p>
+                    <a href="kingdom protector game.html" class="btn-play">
+                        <i class="fas fa-play-circle"></i> Play now
+                    </a>
+                </div>
+            </article>
+            <!-- Placeholder for more games -->
+            <article class="game-card" style="opacity: 0.85;">
+                <div class="game-card-image" style="color: #7f8c8d;">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="game-card-body">
+                    <h3 class="game-card-title">More games coming soon</h3>
+                    <p class="game-card-desc">Spice Route, Aadu Puli Aattam, and more Indian classics will be added here.</p>
+                    <button class="btn-play" disabled style="background: #7f8c8d; cursor: not-allowed;">Coming soon</button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© Bharatiya Games and Esports · Kingdom Protector & more</p>
+        <p>Play. Compete. Celebrate Indian gaming.</p>
+    </footer>
+</body>
+</html>

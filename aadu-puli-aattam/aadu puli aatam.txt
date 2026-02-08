@@ -1,0 +1,1170 @@
+<function_calls>
+<invoke name="artifacts">
+<parameter name="command">update</parameter>
+<parameter name="id">aadu-puli-cursor-prompts</parameter>
+<parameter name="old_str">Step 7: Victory Conditions
+- Explain tigers win by</parameter>
+<parameter name="new_str">Step 7: Victory Conditions
+- Explain tigers win by capturing 5+ goats
+- Explain goats win by trapping all tigers
+- Show examples of both victories
+- Complete simple puzzle to finish tutorial
+- Award "Tutorial Complete" badge
+
+2. IMPLEMENTATION:
+
+```typescript
+interface TutorialStep {
+  id: number;
+  title: string;
+  description: string;
+  highlightElements?: string[];  // CSS selectors
+  interactionRequired?: {
+    type: 'click' | 'place' | 'move';
+    target: string;
+    validation: (state: GameState) => boolean;
+  };
+  hint?: string;
+  skipable: boolean;
+}
+
+const TUTORIAL_STEPS: TutorialStep[] = [
+  {
+    id: 1,
+    title: "Welcome to Aadu Puli Aattam",
+    description: "This ancient Tamil game has been played for over 2000 years...",
+    skipable: true
+  },
+  // ... other steps
+];
+```
+
+3. VISUAL OVERLAY:
+
+- Semi-transparent dark overlay on rest of screen
+- Spotlight effect on highlighted elements
+- Arrow pointing to interactive elements
+- Speech bubble with instructions
+- Progress indicator (Step X/7)
+- Skip tutorial button
+
+4. GUIDED PRACTICE:
+
+Set up simplified scenarios:
+- Only 5 goats instead of 15
+- Slower pace
+- Clear instructions for each move
+- Undo available at any time
+- Can't make invalid moves
+
+5. HINTS SYSTEM:
+
+If player is stuck for >30 seconds:
+- First hint: Gentle suggestion
+- Second hint: Highlight valid moves
+- Third hint: Show exact solution
+
+6. COMPLETION REWARD:
+
+- Congratulatory modal
+- Summary of learned concepts
+- Unlock "Beginner" difficulty AI
+- Option to replay tutorial anytime
+
+Add "Tutorial" button to main menu.
+Save tutorial completion state in localStorage.
+```
+
+---
+
+### **Prompt 5: Sound Effects & Music**
+
+```
+Add authentic audio to Aadu Puli Aattam:
+
+1. BACKGROUND MUSIC:
+
+Create/source 3 music tracks:
+
+Menu Music:
+- Traditional South Indian instrumental
+- Instruments: Flute (venu), Mridangam (gentle)
+- Tempo: Calm, 60-80 BPM
+- Mood: Welcoming, traditional
+- Loop: 2-3 minutes
+
+Gameplay Music:
+- Slightly more energetic
+- Instruments: Veena, Tabla, Tambura drone
+- Tempo: 80-100 BPM
+- Mood: Focused, strategic
+- Loop: 3-4 minutes
+
+Victory Music:
+- Celebratory but respectful
+- Instruments: Full ensemble
+- Duration: 30 seconds
+- Triumphant but not overwhelming
+
+2. SOUND EFFECTS:
+
+UI Sounds:
+- Button click: Soft wooden "tok" sound
+- Menu open/close: Gentle whoosh
+- Toggle switch: Subtle click
+
+Piece Sounds:
+- Goat placement: Soft "bleat" (very subtle, 0.5s)
+- Goat movement: Light footstep/hop
+- Tiger movement: Heavier footstep, padded
+- Invalid move: Gentle "knock" on wood
+
+Capture Sounds:
+- Tiger captures goat: Brief roar + goat sound
+- Dramatic but not scary
+- Duration: 1 second
+
+Victory Sounds:
+- Tigers win: Triumphant roar (2 seconds)
+- Goats win: Multiple goat bleats + celebration bells
+- Draw: Neutral chime
+
+Special Sounds:
+- Turn change: Soft bell chime
+- Phase transition: Musical flourish (2 seconds)
+- Warning (tiger about to win): Tense drum beat
+- Checkmate warning: Urgent but not harsh sound
+
+3. IMPLEMENTATION:
+
+```typescript
+// Sound Manager
+class SoundManager {
+  private sounds: Map<string, HTMLAudioElement> = new Map();
+  private music: HTMLAudioElement | null = null;
+  private volume = {
+    master: 0.7,
+    music: 0.5,
+    sfx: 0.8
+  };
+
+  loadSound(name: string, path: string) {
+    const audio = new Audio(path);
+    audio.volume = this.volume.sfx * this.volume.master;
+    this.sounds.set(name, audio);
+  }
+
+  playSound(name: string) {
+    const sound = this.sounds.get(name);
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.log('Audio play failed:', e));
+    }
+  }
+
+  playMusic(track: string) {
+    if (this.music) {
+      this.music.pause();
+    }
+    this.music = new Audio(track);
+    this.music.loop = true;
+    this.music.volume = this.volume.music * this.volume.master;
+    this.music.play().catch(e => console.log('Music play failed:', e));
+  }
+
+  setVolume(type: 'master' | 'music' | 'sfx', value: number) {
+    this.volume[type] = value;
+    if (type === 'music' && this.music) {
+      this.music.volume = this.volume.music * this.volume.master;
+    }
+  }
+
+  mute() {
+    this.volume.master = 0;
+  }
+
+  unmute() {
+    this.volume.master = 0.7;
+  }
+}
+```
+
+4. AUDIO SETTINGS PANEL:
+
+UI Controls:
+- Master Volume: Slider (0-100%)
+- Music Volume: Slider (0-100%)
+- SFX Volume: Slider (0-100%)
+- Mute All: Toggle button
+- Individual sound toggles (optional)
+
+Save preferences to localStorage.
+
+5. WEB AUDIO API (Advanced):
+
+If using Web Audio API for generated sounds:
+- Create simple tone generators
+- Synthesize traditional instruments
+- Procedural sound effects
+- Better performance than audio files
+
+6. AUDIO SOURCES:
+
+Option A: Royalty-Free Libraries
+- Freesound.org
+- YouTube Audio Library
+- Incompetech (Kevin MacLeod)
+
+Option B: Simple Synthesized Sounds
+- Use Web Audio API
+- Generate simple tones
+- Lightweight and free
+
+Option C: Commission Custom Audio
+- Hire South Indian musician
+- Authentic traditional recordings
+- Professional quality
+
+7. AUDIO TIMING:
+
+Ensure sounds trigger at right moments:
+- Piece placement: Immediate
+- Movement: Start of animation
+- Capture: Mid-animation peak
+- Victory: After victory detection + 200ms delay
+
+Add subtle delay to music start (500ms) to avoid jarring experience.
+
+8. ACCESSIBILITY:
+
+- Always allow audio to be disabled
+- Don't auto-play music (browser policy)
+- Visual indicators for sound events (for hearing impaired)
+- Respect user's reduced-motion preference
+
+Test on multiple browsers (Chrome, Firefox, Safari).
+Handle audio playback failures gracefully.
+```
+
+---
+
+### **Prompt 6: Puzzle Mode**
+
+```
+Create a puzzle mode for Aadu Puli Aattam with pre-designed challenges:
+
+1. PUZZLE STRUCTURE:
+
+```typescript
+interface Puzzle {
+  id: number;
+  title: string;
+  description: string;
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  category: 'tactics' | 'strategy' | 'endgame' | 'traps';
+  
+  initialState: {
+    tigers: Array<{ id: string; position: number }>;
+    goats: Array<{ id: string; position: number | null }>;
+    goatsPlaced: number;
+    phase: 'placement' | 'movement';
+    currentPlayer: 'tiger' | 'goat';
+  };
+  
+  objective: string;
+  solutionMoves?: Move[];  // Optional: for validation
+  parMoves: number;        // Target number of moves
+  hint?: string;
+  
+  tags: string[];
+}
+```
+
+2. SAMPLE PUZZLES:
+
+Easy Puzzles (20 total):
+```typescript
+{
+  id: 1,
+  title: "First Capture",
+  description: "Help the tiger capture its first goat",
+  difficulty: 'easy',
+  category: 'tactics',
+  objective: "Tigers to move and capture the isolated goat",
+  parMoves: 1,
+  hint: "Look for a goat with an empty space behind it",
+  // ... initial state setup
+}
+
+{
+  id: 2,
+  title: "Basic Trap",
+  description: "Learn to trap a single tiger",
+  difficulty: 'easy',
+  category: 'traps',
+  objective: "Goats to move and trap the tiger in corner",
+  parMoves: 3,
+  // ... state
+}
+```
+
+Medium Puzzles (20 total):
+- Multi-move captures
+- Creating formations
+- Breaking defensive lines
+- Forced move sequences
+
+Hard Puzzles (15 total):
+- Complex trapping patterns
+- Sacrifice tactics
+- Endgame precision
+- Counter-intuitive moves
+
+Expert Puzzles (10 total):
+- Masterful combinations
+- Historical game positions
+- Near-impossible traps
+- Perfect play required
+
+3. PUZZLE UI:
+
+Puzzle Selection Screen:
+- Grid layout showing all puzzles
+- Lock icon for unsolved
+- Star rating for completed (1-3 stars based on moves)
+- Filter by difficulty/category
+- Daily puzzle highlighted
+
+Puzzle Game Screen:
+- Show objective clearly
+- Move counter
+- Par moves displayed
+- Restart puzzle button
+- Hint button (costs points)
+- Solution button (reveals answer, no rating)
+
+4. HINTS SYSTEM:
+
+3 Hint Levels:
+1. Strategic hint: "Think about controlling the center"
+2. Tactical hint: "Consider moving your piece at point 7"
+3. Direct hint: Shows the exact best move
+
+Each hint costs points:
+- Hint 1: -10 points
+- Hint 2: -25 points
+- Hint 3: -50 points
+
+5. RATING SYSTEM:
+
+Star Rating based on performance:
+- 3 Stars: Solved in ≤ par moves, no hints
+- 2 Stars: Solved in ≤ par + 3 moves, max 1 hint
+- 1 Star: Solved in any moves, unlimited hints
+- 0 Stars: Used "Show Solution"
+
+Points Calculation:
+```typescript
+function calculatePoints(puzzle: Puzzle, moves: number, hints: number): number {
+  let basePoints = 100;
+  
+  // Deduct for extra moves
+  const extraMoves = Math.max(0, moves - puzzle.parMoves);
+  basePoints -= extraMoves * 5;
+  
+  // Deduct for hints used
+  basePoints -= hints * 10;
+  
+  // Bonus for under par
+  if (moves < puzzle.parMoves) {
+    basePoints += (puzzle.parMoves - moves) * 10;
+  }
+  
+  // Difficulty multiplier
+  const multiplier = {
+    easy: 1.0,
+    medium: 1.5,
+    hard: 2.0,
+    expert: 3.0
+  }[puzzle.difficulty];
+  
+  return Math.max(0, Math.floor(basePoints * multiplier));
+}
+```
+
+6. PROGRESSION:
+
+Unlock System:
+- Easy puzzles: All unlocked from start
+- Medium: Solve 10 easy puzzles
+- Hard: Solve 15 medium puzzles
+- Expert: Solve 10 hard puzzles
+
+Daily Puzzle:
+- New puzzle every day
+- Special rewards for completion
+- Leaderboard for daily puzzle
+- Can replay previous daily puzzles
+
+7. PUZZLE CREATION TOOL (Advanced):
+
+For advanced users:
+- Create custom puzzles
+- Share with community
+- Rate other puzzles
+- Featured user puzzles
+
+8. VALIDATION:
+
+Check if puzzle is solved:
+```typescript
+function isPuzzleSolved(puzzle: Puzzle, state: GameState): boolean {
+  // Check objective completion
+  const objective = puzzle.objective.toLowerCase();
+  
+  if (objective.includes('capture')) {
+    // Check if required captures made
+    return state.goatsCaptured >= getRequiredCaptures(puzzle);
+  }
+  
+  if (objective.includes('trap')) {
+    // Check if tigers are trapped
+    return checkVictory(state) === 'goat';
+  }
+  
+  // Check against solution moves if provided
+  if (puzzle.solutionMoves) {
+    return checkMoveSequence(state.moveHistory, puzzle.solutionMoves);
+  }
+  
+  return false;
+}
+```
+
+9. PUZZLE DATABASE:
+
+Store puzzles in JSON file:
+```json
+{
+  "puzzles": [
+    {
+      "id": 1,
+      "title": "First Capture",
+      "difficulty": "easy",
+      "initialState": {
+        "tigers": [
+          {"id": "T1", "position": 6}
+        ],
+        "goats": [
+          {"id": "G1", "position": 5},
+          {"id": "G2", "position": 7}
+        ]
+      }
+    }
+  ]
+}
+```
+
+Load dynamically and parse into game state.
+
+10. ACHIEVEMENT INTEGRATION:
+
+Puzzle Achievements:
+- "First Solve": Complete first puzzle
+- "Tactician": Solve all easy puzzles
+- "Strategist": Solve all medium puzzles
+- "Master": Solve all hard puzzles
+- "Grandmaster": Solve all expert puzzles
+- "Perfect": Get 3 stars on 20 puzzles
+- "Daily Devotee": Complete 7 daily puzzles
+
+Add "Puzzle Mode" to main menu.
+Track progress and statistics.
+```
+
+---
+
+### **Prompt 7: Online Multiplayer**
+
+```
+Add real-time online multiplayer to Aadu Puli Aattam:
+
+1. BACKEND SETUP (Node.js + Socket.io):
+
+Server Structure:
+```typescript
+// server.ts
+import express from 'express';
+import { Server } from 'socket.io';
+import http from 'http';
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
+
+interface GameRoom {
+  id: string;
+  players: {
+    tiger?: string;  // Socket ID
+    goat?: string;   // Socket ID
+  };
+  gameState: GameState;
+  spectators: string[];
+}
+
+const rooms = new Map<string, GameRoom>();
+
+io.on('connection', (socket) => {
+  console.log('Player connected:', socket.id);
+  
+  // Create new game room
+  socket.on('createRoom', () => {
+    const roomId = generateRoomCode();
+    const room: GameRoom = {
+      id: roomId,
+      players: { tiger: socket.id },
+      gameState: initializeGameState(),
+      spectators: []
+    };
+    rooms.set(roomId, room);
+    socket.join(roomId);
+    socket.emit('roomCreated', { roomId, role: 'tiger' });
+  });
+  
+  // Join existing room
+  socket.on('joinRoom', (roomId: string) => {
+    const room = rooms.get(roomId);
+    if (!room) {
+      socket.emit('error', 'Room not found');
+      return;
+    }
+    
+    if (!room.players.goat) {
+      room.players.goat = socket.id;
+      socket.join(roomId);
+      socket.emit('roomJoined', { roomId, role: 'goat' });
+      io.to(roomId).emit('gameStart');
+    } else {
+      // Join as spectator
+      room.spectators.push(socket.id);
+      socket.join(roomId);
+      socket.emit('spectating', { roomId });
+    }
+  });
+  
+  // Handle moves
+  socket.on('makeMove', ({ roomId, move }) => {
+    const room = rooms.get(roomId);
+    if (!room) return;
+    
+    // Validate it's player's turn
+    const playerRole = getPlayerRole(socket.id, room);
+    if (playerRole !== room.gameState.currentPlayer) {
+      socket.emit('error', 'Not your turn');
+      return;
+    }
+    
+    // Validate move
+    if (isValidMove(move, room.gameState)) {
+      // Apply move
+      room.gameState = applyMove(room.gameState, move);
+      
+      // Broadcast to all players
+      io.to(roomId).emit('moveMade', {
+        move,
+        gameState: room.gameState
+      });
+      
+      // Check victory
+      const winner = checkVictory(room.gameState);
+      if (winner) {
+        io.to(roomId).emit('gameOver', { winner });
+      }
+    } else {
+      socket.emit('error', 'Invalid move');
+    }
+  });
+  
+  // Handle disconnect
+  socket.on('disconnect', () => {
+    console.log('Player disconnected:', socket.id);
+    // Clean up rooms where player was
+    for (const [roomId, room] of rooms.entries()) {
+      if (room.players.tiger === socket.id || room.players.goat === socket.id) {
+        io.to(roomId).emit('playerDisconnected');
+        rooms.delete(roomId);
+      }
+    }
+  });
+});
+
+function generateRoomCode(): string {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+server.listen(3001, () => {
+  console.log('Server running on port 3001');
+});
+```
+
+2. CLIENT INTEGRATION:
+
+```typescript
+// useMultiplayer.ts
+import { io, Socket } from 'socket.io-client';
+import { useState, useEffect } from 'react';
+
+export function useMultiplayer() {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [role, setRole] = useState<'tiger' | 'goat' | 'spectator' | null>(null);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:3001');
+    
+    newSocket.on('connect', () => {
+      setConnected(true);
+      console.log('Connected to server');
+    });
+    
+    newSocket.on('roomCreated', ({ roomId, role }) => {
+      setRoomId(roomId);
+      setRole(role);
+    });
+    
+    newSocket.on('roomJoined', ({ roomId, role }) => {
+      setRoomId(roomId);
+      setRole(role);
+    });
+    
+    setSocket(newSocket);
+    
+    return () => {
+      newSocket.close();
+    };
+  }, []);
+
+  const createRoom = () => {
+    socket?.emit('createRoom');
+  };
+
+  const joinRoom = (code: string) => {
+    socket?.emit('joinRoom', code);
+  };
+
+  const makeMove = (move: Move) => {
+    socket?.emit('makeMove', { roomId, move });
+  };
+
+  return {
+    connected,
+    roomId,
+    role,
+    createRoom,
+    joinRoom,
+    makeMove,
+    socket
+  };
+}
+```
+
+3. MATCHMAKING UI:
+
+Main Menu Options:
+- "Play Online"
+  - "Create Room"
+  - "Join Room"
+  - "Quick Match" (auto-match with similar rating)
+
+Create Room Screen:
+- Shows room code (6 characters)
+- "Copy Code" button
+- "Share Link" button
+- Waiting indicator
+- Cancel button
+
+Join Room Screen:
+- Input field for room code
+- "Join" button
+- Recent rooms list
+
+4. IN-GAME MULTIPLAYER UI:
+
+Show opponent info:
+- Name/Username
+- Rating (if applicable)
+- Turn indicator (bright when their turn)
+- Connection status
+
+Chat (optional):
+- Simple text chat
+- Pre-defined messages
+- Emoji reactions
+
+Game Controls:
+- Resign button
+- Offer draw
+- Report player (if abusive)
+
+5. MATCHMAKING SYSTEM:
+
+Quick Match Algorithm:
+```typescript
+const matchQueue: Array<{
+  socketId: string;
+  rating: number;
+  timestamp: number;
+}> = [];
+
+function attemptMatch() {
+  if (matchQueue.length < 2) return;
+  
+  // Sort by rating
+  matchQueue.sort((a, b) => a.rating - b.rating);
+  
+  // Match closest ratings
+  for (let i = 0; i < matchQueue.length - 1; i++) {
+    const player1 = matchQueue[i];
+    const player2 = matchQueue[i + 1];
+    
+    const ratingDiff = Math.abs(player1.rating - player2.rating);
+    const waitTime = Date.now() - player1.timestamp;
+    
+    // Match if ratings close OR waited long time
+    if (ratingDiff < 200 || waitTime > 60000) {
+      createMatch(player1, player2);
+      matchQueue.splice(i, 2);
+      return;
+    }
+  }
+}
+```
+
+6. RATING SYSTEM (ELO):
+
+```typescript
+function calculateEloChange(
+  winnerRating: number,
+  loserRating: number
+): { winner: number; loser: number } {
+  const K = 32; // K-factor
+  
+  const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
+  const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
+  
+  const winnerChange = Math.round(K * (1 - expectedWinner));
+  const loserChange = Math.round(K * (0 - expectedLoser));
+  
+  return {
+    winner: winnerChange,
+    loser: loserChange
+  };
+}
+```
+
+Starting rating: 1200
+Display rating prominently
+Show rating change after game
+
+7. RECONNECTION HANDLING:
+
+Save game state server-side
+Allow reconnection within 5 minutes
+Resume game from saved state
+Notify opponent of reconnection
+
+8. SPECTATOR MODE:
+
+Allow others to watch ongoing games
+Show both players' perspectives
+Chat for spectators
+No interaction with game
+Learn by watching experts
+
+9. LEADERBOARD:
+
+Global Rankings:
+- Top 100 players
+- Rating display
+- Games played
+- Win rate
+
+Weekly Rankings:
+- Reset every Monday
+- Special rewards for top players
+
+Friends Leaderboard:
+- Compare with friends
+- Challenge friends directly
+
+10. ANTI-CHEAT:
+
+Server-side validation:
+- All moves validated on server
+- Prevent impossible moves
+- Time limits enforced
+- Detect automated play patterns
+
+Fair Play Policy:
+- Report system
+- Temporary bans for violations
+- Rating adjustments for cheaters
+
+Add all multiplayer features to existing game.
+Maintain single-player functionality.
+```
+
+---
+
+### **Prompt 8: Mobile Optimization**
+
+```
+Optimize Aadu Puli Aattam for mobile devices (phones and tablets):
+
+1. RESPONSIVE LAYOUT:
+
+Breakpoints:
+- Mobile: < 640px (vertical layout)
+- Tablet: 640px - 1024px (hybrid layout)
+- Desktop: > 1024px (full layout)
+
+Mobile Layout Changes:
+```css
+@media (max-width: 640px) {
+  .game-container {
+    flex-direction: column;
+  }
+  
+  .game-board {
+    width: 100vw;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .player-info {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  
+  .controls {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}
+```
+
+2. TOUCH CONTROLS:
+
+Replace click events with touch events:
+```typescript
+// Touch handling
+function handleTouch(e: TouchEvent, point: Point) {
+  e.preventDefault(); // Prevent zoom/scroll
+  
+  const touch = e.touches[0];
+  const element = document.elementFromPoint(touch.clientX, touch.clientY);
+  
+  // Same logic as click, but with touch coordinates
+  handlePointInteraction(point);
+}
+
+// Prevent accidental double-tap zoom
+let lastTap = 0;
+function handleDoubleTapPrevention(e: TouchEvent) {
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    e.preventDefault();
+  }
+  lastTap = now;
+}
+```
+
+3. LARGER TOUCH TARGETS:
+
+Increase clickable areas:
+- Points: 40px diameter (was 16px)
+- Pieces: 60px diameter (was 40px)
+- Buttons: Minimum 48px height
+- Spacing: 12px between interactive elements
+
+4. GESTURE SUPPORT:
+
+Pinch to Zoom:
+```typescript
+let initialDistance = 0;
+let currentScale = 1;
+
+function handlePinch(e: TouchEvent) {
+  if (e.touches.length === 2) {
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    
+    const distance = Math.hypot(
+      touch2.clientX - touch1.clientX,
+      touch2.clientY - touch1.clientY
+    );
+    
+    if (initialDistance === 0) {
+      initialDistance = distance;
+    } else {
+      const scale = distance / initialDistance;
+      currentScale = Math.min(Math.max(scale, 0.5), 2);
+      applyZoom(currentScale);
+    }
+  }
+}
+```
+
+Swipe for Menu:
+- Swipe from left: Open game menu
+- Swipe from right: Open move history
+- Swipe down on board: Zoom out
+
+5. ORIENTATION HANDLING:
+
+Lock to Portrait (recommended):
+```typescript
+// Request portrait orientation
+if (screen.orientation && screen.orientation.lock) {
+  screen.orientation.lock('portrait').catch(err => {
+    console.log('Orientation lock failed:', err);
+  });
+}
+```
+
+OR Support Both Orientations:
+- Portrait: Vertical stack layout
+- Landscape: Side-by-side layout (like desktop)
+
+6. PERFORMANCE OPTIMIZATION:
+
+Reduce animations on mobile:
+```typescript
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+const animationDuration = isMobile ? 200 : 400; // Faster on mobile
+const enableParticles = !isMobile; // Disable heavy effects
+
+// Use CSS transforms (GPU accelerated)
+.piece {
+  transform: translate3d(0, 0, 0); /* Force GPU */
+  will-change: transform; /* Optimize animations */
+}
+```
+
+7. MOBILE-SPECIFIC UI:
+
+Bottom Navigation:
+- Undo button
+- Menu button (hamburger)
+- Settings
+- More options
+
+Floating Action Button:
+- Quick access to hints
+- New game
+- Toggle move history
+
+Simplified Info Display:
+- Condensed player stats
+- Icons instead of text where possible
+- Collapsible sections
+
+8. HAPTIC FEEDBACK:
+
+Add vibration on key actions:
+```typescript
+function vibrate(pattern: number | number[]) {
+  if ('vibrate' in navigator) {
+    navigator.vibrate(pattern);
+  }
+}
+
+// Usage
+vibrate(50); // Short vibration on piece selection
+vibrate([100, 50, 100]); // Pattern for capture
+vibrate(200); // Longer for victory
+```
+
+9. OFFLINE SUPPORT:
+
+Service Worker for offline play:
+```typescript
+// service-worker.ts
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open('aadu-puli-v1').then((cache) => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/static/css/main.css',
+        '/static/js/main.js',
+        // ... all assets
+      ]);
+    })
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
+});
+```
+
+10. MOBILE TESTING CHECKLIST:
+
+[ ] Touch targets are 48px+ minimum
+[ ] No accidental zoom on double-tap
+[ ] Smooth scrolling
+[ ] No horizontal scroll
+[ ] Fast load time (< 3 seconds)
+[ ] Offline functionality works
+[ ] Orientation changes handled
+[ ] Keyboard doesn't block game
+[ ] Works on iOS Safari
+[ ] Works on Android Chrome
+[ ] Battery efficient
+
+Add viewport meta tag:
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+```
+
+Test on real devices, not just emulators.
+```
+
+---
+
+### **Prompt 9: Analytics & Statistics**
+
+```
+Add comprehensive analytics and player statistics to Aadu Puli Aattam:
+
+1. GAME STATISTICS TRACKING:
+
+Track these metrics for each game:
+```typescript
+interface GameStatistics {
+  gameId: string;
+  timestamp: Date;
+  
+  // Players
+  tigerPlayer: string;
+  goatPlayer: string;
+  
+  // Outcome
+  winner: 'tiger' | 'goat' | 'draw';
+  totalMoves: number;
+  gameDuration: number; // seconds
+  
+  // Phase statistics
+  placementPhaseMoves: number;
+  movementPhaseMoves: number;
+  
+  // Tiger statistics
+  goatsCaptured: number;
+  tigerMovesPerTurn: number;
+  capturesPerGame: number;
+  averageMoveTime: number;
+  
+  // Goat statistics
+  goatsLost: number;
+  formationStrength: number; // avg goat connections
+  trappingEfficiency: number;
+  
+  // Tactical
+  blunders: number; // Moves that drastically worsen position
+  mistakes: number; // Suboptimal moves
+  excellentMoves: number;
+  
+  // Opening
+  openingUsed: string; // Name of opening pattern
+  openingPhase: number; // Moves in opening
+  
+  // Endgame
+  endgamePhase: number; // Moves in endgame
+  endgameAccuracy: number;
+}
+```
+
+2. PLAYER PROFILE STATISTICS:
+
+```typescript
+interface PlayerProfile {
+  userId: string;
+  username: string;
+  rating: number;
+  peakRating: number;
+  
+  // Overall stats
+  gamesPlayed: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;
+  
+  // Role-specific
+  tigerStats: {
+    games: number;
+    wins: number;
+    avgGoatsCaptured: number;
+    avgGameLength: number;
+    fastestWin: number; // moves
+  };
+  
+  goatStats: {
+    games: number;
+    wins: number;
+    avgGoatsLost: number;
+    avgGameLength: number;
+    fastestWin: number;
+  };
+  
+  // Achievements
+  achievements: string[];
+  titles: string[]; // Earned titles
+  
+  // Trends
+  last10Games: GameStatistics[];
+  ratingHistory: Array<{ date: Date; rating: number }>;
+  
+  // Preferences
+  favoriteOpening: string;
+  mostPlayedOpening: string;
+  
+  // Time tracking
+  totalPlayTime: number; // minutes
+  avgSessionLength: number;
+  longestSession: number;
+  
+  // Streaks
+  currentWinStreak: number;
+  longestWinStreak: number;
+  currentLossStreak: number;
+}
+```
+
+3. STATISTICS DASHBOARD:
+
+Create a comprehensive stats page with:
+
+Overview Tab:
+- Win/Loss pie chart
+- Rating graph over time
+- Recent games list
+- Current streaks
+
+Performance Tab:
+- Tiger vs Goat performance comparison
+- Average captures per game (bar chart)
+- Move accuracy over time (line graph)
+- Best and worst openings (table)

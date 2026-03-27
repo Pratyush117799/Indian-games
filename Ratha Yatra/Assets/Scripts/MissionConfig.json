@@ -1,0 +1,28 @@
+{
+    "missions": [
+        {
+            "id": 1,
+            "title": "The First Ride",
+            "description": "Learn to control the chariot and navigate the training grounds.",
+            "type": "Tutorial",
+            "timeLimit": 300.0,
+            "reward": 50,
+            "objectives": [
+                "Reach the first checkpoint",
+                "Perform a sharp turn",
+                "Return to stable"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Emergency Delivery",
+            "description": "Deliver the messages to the forward command post before sunset.",
+            "type": "Time Trial",
+            "timeLimit": 180.0,
+            "reward": 100,
+            "objectives": [
+                "Reach command post"
+            ]
+        }
+    ]
+}

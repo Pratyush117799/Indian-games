@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeevan Yatra – Life Journey Across India</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+    .jy-hero {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .jy-top {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .jy-title-block {
+      flex: 1.4;
+      min-width: 260px;
+    }
+    .jy-logo {
+      font-size: clamp(2rem, 3vw + 1rem, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffcf73, #ff7a3c, #ff3366);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .jy-tagline {
+      margin-top: 0.4rem;
+      font-size: 0.98rem;
+      color: #e3e7ff;
+    }
+    .jy-orbit {
+      flex: 1;
+      min-width: 260px;
+      height: 220px;
+      position: relative;
+    }
+    .jy-orbit-center {
+      position: absolute;
+      inset: 50%;
+      width: 120px;
+      height: 120px;
+      margin-left: -60px;
+      margin-top: -60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ffdca8, #f5a623);
+      box-shadow: 0 0 28px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      text-align: center;
+      color: #3c2400;
+    }
+    .jy-orbit-path {
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      animation: spin 26s linear infinite;
+    }
+    .jy-orbit-avatar {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6);
+      background: radial-gradient(circle at top, #fff, #ffb36b);
+    }
+    .jy-orbit-avatar:nth-child(1) { top: -8px; left: 50%; transform: translateX(-50%); }
+    .jy-orbit-avatar:nth-child(2) { right: -8px; top: 50%; transform: translateY(-50%); }
+    .jy-orbit-avatar:nth-child(3) { bottom: -8px; left: 50%; transform: translateX(-50%); }
+    .jy-orbit-avatar:nth-child(4) { left: -8px; top: 50%; transform: translateY(-50%); }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .jy-timeline {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      padding: 0.6rem 0.4rem 0.2rem;
+      scrollbar-width: thin;
+    }
+    .jy-stage {
+      flex: 0 0 140px;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.18), rgba(7, 24, 62, 0.9));
+      border-radius: 16px;
+      padding: 0.6rem 0.7rem;
+      text-align: center;
+      font-size: 0.78rem;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .jy-stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .jy-stage-emoji {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .jy-stage-title {
+      font-weight: 700;
+      margin-bottom: 0.1rem;
+    }
+    .jy-stage-sub {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    .jy-center {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+    .jy-mode-card {
+      flex: 1;
+      min-width: 260px;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), rgba(5, 18, 50, 0.98));
+      border-radius: 20px;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .jy-mode-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .jy-mode-subtitle {
+      font-size: 0.86rem;
+      color: #dbe4ff;
+    }
+    .jy-mode-actions {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .jy-link-btn {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      border: 0;
+    }
+    .jy-link-primary {
+      background: linear-gradient(135deg, #ff7a3c, #ff3366);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+    }
+    .jy-link-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f0f0f0;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .jy-mode-list {
+      font-size: 0.8rem;
+      padding-left: 1rem;
+      margin: 0.1rem 0 0;
+      color: #e4edff;
+    }
+    .jy-mode-list li {
+      margin-bottom: 0.18rem;
+    }
+
+    .jy-auth {
+      margin-top: 0.4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .jy-auth input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 0.25rem 0.6rem;
+      background: rgba(5, 14, 35, 0.8);
+      color: #f7f7f7;
+      font-size: 0.8rem;
+    }
+    .jy-auth-note {
+      font-size: 0.75rem;
+      color: #cfd8ff;
+      margin-top: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>Welcome to</h1>
+    </header>
+
+    <main class="app-main" style="grid-template-columns: minmax(0,1fr);">
+      <section class="jy-hero">
+        <div class="jy-top">
+          <div class="jy-title-block">
+            <div class="jy-logo">Jeevan Yatra</div>
+            <p class="jy-tagline">
+              From first cry to final sunset – trace an Indian life across cities, families, exams, careers, and faith.
+            </p>
+          </div>
+          <div class="jy-orbit">
+            <div class="jy-orbit-path">
+              <div class="jy-orbit-avatar">👶</div>
+              <div class="jy-orbit-avatar">🧑‍🎓</div>
+              <div class="jy-orbit-avatar">👨‍💼</div>
+              <div class="jy-orbit-avatar">🧓</div>
+            </div>
+            <div class="jy-orbit-center">
+              <div style="font-weight:700;">Zindagi as a Board &amp; RPG</div>
+              <div style="font-size:0.72rem;margin-top:0.25rem;">
+                Classic spiral journey across India.<br />
+                Story mode: pixel RPG of life.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="jy-timeline" aria-label="Life stages from birth to old age">
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">👶</div>
+            <div class="jy-stage-title">Birth</div>
+            <div class="jy-stage-sub">Hospital, first cries, new beginnings.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">🧒</div>
+            <div class="jy-stage-title">Childhood</div>
+            <div class="jy-stage-sub">Playschool, crayons, first friends.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">🧑‍🎓</div>
+            <div class="jy-stage-title">Student</div>
+            <div class="jy-stage-sub">Exams, tuition, dreams taking shape.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">👨‍💼</div>
+            <div class="jy-stage-title">Career</div>
+            <div class="jy-stage-sub">Offices, deadlines, ambitions and bills.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">👨‍👩‍👧</div>
+            <div class="jy-stage-title">Family</div>
+            <div class="jy-stage-sub">Pilgrims, parents, school runs.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">🧓</div>
+            <div class="jy-stage-title">Old Age</div>
+            <div class="jy-stage-sub">Hospitals, memories, quiet walks.</div>
+          </div>
+          <div class="jy-stage">
+            <div class="jy-stage-emoji">🪔</div>
+            <div class="jy-stage-title">Legacy</div>
+            <div class="jy-stage-sub">Stories, blessings, and goodbye.</div>
+          </div>
+        </div>
+
+        <div class="jy-center">
+          <section class="jy-mode-card">
+            <div class="jy-mode-title">Start the Journey – Classic Mode</div>
+            <div class="jy-mode-subtitle">
+              Travel across India on a spiral board where each square is a city, state, or sacred site. Boosts at temples, delays in metros, rest in remote mountains.
+            </div>
+            <ul class="jy-mode-list">
+              <li>Spiral board from Kanyakumari to the heart of India</li>
+              <li>Boosts at Varanasi, Bodh Gaya, Char Dham, Jyotirlingas</li>
+              <li>Setbacks in Delhi, Mumbai, Bengaluru, Ladakh, and more</li>
+            </ul>
+            <div class="jy-mode-actions">
+              <a href="index.html" class="jy-link-btn jy-link-primary">▶ Play Classic Board</a>
+            </div>
+          </section>
+
+          <section class="jy-mode-card">
+            <div class="jy-mode-title">Story Mode (Chapter 1 Prototype)</div>
+            <div class="jy-mode-subtitle">
+              A Pokemon-style pixel RPG of Indian life. Begin as a toddler in a 1990s middle-class home with family, stats, choices, and mini-games.
+            </div>
+            <ul class="jy-mode-list">
+              <li>Top-down 2D home with mother, father, and dadi</li>
+              <li>Stats: Health, Happiness, Curiosity, Family Bond</li>
+              <li>Arrow keys to move, E to talk, M for menu</li>
+              <li>Prototype mini-game: learning colors</li>
+            </ul>
+            <div class="jy-auth">
+              <div>
+                <label>
+                  6-digit Yatra ID
+                  <input id="jyUserId" maxlength="6" placeholder="e.g. 824193" />
+                </label>
+              </div>
+              <div>
+                <label>
+                  4-digit PIN
+                  <input id="jyUserPin" maxlength="4" type="password" placeholder="••••" />
+                </label>
+              </div>
+            </div>
+            <p class="jy-auth-note">
+              Your progress will be saved per ID+PIN combo in this browser (3 save slots per account). A real database API can later plug into the same structure.
+            </p>
+            <div class="jy-mode-actions">
+              <button class="jy-link-btn jy-link-primary" id="jyStartStory">
+                🎮 Continue Story Mode
+              </button>
+              <a href="story.html" class="jy-link-btn jy-link-secondary">
+                ▶ Quick Start (Guest)
+              </a>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Jeevan Yatra weaves together pilgrims, office-goers, school kids, and elders into one continuous Indian life journey – from the map of India to the map of your choices.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("jyStartStory").addEventListener("click", function () {
+      const id = (document.getElementById("jyUserId").value || "").trim();
+      const pin = (document.getElementById("jyUserPin").value || "").trim();
+      const params = new URLSearchParams();
+      if (id && pin) {
+        params.set("user", id);
+        params.set("pin", pin);
+      }
+      const url = "story.html" + (params.toString() ? "?" + params.toString() : "");
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>
+

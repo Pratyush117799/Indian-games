@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spice Route</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="bg-parchment">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // If opened as file:// or app failed to load, show help after a short delay
+      setTimeout(function () {
+        var root = document.getElementById('root');
+        if (root && root.children.length === 0) {
+          root.innerHTML = '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;font-family:system-ui,sans-serif;background:#F6E8C3;color:#78350f;text-align:center;"><h1 style="font-size:1.5rem;margin-bottom:12px;">Spice Route</h1><p style="margin-bottom:16px;">This game must be run with a local server.</p><p style="margin-bottom:8px;"><strong>In the project folder, run:</strong></p><code style="display:block;padding:12px 20px;background:#fef3c7;border-radius:8px;margin-bottom:16px;">npm run dev</code><p>Then open <a href="http://localhost:5174" style="color:#b45309;">http://localhost:5174</a> in your browser.</p></div>';
+        }
+      }, 1500);
+    </script>
+  </body>
+</html>
+

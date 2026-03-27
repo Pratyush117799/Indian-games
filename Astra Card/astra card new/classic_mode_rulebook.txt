@@ -1,0 +1,158 @@
+Detailed Classic Mode Rulebook (Playtesting Ready)
+ASTRA: Weapons of the Gods – Classic Mode Rulebook v1.0
+Overview
+2 players duel using divine and conventional weapons from Indian mythology. Strategy revolves around mantra management, field control, and mythological counters.
+Components (for Physical Playtest)
+
+200 cards (print base 100 first).
+Life trackers (30 starting each).
+Mantra tokens.
+Field mats (5 slots per player).
+
+Setup
+
+Each player builds a 40-card deck (max 2 copies of any card).
+Shuffle, draw 5 cards.
+Starting life: 30.
+First player skips first mantra gain.
+
+Turn Structure
+
+Draw Phase: Draw 1 card (max hand 7).
+Mantra Phase: Gain 1 mantra (max 10).
+Main Phase: Play cards from hand (pay mantra cost). Artifacts stay on field; Spells resolve immediately.
+Battle Phase: Attack with one fielded artifact (direct or clash opponent's).
+End Phase: Resolve effects, discard to 7.
+
+Combat Resolution
+
+Compare Power (higher wins, deals difference as life damage).
+Modifiers:
+Higher tier: +2 Power.
+Elemental counter: +3 Power.
+Specific counteredBy match: Defender wins automatically.
+
+Tie: Both destroyed.
+Edge case: Supreme mutual (e.g., Brahmastra vs Brahmastra) → both destroyed, no damage.
+
+Card Types
+
+Artifact (e.g., Gandiva): Stays on field, attacks each turn.
+Spell/Astra: One-shot effect.
+Support: Buffs/healing.
+
+Win Conditions
+
+Opponent life = 0.
+Deck out (milling rare due to draw).
+
+Advanced/Edge Cases
+
+Surrender mechanic (Narayanastra): Opponent may discard hand to negate.
+Eternal abilities trigger in graveyard.
+Multiplayer variant: 3–4 players, attacks clockwise.
+
+Ready for playtesting — print 60 cards, use tokens, and balance feedback welcome!
+3. Clash Mode Balance Sheet + Unit Stats Table
+Balance Principles:
+
+Mantra regen: +1 every 2.5s (max 10).
+Derived stats: HP = power × 60, Damage = power × 20, Cost = mantraCost.
+Roles: Conventional → cheap melee, Elemental → mid-range spells, Celestial → strong units, Supreme → expensive win-cons.
+Cycle: Garuda counters Serpent swarms, etc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IDNameCostRoleHPDamageSpeedRangeSpecial Ability1Brahmastra8Spell-1200-GlobalDestroys lane if unopposed2Brahmashirsha9Spell-1600-AllField wipe5Sudarshana Chakra7Unit600200FastLongReturns after kill102Vajrayudha5Unit480160MedShortStun on hit113Mohanastra4Spell-120-AreaConfusion (units attack random)193Balarama Hala5Unit420140SlowMeleeArea sweep200Yama Kala Danda6Unit480160MedMedDoom on <30% HP targets
+Full Balance Notes: Cheap commons flood early, supremes win late. Edge case: Supreme spells require "no counter in opponent's hand" check.

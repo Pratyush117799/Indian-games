@@ -1,0 +1,417 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #133b5c 0, #0b1724 55%, #020308 100%);
+  color: #f7f7f7;
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.app {
+  max-width: 1200px;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2.2vw + 1rem, 2.6rem);
+  letter-spacing: 0.04em;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #ced9f5;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+  gap: 1.5rem;
+}
+
+.board-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board {
+  position: relative;
+  width: min(680px, 90vw);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 3px;
+  padding: 10px;
+  border-radius: 24px;
+  background: radial-gradient(circle at center, #f7f2e9 0, #e8dcc0 40%, #c4a574 100%);
+  box-shadow:
+    0 18px 35px rgba(0, 0, 0, 0.45),
+    0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.tile {
+  position: relative;
+  border-radius: 12px;
+  padding: 4px 5px 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: default;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.tile-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tile-normal {
+  background: linear-gradient(135deg, #fdf7eb, #f0e0c4);
+}
+
+.tile-boost {
+  background: radial-gradient(circle at top left, #f5ffe9, #c2f3a6);
+}
+
+.tile-penalty {
+  background: radial-gradient(circle at top left, #ffe9ec, #f4a7a7);
+}
+
+.tile-center {
+  background: radial-gradient(circle at center, #ffeec9, #f0c979);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 0 18px rgba(255, 216, 126, 0.9);
+}
+
+.tile-number {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #7b5b2f;
+}
+
+.tile-name {
+  margin-top: 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3c2a15;
+}
+
+.tile-tag {
+  margin-top: 2px;
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tile-boost .tile-tag {
+  color: #136b2e;
+}
+
+.tile-penalty .tile-tag {
+  color: #8b1010;
+}
+
+.tile-center .tile-tag {
+  color: #8b5a00;
+}
+
+.pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: auto;
+}
+
+.piece {
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar > section,
+.controls,
+.legend,
+.location-info,
+.log {
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), rgba(12, 28, 55, 0.9));
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.controls h2,
+.legend h2,
+.location-info h2,
+.log h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.current-player {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.dice-display {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.dice-result {
+  min-width: 3.5rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(3, 10, 28, 0.7);
+  text-align: center;
+  font-weight: 600;
+}
+
+.players-config {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.players-config label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+select {
+  background: rgba(2, 9, 26, 0.85);
+  border-radius: 999px;
+  padding: 0.18rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #f7f7f7;
+  font-size: 0.85rem;
+}
+
+.primary-btn,
+.secondary-btn {
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  padding: 0.42rem 0.85rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #ff7a3c, #ff3366);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.55);
+}
+
+.primary-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.legend-boost {
+  background: radial-gradient(circle at center, #eaffd0, #8fdc5b);
+}
+
+.legend-penalty {
+  background: radial-gradient(circle at center, #ffd4db, #f26a6a);
+}
+
+.legend-normal {
+  background: linear-gradient(135deg, #fdf8ef, #e8d0a5);
+}
+
+.location-name {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.location-effect {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #d9e3ff;
+}
+
+.log-entries {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.log-entry {
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.log-entry strong {
+  color: #ffcf73;
+}
+
+.app-footer {
+  font-size: 0.78rem;
+  text-align: center;
+  color: #d6e0ff;
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .app-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .board {
+    width: min(520px, 96vw);
+  }
+}
+
+/* Example landmark tile artwork using web images (you can replace URLs with your own AI-generated or curated images). */
+
+.tile[data-tile-id="22"] {
+  /* Varanasi */
+  background-image:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35)),
+    url("https://upload.wikimedia.org/wikipedia/commons/0/0c/Varanasi_Ghats.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: soft-light;
+}
+
+.tile[data-tile-id="31"] {
+  /* Golden Temple */
+  background-image:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35)),
+    url("https://upload.wikimedia.org/wikipedia/commons/0/09/Golden_Temple_nighttime.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: soft-light;
+}
+
+.tile[data-tile-id="5"] {
+  /* Rameswaram */
+  background-image:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.32)),
+    url("https://upload.wikimedia.org/wikipedia/commons/3/3d/Rameswaram_temple_corridor.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: soft-light;
+}
+
+.tile[data-tile-id="64"] {
+  /* Central Heart of India - subtle mandala */
+  background-image:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.5), rgba(240, 190, 90, 0.2)),
+    url("https://upload.wikimedia.org/wikipedia/commons/6/6a/Indian_Mandala_Art.png");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: soft-light;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 0.9rem;
+  }
+
+  .sidebar {
+    gap: 0.75rem;
+  }
+
+  .log-entries {
+    max-height: 160px;
+  }
+}
+

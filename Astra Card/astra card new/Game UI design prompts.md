@@ -1,0 +1,43 @@
+# ASTRA: Weapons of the Gods – Game UI Design Prompts
+
+## Overall UI Style Guidelines
+- **Theme**: Sacred Indian mythology meets modern digital fantasy. Use ornate golden borders inspired by temple carvings, subtle Sanskrit-inspired script as accents, lotus motifs, mandala patterns, and chakra wheels. Backgrounds feature ethereal cosmic gradients (deep indigo to gold), misty divine auras, and faint deity silhouettes.
+- **Color Palette**: Primary – Rich gold (#FFD700), crimson red (#C41E3A), sapphire blue (#0F52BA), emerald green (#50C878). Accents – Divine glow white (#E0E0FF with bloom), shadow black (#1A1A1A). Text – Elegant serif (Cinzel or similar) for titles, clean sans-serif for body.
+- **Dynamic Effects**: Glowing mantra particles, subtle energy pulses on interactive elements, card hover lifts with golden aura flare, smooth transitions with dissolving mandala wipes. Sound design hints: Vedic chants on menu, thunder cracks on powerful plays.
+- **Layout Philosophy**: Clean, intuitive, with asymmetric ornate framing for cultural depth. Mobile-first responsive (portrait for Clash, landscape optional for Classic).
+- **Typography**: Title – Cinzel Decorative (gold with glow). Body – Inter or Roboto. Flavor text – Devanagari-inspired script overlay for authenticity.
+- **Resolution/Format**: Design mockups at 1920x1080 for desktop previews, 1080x1920 for mobile. Include variants for light/dark mode (dark default for divine mystery).
+
+## 1. Main Menu Screen
+**Prompt**:  
+"Main menu UI for Indian mythology card game 'ASTRA: Weapons of the Gods'. Central glowing title in ornate golden Cinzel font with subtle mantra particle effects rising upward. Background: Cosmic starry void with faint Vishnu preserving the universe silhouette and swirling divine energy. Four large interactive buttons arranged in a mandala pattern: 'Classic Duel' (golden bow icon), 'Clash Battle' (crossed weapons icon), 'Deck Builder' (card stack icon), 'Collection' (open ancient scroll icon). Bottom bar: Player profile avatar (customizable hero like Arjuna), level/progress chakra wheel filling with gold, daily rewards lotus button pulsing gently. Top-right: Settings gear with Om symbol, shop gem icon sparkling. Ornate temple border framing entire screen with glowing edge accents. Clean, luxurious, immersive digital fantasy style, high detail 4k mockup."
+
+## 2. Mode Selection / Lobby Screen
+**Prompt**:  
+"Lobby screen transitioning from main menu. Split background: Left half Classic Mode serene ashram with ancient scrolls and floating cards; right half Clash Mode dynamic battlefield with lanes and marching units. Toggle switch styled as a divine chakra wheel rotating between modes. Featured banners: Current event (e.g., 'Mahabharata Tournament' with epic war scene), daily login reward chest glowing with soma nectar particles. Quick play button large and central with 'Battle Now' text in fiery script. Friends list sidebar with avatar icons and online status (glowing halo if online). Bottom navigation bar persistent across game with icons for Home, Decks, Shop, Profile. Elegant Indian ornamental borders, glowing hover effects, premium mobile game UI aesthetic, 4k detailed mockup."
+
+## 3. Deck Builder Screen
+**Prompt**:  
+"Deck builder interface with drag-and-drop functionality. Left panel: Card collection grid (filterable by tier/element/rarity – filters as glowing chakra buttons). Central area: Deck canvas with 40 card slots arranged in curved mandala pattern, current deck count chakra meter filling progressively. Right panel: Deck stats breakdown (pie chart for elements with fire/water/wind icons, power curve graph with divine glow lines, win rate history). Top bar: Deck name editable field with Sanskrit accent, save/load buttons as golden seals. Search bar with magnifying glass styled as third eye. Card preview on hover: Enlarged 3D card flip with glowing borders and particle effects based on element (fire sparks, water ripples). Background: Ancient library with floating manuscripts and soft golden light rays. Ornate yet functional UI, inspired by Hearthstone but with Indian temple aesthetics, high detail 4k mockup."
+
+## 4. Card Collection / Detail View Screen
+**Prompt**:  
+"Card collection gallery screen. Masonry grid of cards with holographic shine on Mythic/Legendary (subtle animation of divine aura pulsing). Filters top bar: Tier dropdown (Supreme glowing brightest), Element icons in circle, Rarity gems. Tapping a card opens full-screen detail: Large centered card art with zoom/pan, rotating 3D effect optional. Below: Stats display (Power/Mantra Cost as glowing orbs), ability text in elegant scroll, flavor quote in Devanagari-inspired script. Bottom: Craft/Upgrade buttons with divine shard costs sparkling, quantity owned counter with golden frame. Background: Ethereal vault with floating weapon pedestals and soft god rays. Collectible card game UI with premium Indian mythological ornamentation, 4k luxurious mockup."
+
+## 5. Classic Mode Battle Screen
+**Prompt**:  
+"Turn-based duel battle screen. Top half: Opponent side with life total as glowing red chakra orb (30 starting), hand size counter, field zone with up to 5 artifact slots (cards face-up with health bars if applicable). Bottom half: Player side mirrored. Central battlefield: Ornate mandala play area where dragged cards snap into place with golden placement glow. Right sidebar: Mantra pool as filling blue-gold elixir bar (gain +1 per turn animation), end turn button as large glowing lotus that blooms when pressed. Left sidebar: Graveyard stack (peek on hover), deck count with shrinking scroll. Phase indicator top center: Draw/Main/Battle phases as rotating trinity symbols. Dynamic effects: Card play with invocation flash and element particles, combat clash with energy beams and mythological counter explosion if neutralized. Background: Kurukshetra-inspired battlefield with subtle war haze. Strategic card game UI with deep Indian cultural immersion, 4k detailed mockup."
+
+## 6. Clash Mode Battlefield Screen
+**Prompt**:  
+"Real-time lane battle screen inspired by Clash Royale but mythological. Vertical mobile layout: Top opponent base with king tower (golden vimana structure) and two crown towers, health bars as jeweled crowns depleting. Bottom player base mirrored. Two lanes separated by central river with lotus bridges. Elixir/Mantra bar at bottom center filling with blue-gold nectar drops every 2.5s (max 10 orbs). Card hand at bottom: 4-5 cards fanned with mantra cost orbs below each, drag-to-deploy with ghost preview on lane. Deployment zones highlighted with glowing mandala circles. Units auto-march with trail particles matching element. Timer top center as burning incense stick. Dynamic chaos: Projectiles with element effects (Vajra lightning, Agneyastra fireballs), tower attacks with divine beams. Background: Epic war field with distant mountains and flying garudas. Fast-paced mobile battler UI with ornate Indian temple framing and glowing effects, 4k high-energy mockup."
+
+## 7. Shop / Progression Screen
+**Prompt**:  
+"In-game shop with premium feel. Tabbed interface: Daily offers, Gem packs, Divine shard bundles. Central featured bundle: Large holographic chest overflowing with cards and gems, particle sparkles. Currency display top: Gems as sparkling diamonds, gold coins as ancient mohurs, divine shards as glowing prisms. Progression track sidebar: Chakra ladder with level rewards unlocking (new avatars, card backs with mandala designs). Background: Heavenly treasury with floating lotuses and golden pots. Luxurious microtransaction UI with ethical Indian aesthetic – no aggressive timers, focus on cultural beauty, 4k mockup."
+
+## 8. Profile / Achievements Screen
+**Prompt**:  
+"Player profile screen. Central customizable avatar (hero selection: Arjuna with Gandiva, Karna with armor, Rama with bow, etc.) in heroic pose with glowing aura. Stats grid: Wins/losses as victory laurels, favorite element pie chart, total cards collected scroll. Achievements as golden plaques arranged in mandala, with locked ones showing faint silhouettes (e.g., 'Invoke Brahmastra 10 times' with cosmic serpent icon). Season rank ladder with chakra tiers (Brahman, Kshatriya, etc.). Background: Personal ashram with meditation mat and floating om symbols. Motivational progression UI with deep mythological flavor, 4k elegant mockup."
+
+These prompts are ready for AI generation (Midjourney, Figma plugins, etc.) or designer briefing. Each captures functionality, cultural authenticity, and dynamic visual effects suitable for a premium digital card game. Total: 8 core screens covering complete user flow.

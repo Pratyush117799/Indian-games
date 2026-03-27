@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Moksha Patam — मोक्ष पातम् · Krida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Devanagari:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ══ DESIGN TOKENS ══════════════════════════════════════════════ */
+:root{
+  --night:#08060F; --deep:#0F0B1A; --ink:#1A1428; --panel:#221C33; --border:#2E2545;
+  --gold:#C9910D; --gold-lt:#F0B429; --gold-dim:#7A5608; --gold-glow:rgba(201,145,13,.35);
+  --saffron:#C4501A; --ivory:#F5EDD8; --ivory-dim:#A89A7A;
+  --peacock:#1A6B8A; --leaf:#2D6A3F; --crimson:#8B1A2F;
+  --ladder-color:#4A8C5C; --snake-color:#A63228;
+  --sq:min(52px, calc((100vw - 280px) / 10));
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--ivory);font-family:'Crimson Pro',Georgia,serif;
+  font-size:17px;line-height:1.65;overflow-x:hidden;min-height:100vh}
+
+/* grain */
+body::before{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:.35}
+
+/* ══ TYPOGRAPHY ══ */
+.display{font-family:'Cinzel',serif;letter-spacing:.04em}
+.deva{font-family:'Noto Sans Devanagari',sans-serif}
+
+/* ══ NAV ══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1rem,4vw,3rem);height:60px;
+  background:linear-gradient(180deg,rgba(8,6,15,.97) 0%,rgba(8,6,15,.7) 100%);
+  border-bottom:1px solid rgba(201,145,13,.12);backdrop-filter:blur(8px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;
+  color:var(--gold-lt);letter-spacing:.12em;text-transform:uppercase}
+.nav-logo-sub{font-size:.62rem;color:var(--ivory-dim);letter-spacing:.2em;
+  text-transform:uppercase;display:block;margin-top:-3px}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-back{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ivory-dim);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--gold-lt)}
+.nav-badge{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  background:rgba(201,145,13,.15);color:var(--gold);
+  border:1px solid rgba(201,145,13,.3);padding:3px 10px;border-radius:2px}
+
+/* ══ LAYOUT ══ */
+.game-layout{display:grid;grid-template-columns:1fr auto 320px;
+  gap:0;min-height:100vh;padding-top:60px}
+.left-col{padding:20px 16px;display:flex;flex-direction:column;gap:14px;
+  border-right:1px solid rgba(201,145,13,.1)}
+.center-col{padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
+.right-col{padding:20px 16px;display:flex;flex-direction:column;gap:14px;
+  border-left:1px solid rgba(201,145,13,.1);overflow-y:auto;max-height:calc(100vh - 60px)}
+
+@media(max-width:1100px){.game-layout{grid-template-columns:240px auto 1fr}}
+@media(max-width:780px){
+  .game-layout{grid-template-columns:1fr;padding-top:60px}
+  .left-col,.right-col{border:none;flex-direction:row;flex-wrap:wrap}
+}
+
+/* ══ SECTION LABEL ══ */
+.slabel{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.slabel::after{content:'';flex:1;height:1px;background:rgba(201,145,13,.2)}
+
+/* ══ PLAYER CARDS ══ */
+.player-card{background:rgba(34,28,51,.6);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;transition:all .3s;position:relative;overflow:hidden}
+.player-card::before{content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--player-color,var(--gold));border-radius:2px 0 0 2px}
+.player-card.active-turn{border-color:var(--player-color,var(--gold));
+  box-shadow:0 0 20px var(--gold-glow)}
+.player-card.eliminated{opacity:.4}
+.pc-top{display:flex;align-items:center;gap:10px}
+.pc-token{width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;
+  background:var(--player-color,var(--gold));color:var(--night);flex-shrink:0}
+.pc-info{flex:1}
+.pc-name{font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.06em;
+  color:var(--ivory)}
+.pc-sub{font-size:.72rem;color:var(--ivory-dim);margin-top:2px}
+.pc-pos{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--player-color,var(--gold));
+  font-weight:600;margin-left:auto}
+.pc-dharma{display:flex;align-items:center;gap:5px;margin-top:6px;
+  font-size:.7rem;color:var(--gold-dim)}
+.dharma-pips{display:flex;gap:2px}
+.dharma-pip{width:6px;height:6px;border-radius:1px;background:rgba(201,145,13,.3)}
+.dharma-pip.filled{background:var(--gold)}
+
+/* ══ DICE ══ */
+.dice-section{background:rgba(34,28,51,.6);border:1px solid var(--border);
+  border-radius:8px;padding:16px;text-align:center}
+.dice-cowrie{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.cowrie{width:36px;height:36px;background:var(--ivory);border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
+  position:relative;cursor:default;transition:transform .1s;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3)}
+.cowrie::after{content:'';position:absolute;width:60%;height:30%;
+  background:rgba(0,0,0,.25);border-radius:50%;bottom:25%;left:20%}
+.cowrie.flat{background:#B8A898}
+.cowrie.open{background:var(--ivory);transform:rotate(180deg)}
+.dice-result{font-family:'Cinzel',serif;font-size:2.2rem;font-weight:700;
+  color:var(--gold-lt);line-height:1;margin-bottom:4px}
+.dice-label{font-size:.72rem;color:var(--ivory-dim);margin-bottom:12px;
+  letter-spacing:.05em}
+.roll-btn{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--night);background:var(--gold);
+  border:none;padding:11px 28px;cursor:pointer;width:100%;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition:background .2s,transform .15s,box-shadow .2s}
+.roll-btn:hover:not(:disabled){background:var(--gold-lt);transform:translateY(-1px);
+  box-shadow:0 4px 30px rgba(201,145,13,.4)}
+.roll-btn:disabled{opacity:.35;cursor:not-allowed}
+@keyframes diceShake{
+  0%,100%{transform:rotate(0)}
+  15%{transform:rotate(-12deg) scale(1.1)}
+  30%{transform:rotate(10deg) scale(1.1)}
+  45%{transform:rotate(-8deg)}
+  60%{transform:rotate(7deg)}
+  75%{transform:rotate(-4deg)}
+}
+.cowrie.rolling{animation:diceShake .5s ease}
+
+/* ══ MODE SELECTOR ══ */
+.mode-pills{display:flex;gap:5px;flex-wrap:wrap}
+.mode-pill{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:5px 12px;border-radius:2px;cursor:pointer;
+  border:1px solid var(--border);color:var(--ivory-dim);background:transparent;
+  transition:all .2s;white-space:nowrap}
+.mode-pill.active{background:rgba(201,145,13,.15);border-color:var(--gold);color:var(--gold-lt)}
+.mode-pill:hover:not(.active){border-color:rgba(201,145,13,.4);color:var(--ivory)}
+
+/* ══ BOARD ══ */
+.board-outer{position:relative;width:calc(var(--sq)*10 + 2px);
+  height:calc(var(--sq)*10 + 2px);flex-shrink:0}
+.board-border{position:absolute;inset:-3px;
+  background:linear-gradient(135deg,#8B6914,#C9910D,#F0B429,#C9910D,#8B6914);
+  border-radius:6px;z-index:0}
+.board-inner{position:absolute;inset:3px;background:#1A1408;border-radius:3px;z-index:1;overflow:hidden}
+.board-grid{display:grid;grid-template-columns:repeat(10,var(--sq));
+  grid-template-rows:repeat(10,var(--sq));width:100%;height:100%;position:relative;z-index:2}
+
+/* squares */
+.sq{width:var(--sq);height:var(--sq);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;cursor:default;
+  transition:filter .2s;font-size:calc(var(--sq)*0.18);user-select:none}
+.sq.light{background:#F5E8C8}
+.sq.dark{background:#E8D4A8}
+.sq.virtue{background:#2A4A2E!important;border:1px solid rgba(74,140,92,.5)}
+.sq.vice{background:#4A1A1A!important;border:1px solid rgba(166,50,40,.5)}
+.sq.win{background:radial-gradient(circle at 50% 50%,#3A2A00,#1A1000)!important;
+  border:1px solid var(--gold)!important}
+.sq-num{font-family:'Cinzel',serif;font-size:calc(var(--sq)*0.2);
+  font-weight:600;color:rgba(26,20,8,.7);line-height:1;z-index:2;position:relative}
+.sq.virtue .sq-num,.sq.vice .sq-num{color:rgba(255,255,255,.6)}
+.sq.win .sq-num{color:var(--gold-lt)}
+.sq-label{font-family:'Noto Sans Devanagari',sans-serif;font-size:calc(var(--sq)*0.13);
+  color:rgba(255,255,255,.75);line-height:1.1;text-align:center;
+  padding:0 2px;z-index:2;position:relative}
+.sq-icon{font-size:calc(var(--sq)*0.3);z-index:2;position:relative;line-height:1}
+
+/* highlight pulse */
+@keyframes sqPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.4)}}
+.sq.pulsing{animation:sqPulse .4s ease 3}
+
+/* ══ SVG OVERLAY (snakes & ladders) ══ */
+.board-svg{position:absolute;inset:3px;width:calc(100% - 6px);height:calc(100% - 6px);
+  pointer-events:none;z-index:3}
+
+/* ══ TOKENS ══ */
+.token-layer{position:absolute;inset:3px;pointer-events:none;z-index:4}
+.token{position:absolute;width:calc(var(--sq)*0.42);height:calc(var(--sq)*0.42);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif;font-size:calc(var(--sq)*0.2);font-weight:700;
+  color:var(--night);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.3);
+  transition:top .6s cubic-bezier(.4,0,.2,1),left .6s cubic-bezier(.4,0,.2,1);
+  z-index:5}
+@keyframes tokenBounce{
+  0%,100%{transform:translateY(0) scale(1)}
+  30%{transform:translateY(-12px) scale(1.15)}
+  60%{transform:translateY(-4px) scale(1.05)}
+}
+.token.landing{animation:tokenBounce .5s ease}
+@keyframes tokenLadder{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.3) rotate(-5deg)}
+  60%{transform:scale(1.15) rotate(3deg)}
+  100%{transform:scale(1)}
+}
+.token.climbing{animation:tokenLadder .8s ease}
+@keyframes tokenSnake{
+  0%{transform:scale(1)}
+  20%{transform:scale(.8) rotate(10deg)}
+  50%{transform:scale(.9) rotate(-8deg)}
+  80%{transform:scale(.85) rotate(5deg)}
+  100%{transform:scale(1)}
+}
+.token.sliding{animation:tokenSnake .9s ease}
+
+/* ══ WISDOM CARD ══ */
+.wisdom-card{background:linear-gradient(135deg,rgba(42,28,6,.95),rgba(26,16,2,.98));
+  border:1px solid rgba(201,145,13,.4);border-radius:8px;padding:16px;
+  position:relative;overflow:hidden;transition:all .4s;min-height:80px}
+.wisdom-card::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 0% 0%,rgba(201,145,13,.07),transparent 60%);
+  pointer-events:none}
+.wc-source{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-dim);margin-bottom:4px}
+.wc-sq{font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold-lt);
+  font-weight:600;margin-bottom:3px}
+.wc-deva{font-family:'Noto Sans Devanagari',sans-serif;font-size:.72rem;
+  color:var(--ivory-dim);margin-bottom:6px}
+.wc-text{font-size:.82rem;color:var(--ivory-dim);line-height:1.6;font-style:italic}
+.wc-type{position:absolute;top:12px;right:12px;font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;padding:2px 8px;border-radius:1px}
+.wc-virtue{background:rgba(74,140,92,.2);color:#7BC98A;border:1px solid rgba(74,140,92,.4)}
+.wc-vice{background:rgba(166,50,40,.2);color:#C97A72;border:1px solid rgba(166,50,40,.4)}
+.wc-neutral{background:rgba(201,145,13,.1);color:var(--gold);border:1px solid rgba(201,145,13,.3)}
+
+/* card appear */
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.wisdom-card.new-card{animation:cardIn .4s ease}
+
+/* ══ LOG ══ */
+.move-log{max-height:180px;overflow-y:auto;display:flex;flex-direction:column;
+  gap:4px;padding-right:4px}
+.move-log::-webkit-scrollbar{width:3px}
+.move-log::-webkit-scrollbar-thumb{background:rgba(201,145,13,.3);border-radius:2px}
+.log-item{font-size:.74rem;color:var(--ivory-dim);padding:5px 10px;
+  border-radius:4px;background:rgba(34,28,51,.4);border-left:2px solid var(--border);
+  animation:cardIn .3s ease}
+.log-item.virtue-log{border-left-color:#4A8C5C;color:#A8D4B0}
+.log-item.vice-log{border-left-color:#8B3228;color:#D4907A}
+.log-item.moksha-log{border-left-color:var(--gold);color:var(--gold-lt);font-weight:600}
+
+/* ══ GAME STATUS ══ */
+.status-bar{text-align:center;padding:10px;border-radius:6px;
+  background:rgba(34,28,51,.5);border:1px solid var(--border);font-size:.82rem}
+.status-name{font-family:'Cinzel',serif;color:var(--gold-lt)}
+.status-text{color:var(--ivory-dim)}
+
+/* ══ SETUP MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,6,15,.92);
+  z-index:500;display:flex;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(6px)}
+.modal{background:var(--deep);border:1px solid rgba(201,145,13,.3);
+  border-radius:12px;padding:32px;max-width:560px;width:100%;
+  position:relative;overflow:hidden}
+.modal::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,145,13,.06),transparent 60%);
+  pointer-events:none}
+.modal-title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;
+  color:var(--ivory);margin-bottom:4px;text-align:center}
+.modal-sub{font-size:.85rem;color:var(--ivory-dim);text-align:center;
+  margin-bottom:24px;font-style:italic}
+.setup-label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;margin-top:16px}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.player-setup-card{background:rgba(34,28,51,.5);border:1px solid var(--border);
+  border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.psc-top{display:flex;align-items:center;gap:8px}
+.psc-token{width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:var(--night)}
+.psc-input{background:rgba(8,6,15,.6);border:1px solid var(--border);
+  color:var(--ivory);padding:6px 10px;border-radius:4px;font-family:'Crimson Pro',serif;
+  font-size:.85rem;width:100%;outline:none;transition:border-color .2s}
+.psc-input:focus{border-color:var(--gold)}
+.psc-toggle{display:flex;gap:4px}
+.psc-type{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer;
+  border:1px solid var(--border);color:var(--ivory-dim);background:transparent;transition:all .2s}
+.psc-type.active{background:rgba(201,145,13,.15);border-color:var(--gold);color:var(--gold)}
+.count-btns{display:flex;gap:6px;justify-content:center}
+.count-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+  background:transparent;color:var(--ivory-dim);font-family:'Cinzel',serif;
+  font-size:1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;
+  justify-content:center}
+.count-btn.active{background:rgba(201,145,13,.15);border-color:var(--gold);color:var(--gold-lt)}
+.count-btn:hover:not(.active){border-color:rgba(201,145,13,.4)}
+
+/* ══ CELEBRATION ══ */
+.celebration{position:fixed;inset:0;z-index:600;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,rgba(201,145,13,.25),rgba(8,6,15,.97));
+  display:none}
+.cel-deva{font-family:'Noto Sans Devanagari',sans-serif;font-size:3rem;
+  color:var(--gold);margin-bottom:8px;animation:fadeUp .6s .2s ease both}
+.cel-title{font-family:'Cinzel',serif;font-size:2.5rem;font-weight:700;
+  color:var(--ivory);margin-bottom:8px;animation:fadeUp .6s .4s ease both}
+.cel-name{font-family:'Cinzel',serif;font-size:3rem;font-weight:700;
+  color:var(--gold-lt);animation:fadeUp .6s .6s ease both}
+.cel-sub{font-size:1.1rem;color:var(--ivory-dim);font-style:italic;
+  max-width:440px;text-align:center;animation:fadeUp .6s .8s ease both;margin-top:12px}
+.cel-btn{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--night);background:var(--gold);
+  border:none;padding:13px 36px;cursor:pointer;margin-top:28px;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  animation:fadeUp .6s 1s ease both;transition:background .2s}
+.cel-btn:hover{background:var(--gold-lt)}
+/* fireworks */
+.firework{position:absolute;pointer-events:none}
+@keyframes fw-burst{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.5);opacity:0}
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ══ MANDALA GLOW ══ */
+.mandala-glow{position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);width:800px;height:800px;
+  background:radial-gradient(circle,rgba(201,145,13,.03) 0%,transparent 70%);
+  pointer-events:none;animation:slowspin 120s linear infinite;z-index:0}
+@keyframes slowspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ══ SCROLL BAR ══ */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:rgba(201,145,13,.25);border-radius:2px}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:780px){
+  .game-layout{grid-template-columns:1fr}
+  .center-col{order:-1;padding:8px}
+  .left-col{order:0;flex-direction:row;gap:8px;padding:8px;overflow-x:auto}
+  .right-col{order:1;flex-direction:row;flex-wrap:wrap;gap:8px;padding:8px}
+  .player-card,.dice-section,.wisdom-card{min-width:180px;flex:1}
+  .move-log{max-height:120px}
+}
+</style>
+</head>
+<body>
+
+<div class="mandala-glow"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div>
+      <span class="nav-logo-text">Krida</span>
+      <span class="nav-logo-sub">क्रीडा · Ancient Games</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Hub</a>
+    <span class="nav-badge">मोक्ष पातम्</span>
+  </div>
+</nav>
+
+<!-- SETUP MODAL -->
+<div class="modal-overlay" id="setupModal">
+  <div class="modal">
+    <div class="modal-title display">मोक्ष पातम्</div>
+    <div class="modal-sub">Moksha Patam — The Path to Liberation</div>
+
+    <div class="setup-label">Number of players</div>
+    <div class="count-btns">
+      <button class="count-btn" data-count="2" onclick="setPlayerCount(2)">2</button>
+      <button class="count-btn active" data-count="3" onclick="setPlayerCount(3)">3</button>
+      <button class="count-btn" data-count="4" onclick="setPlayerCount(4)">4</button>
+    </div>
+
+    <div class="setup-label">Player names & type</div>
+    <div class="setup-grid" id="playerSetupGrid"></div>
+
+    <div class="setup-label" style="margin-top:20px">Mode</div>
+    <div class="mode-pills" style="justify-content:center">
+      <button class="mode-pill active" data-mode="classic" onclick="setMode('classic',this)">Classic</button>
+      <button class="mode-pill" data-mode="spiritual" onclick="setMode('spiritual',this)">Spiritual</button>
+      <button class="mode-pill" data-mode="daily" onclick="setMode('daily',this)">Daily Karma</button>
+    </div>
+
+    <button class="roll-btn" style="margin-top:24px" onclick="startGame()">
+      Begin the Journey
+    </button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="game-layout" id="gameLayout" style="display:none">
+
+  <!-- LEFT: players + dice -->
+  <div class="left-col">
+    <div>
+      <div class="slabel">Players</div>
+      <div id="playerCards" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+
+    <div class="dice-section">
+      <div class="slabel">Pāśaka Dice</div>
+      <div class="dice-cowrie" id="cowrieRow"></div>
+      <div class="dice-result" id="diceResult">—</div>
+      <div class="dice-label" id="diceLabel">Awaiting the roll</div>
+      <button class="roll-btn" id="rollBtn" onclick="rollDice()">Cast the Cowries</button>
+    </div>
+
+    <div>
+      <div class="slabel">Status</div>
+      <div class="status-bar" id="statusBar">
+        <span class="status-name" id="statusName">—</span>
+        <span class="status-text" id="statusText">&nbsp;awaits</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRE: board -->
+  <div class="center-col">
+    <div class="board-outer" id="boardOuter">
+      <div class="board-border"></div>
+      <div class="board-inner">
+        <div class="board-grid" id="boardGrid"></div>
+        <svg class="board-svg" id="boardSvg" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="token-layer" id="tokenLayer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: wisdom + log -->
+  <div class="right-col">
+    <div>
+      <div class="slabel">Square Wisdom</div>
+      <div class="wisdom-card" id="wisdomCard">
+        <div class="wc-source">Vedic Wisdom</div>
+        <div class="wc-sq">The Journey Begins</div>
+        <div class="wc-deva">मोक्ष का मार्ग</div>
+        <div class="wc-text">The board before you is a map of the soul's journey through birth, life, virtue, and liberation. Every throw of the dice is destiny; every choice of character is yours.</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="slabel">Battle Chronicle</div>
+      <div class="move-log" id="moveLog"></div>
+    </div>
+
+    <div>
+      <div class="slabel">Dharma Guide</div>
+      <div style="background:rgba(34,28,51,.4);border:1px solid var(--border);border-radius:8px;padding:12px">
+        <div style="display:flex;gap:12px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:#7BC98A">
+            <div style="width:10px;height:10px;background:#2A4A2E;border:1px solid rgba(74,140,92,.5);border-radius:2px"></div>Virtue / Ladder
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:#C97A72">
+            <div style="width:10px;height:10px;background:#4A1A1A;border:1px solid rgba(166,50,40,.5);border-radius:2px"></div>Vice / Snake
+          </div>
+        </div>
+        <div style="font-size:.72rem;color:var(--ivory-dim);line-height:1.5">
+          <strong style="color:var(--gold)">6 Ladders</strong> (virtue squares) lift the soul toward Moksha.<br>
+          <strong style="color:#C97A72">12 Snakes</strong> (vice squares) pull the soul back to lower states.<br>
+          <strong style="color:var(--gold)">Square 100</strong> — reach Vaikuntha and attain liberation.
+        </div>
+      </div>
+    </div>
+
+    <button class="roll-btn" style="background:transparent;color:var(--ivory-dim);
+      border:1px solid var(--border);clip-path:none;border-radius:6px;font-size:.7rem"
+      onclick="showSetup()">New Game</button>
+  </div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="celebration" id="celebration">
+  <div id="fireworkCanvas" style="position:absolute;inset:0;pointer-events:none"></div>
+  <div class="cel-deva">मोक्ष</div>
+  <div class="cel-title">Liberation!</div>
+  <div class="cel-name" id="celName">—</div>
+  <div class="cel-sub" id="celSub">has crossed the final square and attained Moksha — freedom from the cycle of birth and rebirth.</div>
+  <button class="cel-btn" onclick="showSetup()">Play Again</button>
+</div>
+
+<script>
+// ══ BOARD DATA ══════════════════════════════════════════════════════════
+const LADDERS = {
+  4:56, 12:50, 20:77, 28:74, 40:79, 51:67, 57:96, 63:81, 71:91, 78:98
+};
+const SNAKES = {
+  41:6, 44:23, 49:11, 52:32, 58:15, 62:5, 69:33, 73:18, 84:42, 92:37, 95:55, 99:7
+};
+
+const SQUARE_DATA = {
+  // Ladders (virtue squares)
+  4:  {type:'virtue',name:'Dharma',deva:'धर्म',text:'Righteous conduct is the foundation of liberation. One who walks the path of dharma ascends swiftly.'},
+  12: {type:'virtue',name:'Shraddha',deva:'श्रद्धा',text:'Faith — trust in the divine order and in one\'s own soul. Shraddha is the ladder that bypasses lifetimes.'},
+  20: {type:'virtue',name:'Kshama',deva:'क्षमा',text:'Forgiveness dissolves karma instantly. The soul that forgives truly is lighter than the soul that triumphs.'},
+  28: {type:'virtue',name:'Dana',deva:'दान',text:'Generous giving without expectation of return. The open hand rises; the clenched fist falls.'},
+  40: {type:'virtue',name:'Viveka',deva:'विवेक',text:'Discernment — the ability to see the Real from the unreal, the eternal from the temporary.'},
+  51: {type:'virtue',name:'Gyaan',deva:'ज्ञान',text:'Knowledge of the Self. When one knows Brahman, one becomes Brahman. The ladder of knowledge has no end.'},
+  57: {type:'virtue',name:'Tapas',deva:'तपस',text:'Austerity and self-discipline. The fire of tapas purifies the soul and burns away accumulated karma.'},
+  63: {type:'virtue',name:'Bhakti',deva:'भक्ति',text:'Devotion to the divine, whatever form it takes. Bhakti is the shortest path for most souls.'},
+  71: {type:'virtue',name:'Seva',deva:'सेवा',text:'Selfless service. To serve another is to serve the divine. Seva transforms karma into grace.'},
+  78: {type:'virtue',name:'Moksha-Chinta',deva:'मोक्ष-चिंता',text:'Constant contemplation of liberation. The soul that keeps Moksha in sight is already half-free.'},
+  // Snakes (vice squares)
+  41: {type:'vice',name:'Avigya',deva:'अविद्या',text:'Ignorance of the true Self. Not stupidity, but the fundamental confusion of the soul\'s identity with the body and mind.'},
+  44: {type:'vice',name:'Ahamkara',deva:'अहंकार',text:'Ego and vanity. The belief that "I am this body, this name, this status." The greatest snake on the board.'},
+  49: {type:'vice',name:'Durvachan',deva:'दुर्वचन',text:'Crude, harsh, or vulgar speech. Words are karma — spoken thoughtlessly, they bind the soul.'},
+  52: {type:'vice',name:'Chouri',deva:'चोरी',text:'Theft — taking what belongs to another. The karma of taking creates the karma of loss.'},
+  58: {type:'vice',name:'Asatya',deva:'असत्य',text:'Lying and deception. Every untruth builds a wall between the soul and the Real.'},
+  62: {type:'vice',name:'Madya',deva:'मद्य',text:'Intoxication and addiction. That which clouds the mind clouds the path to liberation.'},
+  69: {type:'vice',name:'Runa',deva:'ऋण',text:'The karma of debt — financial, moral, emotional. Unpaid obligations bind the soul to another cycle.'},
+  73: {type:'vice',name:'Himsa',deva:'हिंसा',text:'Violence in thought, word, or deed. The soul that causes suffering to others must experience it.'},
+  84: {type:'vice',name:'Krodha',deva:'क्रोध',text:'Anger. The Bhagavad Gita: from anger comes delusion; from delusion, loss of memory; from memory-loss, destruction of discrimination.'},
+  92: {type:'vice',name:'Lobha',deva:'लोभ',text:'Greed — the insatiable hunger that can never be satisfied, no matter how much the world offers.'},
+  95: {type:'vice',name:'Mada',deva:'मद',text:'Pride and arrogance. The soul near Moksha who falls to pride descends the furthest of all.'},
+  99: {type:'vice',name:'Kama',deva:'काम',text:'Lust and unrestrained desire. One step from liberation, and still the old pull of desire can drag the soul back.'},
+  100:{type:'win', name:'Vaikuntha',deva:'वैकुण्ठ',text:'The abode of Vishnu. Moksha — liberation from the cycle of birth and rebirth. The soul rests in eternal bliss.'},
+};
+
+const PLAYER_COLORS = ['#C9910D','#C4501A','#1A6B8A','#2D6A3F'];
+const PLAYER_NAMES  = ['Arjun','Priya','Vikram','Ananya'];
+const TOKEN_LABELS  = ['A','P','V','N'];
+
+// ══ STATE ═══════════════════════════════════════════════════════════════
+let G = {
+  players: [],        // [{name,color,pos,dharma,isBot,active}]
+  currentIdx: 0,
+  rolled: false,
+  animating: false,
+  gameOver: false,
+  playerCount: 3,
+  mode: 'classic',
+  setupConfig: []     // [{name,isBot}]
+};
+
+// ══ SETUP UI ═════════════════════════════════════════════════════════════
+function setPlayerCount(n) {
+  G.playerCount = n;
+  document.querySelectorAll('[data-count]').forEach(b =>
+    b.classList.toggle('active', +b.dataset.count === n));
+  buildSetupGrid();
+}
+
+function setMode(mode, btn) {
+  G.mode = mode;
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function buildSetupGrid() {
+  const grid = document.getElementById('playerSetupGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < G.playerCount; i++) {
+    const cfg = G.setupConfig[i] || { name: PLAYER_NAMES[i], isBot: i > 0 };
+    G.setupConfig[i] = cfg;
+    const card = document.createElement('div');
+    card.className = 'player-setup-card';
+    card.innerHTML = `
+      <div class="psc-top">
+        <div class="psc-token" style="background:${PLAYER_COLORS[i]}">${TOKEN_LABELS[i]}</div>
+        <input class="psc-input" id="pname${i}" placeholder="Player name"
+          value="${cfg.name}" oninput="G.setupConfig[${i}].name=this.value"/>
+      </div>
+      <div class="psc-toggle">
+        <button class="psc-type ${!cfg.isBot?'active':''}" onclick="setBot(${i},false,this)">Human</button>
+        <button class="psc-type ${cfg.isBot?'active':''}" onclick="setBot(${i},true,this)">AI Bot</button>
+      </div>`;
+    grid.appendChild(card);
+  }
+}
+
+function setBot(i, isBot, btn) {
+  G.setupConfig[i].isBot = isBot;
+  btn.parentElement.querySelectorAll('.psc-type').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startGame() {
+  G.players = [];
+  for (let i = 0; i < G.playerCount; i++) {
+    const cfg = G.setupConfig[i] || { name: PLAYER_NAMES[i], isBot: i > 0 };
+    G.players.push({ name: cfg.name||PLAYER_NAMES[i], color: PLAYER_COLORS[i],
+      pos: 0, dharma: 0, isBot: cfg.isBot, eliminated: false,
+      label: TOKEN_LABELS[i] });
+  }
+  G.currentIdx = 0;
+  G.rolled = false;
+  G.animating = false;
+  G.gameOver = false;
+
+  document.getElementById('setupModal').style.display = 'none';
+  document.getElementById('gameLayout').style.display = 'grid';
+  document.getElementById('celebration').style.display = 'none';
+
+  buildBoard();
+  buildTokens();
+  renderPlayerCards();
+  updateStatus();
+  addLog('The journey of the soul begins on the Ashtapada.', 'neutral');
+
+  if (G.players[0].isBot) scheduleBot();
+}
+
+function showSetup() {
+  document.getElementById('celebration').style.display = 'none';
+  document.getElementById('gameLayout').style.display = 'none';
+  document.getElementById('setupModal').style.display = 'flex';
+  buildSetupGrid();
+}
+
+// ══ BOARD BUILD ══════════════════════════════════════════════════════════
+function sqToPos(n) {
+  // returns 0-indexed {row,col} where row 0 = top, col 0 = left
+  const r = Math.floor((n-1)/10);
+  const inRow = (n-1) % 10;
+  const col = (r%2===0) ? inRow : 9-inRow;
+  return { row: 9-r, col };   // row 9 = bottom visual
+}
+
+function buildBoard() {
+  const grid = document.getElementById('boardGrid');
+  grid.innerHTML = '';
+  // Build row by row from visual top (sq 91-100) to bottom (sq 1-10)
+  for (let vRow = 0; vRow < 10; vRow++) {
+    const logicalRow = 9 - vRow; // 9=bottom(1-10), 0=top(91-100)
+    for (let vCol = 0; vCol < 10; vCol++) {
+      const logicalCol = (logicalRow%2===0) ? vCol : 9-vCol;
+      const n = logicalRow*10 + logicalCol + 1;
+      const d = SQUARE_DATA[n];
+      const isLight = (vRow+vCol)%2===0;
+      const sq = document.createElement('div');
+      sq.id = `sq${n}`;
+      sq.className = `sq ${d?.type==='virtue'?'virtue':d?.type==='vice'?'vice':d?.type==='win'?'win':isLight?'light':'dark'}`;
+      sq.title = d ? `${d.name} — ${d.deva}` : '';
+      if (LADDERS[n]) sq.classList.add('virtue');
+      if (SNAKES[n])  sq.classList.add('vice');
+
+      if (d?.type==='win') {
+        sq.innerHTML = `<div class="sq-icon">☀️</div><div class="sq-num">${n}</div><div class="sq-label">${d.deva}</div>`;
+      } else if (LADDERS[n]) {
+        sq.innerHTML = `<div class="sq-icon">🪜</div><div class="sq-num">${n}</div>${d?`<div class="sq-label">${d.deva}</div>`:''}`;
+      } else if (SNAKES[n]) {
+        sq.innerHTML = `<div class="sq-icon">🐍</div><div class="sq-num">${n}</div>${d?`<div class="sq-label">${d.deva}</div>`:''}`;
+      } else {
+        sq.innerHTML = `<div class="sq-num">${n}</div>`;
+      }
+      sq.onclick = () => d && showWisdom(n);
+      grid.appendChild(sq);
+    }
+  }
+  drawSnakesLadders();
+}
+
+// ══ SVG SNAKES & LADDERS ════════════════════════════════════════════════
+function sqCenter(n) {
+  const { row, col } = sqToPos(n);
+  const sqPx = 52; // matches --sq base
+  const x = col * sqPx + sqPx/2;
+  const y = row * sqPx + sqPx/2;
+  return {x, y};
+}
+
+function drawSnakesLadders() {
+  const svg = document.getElementById('boardSvg');
+  svg.innerHTML = '';
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+
+  // Gradients
+  const addGrad = (id, c1, c2, x1,y1,x2,y2) => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+    g.setAttribute('id',id); g.setAttribute('gradientUnits','userSpaceOnUse');
+    g.setAttribute('x1',x1); g.setAttribute('y1',y1); g.setAttribute('x2',x2); g.setAttribute('y2',y2);
+    [[0,c1],[1,c2]].forEach(([o,c])=>{const s=document.createElementNS('http://www.w3.org/2000/svg','stop');s.setAttribute('offset',o);s.setAttribute('stop-color',c);g.appendChild(s);});
+    defs.appendChild(g);
+  };
+
+  svg.appendChild(defs);
+
+  // Draw ladders
+  Object.entries(LADDERS).forEach(([base, top], i) => {
+    const b = sqCenter(+base), t = sqCenter(top);
+    addGrad(`lg${i}`,PLAYER_COLORS[0],PLAYER_COLORS[2],b.x,b.y,t.x,t.y);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('opacity','0.75');
+
+    // Two rails
+    const angle = Math.atan2(t.y-b.y, t.x-b.x);
+    const perp = angle + Math.PI/2;
+    const w = 5;
+    const dx = Math.cos(perp)*w, dy = Math.sin(perp)*w;
+    [[dx,dy],[-dx,-dy]].forEach(([ ox, oy]) => {
+      const rail = document.createElementNS('http://www.w3.org/2000/svg','line');
+      rail.setAttribute('x1',b.x+ox); rail.setAttribute('y1',b.y+oy);
+      rail.setAttribute('x2',t.x+ox); rail.setAttribute('y2',t.y+oy);
+      rail.setAttribute('stroke',`url(#lg${i})`); rail.setAttribute('stroke-width','2.5');
+      rail.setAttribute('stroke-linecap','round');
+      g.appendChild(rail);
+    });
+
+    // Rungs
+    const dist = Math.hypot(t.x-b.x, t.y-b.y);
+    const steps = Math.max(2, Math.floor(dist/26));
+    for (let s=1; s<steps; s++) {
+      const p = s/steps;
+      const cx = b.x + (t.x-b.x)*p, cy = b.y + (t.y-b.y)*p;
+      const rung = document.createElementNS('http://www.w3.org/2000/svg','line');
+      rung.setAttribute('x1',cx+dx); rung.setAttribute('y1',cy+dy);
+      rung.setAttribute('x2',cx-dx); rung.setAttribute('y2',cy-dy);
+      rung.setAttribute('stroke',`url(#lg${i})`); rung.setAttribute('stroke-width','1.5');
+      g.appendChild(rung);
+    }
+    svg.appendChild(g);
+  });
+
+  // Draw snakes
+  Object.entries(SNAKES).forEach(([head, tail], i) => {
+    const h = sqCenter(+head), t = sqCenter(tail);
+    addGrad(`sg${i}`,'#8B3228','#C4501A',h.x,h.y,t.x,t.y);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('opacity','0.8');
+
+    // Bezier snake body
+    const cpx = (h.x + t.x)/2 + (Math.random()-.5)*80;
+    const cpy = (h.y + t.y)/2 + (Math.random()-.5)*80;
+    const cp2x = cpx + (Math.random()-.5)*60;
+    const cp2y = cpy + (Math.random()-.5)*60;
+
+    const body = document.createElementNS('http://www.w3.org/2000/svg','path');
+    body.setAttribute('d',`M${h.x},${h.y} C${cpx},${cpy} ${cp2x},${cp2y} ${t.x},${t.y}`);
+    body.setAttribute('fill','none');
+    body.setAttribute('stroke',`url(#sg${i})`);
+    body.setAttribute('stroke-width','7');
+    body.setAttribute('stroke-linecap','round');
+    body.setAttribute('opacity','0.7');
+    g.appendChild(body);
+
+    // Head dot
+    const snakeHead = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    snakeHead.setAttribute('cx',h.x); snakeHead.setAttribute('cy',h.y); snakeHead.setAttribute('r','7');
+    snakeHead.setAttribute('fill','#8B3228'); snakeHead.setAttribute('stroke','#C4501A');
+    snakeHead.setAttribute('stroke-width','1.5');
+    g.appendChild(snakeHead);
+
+    // Eyes
+    const eyeOffset = 3;
+    [[-eyeOffset,eyeOffset],[eyeOffset,eyeOffset]].forEach(([ex,ey]) => {
+      const eye = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      eye.setAttribute('cx',h.x+ex); eye.setAttribute('cy',h.y+ey); eye.setAttribute('r','1.5');
+      eye.setAttribute('fill','#F0B429');
+      g.appendChild(eye);
+    });
+
+    svg.appendChild(g);
+  });
+}
+
+// ══ TOKENS ══════════════════════════════════════════════════════════════
+function buildTokens() {
+  const layer = document.getElementById('tokenLayer');
+  layer.innerHTML = '';
+  G.players.forEach((p,i) => {
+    const t = document.createElement('div');
+    t.className = 'token';
+    t.id = `token${i}`;
+    t.textContent = p.label;
+    t.style.background = p.color;
+    placeToken(t, 0, i);
+    layer.appendChild(t);
+  });
+}
+
+function placeToken(el, pos, playerIdx) {
+  const sqPx = 52;
+  const n = G.players.length;
+  // offset tokens within square to avoid overlap
+  const offsets = [{x:0,y:0},{x:.35,y:0},{x:0,y:.35},{x:.35,y:.35}];
+  const off = offsets[playerIdx%4];
+
+  let x=0, y=0;
+  if (pos === 0) {
+    x = -sqPx*0.6; y = sqPx*(9.3 + playerIdx*0.15);
+  } else {
+    const {row, col} = sqToPos(pos);
+    x = col*sqPx + off.x*sqPx + sqPx*0.15;
+    y = row*sqPx + off.y*sqPx + sqPx*0.15;
+  }
+  el.style.left = x + 'px';
+  el.style.top  = y + 'px';
+}
+
+function animateToken(playerIdx, newPos, cls) {
+  return new Promise(res => {
+    const el = document.getElementById(`token${playerIdx}`);
+    if (!el) { res(); return; }
+    el.classList.remove('landing','climbing','sliding');
+    placeToken(el, newPos, playerIdx);
+    requestAnimationFrame(() => {
+      el.classList.add(cls || 'landing');
+      el.addEventListener('animationend', () => {
+        el.classList.remove(cls || 'landing');
+        res();
+      }, {once:true});
+    });
+  });
+}
+
+// ══ PLAYER CARDS ════════════════════════════════════════════════════════
+function renderPlayerCards() {
+  const container = document.getElementById('playerCards');
+  container.innerHTML = '';
+  G.players.forEach((p,i) => {
+    const card = document.createElement('div');
+    card.className = `player-card ${i===G.currentIdx && !G.gameOver?'active-turn':''} ${p.eliminated?'eliminated':''}`;
+    card.style.setProperty('--player-color', p.color);
+    const dharmaHtml = Array.from({length:10}).map((_,j) =>
+      `<div class="dharma-pip ${j<p.dharma?'filled':''}"></div>`).join('');
+    card.innerHTML = `
+      <div class="pc-top">
+        <div class="pc-token">${p.label}</div>
+        <div class="pc-info">
+          <div class="pc-name">${p.name}${p.isBot?' <span style="font-size:.6rem;opacity:.5">[AI]</span>':''}</div>
+          <div class="pc-sub">${p.pos===0?'Not started':p.pos===100?'Moksha!':'Square '+p.pos}</div>
+        </div>
+        <div class="pc-pos">${p.pos===0?'—':p.pos}</div>
+      </div>
+      <div class="pc-dharma"><span style="font-size:.65rem">Dharma</span>
+        <div class="dharma-pips">${dharmaHtml}</div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function updateStatus() {
+  if (G.gameOver) return;
+  const p = G.players[G.currentIdx];
+  document.getElementById('statusName').textContent = p.name;
+  document.getElementById('statusText').textContent = G.rolled ? ' — move awaiting...' : '\'s turn — cast the cowries';
+  document.getElementById('rollBtn').disabled = G.rolled || G.animating || G.gameOver;
+}
+
+// ══ WISDOM CARD ══════════════════════════════════════════════════════════
+function showWisdom(sq) {
+  const d = SQUARE_DATA[sq];
+  if (!d) return;
+  const card = document.getElementById('wisdomCard');
+  card.classList.remove('new-card');
+  void card.offsetWidth;
+  card.classList.add('new-card');
+
+  const typeLabel = d.type==='virtue'?'Virtue':d.type==='vice'?'Vice':'Destination';
+  const typeClass  = d.type==='virtue'?'wc-virtue':d.type==='vice'?'wc-vice':'wc-neutral';
+
+  card.innerHTML = `
+    <div class="wc-source">${LADDERS[sq]?'Ladder → Square '+LADDERS[sq]:SNAKES[sq]?'Snake → Square '+SNAKES[sq]:'Square '+sq}</div>
+    <div class="wc-sq">${d.name}</div>
+    <div class="wc-deva">${d.deva}</div>
+    <div class="wc-text">${d.text}</div>
+    <div class="wc-type ${typeClass}">${d.type==='virtue'?'Virtue':d.type==='vice'?'Vice':'Moksha'}</div>`;
+}
+
+// ══ MOVE LOG ═════════════════════════════════════════════════════════════
+function addLog(text, type='neutral') {
+  const log = document.getElementById('moveLog');
+  const item = document.createElement('div');
+  const cls = type==='virtue'?'virtue-log':type==='vice'?'vice-log':type==='moksha'?'moksha-log':'';
+  item.className = `log-item ${cls}`;
+  item.textContent = text;
+  log.prepend(item);
+  while (log.children.length > 30) log.removeChild(log.lastChild);
+}
+
+// ══ DICE ═════════════════════════════════════════════════════════════════
+function buildCowries(n) {
+  const row = document.getElementById('cowrieRow');
+  row.innerHTML = '';
+  for (let i=0; i<4; i++) {
+    const c = document.createElement('div');
+    c.className = 'cowrie';
+    c.id = `cowrie${i}`;
+    row.appendChild(c);
+  }
+}
+
+function rollDice() {
+  if (G.rolled || G.animating || G.gameOver) return;
+  const result = Math.floor(Math.random()*6)+1;
+  document.getElementById('rollBtn').disabled = true;
+  const cowrieRow = document.getElementById('cowrieRow');
+  cowrieRow.innerHTML = '';
+  for (let i=0;i<4;i++){
+    const c = document.createElement('div');
+    c.className='cowrie rolling';
+    c.id=`cowrie${i}`;
+    cowrieRow.appendChild(c);
+  }
+
+  // After animation, show result
+  setTimeout(() => {
+    // Determine open cowries: result = number showing flat side up (0-4 or 1-6 mapping)
+    const openCount = result === 6 ? 0 : result; // all flat = 6, else = count of flat
+    for (let i=0;i<4;i++){
+      const c = document.getElementById(`cowrie${i}`);
+      if (c) {
+        c.classList.remove('rolling');
+        c.className = 'cowrie ' + (i < openCount ? 'open' : 'flat');
+      }
+    }
+    document.getElementById('diceResult').textContent = result;
+    document.getElementById('diceLabel').textContent = DICE_LABELS[result] || '';
+    G.rolled = true;
+    processMove(result);
+  }, 600);
+}
+
+const DICE_LABELS = {
+  1:'One step forward',2:'Two steps forward',3:'Three steps',
+  4:'Four steps',5:'Five steps',6:'Six steps — Fortune!'
+};
+
+// ══ MOVE LOGIC ════════════════════════════════════════════════════════════
+async function processMove(roll) {
+  G.animating = true;
+  const p = G.players[G.currentIdx];
+  const oldPos = p.pos;
+  let newPos = Math.min(p.pos + roll, 100);
+
+  addLog(`${p.name} rolls ${roll} — moves from ${oldPos||'Start'} to ${newPos}`, 'neutral');
+
+  // Move token
+  p.pos = newPos;
+  renderPlayerCards();
+  await animateToken(G.currentIdx, newPos, 'landing');
+  pulseSq(newPos);
+  if (SQUARE_DATA[newPos]) showWisdom(newPos);
+
+  await sleep(400);
+
+  // Check ladder
+  if (LADDERS[newPos]) {
+    const dest = LADDERS[newPos];
+    const d = SQUARE_DATA[newPos];
+    addLog(`🪜 ${p.name} lands on ${d?.name||'a virtue'} (${newPos}) — climbs to ${dest}!`, 'virtue');
+    p.dharma = Math.min(p.dharma+1, 10);
+    p.pos = dest;
+    renderPlayerCards();
+    await animateToken(G.currentIdx, dest, 'climbing');
+    showWisdom(newPos);
+    playSound('ladder');
+    await sleep(300);
+  }
+  // Check snake
+  else if (SNAKES[newPos]) {
+    const dest = SNAKES[newPos];
+    const d = SQUARE_DATA[newPos];
+    addLog(`🐍 ${p.name} lands on ${d?.name||'a vice'} (${newPos}) — slides down to ${dest}!`, 'vice');
+    p.pos = dest;
+    renderPlayerCards();
+    await animateToken(G.currentIdx, dest, 'sliding');
+    showWisdom(newPos);
+    playSound('snake');
+    await sleep(300);
+  }
+
+  // Check win
+  if (p.pos === 100) {
+    G.gameOver = true;
+    G.animating = false;
+    addLog(`☀️ ${p.name} reaches Vaikuntha — Moksha attained!`, 'moksha');
+    await sleep(600);
+    celebrate(p);
+    return;
+  }
+
+  G.rolled = false;
+  G.animating = false;
+  nextTurn();
+}
+
+function nextTurn() {
+  G.currentIdx = (G.currentIdx + 1) % G.players.length;
+  renderPlayerCards();
+  updateStatus();
+  document.getElementById('rollBtn').disabled = false;
+  if (G.players[G.currentIdx].isBot && !G.gameOver) {
+    scheduleBot();
+  }
+}
+
+function scheduleBot() {
+  document.getElementById('rollBtn').disabled = true;
+  setTimeout(() => { if (!G.gameOver && !G.animating) rollDice(); }, 1200 + Math.random()*800);
+}
+
+function pulseSq(n) {
+  const el = document.getElementById(`sq${n}`);
+  if (!el) return;
+  el.classList.add('pulsing');
+  el.addEventListener('animationend', () => el.classList.remove('pulsing'), {once:true});
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ══ AUDIO ══════════════════════════════════════════════════════════════
+let ctx;
+function getCtx() { if (!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); return ctx; }
+
+function playSound(type) {
+  try {
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.connect(gain); gain.connect(c.destination);
+
+    if (type==='ladder') {
+      osc.frequency.setValueAtTime(523, c.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1046, c.currentTime+0.4);
+      gain.gain.setValueAtTime(.15, c.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, c.currentTime+0.5);
+      osc.type='sine';
+      osc.start(); osc.stop(c.currentTime+0.5);
+    } else if (type==='snake') {
+      osc.frequency.setValueAtTime(440, c.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(110, c.currentTime+0.6);
+      gain.gain.setValueAtTime(.12, c.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, c.currentTime+0.7);
+      osc.type='sawtooth';
+      osc.start(); osc.stop(c.currentTime+0.7);
+    }
+  } catch(e){}
+}
+
+// ══ CELEBRATION ══════════════════════════════════════════════════════════
+function celebrate(winner) {
+  const cel = document.getElementById('celebration');
+  document.getElementById('celName').textContent = winner.name;
+  cel.style.display = 'flex';
+  spawnFireworks();
+}
+
+function spawnFireworks() {
+  const canvas = document.getElementById('fireworkCanvas');
+  canvas.innerHTML = '';
+  const colors = ['#F0B429','#C9910D','#C4501A','#1A6B8A','#F5EDD8'];
+  for (let i=0; i<24; i++) {
+    setTimeout(() => {
+      const fw = document.createElement('div');
+      fw.style.cssText = `position:absolute;left:${10+Math.random()*80}%;top:${10+Math.random()*70}%;
+        width:${40+Math.random()*60}px;height:${40+Math.random()*60}px;
+        border-radius:50%;border:2px solid ${colors[Math.floor(Math.random()*colors.length)]};
+        animation:fw-burst ${.6+Math.random()*.4}s ease-out forwards;pointer-events:none`;
+      canvas.appendChild(fw);
+    }, i*100);
+  }
+}
+
+// ══ INIT ════════════════════════════════════════════════════════════════
+setPlayerCount(3);
+buildSetupGrid();
+buildCowries();
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+
+<style>
+.board-wrap {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.board-area {
+  flex: 1 1 300px;
+  min-width: 260px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 12px;
+  box-sizing: border-box;
+}
+.board-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin: 0 0 8px;
+  text-align: center;
+}
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 1px;
+  background: var(--color-border-tertiary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  width: 100%;
+}
+.cell {
+  background: var(--color-background-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--color-text-tertiary);
+  aspect-ratio: 1;
+  position: relative;
+  box-sizing: border-box;
+}
+.cell.ladder { background: #EAF3DE; color: #27500A; font-weight: 500; }
+.cell.snake  { background: #FAECE7; color: #712B13; font-weight: 500; }
+.cell.player1 { background: #FAC775; color: #412402; }
+.cell.player2 { background: #B5D4F4; color: #042C53; }
+.cell.win { background: #C0DD97; color: #173404; font-weight: 500; }
+.cell.alt { background: var(--color-background-secondary); }
+.side-panel {
+  flex: 0 0 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.player-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+}
+.player-card.active { border-color: var(--color-border-info); border-width: 1.5px; }
+.pc-row { display: flex; align-items: center; gap: 8px; }
+.token {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500;
+  flex-shrink: 0;
+}
+.t1 { background: #FAC775; color: #412402; }
+.t2 { background: #B5D4F4; color: #042C53; }
+.t3 { background: #C0DD97; color: #173404; }
+.pc-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.pc-pos { font-size: 11px; color: var(--color-text-secondary); margin-left: auto; }
+.die-area {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 10px;
+  text-align: center;
+}
+.die-face {
+  width: 44px; height: 44px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+.roll-btn {
+  display: block;
+  width: 100%;
+  background: var(--color-background-info);
+  color: var(--color-text-info);
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 2px;
+}
+.roll-btn:hover { opacity: 0.85; }
+.wisdom-card {
+  background: #FAEEDA;
+  border: 0.5px solid #BA7517;
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #412402;
+  line-height: 1.5;
+}
+.wc-title { font-weight: 500; font-size: 12px; margin-bottom: 4px; color: #633806; }
+.mode-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.mode-pill {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  background: var(--color-background-primary);
+}
+.mode-pill.active {
+  background: var(--color-background-info);
+  color: var(--color-text-info);
+  border-color: transparent;
+}
+.legend-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--color-text-secondary); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+</style>
+
+<p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 6px;font-weight:500;">Game Screen — Concept Mockup</p>
+
+<div class="mode-bar">
+  <span class="mode-pill active">Classic</span>
+  <span class="mode-pill">Spiritual</span>
+  <span class="mode-pill">vs AI</span>
+  <span class="mode-pill">Daily Challenge</span>
+</div>
+
+<div class="board-wrap">
+  <div class="board-area">
+    <p class="board-title">Cosmic Board — Vaikuntha Theme</p>
+    <div class="board-grid" id="grid"></div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-dot" style="background:#EAF3DE;border:0.5px solid #27500A"></div>Ladder foot</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FAECE7;border:0.5px solid #712B13"></div>Snake head</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FAC775;border:0.5px solid #633806"></div>You (P1)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#B5D4F4;border:0.5px solid #0C447C"></div>Opponent</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C0DD97;border:0.5px solid #27500A"></div>Cell 100</div>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="player-card active">
+      <div class="pc-row">
+        <div class="token t1">A</div>
+        <span class="pc-name">Arjun</span>
+        <span class="pc-pos">Cell 42</span>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="pc-row">
+        <div class="token t2">P</div>
+        <span class="pc-name">Priya</span>
+        <span class="pc-pos">Cell 67</span>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="pc-row">
+        <div class="token t3">R</div>
+        <span class="pc-name">Rohan</span>
+        <span class="pc-pos">Cell 28</span>
+      </div>
+    </div>
+
+    <div class="die-area">
+      <div class="die-face" id="dieFace">4</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:6px">Arjun's turn</div>
+      <button class="roll-btn" onclick="rollDie()">Roll die</button>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wc-title">Cell 44 — Vanity</div>
+      Pride in one's appearance blinds the soul from recognising the divine in others.
+    </div>
+  </div>
+</div>
+
+<script>
+const ladders = new Set([12, 51, 57, 76]);
+const snakes  = new Set([44, 58, 62, 84, 95, 99]);
+const players = { 42: 't1', 67: 't2', 28: 't3' };
+
+function buildGrid() {
+  const g = document.getElementById('grid');
+  g.innerHTML = '';
+  for (let row = 9; row >= 0; row--) {
+    const cells = [];
+    for (let col = 0; col < 10; col++) {
+      const n = row % 2 === 1
+        ? row * 10 + (10 - col)
+        : row * 10 + col + 1;
+      cells.push(n);
+    }
+    cells.forEach(n => {
+      const d = document.createElement('div');
+      d.className = 'cell' + (n % 2 === 0 ? ' alt' : '');
+      if (n === 100) d.classList.add('win');
+      else if (ladders.has(n)) d.classList.add('ladder');
+      else if (snakes.has(n)) d.classList.add('snake');
+      if (players[n]) d.classList.add(players[n]);
+      d.textContent = n;
+      g.appendChild(d);
+    });
+  }
+}
+
+function rollDie() {
+  const face = document.getElementById('dieFace');
+  const faces = ['1','2','3','4','5','6'];
+  let i = 0;
+  const t = setInterval(() => {
+    face.textContent = faces[Math.floor(Math.random()*6)];
+    i++;
+    if (i > 10) clearInterval(t);
+  }, 80);
+}
+
+buildGrid();
+</script>

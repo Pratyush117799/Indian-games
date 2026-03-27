@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krida — Ancient Indian Games Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Devanagari:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night:    #08060F;
+  --deep:     #0F0B1A;
+  --ink:      #1A1428;
+  --panel:    #221C33;
+  --border:   #2E2545;
+  --gold:     #C9910D;
+  --gold-lt:  #F0B429;
+  --gold-dim: #7A5608;
+  --saffron:  #C4501A;
+  --ivory:    #F5EDD8;
+  --ivory-dim:#A89A7A;
+  --peacock:  #1A6B8A;
+  --leaf:     #2D6A3F;
+  --crimson:  #8B1A2F;
+  --r: 1440px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--night);
+  color: var(--ivory);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── Grain overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ── Typography ── */
+.display { font-family: 'Cinzel', serif; letter-spacing: 0.04em; }
+.deva { font-family: 'Noto Sans Devanagari', sans-serif; }
+
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 64px;
+  background: linear-gradient(180deg, rgba(8,6,15,0.98) 0%, rgba(8,6,15,0) 100%);
+  border-bottom: 1px solid rgba(201,145,13,0.12);
+  backdrop-filter: blur(8px);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  width: 36px; height: 36px;
+  position: relative;
+}
+.nav-logo-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold-lt);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nav-logo-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.65rem;
+  color: var(--ivory-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-top: -4px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ivory-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold-lt); }
+
+.nav-cta {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--night);
+  background: var(--gold);
+  border: none;
+  padding: 9px 22px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+.nav-cta:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 100px clamp(1.5rem, 6vw, 5rem) 4rem;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,145,13,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(196,80,26,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(26,107,138,0.06) 0%, transparent 60%),
+    var(--night);
+}
+
+/* Mandala background art */
+.mandala-bg {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(900px, 120vw);
+  height: min(900px, 120vw);
+  opacity: 0.04;
+  animation: slowspin 120s linear infinite;
+}
+@keyframes slowspin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hero-eyebrow {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s ease forwards;
+}
+
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--ivory);
+  margin-bottom: 0.4rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s ease forwards;
+}
+
+.hero-title span {
+  color: var(--gold-lt);
+  display: block;
+}
+
+.hero-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ivory-dim);
+  max-width: 620px;
+  margin: 1.4rem auto 2.8rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.6s ease forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.8s ease forwards;
+}
+
+.btn-primary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--night);
+  background: var(--gold);
+  border: none;
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  box-shadow: 0 0 40px rgba(201,145,13,0.25);
+}
+.btn-primary:hover {
+  background: var(--gold-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 60px rgba(201,145,13,0.4);
+}
+
+.btn-secondary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ivory-dim);
+  background: transparent;
+  border: 1px solid rgba(201,145,13,0.35);
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--gold-lt); color: var(--gold-lt); }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeUp 0.9s 1.2s ease forwards;
+}
+.hero-scroll span {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform: scaleY(1); opacity: 0.5; }
+  50% { transform: scaleY(0.6); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Section scaffold ── */
+section {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 5rem);
+}
+
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 600;
+  color: var(--ivory);
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+}
+
+.section-body {
+  font-size: 1.1rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  max-width: 56ch;
+  line-height: 1.8;
+}
+
+/* ── Divider ── */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto 3rem;
+  max-width: 320px;
+}
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+}
+.ornament-diamond {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── Philosophy band ── */
+.philosophy {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.philosophy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 40px,
+    rgba(201,145,13,0.018) 40px,
+    rgba(201,145,13,0.018) 41px
+  );
+}
+
+.philosophy-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: var(--r);
+  margin: 0 auto;
+}
+
+.philosophy-quote {
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ivory);
+  line-height: 1.5;
+  border-left: 2px solid var(--gold);
+  padding-left: 2rem;
+}
+.philosophy-quote cite {
+  display: block;
+  font-size: 0.85rem;
+  font-style: normal;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-top: 1rem;
+  font-family: 'Cinzel', serif;
+}
+
+.philosophy-pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.pillar {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  transition: border-color 0.3s, background 0.3s;
+}
+.pillar:hover {
+  border-color: rgba(201,145,13,0.4);
+  background: rgba(201,145,13,0.04);
+}
+.pillar-symbol {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.pillar-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: var(--ivory);
+  margin-bottom: 0.4rem;
+}
+.pillar-desc {
+  font-size: 0.88rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ── Games showcase ── */
+.games {
+  background: var(--night);
+  max-width: 100%;
+}
+
+.games-inner {
+  max-width: var(--r);
+  margin: 0 auto;
+}
+
+.games-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.5px;
+}
+
+.game-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--panel);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  transition: transform 0.4s ease;
+}
+.game-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8,6,15,0.9) 0%, transparent 60%);
+  pointer-events: none;
+}
+.game-card:hover { transform: scale(1.01); z-index: 2; }
+.game-card:hover .card-overlay { opacity: 1; }
+
+.game-card-featured {
+  grid-row: 1 / 3;
+  min-height: 520px;
+}
+
+.card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+.game-card:hover .card-bg { transform: scale(1.04); }
+
+/* SVG board patterns as backgrounds */
+.bg-moksha {
+  background: linear-gradient(135deg, #1A1428 0%, #2A1810 40%, #1A1428 100%);
+}
+.bg-chaturanga { background: linear-gradient(135deg, #0F1A1A 0%, #0A1A0F 100%); }
+.bg-pachisi    { background: linear-gradient(135deg, #1A0F1A 0%, #1A1010 100%); }
+.bg-ashtapada  { background: linear-gradient(135deg, #0F0F1A 0%, #1A0F10 100%); }
+.bg-ganjifa    { background: linear-gradient(135deg, #1A1010 0%, #0F1A1A 100%); }
+
+.card-badge {
+  position: absolute;
+  top: 1.2rem; left: 1.2rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--gold);
+  color: var(--night);
+  z-index: 3;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+.card-content {
+  position: relative;
+  z-index: 3;
+}
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ivory);
+  margin-bottom: 0.4rem;
+}
+.game-card-featured .card-title { font-size: 2rem; }
+.card-desc {
+  font-size: 0.95rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  margin-bottom: 1.2rem;
+  max-width: 40ch;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.card-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-lt);
+  background: rgba(201,145,13,0.12);
+  border: 1px solid rgba(201,145,13,0.3);
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin-top: 0.8rem;
+  text-decoration: none;
+}
+.card-play:hover {
+  background: rgba(201,145,13,0.2);
+  border-color: var(--gold);
+}
+
+/* Board decorative SVG inside card */
+.board-preview {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 1px;
+  padding: 1.5rem;
+  opacity: 0.15;
+}
+.bp-cell {
+  border: 0.5px solid rgba(201,145,13,0.3);
+  border-radius: 1px;
+}
+.bp-cell.ladder { background: rgba(45,106,63,0.6); }
+.bp-cell.snake  { background: rgba(139,26,47,0.6); }
+.bp-cell.top    { background: rgba(201,145,13,0.5); }
+
+/* ── Modes section ── */
+.modes { background: var(--deep); border-top: 1px solid var(--border); }
+.modes-inner { max-width: var(--r); margin: 0 auto; }
+
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+.mode-card {
+  background: var(--deep);
+  padding: 2.5rem 2rem;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.mode-card:hover { background: rgba(201,145,13,0.04); }
+.mode-card:hover::before { transform: scaleX(1); }
+
+.mode-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: rgba(201,145,13,0.15);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+.mode-card:hover .mode-number { color: rgba(201,145,13,0.35); }
+.mode-icon {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+.mode-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ivory);
+  margin-bottom: 0.6rem;
+}
+.mode-desc {
+  font-size: 0.92rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  line-height: 1.7;
+}
+.mode-tag {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  color: var(--ivory-dim);
+}
+
+/* ── Stats bar ── */
+.stats {
+  background: var(--ink);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem clamp(1.5rem, 6vw, 5rem);
+}
+.stats-inner {
+  max-width: var(--r);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.stat-item { text-align: center; }
+.stat-number {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--gold-lt);
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ivory-dim);
+}
+.stat-divider {
+  width: 1px;
+  height: 60px;
+  background: var(--border);
+}
+
+/* ── History / lore section ── */
+.history { background: var(--night); }
+.history-inner {
+  max-width: var(--r);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.timeline {
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--border);
+  margin-top: 2rem;
+}
+.timeline-item {
+  padding: 1.5rem 0 1.5rem 2rem;
+  position: relative;
+  border-bottom: 1px solid rgba(46,37,69,0.5);
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-dot {
+  position: absolute;
+  left: -2.1rem;
+  top: 1.8rem;
+  width: 10px; height: 10px;
+  background: var(--border);
+  border: 1.5px solid var(--gold-dim);
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+.timeline-item:hover .timeline-dot { background: var(--gold); }
+.timeline-era {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.timeline-event {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--ivory);
+  margin-bottom: 0.4rem;
+}
+.timeline-detail {
+  font-size: 0.9rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+}
+
+/* ── Community ── */
+.community { background: var(--deep); border-top: 1px solid var(--border); }
+.community-inner {
+  max-width: var(--r);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.community-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+.comm-card {
+  background: var(--deep);
+  padding: 1.8rem;
+  transition: background 0.3s;
+}
+.comm-card:hover { background: rgba(201,145,13,0.04); }
+.comm-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.7rem;
+  display: block;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+.comm-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--ivory);
+  margin-bottom: 0.4rem;
+}
+.comm-desc {
+  font-size: 0.88rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ── CTA ── */
+.cta-band {
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 5rem);
+  background: var(--night);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.cta-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,145,13,0.07), transparent);
+}
+.cta-inner { position: relative; z-index: 2; }
+.cta-band .section-label { text-align: center; }
+.cta-band .section-title { text-align: center; margin: 0 auto 1rem; }
+.cta-tagline {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--ivory-dim);
+  margin-bottom: 2.5rem;
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  padding: 3rem clamp(1.5rem, 6vw, 5rem) 2rem;
+}
+.footer-inner {
+  max-width: var(--r);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold-lt);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+.footer-brand-tagline {
+  font-size: 0.9rem;
+  color: var(--ivory-dim);
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: 1.2rem;
+}
+.footer-brand-desc {
+  font-size: 0.88rem;
+  color: var(--ivory-dim);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 30ch;
+}
+.footer-col-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 0.6rem; }
+.footer-links a {
+  font-size: 0.88rem;
+  color: var(--ivory-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 300;
+}
+.footer-links a:hover { color: var(--gold-lt); }
+.footer-bottom {
+  max-width: var(--r);
+  margin: 2.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-bottom p {
+  font-size: 0.78rem;
+  color: rgba(168,154,122,0.5);
+  font-weight: 300;
+}
+.footer-langs {
+  display: flex;
+  gap: 1rem;
+}
+.footer-langs a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(168,154,122,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-langs a:hover { color: var(--gold); }
+
+/* ── Announcement bar ── */
+.announcement {
+  background: var(--gold);
+  color: var(--night);
+  text-align: center;
+  padding: 8px 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 901;
+}
+.announcement strong { font-weight: 700; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .philosophy-inner,
+  .history-inner,
+  .community-inner,
+  .footer-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .games-grid { grid-template-columns: 1fr 1fr; }
+  .game-card-featured { grid-column: 1 / -1; }
+  nav .nav-links { display: none; }
+}
+@media (max-width: 580px) {
+  .games-grid { grid-template-columns: 1fr; }
+  .modes-grid { grid-template-columns: 1fr; }
+  .community-cards { grid-template-columns: 1fr; }
+  .stats-inner { gap: 2.5rem; }
+  .stat-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Announcement bar -->
+<div class="announcement">
+  <strong>New:</strong> &nbsp;Vaikuntha Ekadashi Special Board — Live Now &nbsp;·&nbsp; Play Free, No Login Required
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg class="nav-logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="16" stroke="#C9910D" stroke-width="1"/>
+      <circle cx="18" cy="18" r="10" stroke="#C9910D" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="18" cy="18" r="4" fill="#C9910D" opacity="0.8"/>
+      <line x1="18" y1="2" x2="18" y2="34" stroke="#C9910D" stroke-width="0.5" opacity="0.5"/>
+      <line x1="2" y1="18" x2="34" y2="18" stroke="#C9910D" stroke-width="0.5" opacity="0.5"/>
+      <line x1="6.1" y1="6.1" x2="29.9" y2="29.9" stroke="#C9910D" stroke-width="0.5" opacity="0.3"/>
+      <line x1="29.9" y1="6.1" x2="6.1" y2="29.9" stroke="#C9910D" stroke-width="0.5" opacity="0.3"/>
+    </svg>
+    <div>
+      <span class="nav-logo-text">Krida</span>
+      <span class="nav-logo-sub deva">क्रीडा</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#games">Games</a></li>
+    <li><a href="#modes">How to Play</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+
+  <button class="nav-cta" onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">Play Now</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Mandala SVG background art -->
+  <svg class="mandala-bg" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="300" cy="300" r="280" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="240" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="200" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="160" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="120" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="80" stroke="#C9910D" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="40" stroke="#C9910D" stroke-width="0.5"/>
+    <!-- 8 petal lotus -->
+    <g stroke="#C9910D" stroke-width="0.4">
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(45,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(90,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(135,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(180,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(225,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(270,300,300)"/>
+      <ellipse cx="300" cy="220" rx="20" ry="60" fill="none" transform="rotate(315,300,300)"/>
+    </g>
+    <!-- radial lines -->
+    <g stroke="#C9910D" stroke-width="0.3" opacity="0.6">
+      <line x1="300" y1="20" x2="300" y2="580"/>
+      <line x1="20" y1="300" x2="580" y2="300"/>
+      <line x1="86" y1="86" x2="514" y2="514"/>
+      <line x1="514" y1="86" x2="86" y2="514"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(22.5,300,300)"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(45,300,300)"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(67.5,300,300)"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(112.5,300,300)"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(135,300,300)"/>
+      <line x1="300" y1="20" x2="300" y2="580" transform="rotate(157.5,300,300)"/>
+    </g>
+    <!-- outer diamond pattern -->
+    <polygon points="300,20 580,300 300,580 20,300" stroke="#C9910D" stroke-width="0.4" fill="none"/>
+    <polygon points="300,60 540,300 300,540 60,300" stroke="#C9910D" stroke-width="0.4" fill="none" opacity="0.5"/>
+  </svg>
+
+  <div class="hero-inner">
+    <p class="hero-eyebrow deva">प्राचीन भारतीय खेल</p>
+    <h1 class="hero-title display">
+      Ancient Games
+      <span>Reborn.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Rediscover the sacred games of India — Moksha Patam, Chaturanga, Pachisi — 
+      played online with their original spiritual depth and beauty restored.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">Play Moksha Patam Free</button>
+      <button class="btn-secondary" onclick="document.getElementById('history').scrollIntoView({behavior:'smooth'})">Explore the History</button>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Philosophy band -->
+<section class="philosophy" id="about">
+  <div class="philosophy-inner">
+    <div>
+      <p class="section-label">The Philosophy</p>
+      <blockquote class="philosophy-quote">
+        "Every square is a mirror. Every snake a lesson. Every ladder a grace. 
+        The board does not lie — only the player refuses to see."
+        <cite>— Sant Jnaneshwar, 13th century CE</cite>
+      </blockquote>
+    </div>
+    <div class="philosophy-pillars">
+      <div class="pillar">
+        <span class="pillar-symbol">कर्म</span>
+        <p class="pillar-name display">Karma</p>
+        <p class="pillar-desc">Your actions set the path. The dice reveal the moment.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-symbol">धर्म</span>
+        <p class="pillar-name display">Dharma</p>
+        <p class="pillar-desc">Right action elevates. Vice sends you down the serpent.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-symbol">संसार</span>
+        <p class="pillar-name display">Samsara</p>
+        <p class="pillar-desc">The cycle is the board. You have played before.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-symbol">मोक्ष</span>
+        <p class="pillar-name display">Moksha</p>
+        <p class="pillar-desc">Liberation. Square 100. The only goal that matters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-number display">800+</span>
+      <span class="stat-label">Years of History</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number display">12</span>
+      <span class="stat-label">Moral Virtues</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number display">7.6×10⁹³</span>
+      <span class="stat-label">Possible Board Configurations</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number display">5</span>
+      <span class="stat-label">Regional Traditions</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-number display">∞</span>
+      <span class="stat-label">Wisdom to Discover</span>
+    </div>
+  </div>
+</div>
+
+<!-- Games showcase -->
+<section class="games" id="games">
+  <div class="games-inner">
+    <div class="games-header">
+      <div>
+        <p class="section-label">Our Games</p>
+        <h2 class="section-title display">Play the Originals</h2>
+      </div>
+      <p class="section-body" style="max-width:34ch;font-size:1rem;">
+        Each game is presented with full historical context, authentic art, and both casual and contemplative modes.
+      </p>
+    </div>
+
+    <div class="games-grid">
+      <!-- Featured: Moksha Patam -->
+      <div class="game-card game-card-featured" onclick="alert('Launching Moksha Patam...')">
+        <div class="card-bg bg-moksha"></div>
+        <!-- Board grid preview -->
+        <div class="board-preview" id="boardPreview"></div>
+        <div class="card-badge">Featured</div>
+        <div class="card-content">
+          <p style="font-family:'Noto Sans Devanagari',sans-serif;font-size:0.9rem;color:var(--gold);margin-bottom:0.4rem;letter-spacing:0.1em;">मोक्ष पातम्</p>
+          <h3 class="card-title display">Moksha Patam</h3>
+          <p class="card-desc">The original Snakes & Ladders — a map of the soul's journey from vice to liberation. 13th century Maharashtra.</p>
+          <div class="card-meta">
+            <span>100 Squares</span>
+            <span>·</span>
+            <span>2–4 Players</span>
+            <span>·</span>
+            <span>Online Multiplayer</span>
+          </div>
+          <a class="card-play" href="#">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><polygon points="2,1 11,6 2,11"/></svg>
+            Play Now — Free
+          </a>
+        </div>
+      </div>
+
+      <!-- Chaturanga -->
+      <div class="game-card" onclick="alert('Chaturanga coming soon!')">
+        <div class="card-bg bg-chaturanga"></div>
+        <div class="card-badge" style="background:var(--peacock);color:#fff;">Coming Soon</div>
+        <div class="card-content">
+          <p style="font-family:'Noto Sans Devanagari',sans-serif;font-size:0.8rem;color:var(--peacock);margin-bottom:0.3rem;">चतुरंग</p>
+          <h3 class="card-title display" style="font-size:1.2rem;">Chaturanga</h3>
+          <p class="card-desc" style="font-size:0.85rem;">The 6th-century war game that became Chess. Four armies, one battlefield.</p>
+          <div class="card-meta" style="font-size:0.6rem;">8×8 Board · 2–4 Players</div>
+        </div>
+      </div>
+
+      <!-- Pachisi -->
+      <div class="game-card" onclick="alert('Pachisi coming soon!')">
+        <div class="card-bg bg-pachisi"></div>
+        <div class="card-badge" style="background:var(--crimson);color:#fff;">Coming Soon</div>
+        <div class="card-content">
+          <p style="font-family:'Noto Sans Devanagari',sans-serif;font-size:0.8rem;color:#D48FBF;margin-bottom:0.3rem;">पचीसी</p>
+          <h3 class="card-title display" style="font-size:1.2rem;">Pachisi</h3>
+          <p class="card-desc" style="font-size:0.85rem;">The royal court game of the Mughals. The ancestor of Ludo.</p>
+          <div class="card-meta" style="font-size:0.6rem;">Cross Board · 4 Players</div>
+        </div>
+      </div>
+
+      <!-- Ganjifa -->
+      <div class="game-card" onclick="alert('Ganjifa coming soon!')">
+        <div class="card-bg bg-ganjifa"></div>
+        <div class="card-badge" style="background:var(--leaf);color:#fff;">Coming Soon</div>
+        <div class="card-content">
+          <p style="font-family:'Noto Sans Devanagari',sans-serif;font-size:0.8rem;color:#82B896;margin-bottom:0.3rem;">गंजीफा</p>
+          <h3 class="card-title display" style="font-size:1.2rem;">Ganjifa Cards</h3>
+          <p class="card-desc" style="font-size:0.85rem;">The circular playing cards of the Deccan. Hand-painted lacquer on ivory.</p>
+          <div class="card-meta" style="font-size:0.6rem;">96 Cards · 2–6 Players</div>
+        </div>
+      </div>
+
+      <!-- Ashtapada -->
+      <div class="game-card" onclick="alert('Ashtapada coming soon!')">
+        <div class="card-bg bg-ashtapada"></div>
+        <div class="card-badge" style="background:var(--ink);color:var(--gold);border:1px solid var(--gold-dim);">In Dev</div>
+        <div class="card-content">
+          <p style="font-family:'Noto Sans Devanagari',sans-serif;font-size:0.8rem;color:var(--gold);margin-bottom:0.3rem;">अष्टापद</p>
+          <h3 class="card-title display" style="font-size:1.2rem;">Ashtapada</h3>
+          <p class="card-desc" style="font-size:0.85rem;">The 8×8 race game predating chess. Vedic origins, 2nd century BCE.</p>
+          <div class="card-meta" style="font-size:0.6rem;">8×8 Board · 2 Players</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Game Modes -->
+<section class="modes" id="modes">
+  <div class="modes-inner">
+    <p class="section-label">How to Play</p>
+    <h2 class="section-title display">Choose Your Path</h2>
+    <p class="section-body">From a five-minute casual game to a deep evening of philosophical reflection — Moksha Patam meets you where you are.</p>
+
+    <div class="modes-grid">
+      <div class="mode-card">
+        <div class="mode-number display">01</div>
+        <span class="mode-icon">⚡</span>
+        <p class="mode-name display">Classic Mode</p>
+        <p class="mode-desc">Standard rules, polished animations, 2–4 players online or vs AI. No account needed. Start in seconds.</p>
+        <span class="mode-tag display">2–4 Players · 10 min</span>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number display">02</div>
+        <span class="mode-icon">🪔</span>
+        <p class="mode-name display">Spiritual Mode</p>
+        <p class="mode-desc">Each square reveals its wisdom. Wisdom cards, discussion prompts, contemplative pace. The game as the rishis intended.</p>
+        <span class="mode-tag display">2 Players · 30–60 min</span>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number display">03</div>
+        <span class="mode-icon">🎯</span>
+        <p class="mode-name display">Daily Challenge</p>
+        <p class="mode-desc">One special board, every day. Tied to the Hindu calendar. Share your result — challenge your family.</p>
+        <span class="mode-tag display">Solo · 5 min</span>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number display">04</div>
+        <span class="mode-icon">🏆</span>
+        <p class="mode-name display">Tournament</p>
+        <p class="mode-desc">Seasonal brackets, festival specials, global leaderboards. Compete on Ekadashi boards, Diwali boards, and more.</p>
+        <span class="mode-tag display">Online · Seasonal</span>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number display">05</div>
+        <span class="mode-icon">🎨</span>
+        <p class="mode-name display">Board Creator</p>
+        <p class="mode-desc">Design your own board. Name your snakes, place your ladders, assign your own virtues and vices. Share with the community.</p>
+        <span class="mode-tag display">Creative · Free</span>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number display">06</div>
+        <span class="mode-icon">📖</span>
+        <p class="mode-name display">Story Mode</p>
+        <p class="mode-desc">An animated walkthrough of every virtue and vice on the board. Meet the philosophy before you play. Ideal for first-timers.</p>
+        <span class="mode-tag display">Solo · Educational</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- History -->
+<section class="history" id="history">
+  <div class="history-inner">
+    <div>
+      <p class="section-label">The History</p>
+      <h2 class="section-title display">800 Years of Wisdom</h2>
+      <p class="section-body">
+        Moksha Patam is not a children's game. It is a dharmic teaching instrument — 
+        a map of consequence painted by saints, played by kings, and stripped of meaning by empire.
+        We are restoring what was taken.
+      </p>
+      <br>
+      <p class="section-body">
+        The British renamed it "Snakes and Ladders" in 1892. They replaced karma with thrift, 
+        moksha with Victorian virtue, and asymmetry with balance. In 1943, Milton Bradley 
+        turned the snakes into slides. Each step further from the source.
+      </p>
+      <br>
+      <button class="btn-secondary" style="font-size:0.75rem;padding:11px 28px;cursor:pointer;">Read Full History</button>
+    </div>
+    <div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-era display">2nd Century BCE</p>
+          <p class="timeline-event display">Earliest Known References</p>
+          <p class="timeline-detail">Morality-teaching board games referenced in Sanskrit texts. Conceptual roots of the tradition.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-era display">13th Century CE</p>
+          <p class="timeline-event display">Sant Jnaneshwar, Maharashtra</p>
+          <p class="timeline-detail">Attributed creator of the formalised 72-square version. Used as a tool for teaching karma and dharma to children.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-era display">16th Century</p>
+          <p class="timeline-event display">Jain &amp; Vaishnava Variants</p>
+          <p class="timeline-detail">84-square Jain cosmological version. Vaikunthapali tradition in Telugu-speaking regions. The game becomes a living, regional tradition.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-era display">1892</p>
+          <p class="timeline-event display">Colonial Erasure</p>
+          <p class="timeline-detail">Game brought to England. Spiritual philosophy stripped and replaced with Victorian moral codes. Renamed "Snakes and Ladders."</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <p class="timeline-era display">2026</p>
+          <p class="timeline-event display">Krida — Restoration Begins</p>
+          <p class="timeline-detail">The original philosophy, art, and regional traditions restored to digital form. Played globally, understood authentically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Community -->
+<section class="community" id="community">
+  <div class="community-inner">
+    <div>
+      <p class="section-label">Community</p>
+      <h2 class="section-title display">A Living Tradition</h2>
+      <p class="section-body">
+        Moksha Patam was never a solo pursuit. It was played by families on Ekadashi nights, 
+        debated by philosophers, and gifted across generations. Build that community here.
+      </p>
+      <br>
+      <button class="btn-primary" style="font-size:0.72rem;padding:12px 28px;cursor:pointer;">Join the Community</button>
+    </div>
+    <div class="community-cards">
+      <div class="comm-card">
+        <span class="comm-icon">📚</span>
+        <p class="comm-title display">Wisdom Wiki</p>
+        <p class="comm-desc">Deep-dive articles on every virtue and vice. The philosophy behind each square, sourced from Upanishads and Bhagavad Gita.</p>
+      </div>
+      <div class="comm-card">
+        <span class="comm-icon">🎨</span>
+        <p class="comm-title display">Board Gallery</p>
+        <p class="comm-desc">Community-designed boards — rated, shared, played. Regional themes, festival editions, and philosophical variants.</p>
+      </div>
+      <div class="comm-card">
+        <span class="comm-icon">🗣️</span>
+        <p class="comm-title display">Forums</p>
+        <p class="comm-desc">Regional discussions in Hindi, Tamil, Telugu, Bengali, and English. Philosophy talks, strategy discussions, variant rules.</p>
+      </div>
+      <div class="comm-card">
+        <span class="comm-icon">🏮</span>
+        <p class="comm-title display">Festival Boards</p>
+        <p class="comm-desc">Special boards released on Navratri, Diwali, Holi, Vaikuntha Ekadashi. The Hindu calendar lives in the game.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="cta-inner">
+    <p class="section-label">Begin</p>
+    <h2 class="section-title display" style="font-size:clamp(2rem,5vw,3.8rem);">Your Atman Has<br>Played Before.</h2>
+    <p class="cta-tagline">No account. No download. No time like this moment.</p>
+    <button class="btn-primary" style="font-size:0.9rem;padding:16px 48px;cursor:pointer;">Play Moksha Patam — Free</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-brand-name display">Krida</p>
+      <p class="footer-brand-tagline deva">क्रीडा — Ancient Indian Games Hub</p>
+      <p class="footer-brand-desc">Restoring the sacred games of India — their philosophy, their art, their community — to the digital world.</p>
+    </div>
+    <div>
+      <p class="footer-col-title display">Games</p>
+      <ul class="footer-links">
+        <li><a href="#">Moksha Patam</a></li>
+        <li><a href="#">Chaturanga</a></li>
+        <li><a href="#">Pachisi</a></li>
+        <li><a href="#">Ganjifa</a></li>
+        <li><a href="#">Ashtapada</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title display">Learn</p>
+      <ul class="footer-links">
+        <li><a href="#">History Atlas</a></li>
+        <li><a href="#">Wisdom Wiki</a></li>
+        <li><a href="#">Board Philosophy</a></li>
+        <li><a href="#">Regional Variants</a></li>
+        <li><a href="#">Research Papers</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title display">Community</p>
+      <ul class="footer-links">
+        <li><a href="#">Forums</a></li>
+        <li><a href="#">Board Gallery</a></li>
+        <li><a href="#">Tournaments</a></li>
+        <li><a href="#">Daily Challenge</a></li>
+        <li><a href="#">Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Krida — Ancient Indian Games Hub. All rights reserved.</p>
+    <div class="footer-langs">
+      <a href="#">हिन्दी</a>
+      <a href="#">தமிழ்</a>
+      <a href="#">తెలుగు</a>
+      <a href="#">বাংলা</a>
+      <a href="#">English</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Board preview grid (Moksha Patam card) ── */
+(function() {
+  const container = document.getElementById('boardPreview');
+  if (!container) return;
+  const ladders = new Set([12,51,57,76,78]);
+  const snakes  = new Set([41,44,49,52,58,62,69,73,84,92,95,99]);
+  for (let row = 9; row >= 0; row--) {
+    for (let col = 0; col < 10; col++) {
+      const n = row % 2 === 0
+        ? row * 10 + col + 1
+        : row * 10 + (10 - col);
+      const cell = document.createElement('div');
+      cell.className = 'bp-cell';
+      if (n === 100) cell.classList.add('top');
+      else if (ladders.has(n)) cell.classList.add('ladder');
+      else if (snakes.has(n)) cell.classList.add('snake');
+      container.appendChild(cell);
+    }
+  }
+})();
+
+/* ── Scroll-reveal ── */
+(function() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pillar, .mode-card, .timeline-item, .comm-card, .game-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+})();
+</script>
+</body>
+</html>

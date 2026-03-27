@@ -1,0 +1,228 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif}
+.wrap{padding:16px 0}
+.header{margin-bottom:20px}
+.header h2{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.header p{font-size:13px;color:var(--color-text-secondary)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.filter-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.card{border:1px solid var(--color-border-tertiary);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.card.selected{border-color:var(--color-border-info);background:var(--color-background-info)}
+.card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.card-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.card-deva{font-size:11px;color:var(--color-text-secondary)}
+.card-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:10px}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.tag-strategy{background:#EEEDFE;color:#3C3489}
+.tag-luck{background:#FAEEDA;color:#633806}
+.tag-kids{background:#EAF3DE;color:#27500A}
+.tag-family{background:#E1F5EE;color:#085041}
+.tag-two{background:#FAECE7;color:#712B13}
+.priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:1px}
+.p1{background:#E24B4A}.p2{background:#EF9F27}.p3{background:#639922}.p4{background:#888780}
+.build-bar{height:3px;border-radius:2px;background:var(--color-border-tertiary);margin-top:8px;overflow:hidden}
+.build-fill{height:100%;border-radius:2px;background:var(--color-background-info)}
+.effort-label{font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.detail-panel{border:1px solid var(--color-border-secondary);border-radius:10px;padding:18px;margin-top:14px;display:none}
+.detail-panel.show{display:block}
+.detail-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.detail-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-item{font-size:12px}
+.detail-item strong{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:3px}
+.legend{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.build-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 18px;border-radius:6px;border:none;background:var(--color-background-info);color:var(--color-text-info);font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.build-btn:hover{opacity:.85}
+</style>
+<div class="wrap">
+<div class="header">
+  <h2>Krida — Game Catalog</h2>
+  <p>Click any game to see full details and build notes. Click "Suggest this game" to start building.</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="priority-dot p1"></div>Build next (high impact)</div>
+  <div class="legend-item"><div class="priority-dot p2"></div>Strong candidate</div>
+  <div class="legend-item"><div class="priority-dot p3"></div>Good addition</div>
+  <div class="legend-item"><div class="priority-dot p4"></div>Later phase</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all',this)">All games</button>
+  <button class="filter-btn" onclick="filter('strategy',this)">Strategy</button>
+  <button class="filter-btn" onclick="filter('luck',this)">Luck + dice</button>
+  <button class="filter-btn" onclick="filter('kids',this)">Kids-friendly</button>
+  <button class="filter-btn" onclick="filter('two',this)">2-player</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="detail-panel" id="detail"></div>
+</div>
+
+<script>
+const GAMES=[
+  {id:'bagh-chal',icon:'🐯',title:'Bagh Chal',deva:'बाघ चाल',
+   desc:'4 tigers vs 20 goats. Tigers capture by jumping; goats win by surrounding all tigers. The only asymmetric ancient Indian game.',
+   origin:'Nepal/South India',era:'Medieval',region:'Pan-India',players:'2',
+   type:['strategy','two'],priority:1,effort:60,
+   unique:'Asymmetric gameplay — two completely different win conditions and move sets. No other Indian game does this.',
+   mechanics:'Placement phase + movement phase. Tigers leap over goats; goats block movement.',
+   board:'5×5 grid with diagonal intersections. 25 nodes, not squares.',
+   cultural:'Represents the eternal battle between predator and protector. Goat herders vs tigers in the foothills.',
+   buildNote:'SVG board with clickable nodes. Phase tracking. Tiger AI is classic minimax. Very buildable in one session.'},
+  {id:'pallankuzhi',icon:'🪨',title:'Pallankuzhi',deva:'பள்ளாங்குழி',
+   desc:'Tamil Nadu mancala. 2 rows of 7 cups, 146 seeds total. Capture seeds by landing in an empty cup preceded by a full one. Mesmerising.',
+   origin:'Tamil Nadu / Sri Lanka',era:'Ancient (pre-1000 CE)',region:'South India',players:'2',
+   type:['strategy','two','kids'],priority:1,effort:55,
+   unique:'India\'s only surviving mancala tradition. The counting and sowing mechanic is deeply satisfying to watch animated.',
+   mechanics:'Sow seeds clockwise from any cup. If you land on empty cup after a non-empty — capture everything in the preceding cup.',
+   board:'2×7 grid of cups. Animated seeds that flow and stack.',
+   cultural:'Traditionally played by women during harvest festivals in Tamil Nadu. Deeply tied to agricultural rhythm.',
+   buildNote:'Seed animation is the showpiece. Smooth sowing animation cup by cup. Perfect for mobile. Very unique visually.'},
+  {id:'navakankari',icon:'⬡',title:'Navakankari / Dashguti',deva:'नव कंकड़ी',
+   desc:'Nine Men\'s Morris variant. Three concentric squares connected at midpoints. Form a line of 3 (mill) to remove an opponent piece. 3 phases.',
+   origin:'Rajasthan / UP',era:'Ancient',region:'North India',players:'2',
+   type:['strategy','two'],priority:2,effort:50,
+   unique:'The most strategic 2-player game in this list. Opening book rivals chess openings. Phase transitions add depth.',
+   mechanics:'Phase 1: Place 9 pieces each. Phase 2: Move to adjacent. Phase 3: Any piece jumps when 3 left.',
+   board:'Three nested squares with connecting lines. 24 intersection nodes.',
+   cultural:'Played on ghats, temple courtyards, and floors scratched into stone. Found carved into Angkor Wat steps.',
+   buildNote:'SVG board is elegant. Mill detection is O(n). AI for this is well-documented minimax with mill heuristics.'},
+  {id:'lau-kata-kati',icon:'⚔️',title:'Lau Kata Kati',deva:'लाव काट काटी',
+   desc:'Varanasi street war game. 5×5 grid with diagonals. 12 pieces each. Capture by jumping (like draughts). Fast, aggressive, played on ghats at dawn.',
+   origin:'Varanasi, UP',era:'Medieval',region:'North India',players:'2',
+   type:['strategy','two'],priority:2,effort:45,
+   unique:'The game of the Varanasi ghats. Fastest of all Indian strategy games. A game takes under 5 minutes.',
+   mechanics:'Like draughts but on a triangulated grid. Jump over opponent to capture. No promotion.',
+   board:'5×5 grid + diagonal lines. Similar to but distinct from international draughts.',
+   cultural:'The game old men play before sunrise by the Ganga. No boards needed — just chalk on stone.',
+   buildNote:'Simplest to build of all strategy games. Capture logic is minimal. Great for showing off the dark aesthetic.'},
+  {id:'ashtapada',icon:'♟️',title:'Ashtapada',deva:'अष्टापद',
+   desc:'The pre-chess board game. 8×8 grid with 4 marked squares (castles). Played with 2 dice. Different piece moves from chess. Direct ancestor of Chaturanga.',
+   origin:'North India',era:'Vedic/Mauryan (c.500 BCE)',region:'Pan-India',players:'2-4',
+   type:['strategy'],priority:2,effort:70,
+   unique:'The missing link between ancient dice games and chess. Uses the same board as Chaturanga but completely different rules.',
+   mechanics:'Dice determine movement distance, not piece type. Pieces race to marked sanctuary squares.',
+   board:'8×8 with 4 special squares marked. Race mechanic, not war.',
+   cultural:'Mentioned in the Rig Veda. Used by gamblers long before it became chess. Yudhishthira played Ashtapada.',
+   buildNote:'Combines Moksha Patam dice mechanic with Chaturanga board. Moderate complexity. Historically fascinating.'},
+  {id:'pagade',icon:'🐚',title:'Pagade',deva:'पगडे',
+   desc:'Karnataka/Goa Pachisi variant. Cross-shaped board, cowrie shell dice. Slightly different safe squares and capture rules from standard Pachisi.',
+   origin:'Karnataka / Goa',era:'Medieval',region:'South/West India',players:'4',
+   type:['luck','family'],priority:2,effort:65,
+   unique:'The most visually striking board shape in Indian games. The cross (chaupar) shape is iconic and beautiful as SVG.',
+   mechanics:'4 pawns per player, cowrie dice, race to home column. Capture and safe squares.',
+   board:'Cross-shaped board. 4 arms meeting at centre. Each arm has 3 columns × 8 rows.',
+   cultural:'The royal court game of the Deccan. Carved into palace floors (Fatehpur Sikri has a life-size version).',
+   buildNote:'Complex board geometry but very buildable with SVG. The board shape alone makes it visually stunning.'},
+  {id:'paramapadam',icon:'🪷',title:'Paramapadam',deva:'பரம பதம்',
+   desc:'Tamil Vaishnava spiritual board game. Played overnight on Vaikunta Ekadashi to stay awake until Vishnu\'s gates open at midnight.',
+   origin:'Tamil Nadu',era:'Bhakti period (c.1000 CE)',region:'South India',players:'2-6',
+   type:['luck','family','kids'],priority:3,effort:40,
+   unique:'The only game in the world tied to a specific festival night. Theological depth rivals Moksha Patam but with Vaishnava imagery.',
+   mechanics:'Same as Moksha Patam but different snake/ladder positions and Vaishnava iconography at every square.',
+   board:'10×10 but with different square meanings. Square 1 = Patalam (underworld). Square 100 = Vaikuntam.',
+   cultural:'Played in Tamil temple courtyards through the night of Vaikunta Ekadashi every December.',
+   buildNote:'Shares 90% of Moksha Patam code. Reskin + different data. Could be a mode within Moksha Patam rather than a separate game.'},
+  {id:'pachisi',icon:'👑',title:'Pachisi',deva:'पचीसी',
+   desc:'The royal game of India. The game Akbar played on a life-size board at Fatehpur Sikri with human pieces. Cross-shaped board, cowrie dice, 4 players.',
+   origin:'North India (Mughal court)',era:'Medieval (attested 6th CE, popular 16th CE)',region:'Pan-India',players:'4',
+   type:['luck','family'],priority:3,effort:80,
+   unique:'The most culturally prestigious game in the list. Akbar\'s life-size court game. The game that became Ludo.',
+   mechanics:'4 pawns each, race to home column, capture and safe squares, team play option.',
+   board:'Cross-shaped, but larger and more complex than Pagade. 4 arms of 3×8 plus centre court.',
+   cultural:'Mahabharata reference. Mughal imperial game. The direct ancestor of Ludo and Sorry.',
+   buildNote:'Most complex build. Share engine with Pagade. Worth building after Pagade as a visual/mechanical upgrade.'},
+  {id:'kattam',icon:'#',title:'Kattam Vilayattu',deva:'கட்டம் விளையாட்டு',
+   desc:'Tamil extended tic-tac-toe. 4×4 and 5×5 variants with different winning conditions. Traditionally drawn in kolam (rangoli) patterns on the ground.',
+   origin:'Tamil Nadu',era:'Ancient',region:'South India',players:'2',
+   type:['strategy','two','kids'],priority:3,effort:25,
+   unique:'Kolam-style animated board drawing is the design opportunity here. The game is simple; the presentation can be extraordinary.',
+   mechanics:'Standard noughts-and-crosses extended to larger grids with row/column/diagonal wins.',
+   board:'4×4 or 5×5 grid. Could animate the kolam drawing as a board entry animation.',
+   cultural:'Kolam patterns drawn at doorsteps every morning across Tamil Nadu. The game lives inside that tradition.',
+   buildNote:'Simplest build in the entire list. Kolam animation would make it unforgettable. Good starter for a new contributor.'},
+  {id:'ganjifa',icon:'🃏',title:'Ganjifa',deva:'गंजीफा',
+   desc:'Ancient Indian circular card game. Circular cards hand-painted with dashavatara (10 Vishnu avatars) or Mughal court themes. 8-12 suits, 96-120 cards.',
+   origin:'Persia → Mughal India',era:'16th century CE',region:'Rajasthan / Odisha',players:'2-6',
+   type:['strategy','family'],priority:4,effort:90,
+   unique:'The only Indian game with circular cards. The card art is breathtaking. Almost extinct — only a handful of artisans remain.',
+   mechanics:'Trick-taking game. Highest card in led suit wins the trick. Complex suit hierarchy.',
+   board:'No board. 96 circular cards, each a miniature painting.',
+   cultural:'Moradabad, Rajasthan, and Puri still produce hand-painted Ganjifa cards. UNESCO at risk.',
+   buildNote:'Most complex and most culturally important preservation project. SVG card art generation. Phase 2 build.'},
+];
+
+let selectedGame=null;
+let activeFilter='all';
+
+function filter(type,btn){
+  activeFilter=type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  const filtered=GAMES.filter(g=>activeFilter==='all'||g.type.includes(activeFilter));
+  grid.innerHTML=filtered.map(g=>`
+    <div class="card ${selectedGame?.id===g.id?'selected':''}" onclick="selectGame('${g.id}')">
+      <div class="card-top">
+        <div class="card-icon" style="background:var(--color-background-secondary)">${g.icon}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="priority-dot p${g.priority}"></div>
+            <div class="card-title">${g.title}</div>
+          </div>
+          <div class="card-deva">${g.deva} · ${g.origin}</div>
+        </div>
+      </div>
+      <div class="card-desc">${g.desc}</div>
+      <div class="card-meta">
+        ${g.type.map(t=>`<span class="tag tag-${t}">${t}</span>`).join('')}
+        <span style="font-size:10px;color:var(--color-text-tertiary);margin-left:auto">${g.players}P · ${g.era}</span>
+      </div>
+      <div class="build-bar"><div class="build-fill" style="width:${g.effort}%"></div></div>
+      <div class="effort-label">Build effort: ${g.effort<40?'Low':g.effort<65?'Medium':'High'}</div>
+    </div>`).join('');
+}
+
+function selectGame(id){
+  selectedGame=selectedGame?.id===id?null:GAMES.find(g=>g.id===id);
+  renderGrid();
+  const panel=document.getElementById('detail');
+  if(!selectedGame){panel.classList.remove('show');return;}
+  const g=selectedGame;
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div style="font-size:28px">${g.icon}</div>
+      <div>
+        <div class="detail-title">${g.title}</div>
+        <div class="detail-sub">${g.deva} · ${g.era} · ${g.region}</div>
+      </div>
+      <button class="build-btn" onclick="sendPrompt('Build the ${g.title} game for the Krida hub. Research it first, then build the complete game file.')">
+        Build this game →
+      </button>
+    </div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px;line-height:1.6">${g.desc}</div>
+    <div class="detail-grid">
+      <div class="detail-item"><strong>What makes it unique</strong>${g.unique}</div>
+      <div class="detail-item"><strong>Mechanics</strong>${g.mechanics}</div>
+      <div class="detail-item"><strong>Board</strong>${g.board}</div>
+      <div class="detail-item"><strong>Cultural context</strong>${g.cultural}</div>
+      <div class="detail-item" style="grid-column:1/-1"><strong>Build notes</strong>${g.buildNote}</div>
+    </div>`;
+  panel.classList.add('show');
+}
+
+renderGrid();
+</script>

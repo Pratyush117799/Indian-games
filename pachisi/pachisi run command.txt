@@ -1,0 +1,5 @@
+unzip pachisi-krida.zip
+cd pachisi
+npm install
+npm start
+# → http://localhost:3000

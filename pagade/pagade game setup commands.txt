@@ -1,0 +1,8 @@
+# Option A — Docker (recommended, zero config)
+cd pagade
+docker compose up
+# → http://localhost:5173
+
+# Option B — Local
+cd pagade/backend && cp .env.example .env && npm install && npm run dev
+cd pagade/frontend && npm install && npm run dev

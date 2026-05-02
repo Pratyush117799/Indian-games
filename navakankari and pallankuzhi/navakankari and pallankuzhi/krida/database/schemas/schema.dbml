@@ -1,0 +1,77 @@
+// Krida Database Schema (DBML — dbdiagram.io compatible)
+
+Table players {
+  id               uuid        [pk, default: `gen_random_uuid()`]
+  tag_id           varchar(30) [unique, not null]
+  display_name     varchar(40)
+  avatar_skin      varchar(30) [default: 'default']
+  xp_total         int         [not null, default: 0]
+  rank             varchar(20) [not null, default: 'Pebble']
+  streak_current   int         [default: 0]
+  streak_best      int         [default: 0]
+  created_at       timestamptz [default: `now()`]
+  last_seen        timestamptz [default: `now()`]
+}
+
+Table games {
+  id            uuid   [pk]
+  game_type     varchar [note: 'navakankari | pallankuzhi']
+  mode          varchar [note: 'ai | ranked | friendly | daily']
+  player1_id    uuid   [ref: > players.id]
+  player2_id    uuid   [ref: > players.id]
+  winner_id     uuid
+  state_json    json
+  total_moves   int
+  duration_sec  int
+  share_token   varchar(12) [unique]
+  started_at    timestamptz
+  ended_at      timestamptz
+}
+
+Table moves {
+  id            bigint [pk, increment]
+  game_id       uuid   [ref: > games.id]
+  move_number   int
+  player_id     uuid   [ref: > players.id]
+  move_data     json
+  time_taken_ms int
+  created_at    timestamptz
+}
+
+Table xp_log {
+  id          uuid   [pk]
+  player_id   uuid   [ref: > players.id]
+  event_type  varchar
+  xp_delta    int
+  created_at  timestamptz
+}
+
+Table achievement_defs {
+  key         varchar(40) [pk]
+  label       varchar(60)
+  description text
+  icon        varchar(10)
+}
+
+Table player_achievements {
+  player_id       uuid [ref: > players.id]
+  achievement_key varchar [ref: > achievement_defs.key]
+  unlocked_at     timestamptz
+  indexes { (player_id, achievement_key) [pk] }
+}
+
+Table daily_challenges {
+  id             uuid [pk]
+  game_type      varchar
+  date           date
+  challenge_data json
+  created_at     timestamptz
+}
+
+Table daily_completions {
+  player_id    uuid [ref: > players.id]
+  challenge_id uuid [ref: > daily_challenges.id]
+  completed_at timestamptz
+  moves_taken  int
+  indexes { (player_id, challenge_id) [pk] }
+}

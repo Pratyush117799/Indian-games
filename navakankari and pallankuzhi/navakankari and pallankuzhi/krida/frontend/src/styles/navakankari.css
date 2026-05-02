@@ -1,0 +1,176 @@
+/* ── navakankari.css ── Dark stone war-room theme ── */
+
+.nava-portal {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: .9rem 1rem 3rem;
+}
+
+/* Header */
+.nava-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid #1A1606;
+  margin-bottom: 1.1rem;
+}
+.nava-title {
+  font-size: clamp(1rem, 3.5vw, 1.75rem);
+  font-weight: 900;
+  letter-spacing: .2em;
+  color: var(--gold);
+  text-shadow: 0 0 40px var(--gold-glow), 0 0 80px rgba(196,131,26,.12);
+  line-height: 1;
+}
+.nava-subtitle {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(.7rem, 1.8vw, .92rem);
+  color: #4A3A18;
+  letter-spacing: .03em;
+  margin-top: 4px;
+}
+
+/* Arena layout */
+.nava-arena {
+  display: grid;
+  grid-template-columns: 136px 1fr 136px;
+  grid-template-areas: 'hp board ap';
+  gap: .8rem;
+  align-items: start;
+}
+@media (max-width: 620px) {
+  .nava-arena {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'board board' 'hp ap';
+  }
+}
+@media (max-width: 340px) {
+  .nava-arena {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'board' 'hp' 'ap';
+  }
+}
+
+/* Player panels */
+.nava-pp {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--r-lg);
+  padding: .75rem;
+  transition: border-color .3s, box-shadow .3s;
+}
+.nava-pp.area-hp { grid-area: hp; }
+.nava-pp.area-ap { grid-area: ap; }
+.nava-pp.active-h { border-color: #6A4510; box-shadow: 0 0 20px rgba(196,131,26,.12); }
+.nava-pp.active-a { border-color: #183A58; box-shadow: 0 0 20px rgba(56,136,200,.12); }
+
+/* Board section */
+.nava-board-section {
+  grid-area: board;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .55rem;
+}
+.nava-board-svg {
+  width: 100%;
+  max-width: 380px;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  filter: drop-shadow(0 6px 28px rgba(0,0,0,.85));
+}
+
+/* Status bar */
+.nava-status {
+  width: 100%;
+  max-width: 380px;
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-align: center;
+  padding: .45rem .8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-dim);
+  background: var(--bg-surface);
+  color: var(--txt-secondary);
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.nava-status.warn   { border-color: #501808; color: #C03830; background: #100705; }
+.nava-status.good   { border-color: #184028; color: #40B060; background: #08100C; }
+.nava-status.think  { border-color: #182440; color: #3878B0; background: #080C12; }
+.nava-status.fly    { border-color: #2E1050; color: #9050C8; background: #0C0812; }
+.nava-status.remove { border-color: #502808; color: #D07030; background: #100B06; }
+
+/* Difficulty chips */
+.diff-row { display: flex; gap: .3rem; justify-content: center; }
+.diff-chip {
+  font-family: var(--font-display);
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  padding: .28rem .7rem;
+  border-radius: 100px;
+  border: 1px solid var(--border-dim);
+  background: var(--bg-surface);
+  color: var(--txt-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.diff-chip.selected { border-color: #503808; color: var(--gold); background: #160D02; }
+.diff-chip:hover:not(.selected) { color: var(--txt-primary); border-color: var(--border-mid); }
+
+/* Control buttons */
+.nava-ctrls { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: center; }
+.nava-btn {
+  font-family: var(--font-display);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  padding: .36rem .8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-dim);
+  background: var(--bg-surface);
+  color: var(--txt-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.nava-btn:hover    { background: var(--bg-raised); color: var(--txt-primary); border-color: #503808; }
+.nava-btn.active   { background: #160D02; color: var(--gold); border-color: #603A0A; }
+.nava-btn:active   { transform: scale(.97); }
+.nava-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* Phase strip */
+.phase-strip { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.phase-chip {
+  font-size: .54rem; font-weight: 700; padding: 3px 9px; border-radius: 100px;
+  letter-spacing: .1em; background: var(--bg-raised); color: var(--txt-muted);
+  border: 1px solid var(--border-dim); transition: all .3s;
+}
+.phase-chip.on  { background: #150F02; color: var(--gold); border-color: #4A3008; box-shadow: 0 0 10px var(--gold-glow); }
+.phase-chip.fly { background: #0E0A1E; color: var(--purple-fly); border-color: #3E1A70; }
+
+/* Separator */
+.nava-sep { width: 100%; max-width: 380px; height: 1px; background: linear-gradient(90deg, transparent, #201808, transparent); }
+
+/* Legend */
+.nava-legend { width: 100%; max-width: 380px; font-size: .56rem; color: var(--txt-muted); letter-spacing: .06em; text-align: center; line-height: 2.1; }
+.nava-legend b { color: #384048; }
+
+/* Game over overlay */
+.go-overlay { position: fixed; inset: 0; background: rgba(4,5,8,.88); display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(6px); animation: fadeIn .25s ease; }
+.go-box { background: #0C0E15; border: 1px solid #3A2A08; border-radius: var(--r-xl); padding: 2.2rem 1.8rem; text-align: center; max-width: 290px; width: 90%; box-shadow: 0 0 70px rgba(196,131,26,.16), 0 0 0 1px #1C1608; }
+.go-icon { font-size: 2.8rem; margin-bottom: .6rem; display: block; }
+.go-title { font-size: 1.15rem; font-weight: 900; letter-spacing: .22em; color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin-bottom: .3rem; }
+.go-sub { font-family: var(--font-italic); font-style: italic; font-size: .79rem; color: #443C20; line-height: 1.8; margin-bottom: 1.4rem; }
+.go-btn { font-family: var(--font-display); font-size: .72rem; font-weight: 900; letter-spacing: .16em; display: block; width: 100%; padding: .7rem; background: linear-gradient(135deg, var(--gold), #8A5208); color: #040206; border: none; border-radius: var(--r-md); cursor: pointer; transition: opacity .15s, transform .1s; }
+.go-btn:hover { opacity: .85; }
+.go-btn:active { transform: scale(.97); }

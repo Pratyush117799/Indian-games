@@ -1,0 +1,122 @@
+/* ── pallankuzhi.css ── Warm harvest garden theme ── */
+
+.palla-portal {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: .9rem 1rem 3rem;
+  --palla-saffron: #E8820A;
+  --palla-terra:   #C4521A;
+  --palla-earth:   #8B4A0A;
+  --palla-warm:    #F5C87A;
+  --palla-wood:    #3A1E08;
+}
+
+.palla-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid #2A1408;
+  margin-bottom: 1.1rem;
+}
+.palla-title {
+  font-size: clamp(1rem, 3.5vw, 1.75rem);
+  font-weight: 900;
+  letter-spacing: .2em;
+  color: var(--palla-saffron);
+  text-shadow: 0 0 40px rgba(232,130,10,.3), 0 0 80px rgba(232,130,10,.1);
+}
+.palla-subtitle {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(.7rem, 1.8vw, .92rem);
+  color: #5A3018;
+  margin-top: 4px;
+}
+
+.palla-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .9rem;
+}
+
+/* Score bars */
+.palla-scorebar {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.palla-score-label { font-size: .6rem; font-weight: 700; letter-spacing: .12em; min-width: 36px; }
+.palla-score-label.ai  { color: var(--blue-piece); }
+.palla-score-label.you { color: var(--palla-saffron); }
+.palla-score-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-raised);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border-dim);
+}
+.palla-score-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+.palla-score-fill.you { background: linear-gradient(90deg, var(--palla-saffron), var(--palla-terra)); }
+.palla-score-fill.ai  { background: linear-gradient(90deg, var(--blue-piece), #205878); }
+.palla-score-count { font-size: .7rem; font-weight: 700; min-width: 28px; text-align: right; }
+.palla-score-count.you { color: var(--palla-saffron); }
+.palla-score-count.ai  { color: var(--blue-piece); }
+
+/* Board */
+.palla-board-wrap {
+  width: 100%;
+  max-width: 520px;
+  background: #1A0E06;
+  border-radius: var(--r-xl);
+  border: 2px solid #3A1E08;
+  padding: 1.4rem 1rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7), inset 0 1px 0 rgba(245,200,120,.08);
+  position: relative;
+}
+.palla-board-svg {
+  width: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Status */
+.palla-status {
+  width: 100%;
+  max-width: 520px;
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-align: center;
+  padding: .45rem .8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-dim);
+  background: var(--bg-surface);
+  color: var(--txt-secondary);
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.palla-status.good  { border-color: #302010; color: var(--palla-saffron); background: #120C04; }
+.palla-status.think { border-color: var(--border-mid); color: var(--blue-piece); }
+
+/* Control buttons — same as navakankari but saffron accent */
+.palla-ctrls { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: center; }
+.palla-btn {
+  font-family: var(--font-display);
+  font-size: .58rem; font-weight: 700; letter-spacing: .1em;
+  padding: .36rem .8rem; border-radius: var(--r-sm);
+  border: 1px solid var(--border-dim); background: var(--bg-surface); color: var(--txt-muted);
+  cursor: pointer; transition: all .15s;
+}
+.palla-btn:hover  { background: var(--bg-raised); color: var(--txt-primary); border-color: #5A2A08; }
+.palla-btn.active { background: #1A0A02; color: var(--palla-saffron); border-color: #6A3010; }
+.palla-btn:active { transform: scale(.97); }

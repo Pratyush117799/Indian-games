@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>Pallankuzhi · பல்லாங்குழி</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Hind:wght@300;400;500;600&family=Cinzel:wght@700;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+/* ═══ RESET ═══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
+
+/* ═══ ROOT PALETTE ═══ */
+:root{
+  --terra:    #C4521A;
+  --terra-dk: #8B3A0A;
+  --terra-lt: #E8864A;
+  --ochre:    #D4914A;
+  --ochre-lt: #F0C87A;
+  --cream:    #F5E4C0;
+  --cream-dk: #D8C090;
+  --stone:    #2A1808;
+  --stone-md: #3E2210;
+  --stone-lt: #5A3418;
+  --stone-warm:#7A4A28;
+  --seed-h:   #E8A030;  /* human seed colour */
+  --seed-a:   #5090C8;  /* ai seed colour */
+  --bg:       #180E06;
+  --bg2:      #221208;
+  --txt:      #F0D8A8;
+  --txt-dim:  #8A6040;
+  --txt-mute: #4A2E18;
+}
+
+/* ═══ BODY & GRAIN ═══ */
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:'Hind',system-ui,sans-serif;
+  display:flex;justify-content:center;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%,rgba(196,82,26,.12) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(100,50,10,.35) 0%,transparent 70%);
+}
+/* Subtle noise texture */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  opacity:.6;
+}
+
+#root{position:relative;z-index:1;width:100%;max-width:900px;padding:.8rem 1rem 3rem;display:flex;flex-direction:column;align-items:center}
+
+/* ═══ TYPOGRAPHY ═══ */
+.font-display{font-family:'Cinzel',serif}
+.font-tamil{font-family:'Tiro Devanagari Sanskrit',serif}
+
+/* ═══ HEADER ═══ */
+.hdr{
+  width:100%;display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:.75rem;
+  border-bottom:1px solid #2A1A08;
+  margin-bottom:1.1rem;
+}
+.title-main{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1rem,3.5vw,1.8rem);
+  font-weight:900;letter-spacing:.18em;
+  color:var(--terra);
+  text-shadow:0 0 40px rgba(196,82,26,.35),0 0 80px rgba(196,82,26,.1);
+  line-height:1;
+}
+.title-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:clamp(.7rem,1.8vw,.92rem);
+  color:var(--txt-mute);
+  letter-spacing:.04em;
+  margin-top:4px;
+  font-style:italic;
+}
+.mode-badge{
+  font-family:'Cinzel',serif;
+  font-size:.56rem;font-weight:700;letter-spacing:.12em;
+  padding:3px 10px;border-radius:100px;
+  border:1px solid var(--stone-lt);
+  color:var(--ochre);background:var(--stone-md);
+}
+
+/* ═══ DECORATIVE RANGOLI DIVIDER ═══ */
+.rangoli-line{
+  width:100%;max-width:580px;height:20px;margin:.2rem 0;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  flex-shrink:0;
+}
+.rangoli-dot{width:4px;height:4px;border-radius:50%;background:var(--terra);opacity:.4}
+.rangoli-diamond{
+  width:7px;height:7px;background:var(--ochre);opacity:.5;
+  transform:rotate(45deg);
+}
+.rangoli-line-seg{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--stone-lt),transparent)}
+
+/* ═══ SCORE BARS ═══ */
+.score-section{width:100%;max-width:580px;display:flex;flex-direction:column;gap:.4rem}
+.score-row{display:flex;align-items:center;gap:.6rem}
+.score-name{
+  font-family:'Cinzel',serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.12em;min-width:38px;
+}
+.score-name.you{color:var(--ochre)}
+.score-name.opp{color:var(--seed-a)}
+.score-track{
+  flex:1;height:7px;background:var(--stone-md);
+  border-radius:4px;overflow:hidden;
+  border:1px solid var(--stone-lt);
+}
+.score-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.score-fill.you{background:linear-gradient(90deg,var(--ochre),var(--terra))}
+.score-fill.opp{background:linear-gradient(90deg,#3870A8,var(--seed-a))}
+.score-num{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;
+  min-width:28px;text-align:right;
+}
+.score-num.you{color:var(--ochre)}
+.score-num.opp{color:var(--seed-a)}
+
+/* ═══ BOARD WRAP ═══ */
+.board-outer{
+  position:relative;width:100%;max-width:580px;
+  padding:1.2rem .8rem;
+  background:var(--stone);
+  border-radius:20px;
+  border:2px solid var(--stone-lt);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,.7),
+    inset 0 2px 0 rgba(255,200,100,.06),
+    inset 0 -2px 0 rgba(0,0,0,.4);
+}
+/* Stone slab texture lines */
+.board-outer::before{
+  content:'';position:absolute;inset:0;border-radius:18px;pointer-events:none;
+  background:
+    repeating-linear-gradient(92deg,transparent,transparent 60px,rgba(255,180,80,.015) 60px,rgba(255,180,80,.015) 61px),
+    repeating-linear-gradient(2deg,transparent,transparent 40px,rgba(255,180,80,.01) 40px,rgba(255,180,80,.01) 41px);
+}
+
+/* corner kolam dots */
+.board-outer::after{
+  content:'·  ·  ·';
+  position:absolute;bottom:6px;right:12px;
+  font-size:.7rem;color:var(--stone-lt);letter-spacing:4px;pointer-events:none;
+}
+
+.board-canvas-wrap{position:relative;width:100%}
+.board-svg{width:100%;display:block;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.seed-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ═══ STATUS BAR ═══ */
+.status-bar{
+  width:100%;max-width:580px;
+  font-family:'Hind',sans-serif;font-size:.78rem;font-weight:500;
+  letter-spacing:.04em;text-align:center;
+  padding:.45rem 1rem;border-radius:8px;
+  border:1px solid var(--stone-lt);
+  background:var(--stone-md);color:var(--txt-dim);
+  min-height:2.1rem;display:flex;align-items:center;justify-content:center;
+  transition:all .25s;
+}
+.status-bar.active{border-color:#5A3A10;color:var(--ochre-lt);background:#2A1608}
+.status-bar.ai{border-color:#1A2840;color:#78B0E0;background:#0E1820}
+.status-bar.win{border-color:#3A5A10;color:#90D050;background:#121A06}
+.status-bar.lose{border-color:#5A1A08;color:#E06040;background:#1A0A06}
+.status-bar.cap{border-color:#6A4A08;color:var(--ochre-lt);background:#2A1C04}
+
+/* ═══ CONTROLS ═══ */
+.ctrls{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.cbtn{
+  font-family:'Cinzel',serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.1em;padding:.36rem .85rem;border-radius:6px;
+  border:1px solid var(--stone-lt);background:var(--stone-md);
+  color:var(--txt-dim);cursor:pointer;transition:all .15s;
+}
+.cbtn:hover{background:var(--stone-lt);color:var(--txt);border-color:var(--terra-dk)}
+.cbtn.on{background:#2A1408;color:var(--terra-lt);border-color:var(--terra-dk)}
+.cbtn:active{transform:scale(.97)}
+.cbtn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+
+/* Difficulty chips */
+.diff-row{display:flex;gap:.3rem;justify-content:center}
+.dchip{
+  font-family:'Cinzel',serif;font-size:.54rem;font-weight:700;
+  letter-spacing:.1em;padding:.26rem .7rem;border-radius:100px;
+  border:1px solid var(--stone-lt);background:var(--stone-md);
+  color:var(--txt-mute);cursor:pointer;transition:all .15s;
+}
+.dchip.sel{border-color:var(--terra-dk);color:var(--terra-lt);background:#2A1408}
+.dchip:hover:not(.sel){color:var(--txt-dim);border-color:var(--stone-warm)}
+
+/* ═══ LEGEND ═══ */
+.legend{
+  font-family:'Hind',sans-serif;font-size:.64rem;color:var(--txt-mute);
+  text-align:center;letter-spacing:.04em;line-height:2;max-width:580px;width:100%;
+}
+.legend b{color:var(--stone-warm)}
+
+/* ═══ MENU ═══ */
+.menu-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  gap:.75rem;width:100%;max-width:360px;padding-top:.5rem;
+}
+.menu-label{
+  font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
+  letter-spacing:.2em;color:var(--txt-mute);text-align:center;
+}
+.menu-btn{
+  width:100%;font-family:'Cinzel',serif;font-size:.68rem;font-weight:700;
+  letter-spacing:.1em;padding:.75rem 1.2rem;
+  display:flex;flex-direction:column;gap:.2rem;
+  border-radius:10px;border:1px solid var(--stone-lt);
+  background:var(--stone-md);color:var(--txt-dim);
+  cursor:pointer;transition:all .2s;text-align:left;
+}
+.menu-btn:hover{background:var(--stone-lt);color:var(--txt);border-color:var(--terra-dk);
+  box-shadow:0 0 20px rgba(196,82,26,.1)}
+.menu-btn span{font-family:'Hind',sans-serif;font-size:.68rem;font-weight:400;
+  color:var(--txt-mute);letter-spacing:.02em}
+.menu-btn:active{transform:scale(.98)}
+
+/* ═══ GAME OVER OVERLAY ═══ */
+.go-overlay{
+  position:fixed;inset:0;background:rgba(10,5,2,.88);
+  display:flex;align-items:center;justify-content:center;
+  z-index:80;backdrop-filter:blur(6px);
+  animation:fadeIn .3s ease;
+}
+.go-box{
+  background:#1A0E06;border:1px solid var(--terra-dk);
+  border-radius:20px;padding:2.2rem 1.8rem;
+  text-align:center;max-width:300px;width:90%;
+  box-shadow:0 0 80px rgba(196,82,26,.2),0 0 0 1px #2A1808;
+}
+.go-icon{font-size:3rem;margin-bottom:.6rem;display:block}
+.go-title{
+  font-family:'Cinzel',serif;font-size:1.15rem;font-weight:900;
+  letter-spacing:.2em;color:var(--terra-lt);
+  text-shadow:0 0 20px rgba(196,82,26,.4);margin-bottom:.3rem;
+}
+.go-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.82rem;color:var(--stone-warm);line-height:1.8;
+  margin-bottom:1.4rem;white-space:pre-line;
+}
+.go-scores{
+  display:flex;gap:1rem;justify-content:center;margin-bottom:1.2rem;
+}
+.go-score{
+  text-align:center;
+  background:var(--stone-md);border-radius:10px;padding:.5rem .9rem;
+  border:1px solid var(--stone-lt);
+}
+.go-score-n{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900}
+.go-score-n.you{color:var(--ochre)}
+.go-score-n.opp{color:var(--seed-a)}
+.go-score-l{font-size:.56rem;color:var(--txt-mute);letter-spacing:.1em}
+.go-btn{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:900;
+  letter-spacing:.16em;display:block;width:100%;padding:.7rem;
+  background:linear-gradient(135deg,var(--terra),var(--terra-dk));
+  color:#0E0604;border:none;border-radius:9px;
+  cursor:pointer;transition:opacity .15s,transform .1s;
+}
+.go-btn:hover{opacity:.85}
+.go-btn:active{transform:scale(.97)}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes capturePulse{0%{r:12}50%{r:18}100%{r:12}}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes shimmer{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-40}}
+@keyframes seedBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+.fade-in{animation:fadeIn .35s ease-out both}
+.fade-up{animation:fadeUp .4s ease-out both}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo} = React;
+
+/* ════════════════════════════════════════════════════════════════
+   GAME ENGINE — Pure functions, zero side effects
+════════════════════════════════════════════════════════════════ */
+
+const TOTAL   = 14;
+const SEEDS   = 12;       // seeds per cup at start (168 total)
+
+// cups[0..6]  = Player 1 row (human, bottom) — left to right
+// cups[7..13] = Player 2 row (AI,    top)    — right to left from P1 perspective
+// i.e. cup[7] is above cup[6], cup[13] is above cup[0]
+
+const P1_ROW = [0,1,2,3,4,5,6];
+const P2_ROW = [7,8,9,10,11,12,13];
+
+// Clockwise sow order (same for both players)
+// P1: right along bottom → left along top
+// Array position gives next-cup index
+const SOW_ORDER = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]; // 0→1→...→13→0
+
+const nextInOrder = (cup) => (cup + 1) % TOTAL;
+const prevInOrder = (cup) => (cup + TOTAL - 1) % TOTAL;
+
+// For P2, sow starts from their cup going in the SAME clockwise order
+// (P2 sows rightward from their perspective = leftward in P1's view = increasing index)
+
+const playerRow = (p) => p === 1 ? P1_ROW : P2_ROW;
+
+const initState = () => ({
+  cups:     Array(TOTAL).fill(SEEDS),
+  score:    [0, 0, 0],   // [unused, P1, P2]
+  turn:     1,
+  winner:   null,
+  lastMove: null,        // { from, path, captures } for animation
+  moveCount:0,
+});
+
+function applySow(state, cupIdx) {
+  if (state.cups[cupIdx] === 0) return null;
+
+  const cups    = [...state.cups];
+  const score   = [...state.score];
+  const p       = state.turn;
+  const row     = playerRow(p);
+  if (!row.includes(cupIdx)) return null;
+
+  // Pick up seeds
+  let seeds   = cups[cupIdx];
+  cups[cupIdx] = 0;
+
+  const path     = [];
+  const captures = [];
+  let   pos      = cupIdx;
+
+  // Distribute one by one
+  while (seeds > 0) {
+    pos = nextInOrder(pos);
+    cups[pos]++;
+    seeds--;
+    path.push(pos);
+  }
+
+  // Capture chain: if last cup has exactly 4 → capture, check next
+  let check = pos;
+  while (cups[check] === 4) {
+    captures.push(check);
+    score[p] += 4;
+    cups[check] = 0;
+    // Check the cup BEFORE check in sow order (the one that was landed on last)
+    // Actually check the NEXT cup in sow direction after current chain position
+    const nxt = nextInOrder(check);
+    if (cups[nxt] === 4) { check = nxt; } else break;
+  }
+
+  // Check if opponent can continue
+  const opp    = 3 - p;
+  const oppRow = playerRow(opp);
+  const myRow  = playerRow(p);
+  const oppHas = oppRow.some(i => cups[i] > 0);
+
+  let winner = null;
+  if (!oppHas) {
+    // Scoop own remaining seeds
+    myRow.forEach(i => { score[p] += cups[i]; cups[i] = 0; });
+    winner = score[1] > score[2] ? 1 : score[2] > score[1] ? 2 : -1;
+  }
+
+  const ns = {
+    cups, score,
+    turn:      winner ? p : opp,
+    winner,
+    lastMove:  { from: cupIdx, path, captures },
+    moveCount: state.moveCount + 1,
+  };
+  return ns;
+}
+
+function legalMoves(state) {
+  return playerRow(state.turn).filter(i => state.cups[i] > 0);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   AI — Greedy look-ahead with capture priority
+════════════════════════════════════════════════════════════════ */
+
+function scoreMove(state, cup) {
+  const ns = applySow(state, cup);
+  if (!ns) return -Infinity;
+
+  let s = 0;
+  const p = state.turn, opp = 3 - p;
+
+  // Direct score gain
+  s += (ns.score[p] - state.score[p]) * 12;
+
+  // Penalise opponent having 4-cup setups on our row after move
+  playerRow(p).forEach(i => {
+    if (ns.cups[i] === 3) s -= 5;   // opponent might get 4 on next
+    if (ns.cups[i] === 4) s -= 10;
+  });
+
+  // Reward own 3-cups (setup for next capture)
+  playerRow(opp).forEach(i => {
+    if (ns.cups[i] === 3) s += 4;
+    if (ns.cups[i] === 2) s += 1;
+  });
+
+  // Seed count balance
+  const mySeeds  = playerRow(opp).reduce((a,i)=>a+ns.cups[i],0);
+  const oppSeeds = playerRow(p).reduce((a,i)=>a+ns.cups[i],0);
+  s += (mySeeds - oppSeeds) * 0.15;
+
+  return s;
+}
+
+function aiMove(state, difficulty) {
+  const moves = legalMoves(state);
+  if (!moves.length) return null;
+  if (difficulty === 'easy') return moves[Math.floor(Math.random() * moves.length)];
+
+  const scored = moves.map(c => ({ c, s: scoreMove(state, c) }));
+  scored.sort((a,b) => b.s - a.s);
+
+  if (difficulty === 'medium' && Math.random() < .25)
+    return scored[Math.min(1, scored.length-1)].c;
+  return scored[0].c;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SOUND ENGINE
+════════════════════════════════════════════════════════════════ */
+
+let actx = null;
+const ctx = () => {
+  if (!actx) try { actx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){}
+  return actx;
+};
+
+const tone = (f, type, dur, vol=.1) => {
+  try {
+    const c=ctx(); if(!c) return;
+    const osc=c.createOscillator(), g=c.createGain();
+    osc.connect(g); g.connect(c.destination);
+    osc.type=type; osc.frequency.value=f;
+    g.gain.setValueAtTime(vol,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);
+    osc.start(); osc.stop(c.currentTime+dur);
+  } catch(e){}
+};
+
+const sfx = {
+  seed:    ()=>{ tone(800,'sine',.05,.07); tone(600,'sine',.04,.04); },
+  pick:    ()=>{ tone(400,'triangle',.12,.1); },
+  capture: ()=>{ [500,600,700,900].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.2,.09),i*55)); },
+  win:     ()=>{ [440,554,660,880].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.4,.1),i*100)); },
+  lose:    ()=>{ [330,294,261].forEach((f,i)=>setTimeout(()=>tone(f,'sawtooth',.35,.07),i*110)); },
+  click:   ()=>{ tone(350,'triangle',.08,.06); },
+};
+
+/* ════════════════════════════════════════════════════════════════
+   BOARD GEOMETRY — cup centres in SVG space
+════════════════════════════════════════════════════════════════ */
+
+const CUP_W=62, CUP_H=52, GAP_X=8, GAP_Y=14, PAD_X=16, PAD_Y=18;
+const BOARD_W = 7*CUP_W + 6*GAP_X + 2*PAD_X;  // ~482
+const BOARD_H = 2*CUP_H + GAP_Y + 2*PAD_Y;      // ~150
+
+// Returns SVG {cx,cy} of each cup's centre
+function cupCenter(cupIdx) {
+  if (P1_ROW.includes(cupIdx)) {
+    const col = cupIdx;                           // 0-6, left→right
+    const cx  = PAD_X + col*(CUP_W+GAP_X) + CUP_W/2;
+    const cy  = PAD_Y + CUP_H + GAP_Y + CUP_H/2;
+    return { cx, cy };
+  } else {
+    // P2 row: cup 7 above cup 6 (rightmost), cup 13 above cup 0 (leftmost)
+    const col = 13 - cupIdx;                      // 7→col6, 13→col0
+    const cx  = PAD_X + col*(CUP_W+GAP_X) + CUP_W/2;
+    const cy  = PAD_Y + CUP_H/2;
+    return { cx, cy };
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SEED ANIMATION — Canvas-based arc flight
+════════════════════════════════════════════════════════════════ */
+
+class SeedAnimator {
+  constructor(canvas, svgRef) {
+    this.canvas = canvas;
+    this.svgRef = svgRef;
+    this.seeds  = [];       // active flying seeds
+    this.raf    = null;
+    this.onDone = null;
+  }
+
+  // Convert SVG coords to canvas coords
+  toCanvas(svgX, svgY) {
+    const svg  = this.svgRef.current;
+    if (!svg) return { x: svgX, y: svgY };
+    const vb   = svg.viewBox.baseVal;
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = rect.width  / vb.width;
+    const scaleY = rect.height / vb.height;
+    return { x: svgX * scaleX, y: svgY * scaleY };
+  }
+
+  animate({ from, path, player, onDone }) {
+    this.seeds  = [];
+    this.onDone = onDone;
+    const src   = cupCenter(from);
+    const color = player === 1
+      ? '#E8A030'   // human — warm amber
+      : '#5090C8';  // AI    — cool blue
+
+    // Group path by destination cup, accumulate seeds per cup
+    // Each seed in `path` is a cup index where one seed was dropped
+    path.forEach((cupIdx, i) => {
+      const dst  = cupCenter(cupIdx);
+      const dstC = dst;
+      // Each seed departs from source (with tiny random jitter) 
+      // and flies to its destination cup center
+      const jx = (Math.random()-.5)*12;
+      const jy = (Math.random()-.5)*8;
+      // Arc peak: midpoint raised by a random amount
+      const arc = 30 + Math.random()*40;
+
+      this.seeds.push({
+        sx: src.cx + jx, sy: src.cy + jy,
+        dx: dstC.cx,     dy: dstC.cy,
+        arc,
+        color,
+        size: 4.5 + Math.random(),
+        delay: i * 48,          // ms between each seed departing
+        dur:   260 + Math.random()*60,
+        t:     0, started: false, done: false,
+      });
+    });
+
+    const total = this.seeds.length;
+    if (!total) { onDone?.(); return; }
+
+    let start = null;
+    const tick = (now) => {
+      if (!start) start = now;
+      const elapsed = now - start;
+
+      const cv = this.canvas;
+      const ct = cv.getContext('2d');
+      ct.clearRect(0, 0, cv.width, cv.height);
+
+      // Sync canvas size to display size
+      const rect = cv.getBoundingClientRect();
+      if (cv.width !== rect.width || cv.height !== rect.height) {
+        cv.width  = rect.width;
+        cv.height = rect.height;
+      }
+
+      let allDone = true;
+      for (const s of this.seeds) {
+        const localT = elapsed - s.delay;
+        if (localT < 0) { allDone = false; continue; }
+        if (s.done) continue;
+
+        const prog = Math.min(localT / s.dur, 1);
+        allDone = false;
+        if (prog >= 1) { s.done = true; continue; }
+
+        // Convert SVG coords → canvas coords
+        const src2 = this.toCanvas(s.sx, s.sy);
+        const dst2 = this.toCanvas(s.dx, s.dy);
+
+        // Quadratic bezier
+        const cpX = (src2.x + dst2.x) / 2;
+        const cpY = Math.min(src2.y, dst2.y) - s.arc * (canvas.height / BOARD_H);
+
+        const t = prog;
+        const px = (1-t)*(1-t)*src2.x + 2*(1-t)*t*cpX + t*t*dst2.x;
+        const py = (1-t)*(1-t)*src2.y + 2*(1-t)*t*cpY + t*t*dst2.y;
+
+        // Draw seed
+        const r  = s.size * (1 - .2*Math.sin(Math.PI*prog));
+        const ct2 = cv.getContext('2d');
+        ct2.beginPath();
+        ct2.arc(px, py, r, 0, Math.PI*2);
+        ct2.fillStyle = s.color;
+        ct2.shadowColor= s.color;
+        ct2.shadowBlur = 6;
+        ct2.fill();
+        ct2.shadowBlur = 0;
+      }
+
+      // Check all done
+      const allSettled = this.seeds.every(s => s.done || elapsed - s.delay > s.dur + 80);
+      if (allSettled && elapsed > (total-1)*48 + 320) {
+        ct.clearRect(0, 0, cv.width, cv.height);
+        this.onDone?.();
+        return;
+      }
+      this.raf = requestAnimationFrame(tick);
+    };
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = requestAnimationFrame(tick);
+  }
+
+  stop() {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    const ct = this.canvas?.getContext('2d');
+    ct?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BOARD SVG
+════════════════════════════════════════════════════════════════ */
+
+function BoardSVG({ state, legal, onCupClick, lastCaptures, animating, svgRef }) {
+  const { cups, turn } = state;
+
+  const renderCup = (cupIdx, col, row) => {
+    // row=0 → top (P2), row=1 → bottom (P1)
+    const cx = PAD_X + col*(CUP_W+GAP_X) + CUP_W/2;
+    const cy = row===0
+      ? PAD_Y + CUP_H/2
+      : PAD_Y + CUP_H + GAP_Y + CUP_H/2;
+
+    const count      = cups[cupIdx];
+    const isLegal    = legal.includes(cupIdx);
+    const isCaptured = lastCaptures?.includes(cupIdx);
+    const isP1cup    = P1_ROW.includes(cupIdx);
+    const isMyTurn   = (turn===1&&isP1cup) || (turn===2&&!isP1cup);
+
+    // Cup bowl depth colour
+    const bowlFill   = isLegal ? '#2A1A0A' : '#1A0E06';
+    const rimStroke  = isLegal ? '#8B5A20' : '#3A2210';
+    const rimWidth   = isLegal ? 1.8 : 1;
+    const glowColor  = isLegal ? 'rgba(212,145,74,.18)' : 'transparent';
+
+    return (
+      <g key={cupIdx}
+        onClick={() => !animating && isLegal && onCupClick(cupIdx)}
+        style={{ cursor: isLegal && !animating ? 'pointer' : 'default' }}>
+
+        {/* Outer glow ring for legal cups */}
+        {isLegal && (
+          <ellipse cx={cx} cy={cy} rx={CUP_W/2+6} ry={CUP_H/2+5}
+            fill="none" stroke="rgba(196,130,40,.3)" strokeWidth="2"
+            style={{ animation:'blink 1.1s ease-in-out infinite' }}/>
+        )}
+
+        {/* Capture flash */}
+        {isCaptured && (
+          <ellipse cx={cx} cy={cy} rx={CUP_W/2+2} ry={CUP_H/2+2}
+            fill="rgba(255,200,50,.25)"
+            style={{ animation:'fadeIn .2s ease both' }}/>
+        )}
+
+        {/* Cup body — carved ellipse depression */}
+        {/* Outer rim */}
+        <ellipse cx={cx} cy={cy} rx={CUP_W/2} ry={CUP_H/2}
+          fill="#2E1A0A" stroke={rimStroke} strokeWidth={rimWidth}/>
+        {/* Mid depression */}
+        <ellipse cx={cx} cy={cy+2} rx={CUP_W/2-5} ry={CUP_H/2-4}
+          fill="#1E1006" stroke="#2A1808" strokeWidth=".8"/>
+        {/* Inner bowl — darkest */}
+        <ellipse cx={cx} cy={cy+3} rx={CUP_W/2-10} ry={CUP_H/2-8}
+          fill={bowlFill}/>
+        {/* Rim highlight (top edge) */}
+        <path d={`M ${cx-CUP_W/2+2} ${cy-2} A ${CUP_W/2-2} ${CUP_H/2-2} 0 0 1 ${cx+CUP_W/2-2} ${cy-2}`}
+          fill="none" stroke="rgba(255,200,120,.08)" strokeWidth="1.5"/>
+
+        {/* Seeds inside cup */}
+        {renderSeedsFill(count, cx, cy, cupIdx, isP1cup)}
+
+        {/* Seed count label */}
+        <text x={cx} y={cy + CUP_H/2 + 13}
+          textAnchor="middle" fontSize="11"
+          fontFamily="Cinzel, serif" fontWeight="700"
+          fill={isLegal ? '#D4914A' : '#4A2E18'}>
+          {count}
+        </text>
+      </g>
+    );
+  };
+
+  const renderSeedsFill = (count, cx, cy, cupIdx, isP1cup) => {
+    if (count === 0) return null;
+    const display = Math.min(count, 14);
+    const seeds   = [];
+    const seedR   = 3.8;
+    const cols    = 4;
+    const color   = isP1cup ? '#D4912A' : '#4888C0';
+    const hilight = isP1cup ? '#F8C870' : '#90C8F0';
+
+    for (let i = 0; i < display; i++) {
+      const col  = i % cols;
+      const row2 = Math.floor(i / cols);
+      const ox   = (col - (cols-1)/2) * 9;
+      const oy   = (row2 - .5) * 9;
+      const sx   = cx + ox + (row2%2) * 2;
+      const sy   = cy + 2 + oy;
+      seeds.push(
+        <g key={i}>
+          <circle cx={sx} cy={sy} r={seedR} fill={color} stroke={hilight} strokeWidth=".4" opacity=".9"/>
+          <circle cx={sx-1} cy={sy-1} r={1.2} fill={hilight} opacity=".5"/>
+        </g>
+      );
+    }
+    if (count > 14) seeds.push(
+      <text key="x" x={cx} y={cy+4} textAnchor="middle" fontSize="9"
+        fill="rgba(255,200,100,.5)" fontFamily="Cinzel,serif">+{count-14}</text>
+    );
+    return seeds;
+  };
+
+  return (
+    <svg ref={svgRef} className="board-svg"
+      viewBox={`0 0 ${BOARD_W} ${BOARD_H}`}
+      xmlns="http://www.w3.org/2000/svg">
+
+      {/* Board base texture */}
+      <defs>
+        <radialGradient id="boardGrad" cx="50%" cy="50%" r="60%">
+          <stop offset="0%"   stopColor="#3A2010"/>
+          <stop offset="100%" stopColor="#1A0C06"/>
+        </radialGradient>
+        {/* Wood grain lines */}
+        <pattern id="grain" width="4" height="80" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="80" stroke="rgba(255,180,80,.025)" strokeWidth="1"/>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width={BOARD_W} height={BOARD_H} rx="12"
+        fill="url(#boardGrad)"/>
+      <rect x="0" y="0" width={BOARD_W} height={BOARD_H} rx="12"
+        fill="url(#grain)"/>
+
+      {/* Decorative border — terracotta inlay */}
+      <rect x="3" y="3" width={BOARD_W-6} height={BOARD_H-6} rx="10"
+        fill="none" stroke="rgba(196,82,26,.25)" strokeWidth="1"
+        strokeDasharray="6 4"/>
+
+      {/* Row divider line */}
+      <line x1={PAD_X} y1={PAD_Y+CUP_H+GAP_Y/2}
+        x2={BOARD_W-PAD_X} y2={PAD_Y+CUP_H+GAP_Y/2}
+        stroke="rgba(196,82,26,.2)" strokeWidth=".8" strokeDasharray="4 3"/>
+
+      {/* Row labels */}
+      <text x={PAD_X-6} y={PAD_Y+CUP_H/2+4}
+        textAnchor="end" fontSize="8" fontFamily="Cinzel,serif"
+        fill="rgba(90,52,24,.8)">AI</text>
+      <text x={PAD_X-6} y={PAD_Y+CUP_H+GAP_Y+CUP_H/2+4}
+        textAnchor="end" fontSize="8" fontFamily="Cinzel,serif"
+        fill="rgba(90,52,24,.8)">YOU</text>
+
+      {/* AI row: cups 7-13 visual left=cup13, right=cup7 */}
+      {P2_ROW.slice().reverse().map((cupIdx, col) => renderCup(cupIdx, col, 0))}
+
+      {/* Human row: cups 0-6 */}
+      {P1_ROW.map((cupIdx, col) => renderCup(cupIdx, col, 1))}
+    </svg>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SCORE BAR COMPONENT
+════════════════════════════════════════════════════════════════ */
+
+function ScoreBars({ score, turn, winner }) {
+  const total = 168;
+  return (
+    <div className="score-section">
+      {/* AI score */}
+      <div className="score-row">
+        <span className="score-name opp">AI</span>
+        <div className="score-track">
+          <div className="score-fill opp"
+            style={{ width: `${(score[2]/total)*100}%` }}/>
+        </div>
+        <span className="score-num opp">{score[2]}</span>
+      </div>
+      {/* Human score */}
+      <div className="score-row">
+        <span className="score-name you">YOU</span>
+        <div className="score-track">
+          <div className="score-fill you"
+            style={{ width: `${(score[1]/total)*100}%` }}/>
+        </div>
+        <span className="score-num you">{score[1]}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   GAME OVER OVERLAY
+════════════════════════════════════════════════════════════════ */
+
+function GameOver({ state, mySlot, onReplay, mode }) {
+  const { winner, score } = state;
+  const iWon = winner === mySlot;
+  const isDraw = winner === -1;
+  return (
+    <div className="go-overlay">
+      <div className="go-box">
+        <span className="go-icon">{isDraw ? '🤝' : iWon ? '🪔' : '🌾'}</span>
+        <div className="go-title">
+          {isDraw ? 'DRAW' : iWon ? 'VICTORY' : 'DEFEAT'}
+        </div>
+        <div className="go-sub">
+          {isDraw
+            ? 'Seeds balanced.\nA rare and worthy game.'
+            : iWon
+              ? 'You count like\nan elder, Scholar.'
+              : 'The seeds know\ntheir own path.'}
+        </div>
+        <div className="go-scores">
+          <div className="go-score">
+            <div className="go-score-n you">{score[1]}</div>
+            <div className="go-score-l">YOU</div>
+          </div>
+          <div className="go-score">
+            <div className="go-score-n opp">{score[2]}</div>
+            <div className="go-score-l">AI</div>
+          </div>
+        </div>
+        <button className="go-btn" onClick={onReplay}>PLAY AGAIN</button>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DECORATIVE RANGOLI DIVIDER
+════════════════════════════════════════════════════════════════ */
+
+function RangoliDivider() {
+  return (
+    <div className="rangoli-line">
+      <div className="rangoli-line-seg"/>
+      <div className="rangoli-dot"/>
+      <div className="rangoli-diamond"/>
+      <div className="rangoli-dot"/>
+      <div className="rangoli-diamond" style={{ background:'var(--terra)',opacity:.4 }}/>
+      <div className="rangoli-dot"/>
+      <div className="rangoli-diamond"/>
+      <div className="rangoli-dot"/>
+      <div className="rangoli-line-seg"/>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MAIN PORTAL
+════════════════════════════════════════════════════════════════ */
+
+const VIEW = { MENU:'menu', GAME:'game' };
+const MODE = { AI:'ai', LOCAL:'local' };
+
+function PallankuzhiPortal() {
+  const [view,       setView]     = useState(VIEW.MENU);
+  const [mode,       setMode]     = useState(MODE.AI);
+  const [diff,       setDiff]     = useState('medium');
+  const [gs,         setGs]       = useState(initState);
+  const [animating,  setAnimating]= useState(false);
+  const [lastCaps,   setLastCaps] = useState([]);
+  const [soundOn,    setSoundOn]  = useState(true);
+  const [mySlot,     setMySlot]   = useState(1);
+
+  const svgRef      = useRef(null);
+  const canvasRef   = useRef(null);
+  const animatorRef = useRef(null);
+  const aiTimer     = useRef(null);
+
+  const snd = useCallback((n) => { if(soundOn) sfx[n]?.(); }, [soundOn]);
+
+  // Init animator once canvas is ready
+  useEffect(() => {
+    if (canvasRef.current && svgRef.current) {
+      animatorRef.current = new SeedAnimator(canvasRef.current, svgRef);
+    }
+    return () => animatorRef.current?.stop();
+  }, []);
+
+  // Sync canvas size on resize
+  useEffect(() => {
+    const sync = () => {
+      const cv  = canvasRef.current;
+      const svg = svgRef.current;
+      if (!cv || !svg) return;
+      const r = svg.getBoundingClientRect();
+      cv.width  = r.width;
+      cv.height = r.height;
+    };
+    sync();
+    window.addEventListener('resize', sync);
+    return () => window.removeEventListener('resize', sync);
+  }, []);
+
+  // AI turn
+  useEffect(() => {
+    if (view !== VIEW.GAME) return;
+    if (mode === MODE.LOCAL) return;
+    if (gs.turn !== 2 || gs.winner !== null || animating) return;
+
+    clearTimeout(aiTimer.current);
+    aiTimer.current = setTimeout(() => {
+      const cup = aiMove(gs, diff);
+      if (cup === null) return;
+      handleMove(cup, true);
+    }, diff === 'hard' ? 1100 : 750);
+
+    return () => clearTimeout(aiTimer.current);
+  }, [gs, animating, view, mode, diff]);
+
+  // Core move handler
+  const handleMove = useCallback((cupIdx, isAI=false) => {
+    const cur = gs;
+    if (cur.winner !== null) return;
+    const ns = applySow(cur, cupIdx);
+    if (!ns) return;
+
+    snd('pick');
+    setAnimating(true);
+    setLastCaps([]);
+
+    const path = ns.lastMove?.path ?? [];
+    const caps = ns.lastMove?.captures ?? [];
+    const anim = animatorRef.current;
+
+    if (anim && path.length > 0) {
+      anim.animate({
+        from:   cupIdx,
+        path,
+        player: cur.turn,
+        onDone: () => {
+          setAnimating(false);
+          setGs(ns);
+          if (caps.length) {
+            snd('capture');
+            setLastCaps(caps);
+            setTimeout(() => setLastCaps([]), 900);
+          }
+          if (ns.winner !== null) {
+            if (ns.winner === mySlot) snd('win');
+            else if (ns.winner !== -1) snd('lose');
+          }
+        },
+      });
+    } else {
+      setAnimating(false);
+      setGs(ns);
+    }
+  }, [gs, snd, mySlot]);
+
+  const handleCupClick = useCallback((cupIdx) => {
+    if (animating || gs.winner !== null) return;
+    if (mode === MODE.AI && gs.turn !== mySlot) return;
+    const legal = legalMoves(gs);
+    if (!legal.includes(cupIdx)) return;
+    handleMove(cupIdx, false);
+  }, [gs, animating, mode, mySlot, handleMove]);
+
+  const handleReset = () => {
+    animatorRef.current?.stop();
+    clearTimeout(aiTimer.current);
+    setGs(initState());
+    setAnimating(false);
+    setLastCaps([]);
+  };
+
+  const startGame = (m) => {
+    setMode(m);
+    handleReset();
+    setView(VIEW.GAME);
+  };
+
+  // Status message
+  const myTurn = mode === MODE.LOCAL ? true : gs.turn === mySlot;
+  let stCls='', stTxt='';
+  if      (gs.winner===mySlot)  { stTxt='You win! The seeds are yours.'; stCls='win'; }
+  else if (gs.winner!==-1&&gs.winner) { stTxt='Opponent wins this harvest.'; stCls='lose'; }
+  else if (gs.winner===-1)      { stTxt='A draw — seeds perfectly balanced.'; stCls='win'; }
+  else if (!myTurn && mode===MODE.AI) { stTxt='AI is counting seeds…'; stCls='ai'; }
+  else if (lastCaps.length>0)   { stTxt=`Captured ${lastCaps.length*4} seeds! ✦`; stCls='cap'; }
+  else                           { stTxt=myTurn?'Pick a cup on your row to sow.':'Your turn — pick a cup.'; stCls='active'; }
+
+  const legal = (!animating && gs.winner===null && myTurn) ? legalMoves(gs) : [];
+
+  /* ── MENU ── */
+  if (view === VIEW.MENU) {
+    return (
+      <div style={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
+        <div className="hdr">
+          <div>
+            <div className="title-main">PALLANKUZHI</div>
+            <div className="title-sub">பல்லாங்குழி · Tamil Nadu Mancala · Ancient India</div>
+          </div>
+          <div style={{ textAlign:'right', fontSize:'.6rem', color:'var(--txt-mute)', letterSpacing:'.06em', lineHeight:2 }}>
+            2 × 7 cups<br/>
+            12 seeds each<br/>
+            Capture fours
+          </div>
+        </div>
+
+        <RangoliDivider/>
+
+        <div className="menu-wrap fade-up">
+          <div className="menu-label">SELECT MODE</div>
+
+          <button className="menu-btn" onClick={()=>startGame(MODE.AI)}>
+            🤖 &nbsp;VS COMPUTER
+            <span>Play against the counting AI · 3 difficulty levels</span>
+          </button>
+
+          <button className="menu-btn" onClick={()=>startGame(MODE.LOCAL)}>
+            👥 &nbsp;PASS & PLAY
+            <span>Two players on the same screen</span>
+          </button>
+
+          <div style={{ marginTop:'.4rem' }}>
+            <div style={{ fontSize:'.56rem', color:'var(--txt-mute)', letterSpacing:'.12em', textAlign:'center', marginBottom:'.5rem', fontFamily:"'Cinzel',serif" }}>AI DIFFICULTY</div>
+            <div className="diff-row">
+              {['easy','medium','hard'].map(d=>(
+                <div key={d} className={`dchip ${diff===d?'sel':''}`} onClick={()=>setDiff(d)}>
+                  {d.toUpperCase()}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="legend" style={{ marginTop:'.6rem' }}>
+            <b>Sow seeds</b> clockwise cup by cup &nbsp;·&nbsp;
+            Land on <b>4</b> = capture &nbsp;·&nbsp;
+            Most seeds wins
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── GAME ── */
+  return (
+    <div style={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', gap:'.55rem' }}>
+
+      {/* Header */}
+      <div className="hdr fade-in">
+        <div>
+          <button className="cbtn" style={{ marginBottom:'.3rem', fontSize:'.52rem' }}
+            onClick={()=>{ animatorRef.current?.stop(); clearTimeout(aiTimer.current); setView(VIEW.MENU); }}>
+            ← MENU
+          </button>
+          <div className="title-main">PALLANKUZHI</div>
+          <div className="title-sub">பல்லாங்குழி · {mode===MODE.AI?`VS AI · ${diff.toUpperCase()}`:'PASS & PLAY'}</div>
+        </div>
+        <div className={`mode-badge`}>
+          {mode===MODE.AI ? '🤖 AI GAME' : '👥 LOCAL'}
+        </div>
+      </div>
+
+      {/* Score bars */}
+      <ScoreBars score={gs.score} turn={gs.turn} winner={gs.winner}/>
+
+      <RangoliDivider/>
+
+      {/* Board */}
+      <div className="board-outer fade-in">
+        <div className="board-canvas-wrap">
+          <BoardSVG
+            state={gs}
+            legal={legal}
+            onCupClick={handleCupClick}
+            lastCaptures={lastCaps}
+            animating={animating}
+            svgRef={svgRef}/>
+          <canvas ref={canvasRef} className="seed-canvas"/>
+        </div>
+      </div>
+
+      <RangoliDivider/>
+
+      {/* Status */}
+      <div className={`status-bar ${stCls} fade-in`}>{stTxt}</div>
+
+      {/* Difficulty (AI mode only) */}
+      {mode===MODE.AI && !gs.winner && (
+        <div className="diff-row">
+          {['easy','medium','hard'].map(d=>(
+            <div key={d} className={`dchip ${diff===d?'sel':''}`} onClick={()=>setDiff(d)}>
+              {d.toUpperCase()}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Controls */}
+      <div className="ctrls">
+        <button className="cbtn" onClick={handleReset}>NEW GAME</button>
+        <button className={`cbtn ${soundOn?'on':''}`} onClick={()=>setSoundOn(v=>!v)}>
+          {soundOn?'SFX ON':'SFX OFF'}
+        </button>
+      </div>
+
+      {/* Legend */}
+      <div className="legend">
+        <b>Pick</b> any cup on your row &nbsp;·&nbsp;
+        Seeds sow <b>clockwise</b> &nbsp;·&nbsp;
+        Last seed in a cup of <b>4</b> → capture &nbsp;·&nbsp;
+        Empty the opponent's row to end the game
+      </div>
+
+      {/* Game over */}
+      {gs.winner !== null && (
+        <GameOver
+          state={gs}
+          mySlot={mySlot}
+          mode={mode}
+          onReplay={()=>{ handleReset(); }}/>
+      )}
+
+      <style>{`
+        @keyframes blink{0%,100%{opacity:.28}50%{opacity:1}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+        .fade-in{animation:fadeIn .35s ease-out both}
+        .fade-up{animation:fadeUp .4s ease-out both}
+      `}</style>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<PallankuzhiPortal/>);
+</script>
+</body>
+</html>

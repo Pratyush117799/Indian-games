@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delhi Diaries: The Jugaad Quest</title>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #game-container {
+            position: relative;
+            width: 480px;
+            height: 320px;
+            border: 4px solid #fff;
+            box-shadow: 0 0 10px #000;
+        }
+        canvas {
+            display: block;
+        }
+        /* The Dialogue Box */
+        #dialogue-box {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 480px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-top: 2px solid white;
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            display: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        /* The Battle Menu */
+        #battle-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        .btn {
+            background-color: white;
+            color: black;
+            border: 2px solid #555;
+            padding: 10px 20px;
+            margin: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            width: 200px;
+        }
+        .btn:hover { background-color: #ddd; }
+        .instructions { margin-top: 20px; text-align: center; color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <h2>DELHI DIARIES: THE JUGAAD QUEST</h2>
+    
+    <div id="game-container">
+        <canvas id="gameCanvas" width="480" height="320"></canvas>
+        <div id="dialogue-box">Press SPACE to interact.</div>
+        
+        <div id="battle-menu">
+            <h3 id="battle-text" style="color: yellow; text-align: center; padding: 20px;">A wild AUTO-RICKSHAW DRIVER blocks your path!<br>"Bhaiya, 200 rupees for 2 kilometers!"</h3>
+            <button class="btn" onclick="battleAction('haggle')">Use 'Haggle' (Street Smart)</button>
+            <button class="btn" onclick="battleAction('ignore')">Use 'Ignore' (Walk away)</button>
+            <button class="btn" onclick="battleAction('metro')">Use 'Metro Card' (Flee)</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <p><strong>CONTROLS:</strong> Arrow Keys to Move | SPACEBAR to Talk</p>
+        <p><span style="color: blue;">Blue</span> = You | <span style="color: pink;">Pink</span> = Mom | <span style="color: yellow;">Yellow</span> = Auto Rickshaw</p>
+    </div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const dialogueBox = document.getElementById("dialogue-box");
+    const battleMenu = document.getElementById("battle-menu");
+    const battleText = document.getElementById("battle-text");
+
+    const TILE_SIZE = 32;
+    const COLS = 15;
+    const ROWS = 10;
+
+    // Game States
+    let gameState = "PLAYING"; // PLAYING, DIALOGUE, BATTLE
+
+    // Map: 0=Grass(green), 1=Road(dusty), 2=Building(gray)
+    const map = [
+        [2,2,2,2,0,1,1,1,1,1,1,0,0,0,0],
+        [2,2,2,2,0,1,0,0,0,0,1,0,2,2,2],
+        [0,0,0,0,0,1,0,2,2,0,1,0,2,2,2],
+        [1,1,1,1,1,1,0,2,2,0,1,1,1,1,1],
+        [0,0,0,0,0,1,0,0,0,0,1,0,0,0,0],
+        [2,2,2,0,0,1,1,1,1,1,1,0,2,2,2],
+        [2,2,2,0,0,1,0,0,0,0,1,0,2,2,2],
+        [0,0,0,0,0,1,0,2,2,0,1,0,0,0,0],
+        [1,1,1,1,1,1,0,2,2,0,1,1,1,1,1],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]
+    ];
+
+    // Player Object
+    const player = {
+        x: 6, y: 4, // Starting grid position
+        color: "blue",
+        patience: 100,
+        facing: 'down' // up, down, left, right
+    };
+
+    // NPCs
+    const npcs = [
+        { x: 5, y: 4, color: "pink", name: "Mom", message: "Rahul, go to the market and buy Dhaniya! Don't let them overcharge you.", hasTalked: false },
+        { x: 10, y: 8, color: "yellow", name: "Auto", message: "BATTLE", isActive: true }
+    ];
+
+    // Handle Input
+    window.addEventListener("keydown", function(e) {
+        if (gameState !== "PLAYING" && e.code !== "Space") return;
+        
+        let targetX = player.x;
+        let targetY = player.y;
+
+        if (gameState === "PLAYING") {
+            if (e.code === "ArrowUp") { targetY--; player.facing = 'up'; }
+            if (e.code === "ArrowDown") { targetY++; player.facing = 'down'; }
+            if (e.code === "ArrowLeft") { targetX--; player.facing = 'left'; }
+            if (e.code === "ArrowRight") { targetX++; player.facing = 'right'; }
+
+            // Collision Detection with map bounds and buildings (type 2)
+            if (targetX >= 0 && targetX < COLS && targetY >= 0 && targetY < ROWS) {
+                if (map[targetY][targetX] !== 2) {
+                    // Check NPC collision
+                    let npcInWay = npcs.find(npc => npc.x === targetX && npc.y === targetY && npc.isActive !== false);
+                    if (!npcInWay) {
+                        player.x = targetX;
+                        player.y = targetY;
+                    }
+                }
+            }
+        }
+
+        // Interaction (Spacebar)
+        if (e.code === "Space") {
+            if (gameState === "DIALOGUE") {
+                dialogueBox.style.display = "none";
+                gameState = "PLAYING";
+            } else if (gameState === "PLAYING") {
+                checkInteraction();
+            }
+        }
+        draw();
+    });
+
+    function checkInteraction() {
+        let interactX = player.x;
+        let interactY = player.y;
+
+        if (player.facing === 'up') interactY--;
+        if (player.facing === 'down') interactY++;
+        if (player.facing === 'left') interactX--;
+        if (player.facing === 'right') interactX++;
+
+        let npc = npcs.find(n => n.x === interactX && n.y === interactY && n.isActive !== false);
+        
+        if (npc) {
+            if (npc.message === "BATTLE") {
+                startBattle(npc);
+            } else {
+                showDialogue(npc.name + ": " + npc.message);
+                npc.hasTalked = true;
+            }
+        }
+    }
+
+    function showDialogue(text) {
+        gameState = "DIALOGUE";
+        dialogueBox.innerText = text;
+        dialogueBox.style.display = "block";
+    }
+
+    function startBattle(enemy) {
+        gameState = "BATTLE";
+        battleMenu.style.display = "flex";
+        // Hide the enemy from the map temporarily
+        enemy.isActive = false; 
+    }
+
+    // HTML Buttons call this function
+    window.battleAction = function(action) {
+        if (action === 'haggle') {
+            battleText.innerHTML = "You said: 'Bhaiya, I travel from here every day. Make it 50 rupees.'<br><br><span style='color:#5f5'>Super Effective!</span> The Auto Driver agrees.";
+        } else if (action === 'ignore') {
+            battleText.innerHTML = "You ignore him and keep walking in the heat.<br><br><span style='color:red'>You lost 20 Patience (Health).</span>";
+            player.patience -= 20;
+        } else if (action === 'metro') {
+            battleText.innerHTML = "You flash your Metro Card and walk into the AC station.<br><br>Flawless Escape!";
+        }
+
+        // Change buttons to a "Continue" button
+        battleMenu.innerHTML = `<h3 style="color:white; text-align:center; padding:20px;">${battleText.innerHTML}</h3><button class="btn" onclick="endBattle()">Continue Walking</button>`;
+    }
+
+    window.endBattle = function() {
+        battleMenu.style.display = "none";
+        gameState = "PLAYING";
+        // Reset the battle menu for the future
+        battleMenu.innerHTML = `
+            <h3 id="battle-text" style="color: yellow; text-align: center; padding: 20px;">A wild AUTO-RICKSHAW DRIVER blocks your path!<br>"Bhaiya, 200 rupees for 2 kilometers!"</h3>
+            <button class="btn" onclick="battleAction('haggle')">Use 'Haggle' (Street Smart)</button>
+            <button class="btn" onclick="battleAction('ignore')">Use 'Ignore' (Walk away)</button>
+            <button class="btn" onclick="battleAction('metro')">Use 'Metro Card' (Flee)</button>
+        `;
+        draw();
+    }
+
+    // Drawing the Game
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Map
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                let tile = map[r][c];
+                if (tile === 0) ctx.fillStyle = "#88c070"; // Grass
+                else if (tile === 1) ctx.fillStyle = "#e0d8b0"; // Road
+                else if (tile === 2) ctx.fillStyle = "#888"; // Building
+                
+                ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                ctx.strokeStyle = "rgba(0,0,0,0.1)"; // faint grid lines
+                ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+        }
+
+        // Draw NPCs
+        npcs.forEach(npc => {
+            if (npc.isActive !== false) {
+                ctx.fillStyle = npc.color;
+                ctx.fillRect(npc.x * TILE_SIZE + 4, npc.y * TILE_SIZE + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+            }
+        });
+
+        // Draw Player
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x * TILE_SIZE + 4, player.y * TILE_SIZE + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+        // Draw Facing Indicator (a little dot to show where the player is looking)
+        ctx.fillStyle = "white";
+        let eyeX = player.x * TILE_SIZE + 14;
+        let eyeY = player.y * TILE_SIZE + 14;
+        if (player.facing === 'up') eyeY -= 8;
+        if (player.facing === 'down') eyeY += 8;
+        if (player.facing === 'left') eyeX -= 8;
+        if (player.facing === 'right') eyeX += 8;
+        ctx.fillRect(eyeX, eyeY, 4, 4);
+    }
+
+    // Initial render
+    draw();
+</script>
+
+</body>
+</html>

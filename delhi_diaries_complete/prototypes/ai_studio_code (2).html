@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delhi Diaries: The Grand Expansion</title>
+    <style>
+        body {
+            background-color: #0f172a; color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; flex-direction: column; align-items: center;
+            margin: 0; padding: 10px;
+        }
+        #hud {
+            width: 800px; display: flex; justify-content: space-between;
+            background-color: #1e293b; padding: 10px 20px; box-sizing: border-box;
+            border: 4px solid #fff; border-bottom: none;
+            font-size: 16px; font-weight: bold; color: #38bdf8;
+        }
+        #hud span { flex: 1; text-align: center; }
+        #game-container {
+            position: relative; width: 800px; height: 600px;
+            border: 4px solid #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            background-color: #000; overflow: hidden;
+        }
+        canvas { display: block; image-rendering: pixelated; }
+        
+        .modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            z-index: 20; text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        #dialogue-box {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
+            background-color: rgba(15, 23, 42, 0.9); border-top: 4px solid white;
+            color: white; padding: 20px; box-sizing: border-box; display: none;
+            font-size: 18px; font-weight: bold; z-index: 10;
+        }
+        .btn {
+            background-color: white; color: black; border: 2px solid #555;
+            padding: 10px 20px; margin: 5px; font-family: 'Courier New', Courier, monospace;
+            font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; width: 80%;
+        }
+        .btn:hover { background-color: #cbd5e1; transform: scale(1.02); }
+        
+        .question-text { color: #facc15; font-size: 20px; margin-bottom: 20px; }
+        input[type="range"] { width: 300px; margin: 20px 0; }
+        
+        /* Tic-Tac-Toe */
+        #ttt-board {
+            display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; margin: 20px;
+        }
+        .ttt-cell {
+            width: 100px; height: 100px; background-color: #333; color: white;
+            font-size: 48px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; border: 2px solid #fff;
+        }
+        .ttt-cell:hover { background-color: #555; }
+        
+        .instructions { margin-top: 10px; text-align: center; color: #94a3b8; font-size: 14px; max-width: 800px;}
+    </style>
+</head>
+<body>
+
+    <h2>DELHI DIARIES: THE GRAND EXPANSION</h2>
+    
+    <div id="hud">
+        <span id="day-display" style="color:#fcd34d">Day: 1</span>
+        <span id="cash-display" style="color:#4ade80">Money: ₹5000</span>
+        <span id="xp-display" style="color:#c084fc">Level: 1 | XP: 0</span>
+        <span id="club-display" style="color:#f87171">Club: 0/33</span>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="dialogue-box">Press SPACE to interact.</div>
+        
+        <!-- Debate/Wager Modal -->
+        <div id="debate-modal" class="modal">
+            <h2 id="debate-title" style="color: #60a5fa;">DEBATE</h2>
+            <div id="wager-section" style="display:none;">
+                <p>Select your wager (Min ₹200):</p>
+                <input type="range" id="wager-slider" min="200" max="5000" step="100" value="200" oninput="updateWager()">
+                <h3 style="color: #4ade80;">Wager: ₹<span id="wager-value">200</span></h3>
+            </div>
+            <h3 id="debate-question" class="question-text">Question?</h3>
+            <div id="debate-options" style="display: flex; flex-direction: column; width: 100%; align-items:center;"></div>
+            <button id="cancel-debate-btn" class="btn" style="margin-top:20px; background:#ef4444; color:white;" onclick="closeModals()">Run Away</button>
+        </div>
+
+        <!-- Result Modal -->
+        <div id="result-modal" class="modal">
+            <h2 id="result-title">Result</h2>
+            <p id="result-desc" style="font-size: 18px;">Description</p>
+            <button class="btn" onclick="closeModals()">Continue</button>
+        </div>
+
+        <!-- Tic Tac Toe Modal -->
+        <div id="ttt-modal" class="modal">
+            <h2 style="color: #38bdf8;">TIC-TAC-TOE vs Friend</h2>
+            <h3 id="ttt-status" style="color: yellow;">Your Turn (X)</h3>
+            <div id="ttt-board"></div>
+            <button class="btn" onclick="closeModals()">Quit Game</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <p><strong>ARROWS</strong> to Move | <strong>SPACE</strong> to Interact/Knock/Read Signs</p>
+        <p>Find the <strong>Intellects Club</strong> (Center) and answer 25/33 questions to gain VIP access to <strong>Parliament</strong> (Top-Left). Go to your house (Bottom-Right) to <strong>Sleep</strong> and reset the day.</p>
+    </div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // UI
+    const dialogueBox = document.getElementById("dialogue-box");
+    const debateModal = document.getElementById("debate-modal");
+    const resultModal = document.getElementById("result-modal");
+    const tttModal = document.getElementById("ttt-modal");
+    const wagerSection = document.getElementById("wager-section");
+    const wagerSlider = document.getElementById("wager-slider");
+    const wagerValueText = document.getElementById("wager-value");
+
+    const TILE_SIZE = 40;
+    // Map is 100x80 tiles (Massive)
+    const MAP_COLS = 100;
+    const MAP_ROWS = 80;
+    // Camera shows 20x15 tiles
+    const CAM_COLS = 20;
+    const CAM_ROWS = 15;
+
+    let gameState = "PLAYING"; 
+    let currentOpponent = null;
+    let currentQuestionIndex = 0;
+    let currentWager = 200;
+    let isIntellectMode = false;
+    let isParliamentMode = false;
+
+    // Player
+    const player = {
+        x: 85, y: 72, // Start near home
+        color: "#3b82f6", facing: 'up', money: 5000, xp: 0, level: 1,
+        intellectScore: 0, intellectAttempted: 0, hasClubMembership: false,
+        day: 1, parliamentVisitsToday: 0
+    };
+
+    // Colors Legend
+    const C = {
+        GRASS: "#166534", ROAD: "#71717a", WALL: "#b45309", DOOR: "#fcd34d",
+        PARL_WALL: "#e2e8f0", PARL_DOOR: "#fbbf24", JAIL_WALL: "#18181b", JAIL_BARS: "#52525b",
+        CLUB_WALL: "#8b5cf6", CLUB_DOOR: "#d8b4fe", WATER: "#0284c7"
+    };
+
+    // Generate Massive Map
+    let map = Array.from({length: MAP_ROWS}, () => Array(MAP_COLS).fill('GRASS'));
+
+    function drawRect(startX, startY, w, h, type) {
+        for(let y=startY; y<startY+h; y++) {
+            for(let x=startX; x<startX+w; x++) {
+                if(y>=0 && y<MAP_ROWS && x>=0 && x<MAP_COLS) map[y][x] = type;
+            }
+        }
+    }
+
+    // Roads
+    drawRect(0, 30, 100, 4, 'ROAD'); // Main Horiz
+    drawRect(0, 68, 100, 4, 'ROAD'); // Res Horiz
+    drawRect(20, 0, 4, 100, 'ROAD'); // Parl Vert
+    drawRect(75, 0, 4, 100, 'ROAD'); // Jail Vert
+    drawRect(48, 30, 4, 40, 'ROAD'); // Club Vert
+
+    // Parliament (Top Left)
+    drawRect(2, 2, 16, 16, 'PARL_WALL');
+    drawRect(9, 17, 2, 1, 'PARL_DOOR');
+
+    // Tihar Jail (Top Right)
+    drawRect(80, 2, 18, 16, 'JAIL_WALL');
+    drawRect(80, 17, 18, 1, 'JAIL_BARS');
+
+    // Intellects Club (Center)
+    drawRect(40, 40, 20, 12, 'CLUB_WALL');
+    drawRect(49, 51, 2, 1, 'CLUB_DOOR');
+
+    // Residential Houses (Bottom)
+    drawRect(10, 60, 8, 8, 'WALL'); map[67][14] = 'DOOR'; // Friend 1
+    drawRect(30, 60, 8, 8, 'WALL'); map[67][34] = 'DOOR'; // Friend 2
+    drawRect(60, 60, 8, 8, 'WALL'); map[67][64] = 'DOOR'; // Friend 3
+    drawRect(82, 60, 8, 8, 'WALL'); map[67][86] = 'DOOR'; // Player Home / Mom
+
+    // Water feature
+    drawRect(40, 10, 20, 10, 'WATER');
+
+    // --- DATA: 33 INTELLECT QUESTIONS ---
+    const intellectQs =[
+        // Q 1-3 Math
+        {q:"What is the derivative of e^x?", o:["e^x", "x*e", "1"], a:0},
+        {q:"Who is known as the prince of Indian mathematics?", o:["Ramanujan", "Aryabhata", "Bhaskara"], a:0},
+        {q:"What is the sum of angles in a triangle?", o:["360", "180", "90"], a:1},
+        // Q 4-6 Physics
+        {q:"What is the speed of light?", o:["3x10^8 m/s", "3x10^5 m/s", "Sound speed"], a:0},
+        {q:"Who proposed General Relativity?", o:["Newton", "Einstein", "Bohr"], a:1},
+        {q:"What is the 4th state of matter?", o:["Liquid", "Gas", "Plasma"], a:2},
+        // Q 7-9 History
+        {q:"In what year did WW2 end?", o:["1945", "1918", "1939"], a:0},
+        {q:"Who was the first Emperor of Rome?", o:["Caesar", "Augustus", "Nero"], a:1},
+        {q:"Which civilization built the pyramids?", o:["Maya", "Egyptians", "Sumerians"], a:1},
+        // Q 10-12 Ancient India
+        {q:"Which empire was founded by Chandragupta?", o:["Maurya", "Gupta", "Chola"], a:0},
+        {q:"The ancient city of Mohenjo-Daro belongs to?", o:["Indus Valley", "Vedic Period", "Mughals"], a:0},
+        {q:"Who wrote the Arthashastra?", o:["Kalidasa", "Chanakya", "Ashoka"], a:1},
+        // Q 13-15 Philosophy
+        {q:"'I think, therefore I am' was said by?", o:["Kant", "Descartes", "Plato"], a:1},
+        {q:"Who wrote 'The Republic'?", o:["Socrates", "Aristotle", "Plato"], a:2},
+        {q:"Nietzsche declared that ___ is dead.", o:["Art", "God", "History"], a:1},
+        // Q 16-18 Indian Philosophy
+        {q:"Which school accepts perception as the only valid source of knowledge?", o:["Charvaka", "Nyaya", "Yoga"], a:0},
+        {q:"Who is the principal exponent of Advaita Vedanta?", o:["Ramanuja", "Madhva", "Adi Shankara"], a:2},
+        {q:"What is the ultimate goal in Buddhism?", o:["Moksha", "Nirvana", "Janna"], a:1},
+        // Q 19-21 Biology/Chemistry
+        {q:"What is the powerhouse of the cell?", o:["Nucleus", "Mitochondria", "Ribosome"], a:1},
+        {q:"What is the chemical symbol for Gold?", o:["Ag", "Au", "Pb"], a:1},
+        {q:"Which blood type is the universal donor?", o:["O-", "AB+", "A-"], a:0},
+        // Q 22-24 Literature
+        {q:"Who wrote the Mahabharata?", o:["Valmiki", "Vyasa", "Tulsidas"], a:1},
+        {q:"Who wrote 'Hamlet'?", o:["Dickens", "Shakespeare", "Austen"], a:1},
+        {q:"Gitanjali was written by?", o:["Tagore", "Premchand", "Dinkar"], a:0},
+        // Q 25-27 Geography
+        {q:"What is the largest ocean?", o:["Atlantic", "Indian", "Pacific"], a:2},
+        {q:"Which is the longest river in India?", o:["Ganga", "Brahmaputra", "Yamuna"], a:0},
+        {q:"Mt. Everest is located in?", o:["India", "Nepal", "China"], a:1},
+        // Q 28-30 Tech/Logic
+        {q:"Who is the father of the computer?", o:["Turing", "Babbage", "Lovelace"], a:1},
+        {q:"What does HTML stand for?", o:["Hyper Text Markup Language", "High Tech Multi Language", "Home Tool"], a:0},
+        {q:"If A=B and B=C, then A=C is the law of?", o:["Syllogism", "Transitivity", "Identity"], a:1},
+        // Q 31-33 General Science
+        {q:"Which planet is the Red Planet?", o:["Venus", "Mars", "Jupiter"], a:1},
+        {q:"What gas do plants absorb?", o:["Oxygen", "Carbon Dioxide", "Nitrogen"], a:1},
+        {q:"Water boils at what temperature (Celsius)?", o:["50", "100", "200"], a:1}
+    ];
+
+    // Distribute questions to 11 Intellectuals (3 each)
+    const intellectuals =[];
+    for(let i=0; i<11; i++) {
+        intellectuals.push({
+            x: 42 + (i%6)*3, y: 42 + Math.floor(i/6)*3, color: "#d946ef",
+            name: "Intellectual " + (i+1), isIntellect: true, qs: [intellectQs[i*3], intellectQs[i*3+1], intellectQs[i*3+2]],
+            progress: 0 // 0 to 3
+        });
+    }
+
+    // Parliament NPCs
+    const parliamentMPs =[
+        {
+            x: 5, y: 10, color: "#f87171", name: "Home Minister", isParliament: true,
+            qs:[{q:"Under which Article is the President's Rule imposed?", o:["352", "356", "360"], a:1},
+                 {q:"Who appoints the Chief Justice of India?", o:["Prime Minister", "President", "Parliament"], a:1}]
+        },
+        {
+            x: 10, y: 10, color: "#fb923c", name: "Senior MP", isParliament: true,
+            qs:[{q:"What is the minimum age to be a Lok Sabha member?", o:["21", "25", "30"], a:1},
+                 {q:"Which schedule contains anti-defection laws?", o:["8th", "9th", "10th"], a:2}]
+        }
+    ];
+
+    // Friends (Tic-Tac-Toe)
+    const friends =[
+        { x: 14, y: 69, color: "#14b8a6", name: "Rahul (Friend)", isFriend: true },
+        { x: 34, y: 69, color: "#14b8a6", name: "Aman (Friend)", isFriend: true },
+        { x: 64, y: 69, color: "#14b8a6", name: "Karan (Friend)", isFriend: true }
+    ];
+
+    // Random Wager NPCs
+    const wagerNPCs =[
+        { x: 22, y: 32, color: "#eab308", name: "Street Vendor", isWager: true, q: {q:"Is a tomato a fruit or veg?", o:["Fruit", "Vegetable", "Both"], a:0} },
+        { x: 77, y: 32, color: "#eab308", name: "Auto Driver", isWager: true, q: {q:"Shortcut to CP?", o:["Ring Road", "Outer Ring", "Flyover"], a:0} }
+    ];
+
+    const npcs =[...intellectuals, ...parliamentMPs, ...friends, ...wagerNPCs, 
+                  { x: 86, y: 69, color: "#ec4899", name: "Mom", message: "Beta, if you are tired, go inside and Sleep in your bed to start a new day." }];
+
+    // Input
+    window.addEventListener("keydown", function(e) {
+        if (gameState !== "PLAYING" && gameState !== "DIALOGUE") return;
+        
+        let tx = player.x, ty = player.y;
+        if (gameState === "PLAYING") {
+            if (e.code === "ArrowUp") { ty--; player.facing = 'up'; }
+            if (e.code === "ArrowDown") { ty++; player.facing = 'down'; }
+            if (e.code === "ArrowLeft") { tx--; player.facing = 'left'; }
+            if (e.code === "ArrowRight") { tx++; player.facing = 'right'; }
+
+            if (tx >= 0 && tx < MAP_COLS && ty >= 0 && ty < MAP_ROWS) {
+                let tile = map[ty][tx];
+                if (tile === 'GRASS' || tile === 'ROAD' || tile === 'DOOR' || tile === 'PARL_DOOR' || tile === 'CLUB_DOOR') {
+                    // Check Doors
+                    if (tile === 'PARL_DOOR') {
+                        if(!player.hasClubMembership) { showDialogue("Guard: Access Denied. Only Intellects Club Members allowed."); return; }
+                        else { tx = 6; ty = 15; } // Teleport inside
+                    }
+                    if (tile === 'CLUB_DOOR') { tx = 45; ty = 48; } // Teleport inside
+                    if (tile === 'DOOR') {
+                        if(tx===86) { sleep(); return; } // Player home
+                        else { showDialogue("You knocked. They told you to meet them on the road."); return; }
+                    }
+
+                    if (!npcs.find(n => n.x === tx && n.y === ty)) { player.x = tx; player.y = ty; }
+                }
+            }
+        }
+
+        if (e.code === "Space") {
+            e.preventDefault();
+            if (gameState === "DIALOGUE") {
+                dialogueBox.style.display = "none"; gameState = "PLAYING";
+            } else if (gameState === "PLAYING") checkInteraction();
+        }
+        draw();
+    });
+
+    function checkInteraction() {
+        let ix = player.x, iy = player.y;
+        if (player.facing === 'up') iy--; if (player.facing === 'down') iy++;
+        if (player.facing === 'left') ix--; if (player.facing === 'right') ix++;
+
+        let npc = npcs.find(n => n.x === ix && n.y === iy);
+        if (npc) {
+            if (npc.isIntellect) startIntellectDebate(npc);
+            else if (npc.isParliament) startParliamentDebate(npc);
+            else if (npc.isWager) openWagerModal(npc);
+            else if (npc.isFriend) startTicTacToe(npc);
+            else showDialogue(npc.name + ": " + npc.message);
+            return;
+        }
+
+        // Exits
+        if (map[player.y][player.x] === 'PARL_WALL') { player.x = 9; player.y = 18; } // Exit parl
+        if (map[player.y][player.x] === 'CLUB_WALL') { player.x = 49; player.y = 52; } // Exit club
+    }
+
+    function showDialogue(text) {
+        gameState = "DIALOGUE"; dialogueBox.innerText = text; dialogueBox.style.display = "block";
+    }
+
+    function sleep() {
+        player.day++; player.parliamentVisitsToday = 0;
+        showDialogue("You slept in your bed. It is now Day " + player.day + ".");
+        updateHUD();
+    }
+
+    // --- DEBATES ---
+    function openWagerModal(npc) {
+        if (player.money < 200) { showDialogue("You need ₹200 to bet!"); return; }
+        currentOpponent = npc; isIntellectMode = false; isParliamentMode = false;
+        gameState = "WAGER";
+        document.getElementById("debate-title").innerText = "STREET WAGER";
+        wagerSection.style.display = "block";
+        wagerSlider.max = player.money; wagerSlider.value = 200; updateWager();
+        document.getElementById("cancel-debate-btn").style.display = "block";
+        debateModal.style.display = "flex";
+    }
+
+    function updateWager() { currentWager = parseInt(wagerSlider.value); wagerValueText.innerText = currentWager; }
+
+    function startIntellectDebate(npc) {
+        if(npc.progress >= 3) { showDialogue(npc.name + ": You have answered all my questions."); return; }
+        currentOpponent = npc; isIntellectMode = true; isParliamentMode = false;
+        gameState = "DEBATE";
+        document.getElementById("debate-title").innerText = "INTELLECTUAL DEBATE (" + (npc.progress+1) + "/3)";
+        wagerSection.style.display = "none";
+        document.getElementById("cancel-debate-btn").style.display = "none";
+        loadQuestion(npc.qs[npc.progress]);
+        debateModal.style.display = "flex";
+    }
+
+    function startParliamentDebate(npc) {
+        if(player.parliamentVisitsToday >= 1) { showDialogue("You can only debate in Parliament once a day. Go sleep."); return; }
+        currentOpponent = npc; isIntellectMode = false; isParliamentMode = true;
+        gameState = "DEBATE";
+        document.getElementById("debate-title").innerText = "PARLIAMENT POLICY DEBATE";
+        wagerSection.style.display = "none";
+        document.getElementById("cancel-debate-btn").style.display = "block";
+        let q = npc.qs[Math.floor(Math.random() * npc.qs.length)];
+        loadQuestion(q);
+        debateModal.style.display = "flex";
+    }
+
+    window.startDebate = function() { // For Wagers
+        if (player.money < currentWager) return;
+        player.money -= currentWager; updateHUD();
+        wagerSection.style.display = "none";
+        loadQuestion(currentOpponent.q);
+    }
+
+    function loadQuestion(qObj) {
+        document.getElementById("debate-question").innerText = qObj.q;
+        const optionsDiv = document.getElementById("debate-options");
+        optionsDiv.innerHTML = "";
+        
+        if(!isIntellectMode && !isParliamentMode) {
+            // Wager needs accept button first
+            let startBtn = document.createElement("button");
+            startBtn.className = "btn"; startBtn.innerText = "Accept Wager & Start";
+            startBtn.onclick = () => {
+                player.money -= currentWager; updateHUD();
+                wagerSection.style.display = "none"; document.getElementById("cancel-debate-btn").style.display = "none";
+                loadQuestionOptions(qObj);
+            };
+            optionsDiv.appendChild(startBtn);
+        } else {
+            loadQuestionOptions(qObj);
+        }
+    }
+
+    function loadQuestionOptions(qObj) {
+        const optionsDiv = document.getElementById("debate-options");
+        optionsDiv.innerHTML = "";
+        qObj.o.forEach((opt, index) => {
+            let btn = document.createElement("button"); btn.className = "btn"; btn.innerText = opt;
+            btn.onclick = () => resolveDebate(index, qObj.a);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    window.resolveDebate = function(selected, correct) {
+        debateModal.style.display = "none"; gameState = "RESULT";
+        let isWin = (selected === correct);
+
+        if(isIntellectMode) {
+            player.intellectAttempted++;
+            if(isWin) player.intellectScore++;
+            currentOpponent.progress++;
+            document.getElementById("result-title").innerHTML = isWin ? "<span style='color:#4ade80'>CORRECT!</span>" : "<span style='color:#ef4444'>INCORRECT.</span>";
+            document.getElementById("result-desc").innerText = `Score: ${player.intellectScore}/${player.intellectAttempted} (Need 25/33 for Club)`;
+            
+            if(player.intellectScore >= 25 && !player.hasClubMembership) {
+                player.hasClubMembership = true;
+                setTimeout(()=>alert("CONGRATULATIONS! You are now an Elite Intellect. Parliament access granted!"), 500);
+            }
+        } 
+        else if (isParliamentMode) {
+            player.parliamentVisitsToday++;
+            if(isWin) {
+                player.money += 2000; player.xp += 500;
+                document.getElementById("result-title").innerHTML = "<span style='color:#4ade80'>POLICY PASSED!</span>";
+                document.getElementById("result-desc").innerText = `You impressed the MPs!\nWon ₹2000 and 500 XP.`;
+            } else {
+                document.getElementById("result-title").innerHTML = "<span style='color:#ef4444'>BILL REJECTED.</span>";
+                document.getElementById("result-desc").innerText = `Your arguments lacked substance. Come back tomorrow.`;
+            }
+        }
+        else {
+            // Wager
+            if(isWin) {
+                player.money += currentWager * 2; player.xp += Math.floor(currentWager/10);
+                document.getElementById("result-title").innerHTML = "<span style='color:#4ade80'>YOU WON!</span>";
+                document.getElementById("result-desc").innerText = `Won ₹${currentWager*2}!`;
+            } else {
+                let ret = Math.floor(currentWager/2); player.money += ret;
+                document.getElementById("result-title").innerHTML = "<span style='color:#ef4444'>YOU LOST!</span>";
+                document.getElementById("result-desc").innerText = `Lost ₹${currentWager - ret}.`;
+            }
+        }
+        
+        if (player.xp >= player.level * 100) { player.xp -= player.level * 100; player.level++; }
+        updateHUD(); resultModal.style.display = "flex";
+    }
+
+    window.closeModals = function() {
+        debateModal.style.display = "none"; resultModal.style.display = "none"; tttModal.style.display = "none";
+        gameState = "PLAYING"; canvas.focus(); draw();
+    }
+
+    function updateHUD() {
+        document.getElementById("day-display").innerText = "Day: " + player.day;
+        document.getElementById("cash-display").innerText = "Money: ₹" + player.money;
+        document.getElementById("xp-display").innerText = "Level: " + player.level + " | XP: " + player.xp;
+        document.getElementById("club-display").innerText = "Club: " + player.intellectScore + "/33" + (player.hasClubMembership ? " (VIP)" : "");
+    }
+
+    // --- TIC TAC TOE ENGINE ---
+    let tttBoard = ["", "", "", "", "", "", "", "", ""];
+    function startTicTacToe(npc) {
+        gameState = "TICTACTOE"; tttBoard =["", "", "", "", "", "", "", "", ""];
+        document.getElementById("ttt-status").innerText = "Your Turn (X) vs " + npc.name;
+        document.getElementById("ttt-status").style.color = "yellow";
+        renderTTT(); tttModal.style.display = "flex";
+    }
+
+    function renderTTT() {
+        const boardDiv = document.getElementById("ttt-board"); boardDiv.innerHTML = "";
+        tttBoard.forEach((cell, i) => {
+            let div = document.createElement("div"); div.className = "ttt-cell"; div.innerText = cell;
+            div.onclick = () => playerTTTMove(i);
+            boardDiv.appendChild(div);
+        });
+    }
+
+    function playerTTTMove(index) {
+        if(tttBoard[index] !== "" || checkTTTWin()) return;
+        tttBoard[index] = "X"; renderTTT();
+        if(checkTTTWin()) return;
+        setTimeout(aiTTTMove, 500); // Friend plays
+    }
+
+    function aiTTTMove() {
+        let empty = tttBoard.map((c,i) => c===""?i:null).filter(i => i!==null);
+        if(empty.length === 0) { document.getElementById("ttt-status").innerText = "It's a Draw!"; return; }
+        
+        // Simple AI: Random
+        let move = empty[Math.floor(Math.random() * empty.length)];
+        tttBoard[move] = "O"; renderTTT(); checkTTTWin();
+    }
+
+    function checkTTTWin() {
+        const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        for(let w of wins) {
+            let[a,b,c] = w;
+            if(tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                document.getElementById("ttt-status").innerText = tttBoard[a] + " WINS!";
+                document.getElementById("ttt-status").style.color = tttBoard[a]==="X" ? "#4ade80" : "#ef4444";
+                return true;
+            }
+        }
+        if(!tttBoard.includes("")) document.getElementById("ttt-status").innerText = "DRAW!";
+        return false;
+    }
+
+
+    // --- DRAW MAP (CAMERA SYSTEM) ---
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Camera Logic
+        let camX = player.x - Math.floor(CAM_COLS / 2);
+        let camY = player.y - Math.floor(CAM_ROWS / 2);
+        camX = Math.max(0, Math.min(camX, MAP_COLS - CAM_COLS));
+        camY = Math.max(0, Math.min(camY, MAP_ROWS - CAM_ROWS));
+
+        // Draw Visible Map
+        for (let r = 0; r < CAM_ROWS; r++) {
+            for (let c = 0; c < CAM_COLS; c++) {
+                let mapX = camX + c; let mapY = camY + r;
+                let tile = map[mapY][mapX];
+                
+                ctx.fillStyle = C[tile];
+                ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+                // Grid lines for outdoors
+                if (tile === 'GRASS' || tile === 'ROAD' || tile === 'WATER') {
+                    ctx.strokeStyle = "rgba(0,0,0,0.15)";
+                    ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        // Draw Visible NPCs
+        npcs.forEach(npc => {
+            if(npc.x >= camX && npc.x < camX+CAM_COLS && npc.y >= camY && npc.y < camY+CAM_ROWS) {
+                let px = (npc.x - camX) * TILE_SIZE;
+                let py = (npc.y - camY) * TILE_SIZE;
+                ctx.fillStyle = npc.color; ctx.fillRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+                
+                if(npc.isIntellect && npc.progress < 3) {
+                    ctx.fillStyle = "white"; ctx.font = "bold 16px Courier"; ctx.fillText("?", px + 15, py + 5);
+                } else if(npc.isFriend) {
+                    ctx.fillStyle = "white"; ctx.font = "14px Courier"; ctx.fillText("X/O", px + 8, py + 5);
+                }
+            }
+        });
+
+        // Draw Player
+        let px = (player.x - camX) * TILE_SIZE;
+        let py = (player.y - camY) * TILE_SIZE;
+        ctx.fillStyle = player.color; ctx.fillRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+        // Facing indicator
+        ctx.fillStyle = "white";
+        let ex = px + TILE_SIZE/2 - 2, ey = py + TILE_SIZE/2 - 2;
+        if(player.facing === 'up') ey -= 10; if(player.facing === 'down') ey += 10;
+        if(player.facing === 'left') ex -= 10; if(player.facing === 'right') ex += 10;
+        ctx.fillRect(ex, ey, 4, 4);
+    }
+
+    updateHUD(); draw();
+</script>
+
+</body>
+</html>

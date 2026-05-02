@@ -1,0 +1,21 @@
+{
+  "name": "delhi-diaries",
+  "version": "1.0.0",
+  "description": "Delhi Diaries: Ultimate Edition — Node.js backend",
+  "main": "backend/server.js",
+  "scripts": {
+    "start":   "node backend/server.js",
+    "dev":     "nodemon backend/server.js",
+    "db:init": "psql $DATABASE_URL -f database/schema.sql"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors":     "^2.8.5",
+    "express":  "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg":       "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

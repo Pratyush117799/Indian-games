@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delhi Diaries: Ultimate Edition</title>
+    <style>
+        body {
+            background-color: #0f172a; color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; flex-direction: column; align-items: center;
+            margin: 0; padding: 10px;
+        }
+        #hud {
+            width: 800px; display: flex; flex-wrap: wrap; justify-content: space-between;
+            background-color: #1e293b; padding: 10px 20px; box-sizing: border-box;
+            border: 4px solid #fff; border-bottom: none;
+            font-size: 15px; font-weight: bold; color: #38bdf8;
+        }
+        .hud-row { width: 100%; display: flex; justify-content: space-between; margin-bottom: 5px; }
+        #game-container {
+            position: relative; width: 800px; height: 600px;
+            border: 4px solid #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            background-color: #000; overflow: hidden;
+        }
+        canvas { display: block; image-rendering: pixelated; }
+        
+        .modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            z-index: 20; text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        #dialogue-box {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
+            background-color: rgba(15, 23, 42, 0.9); border-top: 4px solid white;
+            color: white; padding: 20px; box-sizing: border-box; display: none;
+            font-size: 18px; font-weight: bold; z-index: 10;
+        }
+        .btn {
+            background-color: white; color: black; border: 2px solid #555;
+            padding: 10px 20px; margin: 5px; font-family: 'Courier New', Courier, monospace;
+            font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; width: 80%;
+        }
+        .btn:hover { background-color: #cbd5e1; transform: scale(1.02); }
+        .btn:disabled { background-color: #555; color: #aaa; cursor: not-allowed; }
+        
+        .question-text { color: #facc15; font-size: 20px; margin-bottom: 20px; line-height: 1.5; }
+        input[type="range"] { width: 300px; margin: 20px 0; }
+        
+        /* Tic-Tac-Toe */
+        #ttt-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; margin: 20px; }
+        .ttt-cell {
+            width: 100px; height: 100px; background-color: #333; color: white;
+            font-size: 48px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; border: 2px solid #fff;
+        }
+        .ttt-cell:hover { background-color: #555; }
+        
+        .instructions { margin-top: 10px; text-align: center; color: #94a3b8; font-size: 14px; max-width: 800px;}
+    </style>
+</head>
+<body>
+
+    <h2>DELHI DIARIES: ULTIMATE EDITION</h2>
+    
+    <div id="hud">
+        <div class="hud-row">
+            <span id="day-display" style="color:#fcd34d">Day: 1</span>
+            <span id="cash-display" style="color:#4ade80">Money: ₹5000</span>
+            <span id="xp-display" style="color:#c084fc">Level: 1 | XP: 0</span>
+            <span id="club-display" style="color:#f87171">Club: 0/33</span>
+        </div>
+        <div class="hud-row" style="color:#a78bfa; font-size: 13px;">
+            <span id="du-display">DU Admission: None (Score: 0/25)</span>
+            <span id="assets-display">Assets: None</span>
+            <span id="lib-display">Library Pass: No</span>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="dialogue-box">Press SPACE to interact.</div>
+        
+        <div id="debate-modal" class="modal">
+            <h2 id="debate-title" style="color: #60a5fa;">DEBATE</h2>
+            <div id="wager-section" style="display:none;">
+                <p>Select your wager (Min ₹200):</p>
+                <input type="range" id="wager-slider" min="200" max="5000" step="100" value="200" oninput="updateWager()">
+                <h3 style="color: #4ade80;">Wager: ₹<span id="wager-value">200</span></h3>
+            </div>
+            <h3 id="debate-question" class="question-text">Question?</h3>
+            <div id="debate-options" style="display: flex; flex-direction: column; width: 100%; align-items:center;"></div>
+            <button id="cancel-debate-btn" class="btn" style="margin-top:20px; background:#ef4444; color:white;" onclick="closeModals()">Leave</button>
+        </div>
+
+        <div id="result-modal" class="modal">
+            <h2 id="result-title">Result</h2>
+            <p id="result-desc" style="font-size: 18px; white-space: pre-wrap;">Description</p>
+            <button class="btn" onclick="closeModals()">Continue</button>
+        </div>
+
+        <div id="ttt-modal" class="modal">
+            <h2 style="color: #38bdf8;">TIC-TAC-TOE (Win = ₹500)</h2>
+            <h3 id="ttt-status" style="color: yellow;">Your Turn (X)</h3>
+            <div id="ttt-board"></div>
+            <button class="btn" onclick="closeModals()">Quit Game</button>
+        </div>
+
+        <!-- Travel Modal -->
+        <div id="travel-modal" class="modal">
+            <h2 style="color: #facc15;">TOUR GUIDE FAST TRAVEL</h2>
+            <p>Where would you like to go?</p>
+            <button class="btn" onclick="travelTo(285, 280)">Home (Residential)</button>
+            <button class="btn" onclick="travelTo(150, 160)">Intellects Club & Library</button>
+            <button class="btn" onclick="travelTo(130, 20)">Delhi University Gate</button>
+            <button class="btn" onclick="travelTo(20, 20)">Parliament</button>
+            <button class="btn" onclick="travelTo(30, 280)">The Great Mall</button>
+            <button class="btn" style="background:#ef4444; color:white; margin-top:20px;" onclick="closeModals()">Cancel</button>
+        </div>
+
+        <!-- Shop Modal -->
+        <div id="shop-modal" class="modal">
+            <h2 style="color: #4ade80;">THE GREAT MALL</h2>
+            <p>Your Money: ₹<span id="shop-money"></span></p>
+            <button class="btn" onclick="buyItem('Car', 50000)">Buy Car (₹50,000)</button>
+            <button class="btn" onclick="buyItem('Mansion', 5000000)">Buy Mansion (₹50,00,000)</button>
+            <button class="btn" onclick="buyItem('Rolex', 250000)">Buy Gold Watch (₹2,50,000)</button>
+            <button class="btn" style="background:#ef4444; color:white; margin-top:20px;" onclick="closeModals()">Leave Mall</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <p><strong>ARROWS</strong> to Move | <strong>SPACE</strong> to Interact</p>
+        <p>Talk to the <strong>Tour Guide (Cyan Icon)</strong> to fast travel across the massive map!</p>
+    </div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const dialogueBox = document.getElementById("dialogue-box");
+    const debateModal = document.getElementById("debate-modal");
+    const resultModal = document.getElementById("result-modal");
+    const tttModal = document.getElementById("ttt-modal");
+    const travelModal = document.getElementById("travel-modal");
+    const shopModal = document.getElementById("shop-modal");
+    const wagerSlider = document.getElementById("wager-slider");
+    const wagerValueText = document.getElementById("wager-value");
+
+    const TILE_SIZE = 40;
+    // Massive 300x300 Map
+    const MAP_COLS = 300;
+    const MAP_ROWS = 300;
+    const CAM_COLS = 20;
+    const CAM_ROWS = 15;
+
+    let gameState = "PLAYING"; 
+    let currentOpponent = null;
+    let currentWager = 200;
+    let debateType = ""; // WAGER, INTELLECT, PARLIAMENT, DU_ADMIN, DU_STUDENT
+
+    // Player Stats
+    const player = {
+        x: 285, y: 280, // Start at home
+        color: "#3b82f6", facing: 'up', money: 5000, xp: 0, level: 1, day: 1,
+        
+        intellectScore: 0, intellectAttempted: 0, hasPaidClubFee: false, hasClubMembership: false,
+        parliamentVisitsToday: 0,
+        
+        hasLibraryPass: false,
+        duStatus: "None", // None, Guest, Admitted
+        guestPassDay: 0,
+        duScore: 0, duAttempted: 0,
+        
+        assets:[]
+    };
+
+    const C = {
+        GRASS: "#166534", ROAD: "#71717a", WALL: "#b45309", DOOR: "#fcd34d",
+        PARL_WALL: "#94a3b8", PARL_FLOOR: "#e2e8f0", PARL_DOOR: "#fbbf24", 
+        JAIL_WALL: "#18181b", JAIL_FLOOR: "#27272a", JAIL_BARS: "#52525b",
+        CLUB_WALL: "#6d28d9", CLUB_FLOOR: "#8b5cf6", CLUB_DOOR: "#d8b4fe", 
+        LIB_WALL: "#0369a1", LIB_FLOOR: "#38bdf8", LIB_DOOR: "#7dd3fc",
+        DU_WALL: "#991b1b", DU_FLOOR: "#fca5a5", DU_DOOR: "#f87171", DU_ADMIN: "#ef4444",
+        MALL_WALL: "#047857", MALL_FLOOR: "#34d399", MALL_DOOR: "#6ee7b7",
+        WATER: "#0284c7"
+    };
+
+    let map = Array.from({length: MAP_ROWS}, () => Array(MAP_COLS).fill('GRASS'));
+    function drawRect(startX, startY, w, h, type) {
+        for(let y=startY; y<startY+h; y++) {
+            for(let x=startX; x<startX+w; x++) {
+                if(y>=0 && y<MAP_ROWS && x>=0 && x<MAP_COLS) map[y][x] = type;
+            }
+        }
+    }
+
+    // MAIN ROADS
+    drawRect(0, 15, 300, 6, 'ROAD'); // Top Horizontal
+    drawRect(0, 150, 300, 6, 'ROAD'); // Mid Horizontal
+    drawRect(0, 270, 300, 6, 'ROAD'); // Bottom Horizontal
+    drawRect(15, 0, 6, 300, 'ROAD'); // Left Vert
+    drawRect(150, 0, 6, 300, 'ROAD'); // Mid Vert
+    drawRect(275, 0, 6, 300, 'ROAD'); // Right Vert
+
+    // ZONES
+    // Parliament (Top Left 16x16)
+    drawRect(20, 20, 16, 16, 'PARL_WALL'); drawRect(21, 21, 14, 14, 'PARL_FLOOR'); drawRect(27, 36, 2, 1, 'PARL_DOOR');
+    
+    // Tihar Jail (Top Right 18x16)
+    drawRect(280, 20, 18, 16, 'JAIL_WALL'); drawRect(281, 21, 16, 14, 'JAIL_FLOOR'); drawRect(280, 36, 18, 1, 'JAIL_BARS');
+    
+    // Intellects Club (Center 20x12)
+    drawRect(130, 130, 20, 12, 'CLUB_WALL'); drawRect(131, 131, 18, 10, 'CLUB_FLOOR'); drawRect(139, 142, 2, 1, 'CLUB_DOOR');
+    
+    // National Library (Near Club 20x15)
+    drawRect(160, 130, 20, 15, 'LIB_WALL'); drawRect(161, 131, 18, 13, 'LIB_FLOOR'); drawRect(169, 145, 2, 1, 'LIB_DOOR');
+
+    // The Mall (Bottom Left 30x20)
+    drawRect(20, 240, 30, 20, 'MALL_WALL'); drawRect(21, 241, 28, 18, 'MALL_FLOOR'); drawRect(34, 260, 2, 1, 'MALL_DOOR');
+
+    // DELHI UNIVERSITY (Massive: 160x100) -> 16,000 tiles (approx 100x Parliament)
+    drawRect(50, 25, 160, 100, 'DU_WALL'); drawRect(51, 26, 158, 98, 'DU_FLOOR'); 
+    drawRect(129, 125, 4, 1, 'DU_DOOR'); // Main Gate
+    // DU Internal Buildings (Classrooms & Admin)
+    drawRect(60, 30, 20, 20, 'DU_ADMIN'); // Admin Block
+    drawRect(100, 30, 30, 20, 'GRASS'); // Internal Parks
+    drawRect(160, 30, 30, 20, 'GRASS');
+    drawRect(80, 70, 40, 30, 'PARL_WALL'); drawRect(81, 71, 38, 28, 'PARL_FLOOR'); // Huge Lecture Hall
+    
+    // Residential Houses
+    drawRect(280, 280, 8, 8, 'WALL'); map[287][284] = 'DOOR'; // Home
+    drawRect(260, 280, 8, 8, 'WALL'); map[287][264] = 'DOOR'; // Friend 1
+    drawRect(240, 280, 8, 8, 'WALL'); map[287][244] = 'DOOR'; // Friend 2
+    drawRect(220, 280, 8, 8, 'WALL'); map[287][224] = 'DOOR'; // Friend 3
+
+    // Question Database (Massive Pool)
+    const masterQs =[
+        {q:"Derivative of e^x?", o:["e^x", "x*e", "1"], a:0},
+        {q:"Prince of Indian mathematics?", o:["Ramanujan", "Aryabhata", "Bhaskara"], a:0},
+        {q:"Speed of light?", o:["3x10^8 m/s", "3x10^5 m/s", "Sound speed"], a:0},
+        {q:"General Relativity?", o:["Newton", "Einstein", "Bohr"], a:1},
+        {q:"4th state of matter?", o:["Liquid", "Gas", "Plasma"], a:2},
+        {q:"WW2 ended in?", o:["1945", "1918", "1939"], a:0},
+        {q:"First Emperor of Rome?", o:["Caesar", "Augustus", "Nero"], a:1},
+        {q:"Built the pyramids?", o:["Maya", "Egyptians", "Sumerians"], a:1},
+        {q:"Arthashastra author?", o:["Kalidasa", "Chanakya", "Ashoka"], a:1},
+        {q:"'I think, therefore I am'?", o:["Kant", "Descartes", "Plato"], a:1},
+        {q:"Author of 'The Republic'?", o:["Socrates", "Aristotle", "Plato"], a:2},
+        {q:"Goal in Buddhism?", o:["Moksha", "Nirvana", "Janna"], a:1},
+        {q:"Powerhouse of the cell?", o:["Nucleus", "Mitochondria", "Ribosome"], a:1},
+        {q:"Chemical symbol for Gold?", o:["Ag", "Au", "Pb"], a:1},
+        {q:"Longest river in India?", o:["Ganga", "Brahmaputra", "Yamuna"], a:0},
+        {q:"Father of the computer?", o:["Turing", "Babbage", "Lovelace"], a:1},
+        {q:"Red Planet?", o:["Venus", "Mars", "Jupiter"], a:1},
+        {q:"Who wrote the Mahabharata?", o:["Valmiki", "Vyasa", "Tulsidas"], a:1},
+        {q:"Capital of Australia?", o:["Sydney", "Melbourne", "Canberra"], a:2},
+        {q:"Hardest natural substance?", o:["Gold", "Iron", "Diamond"], a:2},
+        {q:"Square root of 144?", o:["10", "12", "14"], a:1},
+        {q:"Who painted the Mona Lisa?", o:["Van Gogh", "Da Vinci", "Picasso"], a:1},
+        {q:"Largest planet in our solar system?", o:["Earth", "Saturn", "Jupiter"], a:2},
+        {q:"How many continents are there?", o:["5", "6", "7"], a:2},
+        {q:"What is H2O?", o:["Helium", "Water", "Oxygen"], a:1}
+    ];
+
+    function getRandomQ() { return masterQs[Math.floor(Math.random() * masterQs.length)]; }
+
+    let npcs =[
+        { x: 284, y: 289, color: "#ec4899", name: "Mom" },
+        { x: 138, y: 143, color: "#e2e8f0", name: "Club Guard", isClubGuard: true },
+        { x: 168, y: 146, color: "#e2e8f0", name: "Library Guard", isLibGuard: true },
+        { x: 128, y: 126, color: "#e2e8f0", name: "DU Security", isDUGuard: true },
+        { x: 34, y: 259, color: "#e2e8f0", name: "Mall Entrance", isMallGuard: true },
+        { x: 30, y: 250, color: "#f59e0b", name: "Shopkeeper", isShop: true }
+    ];
+
+    // Tour Guides (Cyan)
+    const guideLocs = [[285, 278],[145, 145], [130, 22],[30, 262]];
+    guideLocs.forEach(l => npcs.push({ x: l[0], y: l[1], color: "#06b6d4", name: "Tour Guide", isGuide: true }));
+
+    // Friends
+    npcs.push({ x: 264, y: 289, color: "#14b8a6", name: "Rahul", isFriend: true });
+    npcs.push({ x: 244, y: 289, color: "#14b8a6", name: "Aman", isFriend: true });
+    npcs.push({ x: 224, y: 289, color: "#14b8a6", name: "Karan", isFriend: true });
+
+    // Club Intellectuals (11 inside Club)
+    for(let i=0; i<11; i++) {
+        npcs.push({ x: 132 + (i%6)*2, y: 133 + Math.floor(i/6)*2, color: "#d946ef", name: "Intellectual", isIntellect: true, qs:[getRandomQ(), getRandomQ(), getRandomQ()], progress: 0 });
+    }
+
+    // Parliament
+    npcs.push({ x: 25, y: 25, color: "#f87171", name: "Home Minister", isParliament: true, qs:[{q:"Article for President's Rule?", o:["352","356","360"], a:1}]});
+
+    // DU Admin Panel (11 Senior Profs)
+    for(let i=0; i<11; i++) {
+        npcs.push({ x: 62 + (i%4)*4, y: 32 + Math.floor(i/4)*4, color: "#ef4444", name: "Senior Panel Prof", isDUAdmin: true, q: getRandomQ() });
+    }
+
+    // DU Students/Scholars (50+ spread across DU Floor)
+    for(let i=0; i<55; i++) {
+        let rx = 55 + Math.floor(Math.random() * 140);
+        let ry = 28 + Math.floor(Math.random() * 90);
+        // Avoid Admin block
+        if(rx >= 60 && rx <= 80 && ry >= 30 && ry <= 50) continue;
+        npcs.push({ x: rx, y: ry, color: "#f97316", name: "DU Scholar", isDUStudent: true, q: getRandomQ() });
+    }
+
+    // Street Debaters (40 random on Roads)
+    for(let i=0; i<40; i++) {
+        let rx = 1 + Math.floor(Math.random() * 298);
+        let ry = (Math.random() > 0.5) ? (15 + Math.floor(Math.random()*6)) : (150 + Math.floor(Math.random()*6));
+        npcs.push({ x: rx, y: ry, color: "#eab308", name: "Citizen", isWager: true, q: getRandomQ() });
+    }
+
+    // Input Movement
+    window.addEventListener("keydown", function(e) {
+        if (gameState !== "PLAYING" && gameState !== "DIALOGUE") return;
+        
+        let tx = player.x, ty = player.y;
+        if (gameState === "PLAYING") {
+            let speed = (player.assets.includes("Car")) ? 2 : 1; // Car makes you faster
+            
+            if (e.code === "ArrowUp") { ty-=speed; player.facing = 'up'; }
+            if (e.code === "ArrowDown") { ty+=speed; player.facing = 'down'; }
+            if (e.code === "ArrowLeft") { tx-=speed; player.facing = 'left'; }
+            if (e.code === "ArrowRight") { tx+=speed; player.facing = 'right'; }
+
+            if (tx >= 0 && tx < MAP_COLS && ty >= 0 && ty < MAP_ROWS) {
+                let tile = map[ty][tx];
+                const wTiles =['GRASS','ROAD','DOOR','PARL_DOOR','CLUB_DOOR','CLUB_FLOOR','PARL_FLOOR','JAIL_FLOOR','LIB_FLOOR','LIB_DOOR','DU_FLOOR','DU_DOOR','DU_ADMIN','MALL_FLOOR','MALL_DOOR'];
+                
+                if (wTiles.includes(tile)) {
+                    if (tile === 'PARL_DOOR' && !player.hasClubMembership && player.y > ty) { showDialogue("Access Denied. Need Club VIP."); return; }
+                    if (tile === 'CLUB_DOOR' && !player.hasPaidClubFee && player.y > ty) { showDialogue("Locked. Speak to Guard."); return; }
+                    if (tile === 'LIB_DOOR' && !player.hasLibraryPass && player.y > ty) { showDialogue("Locked. Speak to Guard."); return; }
+                    if (tile === 'DU_DOOR' && player.duStatus === 'None' && player.y > ty) { showDialogue("Locked. Speak to Gate Guard."); return; }
+                    if (tile === 'DOOR') {
+                        if(tx === 287) { sleep(); return; }
+                        else { showDialogue("Meet them outside."); return; }
+                    }
+
+                    if (!npcs.find(n => n.x === tx && n.y === ty)) { player.x = tx; player.y = ty; }
+                }
+            }
+        }
+
+        if (e.code === "Space") {
+            e.preventDefault();
+            if (gameState === "DIALOGUE") { dialogueBox.style.display = "none"; gameState = "PLAYING"; }
+            else if (gameState === "PLAYING") checkInteraction();
+        }
+        draw();
+    });
+
+    function checkInteraction() {
+        let ix = player.x, iy = player.y;
+        if (player.facing === 'up') iy--; if (player.facing === 'down') iy++;
+        if (player.facing === 'left') ix--; if (player.facing === 'right') ix++;
+
+        // Increase interaction range slightly for Car users
+        let range = player.assets.includes("Car") ? 2 : 1;
+        let npc = npcs.find(n => Math.abs(n.x - player.x) <= range && Math.abs(n.y - player.y) <= range);
+        
+        if (npc) {
+            if (npc.isIntellect) startDebateFlow(npc, "INTELLECT");
+            else if (npc.isParliament) startDebateFlow(npc, "PARLIAMENT");
+            else if (npc.isDUAdmin) startDebateFlow(npc, "DU_ADMIN");
+            else if (npc.isDUStudent) startDebateFlow(npc, "DU_STUDENT");
+            else if (npc.isWager) openWagerModal(npc);
+            else if (npc.isFriend) startTicTacToe(npc);
+            else if (npc.isClubGuard) handleGuard(npc, "CLUB");
+            else if (npc.isLibGuard) handleGuard(npc, "LIB");
+            else if (npc.isDUGuard) handleGuard(npc, "DU");
+            else if (npc.isGuide) openTravelMenu();
+            else if (npc.isShop) openShopMenu();
+            else if (npc.name === "Mom") {
+                if (player.money < 200) { player.money += 500; showDialogue("Mom: Here is ₹500 emergency cash."); updateHUD(); }
+                else showDialogue("Mom: Go sleep in your bed to start a new day.");
+            }
+        }
+    }
+
+    function showDialogue(text) { gameState = "DIALOGUE"; dialogueBox.innerText = text; dialogueBox.style.display = "block"; }
+
+    function sleep() {
+        player.day++; player.parliamentVisitsToday = 0;
+        if(player.duStatus === 'Guest' && player.day > player.guestPassDay) player.duStatus = 'None';
+        showDialogue("You slept. It is now Day " + player.day + ".");
+        updateHUD();
+    }
+
+    // --- GUARDS ---
+    function handleGuard(npc, type) {
+        gameState = "GUARD_PROMPT"; debateType = "GUARD";
+        document.getElementById("debate-title").innerText = "SECURITY";
+        wagerSection.style.display = "none";
+        document.getElementById("cancel-debate-btn").style.display = "block";
+        const opt = document.getElementById("debate-options"); opt.innerHTML = "";
+
+        if(type === "CLUB") {
+            if (player.hasPaidClubFee) { showDialogue("Unlocked."); return; }
+            document.getElementById("debate-question").innerHTML = "Club Entry: ₹2500.";
+            let btn = document.createElement("button"); btn.className="btn"; btn.innerText="Pay ₹2500";
+            btn.onclick = () => { if(player.money>=2500){player.money-=2500; player.hasPaidClubFee=true; closeModals(); showDialogue("Unlocked."); updateHUD();} else alert("Not enough money!");};
+            opt.appendChild(btn);
+        } else if(type === "LIB") {
+            if (player.hasLibraryPass) { showDialogue("Unlocked."); return; }
+            document.getElementById("debate-question").innerHTML = "Library Entry: Need Club VIP + ₹500 Lifetime.";
+            let btn = document.createElement("button"); btn.className="btn"; btn.innerText="Pay ₹500";
+            btn.disabled = !player.hasClubMembership;
+            btn.onclick = () => { if(player.money>=500){player.money-=500; player.hasLibraryPass=true; closeModals(); showDialogue("Unlocked."); updateHUD();} else alert("Not enough money!");};
+            opt.appendChild(btn);
+        } else if(type === "DU") {
+            if (player.duStatus === 'Admitted' || player.duStatus === 'Guest') { showDialogue("You may enter."); return; }
+            document.getElementById("debate-question").innerHTML = "DU Entry: ₹1000 for Guest Pass OR ₹1,00,000 for Permanent Admission (Requires Interview).";
+            
+            let btnG = document.createElement("button"); btnG.className="btn"; btnG.innerText="Pay ₹1000 (Guest)";
+            btnG.onclick = () => { if(player.money>=1000){player.money-=1000; player.duStatus='Guest'; player.guestPassDay=player.day; closeModals(); showDialogue("Guest Pass Active."); updateHUD();} else alert("No money!");};
+            opt.appendChild(btnG);
+
+            let btnA = document.createElement("button"); btnA.className="btn"; btnA.innerText="Pay ₹1,00,000 (Permanent)";
+            btnA.disabled = player.duScore < 25;
+            btnA.onclick = () => { if(player.money>=100000){player.money-=100000; player.duStatus='Admitted'; closeModals(); showDialogue("Welcome to DU permanently!"); updateHUD();} else alert("No money!");};
+            opt.appendChild(btnA);
+        }
+        debateModal.style.display = "flex";
+    }
+
+    // --- MENUS ---
+    window.openTravelMenu = function() {
+        gameState = "MENU"; travelModal.style.display = "flex";
+    }
+    window.travelTo = function(x, y) {
+        player.x = x; player.y = y; closeModals();
+    }
+    
+    window.openShopMenu = function() {
+        gameState = "MENU"; document.getElementById("shop-money").innerText = player.money;
+        shopModal.style.display = "flex";
+    }
+    window.buyItem = function(item, price) {
+        if(player.assets.includes(item)) { alert("You already own this!"); return; }
+        if(player.money >= price) {
+            player.money -= price; player.assets.push(item);
+            document.getElementById("shop-money").innerText = player.money;
+            alert(`Purchased ${item}!`); updateHUD();
+        } else { alert("Not enough money!"); }
+    }
+
+    // --- DEBATES ---
+    function openWagerModal(npc) {
+        if (player.money < 200) { showDialogue("You need ₹200 to bet!"); return; }
+        currentOpponent = npc; debateType = "WAGER"; gameState = "WAGER";
+        document.getElementById("debate-title").innerText = "STREET WAGER";
+        wagerSection.style.display = "block";
+        wagerSlider.max = player.money; wagerSlider.value = 200; updateWager();
+        document.getElementById("cancel-debate-btn").style.display = "block";
+        debateModal.style.display = "flex";
+    }
+    function updateWager() { currentWager = parseInt(wagerSlider.value); wagerValueText.innerText = currentWager; }
+
+    function startDebateFlow(npc, type) {
+        currentOpponent = npc; debateType = type; gameState = "DEBATE";
+        wagerSection.style.display = "none";
+        document.getElementById("cancel-debate-btn").style.display = (type==="INTELLECT"||type==="DU_ADMIN") ? "none" : "block";
+        
+        let qObj;
+        if(type === "INTELLECT") {
+            if(npc.progress>=3) { showDialogue("Answered all questions."); return; }
+            document.getElementById("debate-title").innerText = "CLUB DEBATE ("+(npc.progress+1)+"/3)";
+            qObj = npc.qs[npc.progress];
+        } else if (type === "PARLIAMENT") {
+            if(player.parliamentVisitsToday>=1) { showDialogue("Once per day only."); return; }
+            document.getElementById("debate-title").innerText = "PARLIAMENT POLICY";
+            qObj = npc.qs[0];
+        } else if (type === "DU_ADMIN") {
+            if(player.duScore >= 25) { showDialogue("You passed the interview already."); return; }
+            document.getElementById("debate-title").innerText = "DU INTERVIEW PANEL";
+            qObj = npc.q;
+        } else if (type === "DU_STUDENT") {
+            document.getElementById("debate-title").innerText = "DU SCHOLARSHIP DEBATE";
+            qObj = npc.q;
+        }
+
+        loadQuestion(qObj); debateModal.style.display = "flex";
+    }
+
+    window.startDebate = function() { // For Wagers
+        if (player.money < currentWager) return;
+        player.money -= currentWager; updateHUD();
+        wagerSection.style.display = "none";
+        loadQuestion(currentOpponent.q);
+    }
+
+    function loadQuestion(qObj) {
+        document.getElementById("debate-question").innerText = qObj.q;
+        const opt = document.getElementById("debate-options"); opt.innerHTML = "";
+        
+        if(debateType === "WAGER" && wagerSection.style.display !== "none") {
+            let startBtn = document.createElement("button"); startBtn.className = "btn"; startBtn.innerText = "Start";
+            startBtn.onclick = startDebate; opt.appendChild(startBtn);
+        } else {
+            qObj.o.forEach((o, i) => {
+                let b = document.createElement("button"); b.className = "btn"; b.innerText = o;
+                b.onclick = () => resolveDebate(i, qObj.a); opt.appendChild(b);
+            });
+        }
+    }
+
+    window.resolveDebate = function(selected, correct) {
+        debateModal.style.display = "none"; gameState = "RESULT";
+        let isWin = (selected === correct);
+
+        if(debateType === "INTELLECT") {
+            player.intellectAttempted++; if(isWin) player.intellectScore++;
+            currentOpponent.progress++;
+            document.getElementById("result-title").innerHTML = isWin ? "<span style='color:#4ade80'>CORRECT!</span>" : "<span style='color:#ef4444'>INCORRECT.</span>";
+            document.getElementById("result-desc").innerText = `Score: ${player.intellectScore}/${player.intellectAttempted} (Need 25 for VIP)`;
+            if(player.intellectScore >= 25 && !player.hasClubMembership) { player.hasClubMembership = true; alert("VIP ACCESS GRANTED!"); }
+        } 
+        else if(debateType === "DU_ADMIN") {
+            player.duAttempted++; if(isWin) player.duScore++;
+            document.getElementById("result-title").innerHTML = isWin ? "<span style='color:#4ade80'>CORRECT!</span>" : "<span style='color:#ef4444'>INCORRECT.</span>";
+            document.getElementById("result-desc").innerText = `DU Interview: ${player.duScore}/25 needed for admission offer.`;
+            if(player.duScore >= 25) alert("DU Admission Offer Unlocked! Pay 1L at the gate.");
+        }
+        else if (debateType === "PARLIAMENT") {
+            player.parliamentVisitsToday++;
+            if(isWin) { player.money += 2000; player.xp += 500; document.getElementById("result-title").innerHTML = "PASSED!"; document.getElementById("result-desc").innerText = "Won ₹2000 & 500 XP."; } 
+            else { document.getElementById("result-title").innerHTML = "REJECTED"; document.getElementById("result-desc").innerText = "Failed."; }
+        }
+        else if (debateType === "DU_STUDENT") {
+            if(isWin) { player.money += 1000; player.xp += 100; document.getElementById("result-title").innerHTML = "WON!"; document.getElementById("result-desc").innerText = "Scholarship Won: ₹1000!"; } 
+            else { document.getElementById("result-title").innerHTML = "LOST"; document.getElementById("result-desc").innerText = "The scholar defeated your logic."; }
+        }
+        else if(debateType === "WAGER") {
+            if(isWin) { player.money += currentWager*2; player.xp += Math.floor(currentWager/10); document.getElementById("result-title").innerHTML = "WON!"; document.getElementById("result-desc").innerText = `Won ₹${currentWager*2}!`; } 
+            else { let ret = Math.floor(currentWager/2); player.money += ret; document.getElementById("result-title").innerHTML = "LOST"; document.getElementById("result-desc").innerText = `Lost ₹${currentWager - ret}.`; }
+        }
+        
+        if (player.xp >= player.level * 100) { player.xp -= player.level * 100; player.level++; }
+        updateHUD(); resultModal.style.display = "flex";
+    }
+
+    // --- TIC TAC TOE ENGINE ---
+    let tttBoard = ["", "", "", "", "", "", "", "", ""];
+    function startTicTacToe(npc) {
+        gameState = "TICTACTOE"; tttBoard =["", "", "", "", "", "", "", "", ""];
+        document.getElementById("ttt-status").innerText = "Your Turn (X) vs " + npc.name;
+        document.getElementById("ttt-status").style.color = "yellow";
+        renderTTT(); tttModal.style.display = "flex";
+    }
+    function renderTTT() {
+        const bd = document.getElementById("ttt-board"); bd.innerHTML = "";
+        tttBoard.forEach((c, i) => { let d = document.createElement("div"); d.className = "ttt-cell"; d.innerText = c; d.onclick = () => pTTTMove(i); bd.appendChild(d); });
+    }
+    function pTTTMove(i) {
+        if(tttBoard[i] !== "" || checkTTTWin()) return;
+        tttBoard[i] = "X"; renderTTT();
+        if(checkTTTWin()) return;
+        setTimeout(aTTTMove, 500);
+    }
+    function aTTTMove() {
+        let e = tttBoard.map((c,i) => c===""?i:null).filter(i => i!==null);
+        if(e.length === 0) { document.getElementById("ttt-status").innerText = "Draw!"; return; }
+        tttBoard[e[Math.floor(Math.random() * e.length)]] = "O"; renderTTT(); checkTTTWin();
+    }
+    function checkTTTWin() {
+        const w = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        for(let a of w) {
+            if(tttBoard[a[0]] && tttBoard[a[0]] === tttBoard[a[1]] && tttBoard[a[0]] === tttBoard[a[2]]) {
+                document.getElementById("ttt-status").innerText = tttBoard[a[0]] + " WINS!";
+                document.getElementById("ttt-status").style.color = tttBoard[a[0]]==="X" ? "#4ade80" : "#ef4444";
+                if(tttBoard[a[0]]==="X") { player.money += 500; updateHUD(); alert("You won ₹500!"); }
+                return true;
+            }
+        }
+        if(!tttBoard.includes("")) document.getElementById("ttt-status").innerText = "DRAW!";
+        return false;
+    }
+
+    window.closeModals = function() {
+        debateModal.style.display="none"; resultModal.style.display="none"; tttModal.style.display="none"; 
+        travelModal.style.display="none"; shopModal.style.display="none";
+        gameState = "PLAYING"; canvas.focus(); draw();
+    }
+
+    function updateHUD() {
+        document.getElementById("day-display").innerText = "Day: " + player.day;
+        document.getElementById("cash-display").innerText = "Money: ₹" + player.money;
+        document.getElementById("xp-display").innerText = "Level: " + player.level + " | XP: " + player.xp;
+        document.getElementById("club-display").innerText = "Club: " + player.intellectScore + "/33" + (player.hasClubMembership ? " (VIP)" : "");
+        document.getElementById("du-display").innerText = "DU: " + player.duStatus + " (Intv: " + player.duScore + "/25)";
+        document.getElementById("lib-display").innerText = "Library Pass: " + (player.hasLibraryPass ? "Yes" : "No");
+        document.getElementById("assets-display").innerText = "Assets: " + (player.assets.length > 0 ? player.assets.join(", ") : "None");
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let cx = player.x - Math.floor(CAM_COLS / 2); let cy = player.y - Math.floor(CAM_ROWS / 2);
+        cx = Math.max(0, Math.min(cx, MAP_COLS - CAM_COLS)); cy = Math.max(0, Math.min(cy, MAP_ROWS - CAM_ROWS));
+
+        for (let r = 0; r < CAM_ROWS; r++) {
+            for (let c = 0; c < CAM_COLS; c++) {
+                let tile = map[cy+r][cx+c];
+                ctx.fillStyle = C[tile]; ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                if (['GRASS','ROAD','WATER','CLUB_FLOOR','PARL_FLOOR','JAIL_FLOOR','LIB_FLOOR','DU_FLOOR','MALL_FLOOR'].includes(tile)) {
+                    ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        npcs.forEach(n => {
+            if(n.x >= cx && n.x < cx+CAM_COLS && n.y >= cy && n.y < cy+CAM_ROWS) {
+                let px = (n.x - cx)*TILE_SIZE; let py = (n.y - cy)*TILE_SIZE;
+                ctx.fillStyle = n.color; ctx.fillRect(px+4, py+4, TILE_SIZE-8, TILE_SIZE-8);
+                if(n.isGuide) { ctx.fillStyle="white"; ctx.font="12px Arial"; ctx.fillText("TAXI", px+5, py+8); }
+            }
+        });
+
+        let px = (player.x - cx)*TILE_SIZE; let py = (player.y - cy)*TILE_SIZE;
+        ctx.fillStyle = player.color; ctx.fillRect(px+4, py+4, TILE_SIZE-8, TILE_SIZE-8);
+        ctx.fillStyle = "white";
+        let ex=px+TILE_SIZE/2-2, ey=py+TILE_SIZE/2-2;
+        if(player.facing==='up') ey-=10; if(player.facing==='down') ey+=10;
+        if(player.facing==='left') ex-=10; if(player.facing==='right') ex+=10;
+        ctx.fillRect(ex, ey, 4, 4);
+    }
+
+    updateHUD(); draw();
+</script>
+
+</body>
+</html>

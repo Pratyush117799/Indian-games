@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delhi Diaries: Philosophy & Survival</title>
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #hud {
+            width: 768px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            border: 4px solid #fff;
+            border-bottom: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        #game-container {
+            position: relative;
+            width: 768px;
+            height: 576px;
+            border: 4px solid #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+        /* Overlays */
+        .modal {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #dialogue-box {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 100px;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-top: 4px solid white;
+            color: white;
+            padding: 15px;
+            box-sizing: border-box;
+            display: none;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .btn {
+            background-color: white; color: black;
+            border: 2px solid #555; padding: 12px 24px;
+            margin: 8px; font-family: 'Courier New', Courier, monospace;
+            font-weight: bold; cursor: pointer; font-size: 16px;
+            transition: 0.2s;
+        }
+        .btn:hover { background-color: #ccc; transform: scale(1.05); }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+        
+        .question-text { color: #facc15; font-size: 20px; margin-bottom: 20px; }
+        input[type="range"] { width: 300px; margin: 20px 0; }
+        
+        .instructions { margin-top: 15px; text-align: center; color: #aaa; font-size: 14px; }
+        .zone-label { color: #fff; font-size: 24px; font-weight: bold; position: absolute; pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <h2>DELHI DIARIES: PHILOSOPHY & SURVIVAL</h2>
+    
+    <div id="hud">
+        <span id="cash-display">Money: ₹5000</span>
+        <span id="level-display">Level: 1</span>
+        <span id="xp-display">XP: 0/100</span>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="768" height="576"></canvas>
+        
+        <!-- Zone Labels -->
+        <div class="zone-label" style="top: 20px; left: 30px;">PARLIAMENT</div>
+        <div class="zone-label" style="top: 20px; right: 30px;">TIHAR JAIL</div>
+        <div class="zone-label" style="bottom: 20px; left: 30px;">RESIDENTIAL COLONY</div>
+
+        <div id="dialogue-box">Press SPACE to interact.</div>
+        
+        <!-- Wager Modal -->
+        <div id="wager-modal" class="modal">
+            <h2 style="color: #60a5fa;">ADVENTUROUS PHILOSOPHY DEBATE</h2>
+            <p id="wager-npc-name" style="color: #ccc;">Opponent</p>
+            <p>Minimum Challenge Amount: ₹200</p>
+            <p>Select your wager:</p>
+            <input type="range" id="wager-slider" min="200" max="5000" step="100" value="200" oninput="updateWager()">
+            <h3 style="color: #4ade80;">Wager: ₹<span id="wager-value">200</span></h3>
+            <div>
+                <button class="btn" onclick="startDebate()">Accept Challenge</button>
+                <button class="btn" onclick="closeModals()">Run Away</button>
+            </div>
+        </div>
+
+        <!-- Debate Modal -->
+        <div id="debate-modal" class="modal">
+            <h3 id="debate-question" class="question-text">Question goes here?</h3>
+            <div id="debate-options" style="display: flex; flex-direction: column; width: 80%;">
+                <!-- Buttons injected via JS -->
+            </div>
+        </div>
+
+        <!-- Result Modal -->
+        <div id="result-modal" class="modal">
+            <h2 id="result-title">Result</h2>
+            <p id="result-desc" style="font-size: 18px;">Description</p>
+            <button class="btn" onclick="closeModals()">Continue</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <p><strong>CONTROLS:</strong> Arrow Keys to Move | <strong>SPACEBAR</strong> to Interact/Knock on doors</p>
+        <p>Talk to people to trigger Philosophy Debates. Win = 2x Wager | Lose = Lose Half your Wager.</p>
+    </div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // UI Elements
+    const dialogueBox = document.getElementById("dialogue-box");
+    const wagerModal = document.getElementById("wager-modal");
+    const debateModal = document.getElementById("debate-modal");
+    const resultModal = document.getElementById("result-modal");
+    const wagerSlider = document.getElementById("wager-slider");
+    const wagerValueText = document.getElementById("wager-value");
+
+    const TILE_SIZE = 32;
+    const COLS = 24;
+    const ROWS = 18;
+
+    // Game State
+    let gameState = "PLAYING"; // PLAYING, DIALOGUE, WAGER, DEBATE, RESULT
+    let currentOpponent = null;
+    let currentWager = 200;
+
+    // Player Stats
+    const player = {
+        x: 11, y: 14,
+        color: "#3b82f6", // Blue
+        facing: 'up',
+        money: 5000,
+        xp: 0,
+        level: 1
+    };
+
+    // Map Legend
+    // 0: Grass, 1: Road, 2: House Wall, 3: House Door, 4: Parliament Wall
+    // 5: Parliament Door, 6: Jail Wall, 7: Jail Bars
+    const map = [[4,4,4,4,4,4,4,4,1,1,6,6,6,6,6,6,6,6,6,6,6,6,6,6],[4,1,1,1,1,1,1,4,1,1,6,1,1,1,1,1,1,1,1,1,1,1,1,6],[4,1,4,4,4,4,1,4,1,1,6,1,7,7,7,1,7,7,7,1,7,7,1,6],[4,1,4,4,4,4,1,4,1,1,6,1,7,1,7,1,7,1,7,1,7,1,1,6],[4,1,1,1,1,1,1,5,1,1,6,1,7,7,7,1,7,7,7,1,7,7,1,6],[4,4,4,4,4,4,4,4,1,1,6,6,6,7,6,6,6,6,6,6,6,6,6,6],[0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,0,0,0],[2,2,2,1,1,2,2,2,2,2,2,2,0,1,1,0,2,2,2,1,1,2,2,2],[2,1,2,1,1,2,1,1,1,1,1,2,0,1,1,0,2,1,2,1,1,2,1,2],[2,3,2,1,1,2,2,2,3,2,2,2,0,1,1,0,2,3,2,1,1,2,3,2],[0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0],[2,2,2,1,1,2,2,2,3,2,2,2,0,1,1,0,2,2,2,1,1,2,2,2],[2,1,2,1,1,2,1,1,1,1,1,2,0,1,1,0,2,1,2,1,1,2,1,2]
+    ];
+
+    const colors = {
+        0: "#3E8948", // Grass
+        1: "#7a7a7a", // Road
+        2: "#C66C3E", // House Wall
+        3: "#593E26", // House Door
+        4: "#E2E2E2", // Parliament Wall
+        5: "#BFA15F", // Parliament Door
+        6: "#2A2A2A", // Jail Wall
+        7: "#6b7280"  // Jail Bars
+    };
+
+    // NPCs & Debaters
+    const npcs =[
+        { 
+            x: 5, y: 3, color: "#ef4444", name: "Minister Sharma (Parliament)",
+            isDebater: true,
+            q: "What is the primary moral justification for the State's authority?",
+            options:["To protect individual liberties.", "To amass global power.", "To enforce religious dogmas."],
+            correct: 0 
+        },
+        { 
+            x: 17, y: 3, color: "#f97316", name: "Inmate #420 (Tihar)",
+            isDebater: true,
+            q: "If the universe is strictly deterministic, are humans truly responsible for their crimes?",
+            options:["Yes, responsibility is a social construct we need.", "No, free will is an absolute illusion.", "Only if they get caught."],
+            correct: 0 
+        },
+        { 
+            x: 10, y: 8, color: "#eab308", name: "Chaiwala Uncle",
+            isDebater: true,
+            q: "According to Existentialism, which comes first?",
+            options:["Essence precedes Existence.", "Existence precedes Essence.", "Tea precedes Everything."],
+            correct: 1 
+        },
+        { 
+            x: 18, y: 14, color: "#a855f7", name: "DU Student Priya",
+            isDebater: true,
+            q: "Is it ethical to sacrifice one innocent life to save five others?",
+            options:["No, life is sacred.", "Only if the one is poor.", "Yes, according to Utilitarianism."],
+            correct: 2 
+        },
+        { 
+            x: 13, y: 15, color: "#ec4899", name: "Mom",
+            isDebater: false,
+            message: "Beta, if you lose all your money debating, come see me. I'll give you ₹500 for auto fare."
+        }
+    ];
+
+    // Input Handling
+    window.addEventListener("keydown", function(e) {
+        if (gameState !== "PLAYING" && gameState !== "DIALOGUE") return;
+        
+        let targetX = player.x;
+        let targetY = player.y;
+
+        if (gameState === "PLAYING") {
+            if (e.code === "ArrowUp") { targetY--; player.facing = 'up'; }
+            if (e.code === "ArrowDown") { targetY++; player.facing = 'down'; }
+            if (e.code === "ArrowLeft") { targetX--; player.facing = 'left'; }
+            if (e.code === "ArrowRight") { targetX++; player.facing = 'right'; }
+
+            // Movement & Collision
+            if (targetX >= 0 && targetX < COLS && targetY >= 0 && targetY < ROWS) {
+                let tile = map[targetY][targetX];
+                // Walkable tiles: 0 (Grass), 1 (Road)
+                if (tile === 0 || tile === 1) {
+                    let npcInWay = npcs.find(n => n.x === targetX && n.y === targetY);
+                    if (!npcInWay) {
+                        player.x = targetX;
+                        player.y = targetY;
+                    }
+                }
+            }
+        }
+
+        if (e.code === "Space") {
+            e.preventDefault(); // Stop page scroll
+            if (gameState === "DIALOGUE") {
+                dialogueBox.style.display = "none";
+                gameState = "PLAYING";
+            } else if (gameState === "PLAYING") {
+                checkInteraction();
+            }
+        }
+        draw();
+    });
+
+    function checkInteraction() {
+        let ix = player.x;
+        let iy = player.y;
+        if (player.facing === 'up') iy--;
+        if (player.facing === 'down') iy++;
+        if (player.facing === 'left') ix--;
+        if (player.facing === 'right') ix++;
+
+        // 1. Check NPCs
+        let npc = npcs.find(n => n.x === ix && n.y === iy);
+        if (npc) {
+            if (npc.isDebater) {
+                openWagerModal(npc);
+            } else {
+                // Special Mom interaction if broke
+                if (npc.name === "Mom" && player.money < 200) {
+                    player.money += 500;
+                    showDialogue("Mom: You lost your money playing those philosophy games? Here is ₹500. Be careful!");
+                    updateHUD();
+                } else {
+                    showDialogue(npc.name + ": " + npc.message);
+                }
+            }
+            return;
+        }
+
+        // 2. Check Environment (Doors/Bars)
+        if (ix >= 0 && ix < COLS && iy >= 0 && iy < ROWS) {
+            let tile = map[iy][ix];
+            if (tile === 3) showDialogue("*Knock Knock*... Nobody is home.");
+            else if (tile === 5) showDialogue("Security Guard: 'Only authorized Ministers allowed past these doors!'");
+            else if (tile === 7) showDialogue("An inmate stares at you through the cold iron bars of Tihar Jail.");
+        }
+    }
+
+    function showDialogue(text) {
+        gameState = "DIALOGUE";
+        dialogueBox.innerText = text;
+        dialogueBox.style.display = "block";
+    }
+
+    // --- DEBATE & WAGER SYSTEM ---
+
+    function openWagerModal(npc) {
+        if (player.money < 200) {
+            showDialogue(npc.name + ": 'You don't even have ₹200! Go get some money before challenging me to a debate.'");
+            return;
+        }
+        currentOpponent = npc;
+        gameState = "WAGER";
+        document.getElementById("wager-npc-name").innerText = "Opponent: " + npc.name;
+        
+        wagerSlider.max = player.money;
+        wagerSlider.value = 200;
+        updateWager();
+        
+        wagerModal.style.display = "flex";
+    }
+
+    function updateWager() {
+        currentWager = parseInt(wagerSlider.value);
+        wagerValueText.innerText = currentWager;
+    }
+
+    window.startDebate = function() {
+        if (player.money < currentWager || currentWager < 200) return;
+        
+        // Deduct Wager initially
+        player.money -= currentWager;
+        updateHUD();
+
+        wagerModal.style.display = "none";
+        gameState = "DEBATE";
+        
+        document.getElementById("debate-question").innerText = currentOpponent.q;
+        const optionsDiv = document.getElementById("debate-options");
+        optionsDiv.innerHTML = "";
+
+        currentOpponent.options.forEach((opt, index) => {
+            let btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = () => resolveDebate(index);
+            optionsDiv.appendChild(btn);
+        });
+
+        debateModal.style.display = "flex";
+    }
+
+    window.resolveDebate = function(selectedIndex) {
+        debateModal.style.display = "none";
+        gameState = "RESULT";
+        resultModal.style.display = "flex";
+
+        if (selectedIndex === currentOpponent.correct) {
+            // WIN: Win amount = 2 * Wager
+            let winnings = currentWager * 2;
+            player.money += winnings; // Net profit is Wager
+            
+            // Calculate XP based on wager amount
+            let xpGained = Math.floor(currentWager / 10);
+            player.xp += xpGained;
+
+            document.getElementById("result-title").innerHTML = "<span style='color:#4ade80'>DEBATE WON!</span>";
+            document.getElementById("result-desc").innerText = `Your logic was flawless.\n\nYou won ₹${winnings}!\nGained ${xpGained} XP.`;
+            
+            checkLevelUp();
+        } else {
+            // LOSE: Loss amount = half of the challenge
+            let returnAmt = Math.floor(currentWager / 2);
+            player.money += returnAmt; // We initially deducted full wager, so adding back half means net loss is half wager.
+            
+            document.getElementById("result-title").innerHTML = "<span style='color:#ef4444'>DEBATE LOST!</span>";
+            document.getElementById("result-desc").innerText = `Your argument fell apart.\n\nYou lost ₹${currentWager - returnAmt}.\nYou managed to recover ₹${returnAmt}.`;
+        }
+        updateHUD();
+    }
+
+    window.closeModals = function() {
+        wagerModal.style.display = "none";
+        debateModal.style.display = "none";
+        resultModal.style.display = "none";
+        gameState = "PLAYING";
+        
+        // If player is broke, give a hint
+        if (player.money < 200) {
+            setTimeout(() => { showDialogue("You are broke! Maybe go talk to Mom in the Residential Colony."); }, 100);
+        }
+        
+        // Change canvas focus to enable walking
+        canvas.focus();
+        draw();
+    }
+
+    function checkLevelUp() {
+        if (player.xp >= player.level * 100) {
+            player.xp -= player.level * 100;
+            player.level++;
+            setTimeout(() => { alert("LEVEL UP! You are now a Level " + player.level + " Philosopher!"); }, 500);
+        }
+    }
+
+    function updateHUD() {
+        document.getElementById("cash-display").innerText = "Money: ₹" + player.money;
+        document.getElementById("level-display").innerText = "Level: " + player.level;
+        document.getElementById("xp-display").innerText = "XP: " + player.xp + "/" + (player.level * 100);
+    }
+
+    // --- DRAWING THE GAME ---
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Map
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                let tile = map[r][c];
+                ctx.fillStyle = colors[tile];
+                ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                
+                // Add texture to Parliament (Pillars)
+                if (tile === 4) {
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(c * TILE_SIZE + 10, r * TILE_SIZE, 12, TILE_SIZE);
+                }
+                // Grid lines for grass/road
+                if (tile === 0 || tile === 1) {
+                    ctx.strokeStyle = "rgba(0,0,0,0.1)";
+                    ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        // Draw NPCs
+        npcs.forEach(npc => {
+            ctx.fillStyle = npc.color;
+            ctx.fillRect(npc.x * TILE_SIZE + 4, npc.y * TILE_SIZE + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+            // Draw a tiny "?" over Debaters
+            if (npc.isDebater) {
+                ctx.fillStyle = "white";
+                ctx.font = "14px Arial";
+                ctx.fillText("?", npc.x * TILE_SIZE + 12, npc.y * TILE_SIZE);
+            }
+        });
+
+        // Draw Player
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x * TILE_SIZE + 4, player.y * TILE_SIZE + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+        // Player Facing Indicator
+        ctx.fillStyle = "white";
+        let eyeX = player.x * TILE_SIZE + 14;
+        let eyeY = player.y * TILE_SIZE + 14;
+        if (player.facing === 'up') eyeY -= 8;
+        if (player.facing === 'down') eyeY += 8;
+        if (player.facing === 'left') eyeX -= 8;
+        if (player.facing === 'right') eyeX += 8;
+        ctx.fillRect(eyeX, eyeY, 4, 4);
+    }
+
+    // Init
+    updateHUD();
+    draw();
+</script>
+
+</body>
+</html>

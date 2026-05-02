@@ -1,0 +1,316 @@
+[
+    {
+        "id": 1,
+        "name": "Brahmastra",
+        "tier": "Supreme",
+        "power": 10,
+        "mantraCost": 5,
+        "element": "Divine",
+        "counters": [
+            "All lower tier weapons"
+        ],
+        "counteredBy": [
+            "Brahmastra",
+            "Brahmashirsha"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Eternal",
+            "effect": "Returns to hand if destroyed"
+        },
+        "description": "Brahma's ultimate weapon of creation and destruction."
+    },
+    {
+        "id": 2,
+        "name": "Brahmashirsha Astra",
+        "tier": "Supreme",
+        "power": 12,
+        "mantraCost": 6,
+        "element": "Divine",
+        "counters": [
+            "All weapons except Pashupatastra"
+        ],
+        "counteredBy": [
+            "Brahmashirsha",
+            "Pashupatastra"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Uncounterable",
+            "effect": "Cannot be countered by Brahmastra; deals double damage if uncountered"
+        },
+        "description": "Four-headed Brahmastra, four times more powerful."
+    },
+    {
+        "id": 3,
+        "name": "Pashupatastra",
+        "tier": "Supreme",
+        "power": 12,
+        "mantraCost": 6,
+        "element": "Divine",
+        "counters": [
+            "All weapons"
+        ],
+        "counteredBy": [
+            "Pashupatastra"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Destroyer",
+            "effect": "If this wins, opponent discards 2 random cards"
+        },
+        "description": "Shiva's most destructive weapon, destroyer of all creation."
+    },
+    {
+        "id": 4,
+        "name": "Narayanastra",
+        "tier": "Supreme",
+        "power": 11,
+        "mantraCost": 6,
+        "element": "Divine",
+        "counters": [
+            "All lower weapons"
+        ],
+        "counteredBy": [
+            "Submission",
+            "Supreme weapons"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Surrender",
+            "effect": "Grows stronger if opponent defends (+2 power per defense card)"
+        },
+        "description": "Vishnu's weapon that only respects surrender."
+    },
+    {
+        "id": 5,
+        "name": "Vaishnavastra",
+        "tier": "Supreme",
+        "power": 10,
+        "mantraCost": 5,
+        "element": "Divine",
+        "counters": [
+            "Asura weapons",
+            "Dark element"
+        ],
+        "counteredBy": [
+            "Supreme tier"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Preserver",
+            "effect": "Gain 2 Life Points when played"
+        },
+        "description": "Vishnu's protective and destructive force."
+    },
+    {
+        "id": 6,
+        "name": "Maheswarastra",
+        "tier": "Supreme",
+        "power": 11,
+        "mantraCost": 6,
+        "element": "Divine",
+        "counters": [
+            "All demons",
+            "Asuras"
+        ],
+        "counteredBy": [
+            "Supreme weapons"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Banish",
+            "effect": "Banish target weapon permanently"
+        },
+        "description": "Combined power of Shiva's arsenal."
+    },
+    {
+        "id": 13,
+        "name": "Vajra",
+        "tier": "Celestial",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Thunder",
+        "counters": [
+            "Water",
+            "Demons"
+        ],
+        "counteredBy": [
+            "Earth",
+            "Supreme weapons"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Stun",
+            "effect": "Target cannot attack next turn"
+        },
+        "description": "Indra's thunderbolt forged from Dadhichi's bones."
+    },
+    {
+        "id": 15,
+        "name": "Gandiva",
+        "tier": "Celestial",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Divine",
+        "counters": [
+            "Never runs out of arrows"
+        ],
+        "counteredBy": [
+            "Celestial",
+            "Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Multishot",
+            "effect": "Draw 1 card when played"
+        },
+        "description": "Arjuna's divine bow gifted by Agni."
+    },
+    {
+        "id": 17,
+        "name": "Sudarshana Chakra",
+        "tier": "Celestial",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Fire/Divine",
+        "counters": [
+            "Fire weapons"
+        ],
+        "counteredBy": [
+            "Water",
+            "Celestial"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Return",
+            "effect": "Returns to hand after use"
+        },
+        "description": "Vishnu's disc weapon that always returns."
+    },
+    {
+        "id": 33,
+        "name": "Agneyastra",
+        "tier": "Elemental",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Fire",
+        "counters": [
+            "Wind",
+            "Wood",
+            "Ice"
+        ],
+        "counteredBy": [
+            "Varunastra",
+            "Water"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Burn",
+            "effect": "Deal 1 damage at start of opponent's turn"
+        },
+        "description": "Agni's fire weapon consuming all."
+    },
+    {
+        "id": 45,
+        "name": "Varunastra",
+        "tier": "Elemental",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Water",
+        "counters": [
+            "Fire",
+            "Heat"
+        ],
+        "counteredBy": [
+            "Vayavastra",
+            "Wind"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Extinguish",
+            "effect": "Remove all burn effects"
+        },
+        "description": "Varuna's ocean weapon."
+    },
+    {
+        "id": 38,
+        "name": "Raudra Astra",
+        "tier": "Elemental",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Fire/Fury",
+        "counters": [
+            "Peace weapons"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Rage",
+            "effect": "+2 damage if you took damage last turn"
+        },
+        "description": "Weapon of Shiva's fury."
+    },
+    {
+        "id": 101,
+        "name": "Indrastra",
+        "tier": "Celestial",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Thunder/Divine",
+        "counters": [
+            "Sky"
+        ],
+        "counteredBy": [
+            "Earth"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Storm",
+            "effect": "Deals damage to all active enemy cards"
+        },
+        "description": "Indra's main weapon controlling storms"
+    },
+    {
+        "id": 113,
+        "name": "Mohanastra",
+        "tier": "Unique",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Illusion",
+        "counters": [
+            "Analysis"
+        ],
+        "counteredBy": [
+            "Wisdom"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Confuse",
+            "effect": "Opponent attacks a random target (50% chance)"
+        },
+        "description": "Weapon creating delusions and confusion"
+    },
+    {
+        "id": 139,
+        "name": "Durga Trishul",
+        "tier": "Supreme",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Divine",
+        "counters": [
+            "Demons"
+        ],
+        "counteredBy": [
+            "None"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Slayer",
+            "effect": "+4 Damage against Demon/Asura types"
+        },
+        "description": "Durga's trident slaying Mahishasura"
+    }
+]

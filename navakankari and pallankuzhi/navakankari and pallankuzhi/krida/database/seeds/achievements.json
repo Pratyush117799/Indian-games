@@ -1,0 +1,10 @@
+[
+  { "key": "first_mill",   "label": "First Mill",    "icon": "🏛", "xp": 10 },
+  { "key": "sower",        "label": "Sower",         "icon": "🌊", "xp": 5  },
+  { "key": "flame_streak", "label": "Flame Streak",  "icon": "🔥", "xp": 30 },
+  { "key": "double_mill",  "label": "Double Mill",   "icon": "⚡", "xp": 20 },
+  { "key": "harvest",      "label": "Harvest",       "icon": "🌾", "xp": 15 },
+  { "key": "flight",       "label": "Flight",        "icon": "🦅", "xp": 25 },
+  { "key": "grandmaster",  "label": "Grandmaster",   "icon": "👑", "xp": 100 },
+  { "key": "historian",    "label": "Historian",     "icon": "📜", "xp": 20 }
+]

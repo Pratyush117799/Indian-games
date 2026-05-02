@@ -1,0 +1,165 @@
+# ASTRA: Weapons of the Gods – AI Opponent Logic Design
+
+This guide details a robust, scalable AI opponent system for **both game modes** (Classic turn-based duel and Clash real-time battler). The AI is designed to feel challenging yet fair, reflecting mythological themes—strategic foresight for sages (Classic) and aggressive divine fury for warriors (Clash). It balances computational efficiency (critical for mobile Clash) with depth (counter prediction, ability synergy).
+
+We explore AI from **multiple angles**: decision-making heuristics, threat evaluation, difficulty scaling, shared core logic, mode-specific behaviors, edge cases, and implications for player experience. Examples draw from the 200-card database (e.g., Brahmastra risks, elemental cycles).
+
+## Design Principles & Overall Architecture
+- **Core Goals**: 
+  - **Fun & Thematic**: AI plays "intelligently" (e.g., saves counters for supremes) without perfect information cheese.
+  - **Scalability**: Easy difficulty tiers (Easy: greedy; Hard: predictive simulation).
+  - **Performance**: O(n) evaluations per decision; no deep Monte Carlo in real-time Clash (use heuristics).
+  - **Mythological Flavor**: Prioritizes lore-accurate plays (e.g., holds Narayanastra for crowded field).
+- **Architecture**:
+  - **Card Evaluator**: Shared function scoring cards (0–10) based on power/cost ratio, synergies, counters.
+  - **Threat Assessor**: Rates board state (e.g., incoming damage, counter availability).
+  - **Decision Tree**: Heuristic rules + weighted random for variability.
+  - **Difficulty Modifiers**: Easy (myopic), Medium (1-turn lookahead), Hard (simple sim + bluffing).
+- **Shared Components**:
+  - Counter prediction (checks player's visible field/hand hints).
+  - Ability awareness (e.g., avoids resisting Narayanastra).
+
+**Implications**: AI teaches players (visible "thinking" delays/tooltips in easy mode); prevents frustration (no instant perfect counters); enables single-player progression.
+
+## Shared AI Core: Card & Board Evaluation
+Central to both modes. Scores guide plays.
+
+### Card Evaluation Function
+Scores a card's immediate value + potential.
+
+```typescript
+// aiCore.ts
+import { Weapon } from './types';
+import { GameState } from './gameState'; // Unified or mode-specific
+
+const evaluateCard = (card: Weapon, state: GameState, owner: 'opponent'): number => {
+  let score = card.power / card.mantraCost; // Base efficiency (~2-3 ideal)
+
+  // Tier bonus
+  const tierBonus = { Supreme: 4, Celestial: 3, Elemental: 2, Conventional: 1 };
+  score += tierBonus[card.tier];
+
+  // Elemental synergy/counter
+  const boardElements = getBoardElements(state, owner);
+  if (boardElements.some(el => elementsCounter(card.element, el))) score += 2; // Offensive
+  if (opponentHasWeakness(card, state)) score += 3; // Direct counter
+
+  // Ability value (keyword weights)
+  if (card.ability?.includes('Eternal')) score += 2;
+  if (card.ability?.includes('Cataclysm')) score += 4; // High risk/reward
+
+  // Mantra availability penalty
+  if (state.opponentMantra < card.mantraCost) score -= 10; // Unplayable
+
+  // Supreme caution
+  if (card.tier === 'Supreme' && opponentHasCounter(card, state)) score -= 5;
+
+  return Math.max(0, score);
+};
+```
+
+**Nuances**:
+- **Bluffing (Hard)**: Occasionally play sub-optimal to bait (e.g., fake weakness).
+- **Edge Case**: Unplayable supremes held for "scare" value.
+
+## Classic Mode AI: Turn-Based Strategic Logic
+Classic AI focuses on tempo, board control, and counter hoarding. Decisions per phase.
+
+### Phase-by-Phase Logic
+1. **Draw/Mulligan**: Keep hands with curve (low-cost early, supremes late). Mulligan if no 2-3 cost cards.
+2. **Main Phase**: Play highest scored card affordable. Prioritize:
+   - Answers (counters to player's field).
+   - Board development (artifacts over spells if behind).
+   - Ramp (mantra gain abilities).
+3. **Battle Phase**: Target weakest (for value) or most threatening. Predict counters:
+   - If player has potential counter in hand (inferred from deck knowledge), hold attack.
+4. **End Phase**: Discard lowest score if over hand size.
+
+**Difficulty Scaling**:
+- **Easy**: Greedy—always play highest score, attack direct if possible.
+- **Medium**: 1-turn lookahead (simulate player's response).
+- **Hard**: Bluff (e.g., play weak card to bait counter), perfect counter timing.
+
+**Example Flow**:
+- Player fields Agneyastra (Fire).
+- AI has Vayavastra (Wind counter): High score → play immediately.
+- Player plays Brahmastra: AI holds Brahmashirsha if available (perfect counter).
+
+**Code Snippet: Main Decision**
+```typescript
+const classicAITurn = (state: ClassicGameState) => {
+  // Sort hand by score descending
+  const playable = state.opponent.hand
+    .filter(c => c.mantraCost <= state.opponent.mantra)
+    .sort((a, b) => evaluateCard(b, state, 'opponent') - evaluateCard(a, state, 'opponent'));
+
+  playable.forEach(card => {
+    // Play if score > threshold (difficulty-tuned)
+    if (evaluateCard(card, state, 'opponent') > 5) playCard(card);
+  });
+
+  // Battle: Select best attack (threat removal priority)
+  const target = selectOptimalTarget(state.opponent.field, state.player.field);
+  if (target) attack(target);
+};
+```
+
+**Edge Cases**:
+- Narayanastra: AI always "surrenders" if resisting loses board.
+- Eternal loops: Cap returns per turn.
+
+**Implications**: Teaches pacing; Hard AI feels like epic duel (e.g., Arjuna vs Karna foresight).
+
+## Clash Mode AI: Real-Time Deployment Logic
+Clash AI is aggressive, lane-pressuring. Decisions every 1-2s (tick-based).
+
+### Core Loop (per Tick)
+1. **Mantra Check**: If ≥ cost, evaluate deployable cards.
+2. **Threat Assessment**: Score lanes (push potential vs defense needed).
+   - Weak lane: Deploy pusher (high damage/speed).
+   - Threatened lane: Deploy counter (e.g., Garuda vs player serpents).
+3. **Deployment Choice**:
+   - Highest scored affordable card.
+   - Lane: Opposing player's weak tower or counter-swarm.
+4. **Spell Timing**: Save for value (e.g., global supreme when player overcommits).
+
+**Difficulty Scaling**:
+- **Easy**: Random lane, greedy deploy.
+- **Medium**: Lane pressure awareness (push winning lane).
+- **Hard**: Predictive (deploy counters preemptively), elixir waste minimal.
+
+**Example**:
+- Player deploys Naagastra swarm left lane.
+- AI scores Garudastra high → deploy right (split pressure) or left (counter).
+
+**Code Snippet: Deployment Decision**
+```typescript
+const clashAITick = (state: ClashGameState, delta: number) => {
+  if (state.opponentMantra < 2) return; // Wait for value
+
+  const handScores = state.opponentHand.map(card => ({
+    card,
+    score: evaluateCard(card, state, 'opponent')
+  })).sort((a, b) => b.score - a.score);
+
+  const best = handScores[0];
+  if (best && best.score > 4 && state.opponentMantra >= best.card.mantraCost) {
+    const lane = selectBestLane(state); // Heuristic: lowest tower HP or most threats
+    deployCard(best.card, lane, 'opponent', state);
+  }
+};
+```
+
+**Edge Cases**:
+- Supreme Spells: Only when winning (overcommit punish) or desperate comeback.
+- Swarm Mirror: Cycle counters rapidly.
+
+**Implications**: Fast-paced feel; AI adapts to player style (aggressive vs turtling).
+
+## Balance, Testing & Player Experience
+- **Testing**: Simulate 10k games per difficulty. Metrics: Win rate ~50% Medium, player satisfaction (no "unfair" feels).
+- **Difficulty Tiers**: Campaign progression unlocks harder AI.
+- **Nuances**: Randomness prevents predictability; "personality" variants (e.g., Indra AI thunder-focused).
+- **Edge Implications**: Rare supreme mirrors → spectacular draws; abilities create swings.
+
+This AI system is complete for prototype implementation. Integrate with your ability engine for full synergy. If you'd like full AI module code, specific difficulty tweaks, or simulation results, let me know!

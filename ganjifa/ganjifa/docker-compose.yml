@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ganjifa_db
+    environment:
+      POSTGRES_USER: ganjifa_user
+      POSTGRES_PASSWORD: ganjifa_pass
+      POSTGRES_DB: ganjifa_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/seeds/themes.sql:/docker-entrypoint-initdb.d/02_themes.sql
+    ports: ["5433:5432"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U ganjifa_user -d ganjifa_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: { context: ./backend, dockerfile: Dockerfile }
+    container_name: ganjifa_backend
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment:
+      NODE_ENV: development
+      PORT: 5002
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ganjifa_db
+      DB_USER: ganjifa_user
+      DB_PASSWORD: ganjifa_pass
+      JWT_SECRET: dev_jwt_secret_change_in_prod
+      JWT_REFRESH_SECRET: dev_refresh_secret_change_in_prod
+      CLIENT_URL: http://localhost:3002
+    volumes:
+      - ./backend:/app
+      - ./cards:/cards
+      - /app/node_modules
+    ports: ["5002:5002"]
+    command: npm run dev
+
+  frontend:
+    build: { context: ./frontend, dockerfile: Dockerfile }
+    container_name: ganjifa_frontend
+    depends_on: [backend]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5002
+      NEXT_PUBLIC_SOCKET_URL: http://localhost:5002
+      NEXT_PUBLIC_CARDS_URL: http://localhost:5002
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports: ["3002:3002"]
+    command: npm run dev
+
+volumes:
+  pg_data:

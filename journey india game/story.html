@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeevan Yatra – Story Mode (Chapter 1)</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background: radial-gradient(circle at top, #050816 0, #050816 40%, #020308 100%);
+      }
+      .story-root-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      .story-shell {
+        background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), rgba(5, 12, 35, 0.98));
+        border-radius: 18px;
+        padding: 0.8rem 1rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
+      }
+      .story-top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+        font-size: 0.85rem;
+      }
+      .story-logo {
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      }
+      .story-logo span {
+        background: linear-gradient(90deg, #ffcf73, #ff7a3c, #ff3366);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .story-status {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+      }
+      .story-status span {
+        opacity: 0.9;
+      }
+      .story-main {
+        display: grid;
+        grid-template-columns: 4fr 3fr;
+        gap: 0.7rem;
+      }
+      .story-viewport {
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.22);
+      }
+      .story-viewport-inner {
+        width: 800px;
+        height: 600px;
+        transform: scale(0.9);
+        transform-origin: top left;
+      }
+      .story-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        font-size: 0.8rem;
+      }
+      .story-panel {
+        background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(4, 14, 40, 0.96));
+        border-radius: 12px;
+        padding: 0.5rem 0.6rem;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+      }
+      .story-panel h3 {
+        margin: 0 0 0.3rem;
+        font-size: 0.86rem;
+      }
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.25rem;
+      }
+      .stat-bar {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
+        margin-left: 0.4rem;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+      }
+      .stat-bar-fill {
+        height: 100%;
+        border-radius: inherit;
+      }
+      .key-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem 0.5rem;
+      }
+      .key-chip {
+        padding: 0.1rem 0.5rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        font-size: 0.72rem;
+      }
+      .save-slot {
+        padding: 0.25rem 0.35rem;
+        border-radius: 8px;
+        margin-bottom: 0.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+      .save-slot.active {
+        border: 1px solid #ffcf73;
+        box-shadow: 0 0 8px rgba(255, 207, 115, 0.65);
+      }
+      .save-slot span {
+        font-size: 0.76rem;
+      }
+      .save-actions {
+        display: flex;
+        gap: 0.4rem;
+        margin-top: 0.25rem;
+      }
+      .save-actions button {
+        flex: 1;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.3rem;
+      }
+      .dialogue-box {
+        position: relative;
+        width: 100%;
+        height: 150px;
+        background: #111019;
+        border-top: 2px solid #f5e4c0;
+        color: #fdf7eb;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+        box-sizing: border-box;
+      }
+      .dialogue-name {
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        color: #ffe1a8;
+      }
+      .dialogue-text {
+        line-height: 1.35;
+      }
+      .dialogue-hint {
+        position: absolute;
+        right: 0.6rem;
+        bottom: 0.3rem;
+        font-size: 0.7rem;
+        opacity: 0.75;
+      }
+      @media (max-width: 960px) {
+        .story-main {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .story-viewport-inner {
+          transform: scale(0.8);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="story-root-wrap">
+      <div id="story-root" class="story-shell"></div>
+    </div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel" data-presets="es2015,react">
+      const { useState, useEffect, useRef } = React;
+
+      const initialStats = {
+        health: 70,
+        happiness: 80,
+        curiosity: 85,
+        familyBond: 90,
+        ageMonths: 30, // ~2.5 years
+      };
+
+      const TILE_SIZE = 40;
+      const GRID_W = 20;
+      const GRID_H = 11;
+
+      const COLORS = {
+        floor: "#20263b",
+        wall: "#15182a",
+        toddler: "#ffcf73",
+        mother: "#ff7a8a",
+        dadi: "#f5e4c0",
+      };
+
+      function drawScene(ctx, state) {
+        ctx.fillStyle = "#090a15";
+        ctx.fillRect(0, 0, 800, 600);
+
+        // Simple room
+        for (let y = 0; y < GRID_H; y++) {
+          for (let x = 0; x < GRID_W; x++) {
+            const sx = x * TILE_SIZE;
+            const sy = y * TILE_SIZE;
+            if (y === 0 || y === GRID_H - 1 || x === 0 || x === GRID_W - 1) {
+              ctx.fillStyle = COLORS.wall;
+            } else {
+              ctx.fillStyle = COLORS.floor;
+            }
+            ctx.fillRect(sx, sy, TILE_SIZE - 1, TILE_SIZE - 1);
+          }
+        }
+
+        // Simple furniture placeholders
+        ctx.fillStyle = "#3b2b20"; // bed
+        ctx.fillRect(2 * TILE_SIZE, 2 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE * 1.5);
+        ctx.fillStyle = "#2b3a4f"; // TV cabinet
+        ctx.fillRect(13 * TILE_SIZE, 2 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE);
+
+        // NPCs
+        const motherPos = { x: 8, y: 4 };
+        const dadiPos = { x: 4, y: 6 };
+
+        ctx.fillStyle = COLORS.mother;
+        ctx.fillRect(
+          motherPos.x * TILE_SIZE + 8,
+          motherPos.y * TILE_SIZE + 4,
+          TILE_SIZE - 16,
+          TILE_SIZE - 8
+        );
+        ctx.fillStyle = COLORS.dadi;
+        ctx.fillRect(
+          dadiPos.x * TILE_SIZE + 8,
+          dadiPos.y * TILE_SIZE + 4,
+          TILE_SIZE - 16,
+          TILE_SIZE - 8
+        );
+
+        // Player
+        ctx.fillStyle = COLORS.toddler;
+        ctx.fillRect(
+          state.player.x * TILE_SIZE + 10,
+          state.player.y * TILE_SIZE + 8,
+          TILE_SIZE - 20,
+          TILE_SIZE - 16
+        );
+
+        // Mini-game color tiles (bottom row)
+        if (state.mode === "miniGame") {
+          const colors = ["#e74c3c", "#27ae60", "#3498db"];
+          const labels = ["RED", "GREEN", "BLUE"];
+          colors.forEach((c, i) => {
+            const tx = 6 + i * 2;
+            const ty = GRID_H - 2;
+            ctx.fillStyle = c;
+            ctx.fillRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE * 2 - 4, TILE_SIZE - 6);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "12px monospace";
+            ctx.fillText(
+              labels[i],
+              tx * TILE_SIZE + 8,
+              ty * TILE_SIZE + TILE_SIZE / 2
+            );
+          });
+        }
+      }
+
+      function StoryApp() {
+        const canvasRef = useRef(null);
+        const [stats, setStats] = useState(initialStats);
+        const [player, setPlayer] = useState({ x: 3, y: 4 });
+        const [dialogue, setDialogue] = useState(null);
+        const [mode, setMode] = useState("normal"); // normal | miniGame
+        const [activeSlot, setActiveSlot] = useState(0);
+        const [userKey, setUserKey] = useState(null);
+        const [tick, setTick] = useState(0);
+
+        useEffect(() => {
+          const params = new URLSearchParams(window.location.search);
+          const u = params.get("user");
+          const p = params.get("pin");
+          if (u && p) {
+            setUserKey(\`jy_\${u}_\${p}\`);
+          }
+        }, []);
+
+        useEffect(() => {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const ctx = canvas.getContext("2d");
+          drawScene(ctx, { player, mode });
+        }, [player, mode, tick]);
+
+        useEffect(() => {
+          const handleKey = (e) => {
+            if (e.repeat) return;
+            if (e.key === "m" || e.key === "M") {
+              // simple stat tick
+              setStats((s) => ({ ...s }));
+              return;
+            }
+
+            if (dialogue && (e.key === "e" || e.key === "E" || e.key === "Enter")) {
+              // advance or close dialogue
+              if (dialogue.index + 1 < dialogue.lines.length) {
+                setDialogue({ ...dialogue, index: dialogue.index + 1 });
+              } else {
+                setDialogue(null);
+              }
+              return;
+            }
+
+            if (e.key === "e" || e.key === "E") {
+              // interact with NPC
+              const nearMother =
+                (Math.abs(player.x - 8) + Math.abs(player.y - 4)) === 1;
+              const nearDadi =
+                (Math.abs(player.x - 4) + Math.abs(player.y - 6)) === 1;
+
+              if (nearMother) {
+                setDialogue({
+                  speaker: "Maa",
+                  lines: [
+                    "Arre chotu, dheere-dheere chalo. Gir jaoge toh lag jaayegi!",
+                    "Aaj hum rangon ka game khelenge. Laal rang dhoondh ke dikhao?",
+                  ],
+                  index: 0,
+                });
+                setMode("miniGame");
+                return;
+              }
+              if (nearDadi) {
+                setDialogue({
+                  speaker: "Dadi",
+                  lines: [
+                    "Aao beta, kahaani sunaoon? Ek tha raja, ek thi rani...",
+                  ],
+                  index: 0,
+                });
+                setStats((s) => ({
+                  ...s,
+                  familyBond: Math.min(100, s.familyBond + 5),
+                  happiness: Math.min(100, s.happiness + 3),
+                }));
+                return;
+              }
+              return;
+            }
+
+            // movement
+            let dx = 0;
+            let dy = 0;
+            if (e.key === "ArrowUp") dy = -1;
+            else if (e.key === "ArrowDown") dy = 1;
+            else if (e.key === "ArrowLeft") dx = -1;
+            else if (e.key === "ArrowRight") dx = 1;
+
+            if (dx === 0 && dy === 0) return;
+
+            setPlayer((p) => {
+              const nx = Math.max(1, Math.min(GRID_W - 2, p.x + dx));
+              const ny = Math.max(1, Math.min(GRID_H - 2, p.y + dy));
+
+              // mini-game: find RED tile (left-most color tile)
+              if (mode === "miniGame") {
+                const redTile = { x: 6, y: GRID_H - 2 };
+                const reachedRed = nx === redTile.x || nx === redTile.x + 1;
+                const atRow = ny === redTile.y;
+                if (reachedRed && atRow) {
+                  setDialogue({
+                    speaker: "Maa",
+                    lines: [
+                      "Wah! Laal rang mil gaya. Shabash!",
+                      "Tumhari curiosity badh gayi. Chalo, agla chapter kabhi aur.",
+                    ],
+                    index: 0,
+                  });
+                  setStats((s) => ({
+                    ...s,
+                    curiosity: Math.min(100, s.curiosity + 8),
+                    happiness: Math.min(100, s.happiness + 5),
+                  }));
+                  setMode("normal");
+                }
+              }
+
+              return { x: nx, y: ny };
+            });
+          };
+
+          window.addEventListener("keydown", handleKey);
+          return () => window.removeEventListener("keydown", handleKey);
+        }, [player, mode, dialogue]);
+
+        const slotKey = (slotIndex) =>
+          (userKey || "jy_guest") + "_slot_" + slotIndex;
+
+        const [slotsMeta, setSlotsMeta] = useState(() => {
+          return [0, 1, 2].map((i) => {
+            const raw = window.localStorage.getItem(slotKey(i));
+            if (!raw) return null;
+            try {
+              return JSON.parse(raw);
+            } catch {
+              return null;
+            }
+          });
+        });
+
+        const saveToSlot = (i) => {
+          const payload = {
+            stats,
+            player,
+            timestamp: new Date().toISOString(),
+          };
+          window.localStorage.setItem(slotKey(i), JSON.stringify(payload));
+          const meta = {
+            ageMonths: stats.ageMonths,
+            timestamp: payload.timestamp,
+          };
+          setSlotsMeta((old) => {
+            const next = [...old];
+            next[i] = meta;
+            return next;
+          });
+        };
+
+        const loadFromSlot = (i) => {
+          const raw = window.localStorage.getItem(slotKey(i));
+          if (!raw) return;
+          try {
+            const saved = JSON.parse(raw);
+            if (saved.stats) setStats(saved.stats);
+            if (saved.player) setPlayer(saved.player);
+            setDialogue({
+              speaker: "Narrator",
+              lines: ["Save slot loaded. The yatra continues from where you left it."],
+              index: 0,
+            });
+            setTick((t) => t + 1);
+          } catch {
+            // ignore
+          }
+        };
+
+        const ageYears = (stats.ageMonths / 12).toFixed(1);
+
+        const renderSlotLabel = (meta, i) => {
+          if (!meta) return \`Empty Slot \${i + 1}\`;
+          return \`Slot \${i + 1} – Age \${(meta.ageMonths / 12).toFixed(1)} yrs\`;
+        };
+
+        const renderSlotSub = (meta) => {
+          if (!meta) return "No journey saved yet.";
+          const date = new Date(meta.timestamp);
+          return "Saved: " + date.toLocaleString();
+        };
+
+        return (
+          <div>
+            <div className="story-top-bar">
+              <div className="story-logo">
+                <span>JEEVAN YATRA</span> · Story Mode – Chapter 1: Ghar, 1990s
+              </div>
+              <div className="story-status">
+                <span>Age: {ageYears} yrs</span>
+                <span>Controls: ← ↑ ↓ → · E = talk · M = menu</span>
+              </div>
+            </div>
+
+            <div className="story-main">
+              <div className="story-viewport">
+                <canvas
+                  ref={canvasRef}
+                  className="story-viewport-inner"
+                  width={800}
+                  height={600}
+                />
+                <div className="dialogue-box">
+                  {dialogue ? (
+                    <React.Fragment>
+                      <div className="dialogue-name">{dialogue.speaker}</div>
+                      <div className="dialogue-text">
+                        {dialogue.lines[dialogue.index]}
+                      </div>
+                      <div className="dialogue-hint">Press E / Enter</div>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <div className="dialogue-name">Narrator</div>
+                      <div className="dialogue-text">
+                        It is the late 1990s in a middle-class Indian home. You are a curious
+                        toddler taking small steps between Maa, Papa, and Dadi.
+                        Walk around with arrow keys, stand next to them and press E to talk.
+                      </div>
+                      <div className="dialogue-hint">Arrow keys to move · E to interact</div>
+                    </React.Fragment>
+                  )}
+                </div>
+              </div>
+
+              <aside className="story-sidebar">
+                <div className="story-panel">
+                  <h3>Stats</h3>
+                  <div className="stat-row">
+                    <span>Health</span>
+                    <div className="stat-bar">
+                      <div
+                        className="stat-bar-fill"
+                        style={{
+                          width: stats.health + "%",
+                          background:
+                            "linear-gradient(90deg,#2ecc71,#27ae60)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="stat-row">
+                    <span>Happiness</span>
+                    <div className="stat-bar">
+                      <div
+                        className="stat-bar-fill"
+                        style={{
+                          width: stats.happiness + "%",
+                          background:
+                            "linear-gradient(90deg,#f1c40f,#f39c12)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="stat-row">
+                    <span>Curiosity</span>
+                    <div className="stat-bar">
+                      <div
+                        className="stat-bar-fill"
+                        style={{
+                          width: stats.curiosity + "%",
+                          background:
+                            "linear-gradient(90deg,#3498db,#2980b9)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="stat-row">
+                    <span>Family Bond</span>
+                    <div className="stat-bar">
+                      <div
+                        className="stat-bar-fill"
+                        style={{
+                          width: stats.familyBond + "%",
+                          background:
+                            "linear-gradient(90deg,#e74c3c,#c0392b)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="story-panel">
+                  <h3>Controls</h3>
+                  <div className="key-row">
+                    <div className="key-chip">← ↑ ↓ → : Move</div>
+                    <div className="key-chip">E : Talk / Interact</div>
+                    <div className="key-chip">M : Menu (reserved)</div>
+                  </div>
+                  <p style={{ marginTop: "0.35rem" }}>
+                    Prototype includes: walking around home, talking to Maa &amp; Dadi,
+                    and a simple color mini-game that boosts curiosity.
+                  </p>
+                </div>
+
+                <div className="story-panel">
+                  <h3>Save Slots</h3>
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className={
+                        "save-slot" + (activeSlot === i ? " active" : "")
+                      }
+                      onClick={() => setActiveSlot(i)}
+                    >
+                      <span>{renderSlotLabel(slotsMeta[i], i)}</span>
+                    </div>
+                  ))}
+                  <div className="save-actions">
+                    <button
+                      className="secondary-btn"
+                      onClick={() => saveToSlot(activeSlot)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="secondary-btn"
+                      onClick={() => loadFromSlot(activeSlot)}
+                    >
+                      Load
+                    </button>
+                  </div>
+                  <p style={{ marginTop: "0.3rem", fontSize: "0.74rem" }}>
+                    Saves are stored in this browser only, keyed by your Yatra
+                    ID + PIN from the home page. A backend database can map
+                    the same keys to server-side saves later.
+                  </p>
+                </div>
+
+                <div className="story-panel">
+                  <h3>Chapter Roadmap</h3>
+                  <p style={{ margin: 0 }}>
+                    Future chapters will add exam-battle systems, relationship
+                    meters, time management, and age transitions with summaries,
+                    expanding this toddler chapter into a 75-year Jeevan Yatra.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("story-root"));
+      root.render(<StoryApp />);
+    </script>
+  </body>
+</html>
+

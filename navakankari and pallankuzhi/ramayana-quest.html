@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Ramayana Quest 🏹</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Hind:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,400;1,500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+/* Amar Chitra Katha Design System */
+:root{
+  --saffron:#FF9933;--saffron-lt:#FFB84D;--saffron-dk:#E07800;
+  --royal:#1A3A8F;--royal-lt:#2F5FC4;--royal-dk:#0D2260;
+  --forest:#1B5E20;--forest-lt:#2E7D32;--forest-dk:#0A3A0A;
+  --gold:#C8960C;--gold-lt:#E8B020;--gold-dk:#9A7000;
+  --crimson:#B71C1C;--crimson-lt:#E53935;
+  --ink:#0A0A14;--ink-lt:#1A1A2E;
+  --parch:#FFF8E7;--parch-dk:#F5E8C0;
+  --outline:#000;--outline-w:2.5px;
+  --panel-bg:#FFFEF5;
+  --shadow:rgba(10,10,20,.22);
+  --sky-day:#87CEEB;--sky-dawn:#FF9966;--sky-night:#0D1B4A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--parch);color:var(--ink);font-family:'Hind',system-ui,sans-serif;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");}
+#root{height:100%;display:flex;flex-direction:column}
+/* ACK-style thick black borders on panels */
+.panel{background:var(--panel-bg);border:var(--outline-w) solid var(--outline);border-radius:0;box-shadow:3px 3px 0 var(--ink)}
+.panel-round{background:var(--panel-bg);border:var(--outline-w) solid var(--outline);border-radius:8px;box-shadow:3px 3px 0 var(--ink)}
+/* NAV */
+.nav{height:52px;min-height:52px;background:var(--saffron-dk);display:flex;align-items:center;justify-content:space-between;padding:0 .9rem;border-bottom:3px solid var(--outline);position:relative;z-index:50}
+.nav-brand{display:flex;align-items:center;gap:.5rem}
+.nav-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:#fff;letter-spacing:.04em;text-shadow:1px 1px 0 var(--ink)}
+.nav-sk{font-family:'Tiro Devanagari Sanskrit',serif;font-size:.7rem;color:rgba(255,255,255,.7);margin-top:1px}
+.nav-tabs{display:flex;gap:2px}
+.nav-tab{font-size:.58rem;font-weight:700;letter-spacing:.08em;padding:.3rem .65rem;border-radius:3px;background:rgba(0,0,0,.2);color:rgba(255,255,255,.65);border:1px solid rgba(0,0,0,.2);cursor:pointer;transition:all .15s;text-transform:uppercase}
+.nav-tab:hover{background:rgba(0,0,0,.35);color:#fff}
+.nav-tab.active{background:var(--royal-dk);color:#FFD700;border-color:var(--royal)}
+.nav-right{display:flex;align-items:center;gap:.45rem}
+.virtue-pill{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:100px;border:1px solid rgba(0,0,0,.3);background:rgba(0,0,0,.2);color:#fff}
+.scene{flex:1;overflow:hidden;position:relative}
+/* BUTTONS - thick ACK style */
+.btn{font-size:.68rem;font-weight:700;letter-spacing:.1em;padding:.42rem 1.1rem;border-radius:3px;cursor:pointer;transition:all .12s;border:2px solid var(--outline);text-transform:uppercase;font-family:'Hind',sans-serif;box-shadow:2px 2px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn-saffron{background:var(--saffron);color:var(--ink)}
+.btn-saffron:hover{background:var(--saffron-lt)}
+.btn-royal{background:var(--royal);color:#FFD700}
+.btn-royal:hover{background:var(--royal-lt)}
+.btn-forest{background:var(--forest);color:#fff}
+.btn-forest:hover{background:var(--forest-lt)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:var(--gold-lt)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:rgba(0,0,0,.08)}
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes comicPop{0%{transform:scale(.6) rotate(-4deg);opacity:0}70%{transform:scale(1.06) rotate(1deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes bowPull{0%{transform:scaleX(1)}100%{transform:scaleX(.7)}}
+@keyframes arrowFly{0%{transform:translateX(0) rotate(0);opacity:1}100%{transform:translateX(300px) rotate(10deg);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes spinStar{0%{transform:rotate(0) scale(1)}100%{transform:rotate(720deg) scale(0)}}
+@keyframes glimmer{0%,100%{opacity:.6}50%{opacity:1;filter:brightness(1.2)}}
+@keyframes ripple{0%{transform:scale(0);opacity:.8}100%{transform:scale(4);opacity:0}}
+.fi{animation:fadeIn .4s ease both}
+.su{animation:slideUp .42s ease both}
+.cp{animation:comicPop .45s cubic-bezier(.34,1.56,.64,1) both}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--saffron-dk);border-radius:2px}
+/* VIRTUE BARS */
+.virtue-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem}
+.virtue-lbl{font-size:.62rem;font-weight:700;width:62px;flex-shrink:0;color:var(--ink)}
+.virtue-track{flex:1;height:9px;background:rgba(0,0,0,.12);border-radius:0;border:1px solid rgba(0,0,0,.2);overflow:hidden}
+.virtue-fill{height:100%;transition:width .8s cubic-bezier(.22,1,.36,1)}
+.virtue-val{font-size:.62rem;font-weight:700;width:30px;text-align:right;color:var(--ink);flex-shrink:0}
+/* SCENE: TITLE SCREEN */
+.title-scene{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;text-align:center;background:var(--royal-dk);overflow:hidden;position:relative}
+.title-stars{position:absolute;inset:0;pointer-events:none}
+.title-star{position:absolute;background:#FFD700;border-radius:50%;animation:glimmer 2s ease-in-out infinite}
+.title-logo{font-family:'Lora',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;color:#FFD700;text-shadow:3px 3px 0 #000,0 0 40px rgba(255,215,0,.4);margin-bottom:.4rem;letter-spacing:.05em}
+.title-sub{font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;font-size:clamp(.85rem,2vw,1.1rem);color:rgba(255,200,100,.8);margin-bottom:.3rem}
+.title-author{font-size:.7rem;color:rgba(255,255,255,.35);letter-spacing:.18em;text-transform:uppercase;margin-bottom:2rem}
+.title-panel{background:rgba(255,255,255,.06);border:2px solid rgba(255,215,0,.3);border-radius:6px;padding:1rem 1.4rem;max-width:460px;margin-bottom:2rem}
+.title-panel-text{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:rgba(255,255,255,.8);line-height:1.7}
+/* SCENE: CHARACTER SELECT */
+.char-scene{height:100%;overflow-y:auto;padding:1rem;background:linear-gradient(to bottom,#FFF8E7,#E8D9A0)}
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:640px;margin:0 auto}
+@media(max-width:480px){.char-grid{grid-template-columns:1fr}}
+.char-card{padding:1.1rem 1rem;cursor:pointer;transition:transform .18s,box-shadow .18s;border-radius:6px;background:var(--panel-bg);border:2.5px solid var(--outline);box-shadow:4px 4px 0 var(--ink)}
+.char-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.char-card.sel{border-color:var(--gold);background:#FFFDE7;box-shadow:4px 4px 0 var(--gold-dk)}
+.char-emoji{font-size:2.5rem;margin-bottom:.4rem;display:block;text-align:center}
+.char-name{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--ink);text-align:center;margin-bottom:.12rem}
+.char-sk{font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;font-size:.72rem;color:var(--gold-dk);text-align:center;margin-bottom:.3rem}
+.char-title{font-size:.65rem;color:var(--ink-lt);text-align:center;margin-bottom:.5rem;opacity:.7;font-style:italic}
+.char-ability{font-size:.7rem;font-weight:600;color:var(--royal);margin-bottom:.35rem;padding:.3rem .5rem;background:rgba(26,58,143,.06);border-left:3px solid var(--royal)}
+.char-desc{font-size:.72rem;color:var(--ink-lt);line-height:1.6}
+.char-style{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--saffron-dk);margin-top:.4rem}
+/* SCENE: JOURNEY MAP */
+.map-scene{height:100%;overflow:hidden;position:relative;background:linear-gradient(to bottom,#87CEEB 0%,#6DB56D 65%,#5C9A5C 100%)}
+.map-title-bar{position:absolute;top:0;left:0;right:0;z-index:10;background:rgba(10,10,20,.75);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid rgba(255,200,0,.3)}
+.map-scroll{position:absolute;inset:48px 0 0;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;gap:0}
+.kanda-node{flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:0 1.2rem;cursor:pointer;transition:transform .2s;position:relative}
+.kanda-node:hover .kanda-gem{transform:scale(1.12)}
+.kanda-gem{width:72px;height:72px;border-radius:50%;border:3px solid var(--outline);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:.4rem;box-shadow:3px 3px 0 var(--ink),0 0 20px rgba(0,0,0,.3);transition:transform .18s;position:relative;z-index:2}
+.kanda-gem.unlocked{cursor:pointer}
+.kanda-gem.locked{filter:grayscale(.8);opacity:.5;cursor:default}
+.kanda-gem.current{box-shadow:3px 3px 0 var(--ink),0 0 0 3px var(--gold),0 0 20px rgba(255,200,0,.4);animation:glimmer 2s ease-in-out infinite}
+.kanda-name{font-family:'Lora',serif;font-size:.72rem;font-weight:700;color:#fff;text-shadow:1px 1px 0 #000;text-align:center;max-width:90px}
+.kanda-en{font-size:.58rem;color:rgba(255,255,255,.65);text-align:center}
+.kanda-connect{flex-shrink:0;width:60px;height:4px;background:linear-gradient(90deg,rgba(255,200,0,.4),rgba(255,200,0,.2));border-top:2px dashed rgba(255,200,0,.5);margin-bottom:56px;position:relative;z-index:1}
+.kanda-connect.done{background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-top:2px solid var(--gold)}
+.virtue-sidebar{position:absolute;right:0;top:48px;bottom:0;width:160px;background:rgba(10,10,20,.82);border-left:2px solid rgba(255,200,0,.2);padding:.8rem .7rem;overflow-y:auto}
+.virtue-sidebar-title{font-family:'Lora',serif;font-size:.72rem;font-weight:700;color:#FFD700;margin-bottom:.65rem;letter-spacing:.06em}
+/* SCENE: KANDA / STORY */
+.story-scene{height:100%;overflow-y:auto;padding:1rem;background:linear-gradient(to bottom,#FFF8E7,#EDD890)}
+.story-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;padding:.8rem 1rem;background:var(--ink);border:2.5px solid var(--outline);border-radius:4px}
+.story-kanda-num{font-family:'Lora',serif;font-size:1.8rem;font-weight:700;color:var(--saffron);line-height:1}
+.story-kanda-name{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:#fff}
+.story-kanda-sk{font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;font-size:.72rem;color:rgba(255,200,100,.7)}
+.comic-panel{border:2.5px solid var(--outline);border-radius:0;margin-bottom:.9rem;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+.comic-panel-header{padding:.45rem .75rem;font-family:'Lora',serif;font-size:.82rem;font-weight:700;color:#fff;border-bottom:2px solid var(--outline)}
+.comic-panel-body{padding:.8rem;background:var(--panel-bg)}
+.comic-panel-text{font-family:'Lora',serif;font-style:italic;font-size:.85rem;line-height:1.72;color:var(--ink)}
+.comic-panel-art{width:100%;height:110px;border-bottom:2px solid var(--outline);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+/* MORAL CHOICE */
+.moral-box{border:3px solid var(--outline);border-radius:4px;margin-bottom:.9rem;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.moral-header{background:var(--royal);padding:.6rem .8rem;font-family:'Lora',serif;font-size:.82rem;font-weight:700;color:#FFD700;border-bottom:2px solid var(--outline);display:flex;align-items:center;gap:.4rem}
+.moral-question{background:rgba(26,58,143,.06);padding:.7rem .8rem;font-family:'Lora',serif;font-style:italic;font-size:.84rem;color:var(--ink);line-height:1.65;border-bottom:1px solid rgba(0,0,0,.1)}
+.moral-option{display:block;width:100%;padding:.7rem .85rem;text-align:left;background:var(--panel-bg);border:none;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;transition:all .14s;font-family:'Lora',serif;font-size:.8rem;color:var(--ink);line-height:1.5;position:relative}
+.moral-option:last-child{border-bottom:none}
+.moral-option:hover{background:#FFF3CD;padding-left:1.1rem}
+.moral-option.chosen{background:var(--saffron);color:var(--ink);font-weight:700}
+.moral-opt-letter{font-family:'Lora',serif;font-weight:700;font-size:.72rem;color:var(--saffron-dk);margin-right:.4rem}
+/* CHOICE RESULT */
+.choice-result{border:2.5px solid var(--outline);border-radius:4px;margin-bottom:.9rem;box-shadow:3px 3px 0 var(--ink)}
+.choice-result-hd{padding:.55rem .8rem;font-family:'Lora',serif;font-size:.78rem;font-weight:700;border-bottom:2px solid var(--outline)}
+.virtue-earned{display:inline-flex;align-items:center;gap:.28rem;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:2px;margin:.18rem .2rem 0 0}
+.ripple-box{padding:.55rem .8rem;border-top:2px dashed rgba(0,0,0,.15);font-family:'Lora',serif;font-style:italic;font-size:.76rem;color:var(--royal-dk);line-height:1.6}
+/* QUIZ */
+.quiz-panel{border:2.5px solid var(--outline);border-radius:4px;box-shadow:4px 4px 0 var(--ink);overflow:hidden;margin-bottom:.9rem}
+.quiz-header{background:var(--forest);padding:.55rem .8rem;font-family:'Lora',serif;font-size:.8rem;font-weight:700;color:#fff;border-bottom:2px solid var(--outline);display:flex;align-items:center;gap:.4rem}
+.quiz-q{padding:.7rem .85rem;font-family:'Lora',serif;font-size:.86rem;font-weight:700;color:var(--ink);border-bottom:1px solid rgba(0,0,0,.08);background:var(--panel-bg)}
+.quiz-opt{display:block;width:100%;padding:.6rem .85rem;text-align:left;background:var(--panel-bg);border:none;border-bottom:1px solid rgba(0,0,0,.07);cursor:pointer;transition:all .13s;font-family:'Hind',sans-serif;font-size:.8rem;color:var(--ink)}
+.quiz-opt:last-child{border-bottom:none}
+.quiz-opt:hover{background:#F0F9F0}
+.quiz-opt.correct{background:#E8F5E9;color:#1B5E20;font-weight:600}
+.quiz-opt.wrong{background:#FDECEA;color:#B71C1C}
+.quiz-fact{padding:.6rem .85rem;background:#F0F9F0;border-top:1px dashed rgba(0,0,0,.15);font-size:.75rem;color:var(--forest-dk);line-height:1.6;font-style:italic}
+/* MINI GAMES */
+.minigame-container{border:3px solid var(--outline);border-radius:4px;box-shadow:5px 5px 0 var(--ink);margin-bottom:.9rem;overflow:hidden}
+.minigame-header{background:var(--crimson);padding:.6rem .9rem;font-family:'Lora',serif;font-size:.85rem;font-weight:700;color:#fff;border-bottom:2px solid var(--outline);display:flex;align-items:center;gap:.4rem}
+.minigame-body{padding:1.2rem;background:var(--panel-bg);display:flex;flex-direction:column;align-items:center;gap:.8rem}
+/* BOW LIFT GAME */
+.bow-scene{width:100%;max-width:320px;height:180px;background:linear-gradient(to bottom,#E8C88A,#C4A870);border:2px solid var(--outline);border-radius:4px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.bow-svg{transition:transform .3s}
+.power-bar{width:100%;max-width:260px;height:22px;background:#222;border:2px solid var(--outline);border-radius:3px;overflow:hidden;position:relative}
+.power-fill{height:100%;transition:width .1s linear}
+.power-marker{position:absolute;top:0;bottom:0;width:3px;background:#FFD700;opacity:.8}
+/* OCEAN LEAP GAME */
+.ocean-scene{width:100%;max-width:340px;height:160px;background:linear-gradient(to bottom,#87CEEB 0%,#4FC3F7 40%,#0288D1 100%);border:2px solid var(--outline);border-radius:4px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;padding:.5rem}
+.ocean-waves{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(to top,rgba(2,136,209,.9),transparent)}
+/* BRIDGE BUILDING GAME */
+.bridge-scene{width:100%;max-width:340px;height:140px;background:linear-gradient(to bottom,#87CEEB,#2E7D32 70%,#1B5E20);border:2px solid var(--outline);border-radius:4px;position:relative;overflow:hidden}
+.bridge-cell{width:36px;height:36px;border:2px solid var(--outline);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s;font-size:1.1rem;border-radius:2px}
+.bridge-cell:hover{background:rgba(255,200,0,.3)}
+.bridge-cell.placed{background:rgba(100,150,200,.5);cursor:default}
+.bridge-cell.wrong{background:rgba(220,50,50,.3);animation:shake .3s ease}
+/* VALMIKI WIDGET */
+.valmiki-fab{position:fixed;bottom:1.1rem;right:1.1rem;z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:.45rem}
+.valmiki-btn{width:52px;height:52px;border-radius:4px;background:var(--royal-dk);border:2.5px solid var(--outline);display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:all .15s;animation:float 4s ease-in-out infinite}
+.valmiki-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);animation:none}
+.valmiki-chat{width:290px;max-height:380px;background:var(--royal-dk);border:2.5px solid var(--outline);border-radius:4px;overflow:hidden;box-shadow:5px 5px 0 var(--ink);animation:comicPop .35s cubic-bezier(.34,1.56,.64,1)}
+.valmiki-hd{background:var(--ink);padding:.55rem .85rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid rgba(255,200,0,.3)}
+.valmiki-hd-nm{font-family:'Lora',serif;font-size:.78rem;font-weight:700;color:#FFD700;display:flex;align-items:center;gap:.35rem}
+.valmiki-msgs{height:210px;overflow-y:auto;padding:.6rem;display:flex;flex-direction:column;gap:.4rem}
+.valmiki-msgs::-webkit-scrollbar{width:3px}
+.vm-g{align-self:flex-start;max-width:90%}
+.vm-u{align-self:flex-end;max-width:80%}
+.vb-g{background:rgba(255,200,0,.1);border:1.5px solid rgba(255,200,0,.2);border-radius:2px 8px 8px 8px;padding:.48rem .62rem;font-family:'Lora',serif;font-style:italic;font-size:.73rem;color:rgba(255,230,150,.9);line-height:1.62}
+.vb-u{background:rgba(255,153,51,.25);border:1px solid rgba(255,153,51,.3);border-radius:8px 8px 2px 8px;padding:.45rem .62rem;font-size:.72rem;color:rgba(255,240,200,.85)}
+.v-typing{display:flex;gap:4px;padding:.38rem .58rem;align-items:center}
+.v-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,200,0,.5);animation:pulse 1.2s ease-in-out infinite}
+.v-dot:nth-child(2){animation-delay:.18s}.v-dot:nth-child(3){animation-delay:.36s}
+.valmiki-inp-row{display:flex;gap:.3rem;padding:.48rem .62rem;border-top:1.5px solid rgba(255,200,0,.15);background:rgba(0,0,0,.2)}
+.valmiki-inp{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,200,0,.15);border-radius:3px;padding:.34rem .52rem;font-size:.71rem;color:rgba(255,230,150,.85);outline:none}
+.valmiki-inp::placeholder{color:rgba(255,200,100,.25)}
+.valmiki-inp:focus{border-color:rgba(255,200,0,.35)}
+.v-send{width:28px;height:28px;border-radius:3px;background:var(--saffron);border:2px solid var(--outline);cursor:pointer;font-size:.82rem;display:flex;align-items:center;justify-content:center;transition:background .14s;flex-shrink:0;font-weight:700;color:var(--ink)}
+.v-send:hover{background:var(--saffron-lt)}
+.v-send:disabled{opacity:.3;cursor:default}
+/* ACHIEVEMENT TOAST */
+.ach-toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:200;background:var(--royal-dk);border:2.5px solid var(--gold);border-radius:4px;box-shadow:4px 4px 0 var(--ink);padding:.55rem 1.1rem;display:flex;align-items:center;gap:.6rem;animation:comicPop .4s cubic-bezier(.34,1.56,.64,1) both;white-space:nowrap}
+.ach-ti{font-family:'Lora',serif;font-size:.8rem;font-weight:700;color:#FFD700}
+.ach-sb{font-size:.62rem;color:rgba(255,200,100,.6)}
+/* HISTORICAL NOTE */
+.hist-note{background:rgba(26,94,32,.08);border-left:4px solid var(--forest);padding:.65rem .85rem;border-radius:0 4px 4px 0;margin:.6rem 0;font-size:.76rem;color:var(--forest-dk);line-height:1.65;font-style:italic}
+/* CONSEQUENCE DISPLAY */
+.consequence-banner{background:rgba(26,58,143,.08);border:1.5px dashed var(--royal);border-radius:4px;padding:.55rem .8rem;margin:.6rem 0;display:flex;align-items:flex-start;gap:.45rem}
+.consequence-ic{font-size:1rem;flex-shrink:0;margin-top:1px}
+.consequence-txt{font-size:.74rem;color:var(--royal-dk);line-height:1.6}
+/* SHLOKA DISPLAY */
+.shloka-display{background:var(--ink);color:var(--parch);padding:.75rem 1rem;border-radius:3px;margin:.6rem 0;border:2px solid var(--outline)}
+.shloka-sk{font-family:'Tiro Devanagari Sanskrit',serif;font-size:.85rem;color:#FFD700;margin-bottom:.3rem;line-height:1.7}
+.shloka-meaning{font-family:'Lora',serif;font-style:italic;font-size:.76rem;color:rgba(255,240,200,.75);line-height:1.6}
+/* BACK BUTTON */
+.back-btn{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;margin-bottom:.7rem;padding:.28rem .6rem;border:2px solid var(--outline);border-radius:3px;background:transparent;transition:all .12s}
+.back-btn:hover{background:rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+/* ─ STORY DATA ──────────────────────────────────────────────── */
+const KANDAS=[
+  {id:'bala',num:1,name:'Bāla Kāṇḍa',sk:'बाल काण्ड',en:'The Book of Youth',loc:'Ayodhya, Mithila',emoji:'🏹',color:'#C8960C',bg:'#FFF8E0',sky:'linear-gradient(160deg,#FFD084,#87CEEB)',unlocked:true,
+   synopsis:'The birth of Rama. Training under Vishwamitra. The Swayamvara at Mithila where Rama lifts Shiva\'s bow and wins Sita\'s hand.',
+   histNote:'Ayodhya (modern Uttar Pradesh) was the Kosala Kingdom capital. The Sarayu river still flows there. The bow of Shiva (Shiva Dhanush) was so heavy 500 men could barely move it.',
+   scenes:[
+    {id:'birth',title:'The Four Princes of Ayodhya',emoji:'👑',
+     narrative:'King Dasharatha performed the Putrakameshti Yajna — a sacred fire ritual for sons. From the flames rose Agni bearing a golden bowl of payasam (sacred kheer). Soon four princes were born: Rama to Kaushalya, Bharata to Kaikeyi, and twins Lakshmana and Shatrughna to Sumitra. All of Ayodhya celebrated.',
+     virtue:{wisdom:3}},
+    {id:'vishwamitra',title:"Sage Vishwamitra's Request",emoji:'🔥',
+     narrative:'The sage Vishwamitra came requesting that young Rama protect his forest ashram from rakshasas. Dasharatha was terrified — his beloved son, barely a teenager, sent into such danger. But Rama stepped forward with a calm smile: "Father, a sage\'s request is a king\'s duty."',
+     choice:{q:'You are Rama. Your father weeps at the thought of sending you. What do you tell him?',
+      opts:[
+       {l:'Father, your duty is to honour the sage. My duty is to go. Do not grieve.',virt:{dharma:15,courage:10},out:'Dasharatha is moved to tears. He gives his blessing with a full heart.',rip:'Your father\'s grief transforms into pride. He watches with clear eyes as you leave.',cid:'noble_departure'},
+       {l:'I will go — but only if Lakshmana can come with me.',virt:{devotion:15,courage:8},out:'Lakshmana joins the quest. Your brotherhood deepens from this first adventure.',rip:'Lakshmana\'s loyalty, forged in this first journey, will save your life in Lanka.',cid:'lakshmana_bond'},
+       {l:'I will go. But first, teach me what I need to know about the enemy.',virt:{wisdom:15,courage:8},out:'Vishwamitra teaches you the divine weapons Bala and Atibala before departure.',rip:'The divine weapons learned here will protect you throughout your exile.',cid:'divine_weapons'},
+      ]}},
+    {id:'swayamvara',title:'Lifting the Bow of Shiva',emoji:'🏹',
+     narrative:'At the Swayamvara of Mithila, hundreds of princes had failed to even lift Shiva\'s divine bow. Rama walked forward, the court fell silent. He picked it up, strung it — and it shattered from its own tension. Sita placed the marriage garland around his neck.',
+     isGame:true,game:'bow_lift',virtue:{courage:15,dharma:5}},
+   ],
+   quiz:[
+    {q:'What was the sacred ritual Dasharatha performed for sons?',opts:['Ashwamedha Yajna','Putrakameshti Yajna','Soma Yajna','Rajasuya Yajna'],a:1,fact:'Putrakameshti Yajna is a Vedic fire ritual specifically for the birth of sons. The divine Agni himself brought the sacred payasam from the flames.'},
+    {q:'How many sons did Dasharatha have and who were their mothers?',opts:['2 sons from 2 wives','3 sons from 2 wives','4 sons from 3 wives','5 sons from 3 wives'],a:2,fact:'Rama (Kaushalya), Bharata (Kaikeyi), and twins Lakshmana & Shatrughna (Sumitra) = 4 sons from 3 wives.'},
+    {q:'Where was Sita\'s Swayamvara held?',opts:['Ayodhya','Lanka','Mithila (Videha Kingdom)','Kishkindha'],a:2,fact:'Mithila was the capital of the Videha Kingdom, ruled by King Janaka. It is identified with modern Janakpur in Nepal and parts of Bihar, India.'},
+    {q:'What happened to Shiva\'s bow when Rama lifted it?',opts:['He carried it away','He placed it back gently','It shattered from its own tension','Nothing — he simply strung it'],a:2,fact:'The bow shattered with a sound that echoed across three worlds. This was the sign — only a person of divine strength could even lift it, and the breaking proved Rama\'s identity as Vishnu\'s avatar.'},
+   ]},
+  {id:'aranya',num:3,name:'Āraṇya Kāṇḍa',sk:'अरण्य काण्ड',en:'The Book of the Forest',loc:'Dandaka Forest, Panchavati',emoji:'🌳',color:'#1B5E20',bg:'#E8F5E9',sky:'linear-gradient(160deg,#1B5E20,#2E7D32)',unlocked:false,
+   synopsis:'Life in the forest. The golden deer. The abduction of Sita by Ravana. Jatayu\'s sacrifice.',
+   histNote:'Panchavati is identified with modern Nashik in Maharashtra on the Godavari river. The Dandaka forest covered much of the Deccan plateau.',
+   scenes:[
+    {id:'tataka',title:'The Golden Deer — Maya',emoji:'🦌',
+     narrative:'Maricha came in the form of a glittering golden deer — magical, irresistible. Sita was enchanted and asked Rama to catch it. Lakshmana warned: "This is Maya — illusion. No deer like this exists in nature." But Rama, unable to deny Sita, went in pursuit. The trap was set.',
+     choice:{q:'You are Lakshmana. Rama has gone after the golden deer. Sita is alone. A false cry of "Lakshmana, help!" echoes from the forest. What do you do?',
+      opts:[
+       {l:'Stay and guard Sita — your duty is her protection, not obeying a false cry.',virt:{dharma:15,wisdom:10},out:'You draw the Lakshmana Rekha — a sacred protective line — before going.',rip:'The Rekha you drew became legend. "Crossing the Lakshmana Rekha" is still used to mean crossing a line that should not be crossed.',cid:'rekha_drawn'},
+       {l:'Go immediately — Rama\'s call must be answered, even at risk.',virt:{devotion:12,courage:10},out:'You go, leaving Sita unprotected. Ravana seizes the moment.',rip:'Even perfect loyalty cannot prevent what fate has arranged. But your intent was pure.',cid:'loyalty_tested'},
+      ]}},
+    {id:'jatayu',title:"Jatayu's Sacrifice",emoji:'🦅',
+     narrative:'Ravana seized Sita and rose in his chariot. The great eagle Jatayu, old friend of Dasharatha, heard Sita\'s screams and attacked with everything he had — wings beating against swords, talons against ten heads. Ravana cut off Jatayu\'s wings. The old bird fell, mortally wounded. When Rama found him, Jatayu breathed his last words: "She was taken south."',
+     virtue:{courage:10,dharma:5}},
+   ],
+   quiz:[
+    {q:'Who was Jatayu?',opts:['A forest sage','The king of eagles, friend of Dasharatha','A shape-shifting rakshasa','Rama\'s childhood friend'],a:1,fact:'Jatayu was the king of eagles (Garuda-jati), an old friend of King Dasharatha. He gave his life trying to stop Ravana — one of the noblest sacrifices in the Ramayana.'},
+    {q:'Who disguised himself as the golden deer?',opts:['Ravana','Kumbhakarna','Maricha','Indrajit'],a:2,fact:'Maricha reluctantly agreed to help Ravana, knowing it meant his death — choosing death by Rama\'s arrow over death by Ravana\'s anger. His golden disguise was described as the most beautiful thing ever seen.'},
+    {q:'What is the cultural meaning of "Lakshmana Rekha" today?',opts:['A military boundary','A line that should never be crossed — used as a metaphor','A type of Indian painting','A river in Karnataka'],a:1,fact:'Even today in Indian languages, "Lakshmana Rekha" means a boundary that must not be crossed. Politicians, judges, and commentators use it regularly — a 3000-year-old metaphor still in active use.'},
+   ]},
+  {id:'kishkindha',num:4,name:'Kiṣkindhā Kāṇḍa',sk:'किष्किन्धा काण्ड',en:'The Book of Kishkindha',loc:'Kingdom of the Vanaras, Karnataka',emoji:'🐒',color:'#7B3F00',bg:'#FFF3E0',sky:'linear-gradient(160deg,#8D6E63,#A1887F)',unlocked:false,
+   synopsis:'Meeting Hanuman and Sugriva. Rama helps Sugriva defeat Vali. The search parties sent to find Sita.',
+   histNote:'Kishkindha is the Hampi region of modern Karnataka along the Tungabhadra river. The Anjanadri hill near Hampi is believed to be Hanuman\'s birthplace.',
+   scenes:[
+    {id:'hanuman_meet',title:'First Meeting with Hanuman',emoji:'🙏',
+     narrative:'A vanara descended speaking perfect Sanskrit, quoting the Vedas with calm authority. This was Hanuman — son of Vayu (wind god), student of Surya (sun god), the greatest devotee in all of literature. "I know who you are," he said to Rama. "And I have been waiting for you." Rama whispered to Lakshmana: "He who speaks like this — his Guru must be the greatest of teachers."',
+     virtue:{devotion:10,wisdom:5}},
+    {id:'vali',title:"Rama's Arrow — The Question of Vali",emoji:'⚔️',
+     narrative:'Rama shot Vali from behind a tree — an act that has troubled readers for 3000 years. Vali, dying, accused: "You are a dharmic king. Why did you strike me from hiding?" Rama explained: Vali had sinned against his own brother, taken another\'s wife. The boon (half opponent strength transfers) made direct combat impossible. The debate was never fully resolved — and that is the point.',
+     choice:{q:'Vali asks why Rama struck from hiding. What is the most honest answer?',
+      opts:[
+       {l:'"You sinned against your own brother. A king who violates family dharma loses the right to warrior code."',virt:{dharma:12,wisdom:8},out:'Vali listens, then accepts. He dies naming his son Angada as heir and asking Sugriva to treat him well.',rip:'Angada becomes a key diplomat in Lanka — a direct result of this moment of grace at death.',cid:'angada_diplomat'},
+       {l:'"I acted for the greater good — to build the alliance that will save Sita and restore dharma."',virt:{courage:10,wisdom:10},out:'Vali sees the larger purpose and gives a final blessing for Rama\'s mission.',rip:'This willingness to hold moral complexity — imperfect action for greater good — marks your wisdom as a king.',cid:'greater_good'},
+       {l:'"You may be right. I may have acted wrongly. But Sugriva deserved justice, and I gave it."',virt:{dharma:15,wisdom:5},out:'Vali, shocked by Rama\'s honesty, forgives him completely. His death becomes a moment of grace.',rip:'Your honesty about moral ambiguity becomes the teaching: even great beings make imperfect choices.',cid:'honest_admission'},
+      ]}},
+   ],
+   quiz:[
+    {q:"What was Hanuman's special quality when Rama first met him?",opts:['His extraordinary strength','He spoke perfect Sanskrit and quoted the Vedas — revealing a supremely educated mind','He could fly faster than any bird','His ability to change size'],a:1,fact:'Rama told Lakshmana: "Only one whose guru is the greatest of teachers could speak like this." Hanuman studied under Surya (the sun god) himself for 60 years — and his linguistic mastery proved it instantly.'},
+    {q:"What was Vali's special boon that made him nearly unbeatable?",opts:['Invisibility in battle','Half his opponent\'s strength transferred to him when they fought directly','He could not be killed by any weapon','He had ten lives'],a:1,fact:'This boon (granted by Brahma) made it impossible for anyone to face Vali in direct combat. Sugriva had tried and nearly died. It is why Rama had to use strategy rather than direct battle.'},
+    {q:'Where is ancient Kishkindha identified today?',opts:['Near Varanasi','The Hampi region of Karnataka','Near Chennai','In Sri Lanka'],a:1,fact:'Hampi in Karnataka, along the Tungabhadra river, is universally identified as ancient Kishkindha. The entire landscape — boulders, hills, river — matches the Ramayana description precisely.'},
+   ]},
+  {id:'sundara',num:5,name:'Sundara Kāṇḍa',sk:'सुन्दर काण्ड',en:'The Beautiful Book',loc:'Lanka — Ashoka Vana',emoji:'🌊',color:'#00369A',bg:'#E3F2FD',sky:'linear-gradient(160deg,#0D2260,#1A3A8F)',unlocked:false,
+   synopsis:'Hanuman leaps across the ocean. He finds Sita in the Ashoka garden. He burns Lanka and returns.',
+   histNote:'Sundara Kanda is the most widely recited section of the Ramayana. In many Indian homes, it is read daily. It is considered complete in itself and is believed to bring peace and remove obstacles.',
+   scenes:[
+    {id:'ocean_leap',title:'Hanuman Leaps the Ocean',emoji:'🌊',
+     narrative:'The ocean stretched impossibly wide. The vanaras despaired. Then Jambavan reminded Hanuman of something forgotten: as a child he had tried to swallow the sun, thinking it a fruit. He had been struck by Indra\'s thunderbolt. In the rage that followed, his father Vayu withdrew from the world. Hanuman simply had forgotten his own power. He grew to the size of a mountain and leaped.',
+     isGame:true,game:'ocean_leap',virtue:{courage:15,devotion:10}},
+    {id:'sita_found',title:'Sita in the Ashoka Garden',emoji:'🌸',
+     narrative:'Hanuman searched Lanka in the night, tiny as a cat. He found Sita in the Ashoka garden, surrounded by rakshasis, thin with grief but unbroken in dignity. He watched Ravana approach. Sita would not even look at him — she kept a blade of grass between them as a thin barrier of defiance. Ravana gave an ultimatum: become his queen, or be executed.',
+     choice:{q:'Hanuman watches Sita suffering. He has the strength to carry her to Rama now. Should he?',
+      opts:[
+       {l:"No — Sita's rescue must be Rama's to achieve. That is the meaning of this mission.",virt:{dharma:15,wisdom:10},out:"Hanuman restrains himself. He delivers Rama's ring. Sita's chudamani (crest jewel) becomes her message back.",rip:"Sita's message — delivered through her jewel — becomes the emotional core of Rama's determination to cross the ocean.",cid:'message_delivered'},
+       {l:'Offer to carry her. But if she refuses, respect her choice completely.',virt:{devotion:12,wisdom:12},out:'Sita refuses — she wants Rama himself to come and defeat Ravana, restoring dharma fully. Hanuman understands.',rip:"Sita's agency in refusing rescue defines her character: she will not be saved — she will be liberated.",cid:'sita_agency'},
+      ]}},
+   ],
+   quiz:[
+    {q:'Why is the fifth Kanda called "Sundara" (Beautiful)?',opts:['Because Sita is beautiful','Because Lanka is beautiful','It is the most poetic Kanda — and Hanuman\'s childhood name meant "Beautiful Jaw"','Because Ravana is described as handsome'],a:2,fact:'Sundara Kanda is universally considered the most literary section. "Sundara" also refers to Hanuman\'s beauty of character. It is the only Kanda named after Hanuman, and many consider it the emotional heart of the entire epic.'},
+    {q:'What did Hanuman give Sita to prove he was sent by Rama?',opts:['A letter from Rama',"Rama's ring with his name",'A flower from Ayodhya',"Rama's bow"],a:1,fact:"Rama's ring bore his name inscribed on it — the token of recognition. Sita sent back her chudamani (crest jewel) as her message to Rama. This exchange of jewels across the ocean is one of the most poetic moments in world literature."},
+    {q:'What happened when Ravana\'s soldiers set Hanuman\'s tail on fire?',opts:['Hanuman was defeated','He used his tail to burn most of Lanka before escaping','He flew away before it lit','The fire did not harm him'],a:1,fact:'Ravana intended this as humiliation, but Hanuman used the burning tail to torch much of Lanka. It was perhaps the most spectacularly backfired plan in the Ramayana.'},
+   ]},
+  {id:'yuddha',num:6,name:'Yuddha Kāṇḍa',sk:'युद्ध काण्ड',en:'The Book of War',loc:'Lanka — The Great Battle',emoji:'⚔️',color:'#8B0000',bg:'#FDECEA',sky:'linear-gradient(160deg,#4A0E0E,#8B0000)',unlocked:false,
+   synopsis:'The bridge across the ocean. Vibhishana joins Rama. The great war for Lanka. Ravana falls.',
+   histNote:"Adam's Bridge (Rama Setu) — a chain of limestone shoals between India and Sri Lanka — appears in NASA satellite images. Geological studies suggest it is approximately 7,000 years old.",
+   scenes:[
+    {id:'vibhishana',title:"Vibhishana Seeks Refuge",emoji:'🙏',
+     narrative:"Ravana's younger brother Vibhishana had advised Ravana to return Sita peacefully — and was cast out for it. He came to Rama seeking refuge. The vanara generals were suspicious: could Ravana's own brother be trusted?",
+     choice:{q:"Vibhishana, Ravana's own brother, has come to join your side. Should you trust him?",
+      opts:[
+       {l:'Welcome him. Anyone who chooses righteousness over blood loyalty deserves full refuge.',virt:{dharma:18,wisdom:8},out:'Vibhishana joins Rama. His knowledge of Lanka\'s secret passages and Ravana\'s weakness becomes crucial.',rip:'Vibhishana becomes king of Lanka after Ravana\'s death — Rama\'s most consequential act of mercy.',cid:'vibhishana_king'},
+       {l:'Accept him conditionally — he must prove himself in a small task first.',virt:{wisdom:12,dharma:8},out:'Vibhishana accepts without offence and proves himself quickly.',rip:'The conditional trust, though prudent, showed that dharma without full trust has limits.',cid:'vibhishana_tested'},
+      ]}},
+    {id:'bridge',title:'Building Rama Setu',emoji:'🌊',
+     narrative:'The vanara architects Nala and Neela (blessed that anything they threw into water would float) led the army. The entire army worked — throwing rocks, trees, mountains. They wrote "Rama" on each stone. The stones floated. Rama Setu — the Bridge of Rama — was built in 5 days. Some of its stones are visible in satellite images today.',
+     isGame:true,game:'bridge_building',virtue:{courage:8,wisdom:5}},
+    {id:'sanjeevani',title:"Hanuman's Flight for Sanjeevani",emoji:'🌿',
+     narrative:"Indrajit's Brahmastra struck Lakshmana unconscious. Only the Sanjeevani herb from the Himalayas — before sunrise — could revive him. Hanuman flew at the speed of wind. Unable to identify the herb among thousands, he lifted the entire Dronagiri mountain and carried it back. Lakshmana revived. The war could continue.",
+     virtue:{devotion:15,courage:10}},
+   ],
+   quiz:[
+    {q:'Who built the bridge from India to Lanka?',opts:['Hanuman alone','The vanara architects Nala and Neela with the entire army','Rama with divine weapons','The ocean god Varuna'],a:1,fact:'Nala and Neela had been given a boon (by a sage they had once playfully troubled) that anything they threw into water would float. This accidentally useful boon made them the architects of Rama Setu.'},
+    {q:'What herb did Hanuman bring from the Himalayas to revive Lakshmana?',opts:['Brahmi','Tulsi','Sanjeevani','Ashwagandha'],a:2,fact:'Sanjeevani — the life-restoring herb. The real plant Selaginella bryopteris literally comes back to life after drying out. Hanuman brought the entire Dronagiri mountain because he could not identify which herb it was.'},
+    {q:"What is Adam's Bridge / Rama Setu?",opts:['A temple complex in Sri Lanka','A chain of limestone shoals between India and Sri Lanka, possibly ancient','A mountain range','An ancient port'],a:1,fact:'NASA satellite images from 2002 showed a 48km chain of shoals between Pamban Island (India) and Mannar Island (Sri Lanka). The structure has been a subject of major geological and archaeological interest.'},
+   ]},
+];
+const CHARS={
+  rama:{id:'rama',name:'Rama',sk:'राम',title:"Prince of Ayodhya",emoji:'🏹',color:'#1565C0',vBonus:{dharma:2},ability:'Maryada — every moral choice earns double Dharma points',desc:'The ideal man (Maryada Purushottama). Power from absolute adherence to dharma — even when it costs everything.',start:{dharma:15,courage:12,devotion:10,wisdom:10},style:'Strategic · High dharma rewards · Harder choices'},
+  sita:{id:'sita',name:'Sita',sk:'सीता',title:"Princess of Mithila",emoji:'🌸',color:'#AD1457',vBonus:{devotion:2},ability:'Inner Flame — can see through illusions (Maya) that fool others',desc:'Daughter of the earth. Strength from inner clarity — she never loses herself even in the most extreme circumstances.',start:{dharma:12,courage:12,devotion:18,wisdom:15},style:'Perceptive · High wisdom rewards · Alternative story path'},
+  hanuman:{id:'hanuman',name:'Hanuman',sk:'हनुमान',title:"Son of Wind",emoji:'🐒',color:'#E65100',vBonus:{courage:2},ability:'Bhakti Power — devotion scores are doubled; impossible tasks become possible',desc:'The greatest devotee. Power is literally limitless — the only constraint is his humility. He kept forgetting how strong he was.',start:{dharma:12,courage:18,devotion:20,wisdom:10},style:'Action-focused · High courage rewards · Direct paths'},
+  lakshmana:{id:'lakshmana',name:'Lakshmana',sk:'लक्ष्मण',title:"Rama's Shadow",emoji:'⚔️',color:'#2E7D32',vBonus:{devotion:1,courage:1},ability:"Loyalty Shield — protect one ally from wrong-choice consequences (once per Kanda)",desc:'The perfect companion. Gave up kingdom, wife, sleep for 14 years — everything — for his brother.',start:{dharma:13,courage:16,devotion:16,wisdom:12},style:'Protective · Balanced virtues · Defensive strategies'},
+};
+const VALMIKI_RESPS={
+  hanuman:'Hanuman\'s greatest power was not his strength, young seeker — it was that he had forgotten it. Jambavan had to remind him! This teaches us: the greatest gifts often lie dormant inside us, waiting for a teacher or a moment of necessity to awaken them.',
+  ravana:'Ravana was no ordinary villain. He was a great scholar, an accomplished musician, a devoted worshipper of Shiva. He wrote the Shiva Tandava Stotram — still sung today! His tragedy was that extraordinary gifts combined with unchecked desire. Power without wisdom destroys the very one it serves.',
+  sita:'Sita\'s strength is often misunderstood. She had the strength of Hanuman\'s devotion — which means unlimited. When she kept a blade of grass between herself and Ravana, that thin blade held. No weapon, no threat, no time could make her waver. The fire test (Agni Pariksha) at the end was not about proving herself to Rama — it was Sita asserting her own truth before the world.',
+  dharma:'Dharma is not a fixed list of rules, young seeker. It shifts with context — what is dharmic for a student differs from what is dharmic for a king. The Ramayana\'s greatness is that it shows dharma being tested in every scene, and even Rama — the ideal man — faces choices where no answer is perfectly clean. That is the real lesson.',
+  default:'The Ramayana is not a story of the past, young seeker. Every character in it lives inside you: the Rama who tries to be good, the Ravana who lets desire cloud judgment, the Hanuman who forgets his own strength, the Sita who holds her truth steady against all pressure. Which character are you today?',
+};
+/* ─ SOUND ────────────────────────────────────────────────────── */
+let actx=null;
+const gc=()=>{if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}return actx};
+const tn=(f,t,d,v=.08)=>{try{const c=gc();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start();o.stop(c.currentTime+d)}catch{}};
+const sfx={
+  fanfare:()=>{[392,523,659,784].forEach((f,i)=>setTimeout(()=>tn(f,'sine',.4,.12),i*100))},
+  click:()=>tn(350,'triangle',.08,.07),
+  choice:()=>{tn(440,'sine',.2,.08);setTimeout(()=>tn(554,'sine',.18,.06),120)},
+  correct:()=>{[440,660,880].forEach((f,i)=>setTimeout(()=>tn(f,'sine',.3,.09),i*80))},
+  wrong:()=>{tn(200,'sawtooth',.25,.1)},
+  virtue:()=>{[523,659].forEach((f,i)=>setTimeout(()=>tn(f,'sine',.28,.08),i*90))},
+  achieve:()=>{[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tn(f,'sine',.5,.12),i*100))},
+  valmiki:()=>{tn(330,'sine',.18,.06);setTimeout(()=>tn(440,'sine',.15,.05),110)},
+};
+/* ─ VIRTUE DISPLAY ───────────────────────────────────────────── */
+function VirtueBar({label,value,max=100,color}){
+  const pct=Math.min((value/max)*100,100);
+  return(<div className="virtue-row">
+    <div className="virtue-lbl">{label}</div>
+    <div className="virtue-track"><div className="virtue-fill" style={{width:pct+'%',background:color}}/></div>
+    <div className="virtue-val">{value}</div>
+  </div>);
+}
+/* ─ MINI GAMES ───────────────────────────────────────────────── */
+function BowLiftGame({onComplete}){
+  const [power,setPower]=useState(0);const [pulling,setPulling]=useState(false);const [shot,setShot]=useState(false);const [result,setResult]=useState(null);
+  const interval=useRef(null);const targetZone=[55,80];
+  useEffect(()=>{
+    if(pulling&&!shot){interval.current=setInterval(()=>{setPower(p=>{if(p>=100){clearInterval(interval.current);setPulling(false);return 100;}return p+2;});},50);}
+    else clearInterval(interval.current);
+    return()=>clearInterval(interval.current);
+  },[pulling,shot]);
+  const startPull=()=>{if(shot)return;setPulling(true)};
+  const release=()=>{
+    if(!pulling||shot)return;
+    clearInterval(interval.current);setPulling(false);setShot(true);
+    const success=power>=targetZone[0]&&power<=targetZone[1];
+    const partial=!success&&power>=35&&power<=90;
+    setResult(success?'perfect':partial?'good':'fail');
+    if(success||partial)sfx.fanfare();else sfx.wrong();
+    setTimeout(()=>onComplete(success?'masterwork':partial?'success':'partial'),2200);
+  };
+  return(<div className="minigame-body">
+    <div className="bow-scene">
+      <div style={{fontSize:'6rem',animation:pulling?'none':'float 3s ease-in-out infinite',transition:'transform .1s',transform:pulling?`scale(${1+power*0.003})`:''}}>🏹</div>
+      {shot&&result&&<div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.5)',borderRadius:4}}>
+        <div style={{fontFamily:'Lora,serif',fontWeight:700,fontSize:'1.5rem',color:result==='perfect'?'#FFD700':result==='good'?'#90EE90':'#FF6B6B',textShadow:'2px 2px 0 #000'}}>
+          {result==='perfect'?'✨ PERFECT!':result==='good'?'💪 STRONG!':'💨 Too much force!'}
+        </div>
+      </div>}
+    </div>
+    <div style={{textAlign:'center',fontSize:'.75rem',fontWeight:700,color:'var(--ink)',marginBottom:'.4rem'}}>
+      {!shot?'Press and HOLD to pull the bow — release in the golden zone!':''}
+    </div>
+    <div className="power-bar">
+      <div className="power-fill" style={{width:power+'%',background:power<targetZone[0]?'#2196F3':power<=targetZone[1]?'#FFD700':'#F44336'}}/>
+      <div className="power-marker" style={{left:targetZone[0]+'%'}}/>
+      <div className="power-marker" style={{left:targetZone[1]+'%'}}/>
+    </div>
+    <div style={{fontSize:'.62rem',color:'var(--ink-lt)',textAlign:'center',marginTop:'.2rem'}}>Golden zone: {targetZone[0]}%–{targetZone[1]}%</div>
+    {!shot&&<div style={{display:'flex',gap:'.5rem'}}>
+      <button className="btn btn-royal" onMouseDown={startPull} onMouseUp={release} onTouchStart={e=>{e.preventDefault();startPull()}} onTouchEnd={e=>{e.preventDefault();release()}}>
+        {pulling?'🏹 Pulling…':'🏹 Pull the Bow'}
+      </button>
+    </div>}
+  </div>);
+}
+function OceanLeapGame({onComplete}){
+  const [phase,setPhase]=useState(0);const [power,setPower]=useState(0);const [leaped,setLeaped]=useState(false);const [pos,setPos]=useState(0);
+  const PHASES=['Jambavan reminds Hanuman of his power…','Hanuman grows to the size of a mountain…','NOW — Hanuman leaps!'];
+  useEffect(()=>{
+    if(phase<2){const t=setTimeout(()=>setPhase(p=>p+1),1400);return()=>clearTimeout(t);}
+  },[phase]);
+  const startLeap=()=>{
+    if(leaped)return;setLeaped(true);
+    let p=0;const id=setInterval(()=>{p+=3;setPos(p);if(p>=100){clearInterval(id);sfx.fanfare();setTimeout(()=>onComplete('success'),1200);}},30);
+  };
+  return(<div className="minigame-body">
+    <div className="ocean-scene">
+      <div style={{position:'absolute',bottom:60,left:12,fontSize:'3rem',transition:'transform 1.5s ease-in',transform:leaped?`translateX(${pos*2.8}px) translateY(${-Math.sin(pos/100*Math.PI)*80}px) scale(${leaped&&pos<50?1.5:1})`:'scale(1)',animation:!leaped&&phase===1?'pulse 0.5s ease-in-out infinite':'none'}}>🐒</div>
+      <div style={{position:'absolute',bottom:50,right:12,fontSize:'2rem'}}>🏝️</div>
+      <div className="ocean-waves"/>
+      <div style={{position:'absolute',top:10,left:0,right:0,textAlign:'center',fontFamily:'Lora,serif',fontStyle:'italic',fontSize:'.72rem',color:'rgba(255,255,255,.9)',padding:'0 .5rem'}}>{PHASES[Math.min(phase,2)]}</div>
+    </div>
+    {phase>=2&&!leaped&&<button className="btn btn-saffron" onClick={startLeap}>🌊 LEAP!</button>}
+    {leaped&&pos>=100&&<div style={{fontFamily:'Lora,serif',fontWeight:700,color:'var(--forest)',textAlign:'center'}}>✨ Hanuman reaches Lanka!</div>}
+  </div>);
+}
+function BridgeBuildingGame({onComplete}){
+  const GRID=8;const TARGET=[2,3,3,2,3,3,2,3];// column heights needed
+  const [placed,setPlaced]=useState(Array(GRID).fill(0));const [done,setDone]=useState(false);const [wrong,setWrong]=useState(null);
+  const placeStone=(col)=>{
+    if(done||placed[col]>=TARGET[col])return;
+    const np=[...placed];np[col]++;setPlaced(np);sfx.click();
+    if(np[col]===TARGET[col]){const allDone=np.every((v,i)=>v>=TARGET[i]);if(allDone){setDone(true);sfx.fanfare();setTimeout(()=>onComplete('success'),1500);}}
+  };
+  const progress=Math.round(placed.reduce((a,b)=>a+b,0)/TARGET.reduce((a,b)=>a+b,0)*100);
+  return(<div className="minigame-body">
+    <div style={{fontFamily:'Lora,serif',fontStyle:'italic',fontSize:'.78rem',color:'var(--ink)',textAlign:'center',marginBottom:'.5rem'}}>
+      Place stones in each column to build Rama Setu! 🪨
+    </div>
+    <div className="bridge-scene" style={{display:'flex',alignItems:'flex-end',justifyContent:'center',padding:'.5rem',gap:3}}>
+      {Array(GRID).fill(0).map((_,col)=>(
+        <div key={col} style={{display:'flex',flexDirection:'column-reverse',gap:2}}>
+          {Array(TARGET[col]).fill(0).map((_,row)=>(
+            <div key={row} className={`bridge-cell${placed[col]>row?' placed':''}`}
+              onClick={()=>placeStone(col)}
+              style={{background:placed[col]>row?'rgba(150,200,255,.7)':wrong===col?'rgba(220,50,50,.3)':'rgba(255,255,255,.15)',borderColor:'rgba(0,0,0,.4)'}}>
+              {placed[col]>row?'🪨':''}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div style={{width:'100%',maxWidth:200,height:8,background:'rgba(0,0,0,.12)',borderRadius:2,overflow:'hidden'}}>
+      <div style={{height:'100%',background:'var(--saffron)',transition:'width .3s',borderRadius:2,width:progress+'%'}}/>
+    </div>
+    <div style={{fontSize:'.68rem',color:'var(--ink-lt)',textAlign:'center'}}>{progress}% complete — {done?'Bridge complete! Jai Shri Ram!':'tap each column to place stones'}</div>
+  </div>);
+}
+/* ─ SCENE COMPONENTS ─────────────────────────────────────────── */
+function TitleScene({onStart}){
+  const stars=Array.from({length:30},(_,i)=>({left:Math.random()*100+'%',top:Math.random()*100+'%',size:Math.random()*4+2,delay:Math.random()*3+'s'}));
+  return(<div className="title-scene">
+    <div className="title-stars">{stars.map((s,i)=><div key={i} className="title-star" style={{left:s.left,top:s.top,width:s.size,height:s.size,animationDelay:s.delay,animationDuration:(2+Math.random()*2)+'s'}}/>)}</div>
+    <div style={{fontSize:'4rem',marginBottom:'.5rem',animation:'float 4s ease-in-out infinite'}}>🏹</div>
+    <div className="title-logo">Ramayana Quest</div>
+    <div className="title-sub">रामायण यात्रा</div>
+    <div className="title-author">Based on Valmiki Ramayana · 24,000 Shlokas · 300 BCE</div>
+    <div className="title-panel">
+      <div className="title-panel-text">
+        "No poem in any language has been more widely read, more deeply loved, or more carefully preserved than the Ramayana. It has shaped the moral imagination of a billion people across three millennia."
+      </div>
+    </div>
+    <div style={{display:'flex',gap:'.7rem',flexWrap:'wrap',justifyContent:'center'}}>
+      <button className="btn btn-saffron" onClick={onStart} style={{fontSize:'.78rem',padding:'.55rem 1.4rem'}}>🏹 Begin the Quest</button>
+      <a href="guru-charaka.html" className="btn btn-ghost" style={{fontSize:'.72rem',textDecoration:'none',padding:'.5rem 1rem'}}>🌿 Ayurveda Apothecary</a>
+    </div>
+    <div style={{marginTop:'1.2rem',fontSize:'.62rem',color:'rgba(255,255,255,.2)',letterSpacing:'.14em',textTransform:'uppercase'}}>Smart India Hackathon · Cultural Heritage Platform</div>
+  </div>);
+}
+function CharacterSelectScene({onSelect,currentChar}){
+  const [hovered,setHovered]=useState(null);
+  return(<div className="char-scene">
+    <div style={{textAlign:'center',marginBottom:'1rem',paddingTop:'.5rem'}}>
+      <div style={{fontFamily:'Lora,serif',fontSize:'1.2rem',fontWeight:700,color:'var(--ink)',marginBottom:'.2rem'}}>Choose Your Character</div>
+      <div style={{fontFamily:'Tiro Devanagari Sanskrit,serif',fontStyle:'italic',fontSize:'.78rem',color:'var(--gold-dk)'}}>पात्र चुनें — Each has unique abilities and story paths</div>
+    </div>
+    <div className="char-grid">
+      {Object.values(CHARS).map(c=>(
+        <div key={c.id} className={`char-card${currentChar===c.id?' sel':''}`} onClick={()=>{onSelect(c.id);sfx.fanfare()}}
+          onMouseEnter={()=>setHovered(c.id)} onMouseLeave={()=>setHovered(null)}>
+          <span className="char-emoji">{c.emoji}</span>
+          <div className="char-name">{c.name}</div>
+          <div className="char-sk">{c.sk}</div>
+          <div className="char-title">{c.title}</div>
+          <div className="char-ability">⚡ {c.ability}</div>
+          <div className="char-desc">{c.desc}</div>
+          <div className="char-style">{c.style}</div>
+          {currentChar===c.id&&<div style={{textAlign:'center',marginTop:'.4rem',fontSize:'.65rem',fontWeight:700,color:'var(--gold-dk)',letterSpacing:'.1em'}}>✓ SELECTED</div>}
+        </div>
+      ))}
+    </div>
+    {currentChar&&<div style={{textAlign:'center',padding:'1rem 0'}}>
+      <button className="btn btn-royal" style={{fontSize:'.78rem',padding:'.55rem 1.4rem'}} onClick={()=>sfx.fanfare()}>Continue as {CHARS[currentChar]?.name} →</button>
+    </div>}
+  </div>);
+}
+function JourneyMapScene({player,setScene,setActiveKanda,completedKandas}){
+  const char=CHARS[player.char]||CHARS.rama;
+  return(<div className="map-scene">
+    <div className="map-title-bar">
+      <div style={{fontFamily:'Lora,serif',fontWeight:700,color:'#FFD700',fontSize:'.88rem'}}>🗺️ The Journey of {char.name}</div>
+      <div style={{display:'flex',gap:'.4rem',alignItems:'center'}}>
+        <div style={{fontSize:'.6rem',color:'rgba(255,200,100,.6)',letterSpacing:'.1em'}}>AYODHYA → LANKA</div>
+      </div>
+    </div>
+    <div className="map-scroll" style={{paddingLeft:'1rem',paddingRight:'180px'}}>
+      <div style={{display:'flex',alignItems:'center',height:'100%'}}>
+        {KANDAS.map((k,i)=>{
+          const done=completedKandas.includes(k.id);
+          const isFirst=(i===0);const notFirst=(i>0);
+          return(<React.Fragment key={k.id}>
+            {notFirst&&<div className={`kanda-connect${done?'':''}`}/>}
+            <div className="kanda-node" onClick={()=>{if(!k.unlocked&&!done&&i!==0&&!completedKandas.includes(KANDAS[i-1]?.id))return;setActiveKanda(k.id);setScene('kanda');sfx.click();}}>
+              <div className={`kanda-gem${k.unlocked||done?'unlocked':'locked'}${done?' ':k.unlocked?' current':''}`}
+                style={{background:done?`linear-gradient(135deg,${k.color},${k.color}AA)`:k.unlocked?`linear-gradient(135deg,${k.color},${k.color}88)`:`linear-gradient(135deg,#444,#333)`}}>
+                {done?'✓':k.emoji}
+              </div>
+              <div className="kanda-name">{k.name}</div>
+              <div className="kanda-en">{k.en}</div>
+              {done&&<div style={{fontSize:'.55rem',color:'#FFD700',textAlign:'center',marginTop:'.1rem'}}>Complete ★</div>}
+              {!k.unlocked&&!done&&i>0&&<div style={{fontSize:'.55rem',color:'rgba(255,255,255,.4)',textAlign:'center',marginTop:'.1rem'}}>🔒 Locked</div>}
+            </div>
+          </React.Fragment>);
+        })}
+        <div style={{width:20}}/>
+      </div>
+    </div>
+    <div className="virtue-sidebar">
+      <div className="virtue-sidebar-title">⚡ Virtues</div>
+      {[{k:'dharma',l:'Dharma',c:'#FFD700'},{k:'courage',l:'Courage',c:'#FF4444'},{k:'devotion',l:'Devotion',c:'#FF88AA'},{k:'wisdom',l:'Wisdom',c:'#88AAFF'}].map(v=>(
+        <VirtueBar key={v.k} label={v.l} value={player.virtues[v.k]||0} max={100} color={v.c}/>
+      ))}
+      <div style={{marginTop:'.6rem',padding:'.4rem',background:'rgba(255,200,0,.08)',border:'1px solid rgba(255,200,0,.2)',borderRadius:3}}>
+        <div style={{fontSize:'.58rem',color:'rgba(255,200,100,.6)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:'.2rem'}}>Character</div>
+        <div style={{fontFamily:'Lora,serif',fontSize:'.72rem',fontWeight:700,color:'#FFD700'}}>{char.emoji} {char.name}</div>
+        <div style={{fontSize:'.6rem',color:'rgba(255,200,100,.55)',fontStyle:'italic',marginTop:'.1rem'}}>{char.ability}</div>
+      </div>
+      <div style={{marginTop:'.6rem'}}>
+        <div style={{fontSize:'.58rem',color:'rgba(255,200,100,.6)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:'.3rem'}}>Sanskriti</div>
+        <div style={{fontFamily:'Lora,serif',fontSize:'1.3rem',fontWeight:700,color:'#FFD700'}}>{player.sankr||0}</div>
+        <div style={{fontSize:'.56rem',color:'rgba(255,200,100,.4)'}}>cultural points</div>
+      </div>
+      {completedKandas.length>0&&<div style={{marginTop:'.6rem',fontSize:'.6rem',color:'rgba(255,200,100,.5)'}}>{completedKandas.length}/6 Kandas complete</div>}
+    </div>
+  </div>);
+}
+function KandaScene({kandaId,player,setPlayer,onBack,onComplete,completedKandas}){
+  const kanda=KANDAS.find(k=>k.id===kandaId);
+  if(!kanda)return<div style={{padding:'1rem'}}>Kanda not found</div>;
+  const [sceneIdx,setSceneIdx]=useState(0);const [choiceMade,setChoiceMade]=useState(null);
+  const [quizPhase,setQuizPhase]=useState(false);const [quizIdx,setQuizIdx]=useState(0);const [quizDone,setQuizDone]=useState(false);const [quizAns,setQuizAns]=useState({});
+  const [gameResult,setGameResult]=useState(null);const [consequences,setConsequences]=useState(player.consequences||[]);
+  const currentScene=kanda.scenes[sceneIdx];
+  const addVirtues=(gains)=>{
+    const char=CHARS[player.char];const bonus=char?.vBonus||{};
+    const newV={...player.virtues};
+    for(const[k,v] of Object.entries(gains)){newV[k]=(newV[k]||0)+v+(bonus[k]||0);}
+    setPlayer(p=>({...p,virtues:newV}));sfx.virtue();
+  };
+  const makeChoice=(opt)=>{
+    setChoiceMade(opt);addVirtues(opt.virt||{});
+    if(opt.cid)setConsequences(c=>[...c.filter(x=>x!==opt.cid),opt.cid]);
+    setPlayer(p=>({...p,consequences:[...(p.consequences||[]).filter(x=>x!==opt.cid),opt.cid]}));
+    sfx.choice();
+  };
+  const nextScene=()=>{
+    if(sceneIdx<kanda.scenes.length-1){setSceneIdx(i=>i+1);setChoiceMade(null);setGameResult(null);}
+    else{setQuizPhase(true);}
+  };
+  const answerQuiz=(qi,ai)=>{
+    if(quizAns[qi]!==undefined)return;
+    const q=kanda.quiz[qi];const correct=ai===q.a;
+    setQuizAns(a=>({...a,[qi]:{chosen:ai,correct}}));
+    if(correct){sfx.correct();addVirtues({wisdom:3});setPlayer(p=>({...p,sankr:(p.sankr||0)+8}));}
+    else sfx.wrong();
+    if(qi===kanda.quiz.length-1)setTimeout(()=>setQuizDone(true),1800);
+    else setTimeout(()=>setQuizIdx(i=>i+1),1600);
+  };
+  const completeKanda=()=>{
+    sfx.fanfare();
+    setPlayer(p=>({...p,sankr:(p.sankr||0)+25}));
+    onComplete(kandaId);
+  };
+  const GAME_COMPS={'bow_lift':BowLiftGame,'ocean_leap':OceanLeapGame,'bridge_building':BridgeBuildingGame};
+  const handleGameDone=(result)=>{
+    setGameResult(result);
+    const gains=result==='masterwork'?{courage:12,dharma:8}:result==='success'?{courage:8,dharma:5}:{courage:3};
+    addVirtues(gains);
+    if(currentScene.virtue)addVirtues(currentScene.virtue);
+  };
+  if(quizDone)return(
+    <div className="story-scene">
+      <button className="back-btn" onClick={onBack}>← Map</button>
+      <div className="comic-panel" style={{borderColor:kanda.color}}>
+        <div className="comic-panel-header" style={{background:kanda.color}}>✨ {kanda.name} — Complete!</div>
+        <div className="comic-panel-body" style={{textAlign:'center',padding:'1.5rem'}}>
+          <div style={{fontSize:'3rem',marginBottom:'.5rem'}}>🏆</div>
+          <div style={{fontFamily:'Lora,serif',fontSize:'1rem',fontWeight:700,marginBottom:'.4rem'}}>Kanda Complete!</div>
+          <div style={{fontSize:'.78rem',color:'var(--ink-lt)',marginBottom:1+'rem'}}>
+            Quiz score: {Object.values(quizAns).filter(a=>a.correct).length}/{kanda.quiz.length} correct · +25 Sanskriti points
+          </div>
+          <div style={{display:'flex',gap:'.5rem',justifyContent:'center',flexWrap:'wrap',marginBottom:'1rem'}}>
+            {[{l:'Dharma',c:'#C8960C'},{l:'Courage',c:'#E53935'},{l:'Devotion',c:'#E91E63'},{l:'Wisdom',c:'#1565C0'}].map(v=>(
+              <div key={v.l} style={{padding:'.3rem .6rem',borderRadius:3,border:'2px solid var(--outline)',background:v.c,color:'#fff',fontSize:'.65rem',fontWeight:700,boxShadow:'2px 2px 0 var(--ink)'}}>{v.l}: {player.virtues[v.l.toLowerCase()]||0}</div>
+            ))}
+          </div>
+          {consequences.length>0&&<div style={{fontSize:'.72rem',fontStyle:'italic',color:'var(--royal-dk)',marginBottom:'.8rem',fontFamily:'Lora,serif'}}>
+            ⚡ {consequences.length} moral choice{consequences.length!==1?'s':''} will ripple into future Kandas
+          </div>}
+          <button className="btn btn-saffron" onClick={completeKanda}>Continue Journey →</button>
+        </div>
+      </div>
+    </div>
+  );
+  if(quizPhase)return(
+    <div className="story-scene">
+      <button className="back-btn" onClick={onBack}>← Map</button>
+      <div style={{fontFamily:'Lora,serif',fontSize:'.88rem',fontWeight:700,color:'var(--ink)',marginBottom:'.7rem',display:'flex',alignItems:'center',gap:'.4rem'}}>
+        <span style={{background:kanda.color,color:'#fff',padding:'2px 8px',borderRadius:2,border:'2px solid var(--outline)',fontSize:'.72rem'}}>Knowledge Test</span>
+        Question {quizIdx+1} of {kanda.quiz.length}
+      </div>
+      {kanda.quiz.map((q,qi)=>qi===quizIdx?(
+        <div key={qi} className="quiz-panel fi">
+          <div className="quiz-header">📜 {q.q}</div>
+          <div style={{background:'var(--panel-bg)'}}>
+            {q.opts.map((opt,ai)=>{
+              const ans=quizAns[qi];
+              return(<button key={ai} className={`quiz-opt${ans?ans.chosen===ai?ans.correct?' correct':' wrong':ans.chosen!==ai&&ai===q.a?' correct':''':''}`} onClick={()=>answerQuiz(qi,ai)} disabled={!!ans}>
+                <span style={{fontWeight:700,color:'var(--gold-dk)',marginRight:'.35rem'}}>{String.fromCharCode(65+ai)}.</span>{opt}
+              </button>);
+            })}
+          </div>
+          {quizAns[qi]&&<div className="quiz-fact">📖 {q.fact}</div>}
+        </div>
+      ):null)}
+    </div>
+  );
+  return(<div className="story-scene">
+    <button className="back-btn" onClick={onBack}>← Map</button>
+    <div className="story-header">
+      <div className="story-kanda-num">{kanda.num}</div>
+      <div><div className="story-kanda-name">{kanda.name}</div><div className="story-kanda-sk">{kanda.sk} · {kanda.en}</div></div>
+    </div>
+    {/* Historical note */}
+    <div className="hist-note">📍 {kanda.histNote}</div>
+    {/* Active consequences from previous Kandas */}
+    {consequences.length>0&&<div className="consequence-banner">
+      <span className="consequence-ic">⚡</span>
+      <div className="consequence-txt">Your past choices echo forward: {consequences.length} moral decision{consequences.length!==1?'s':''} from previous Kandas shape this story.</div>
+    </div>}
+    {/* Current scene */}
+    {currentScene&&(<>
+      <div className="comic-panel su" style={{borderColor:kanda.color}}>
+        <div className="comic-panel-header" style={{background:kanda.color}}>
+          {currentScene.emoji} {currentScene.title}
+        </div>
+        <div className="comic-panel-art" style={{background:kanda.sky||'linear-gradient(135deg,#87CEEB,#4FC3F7)'}}>
+          <div style={{fontSize:'5rem',animation:'float 3s ease-in-out infinite'}}>{currentScene.emoji}</div>
+        </div>
+        <div className="comic-panel-body">
+          <div className="comic-panel-text">{currentScene.narrative}</div>
+        </div>
+      </div>
+      {/* Mini game */}
+      {currentScene.isGame&&!gameResult&&(
+        <div className="minigame-container">
+          <div className="minigame-header">🎮 Mini-game: {currentScene.title}</div>
+          {React.createElement(GAME_COMPS[currentScene.game],{onComplete:handleGameDone})}
+        </div>
+      )}
+      {gameResult&&<div className="choice-result" style={{borderColor:'var(--forest)'}}>
+        <div className="choice-result-hd" style={{background:'var(--forest)',color:'#fff'}}>
+          ✨ {gameResult==='masterwork'?'Masterwork!':gameResult==='success'?'Success!':'Partial Success'}
+        </div>
+        <div style={{padding:'.6rem .8rem',fontFamily:'Lora,serif',fontStyle:'italic',fontSize:'.8rem',color:'var(--ink)'}}>
+          {gameResult==='masterwork'?'A perfect execution — worthy of legend itself.':gameResult==='success'?'Well done! The task is accomplished.':'Accomplished, though not without some difficulty.'}
+        </div>
+      </div>}
+      {/* Moral choice */}
+      {currentScene.choice&&!choiceMade&&(
+        <div className="moral-box su">
+          <div className="moral-header">⚖️ Moral Choice — Your Decision Shapes the Story</div>
+          <div className="moral-question">{currentScene.choice.q}</div>
+          {currentScene.choice.opts.map((opt,i)=>(
+            <button key={i} className="moral-option" onClick={()=>makeChoice(opt)}>
+              <span className="moral-opt-letter">{String.fromCharCode(65+i)}.</span>{opt.l}
+            </button>
+          ))}
+        </div>
+      )}
+      {choiceMade&&(
+        <div className="choice-result su" style={{borderColor:kanda.color}}>
+          <div className="choice-result-hd" style={{background:kanda.color,color:'#fff'}}>
+            ✓ You chose: "{choiceMade.l}"
+          </div>
+          <div style={{padding:'.6rem .8rem',fontFamily:'Lora,serif',fontStyle:'italic',fontSize:'.82rem',color:'var(--ink)',lineHeight:1.68}}>{choiceMade.out}</div>
+          <div style={{display:'flex',flexWrap:'wrap',padding:'.4rem .8rem',gap:'.3rem',borderTop:'1px dashed rgba(0,0,0,.1)'}}>
+            {Object.entries(choiceMade.virt||{}).map(([k,v])=>(
+              <span key={k} className="virtue-earned" style={{background:k==='dharma'?'#FFF9C4':k==='courage'?'#FDECEA':k==='devotion'?'#FCE4EC':'#E3F2FD',color:k==='dharma'?'#827717':k==='courage'?'#B71C1C':k==='devotion'?'#880E4F':'#0D47A1',border:`1.5px solid ${k==='dharma'?'#F9A825':k==='courage'?'#E53935':k==='devotion'?'#E91E63':'#1565C0'}`}}>
+                +{v+(CHARS[player.char]?.vBonus?.[k]||0)} {k.charAt(0).toUpperCase()+k.slice(1)}
+              </span>
+            ))}
+          </div>
+          {choiceMade.rip&&<div className="ripple-box">⚡ Ripple effect: {choiceMade.rip}</div>}
+        </div>
+      )}
+      {/* Navigation */}
+      {((!currentScene.choice||choiceMade)&&(!currentScene.isGame||gameResult))&&(
+        <div style={{textAlign:'center',marginTop:'.8rem'}}>
+          {sceneIdx<kanda.scenes.length-1?(
+            <button className="btn btn-royal" onClick={nextScene}>Next Scene →</button>
+          ):(
+            <button className="btn btn-saffron" onClick={()=>setQuizPhase(true)}>Knowledge Test →</button>
+          )}
+        </div>
+      )}
+    </>)}
+  </div>);
+}
+/* ─ VALMIKI AI WIDGET ────────────────────────────────────────── */
+function ValmikiWidget({player}){
+  const [open,setOpen]=useState(false);
+  const [msgs,setMsgs]=useState([{r:'g',t:'Namaste! I am Valmiki — the Adi Kavi, the first poet. I wrote the Ramayana 3000 years ago. Ask me anything about the story, its characters, or what it means for your life today.'}]);
+  const [inp,setInp]=useState('');const [load,setLoad]=useState(false);
+  const endRef=useRef();
+  useEffect(()=>endRef.current?.scrollIntoView({behavior:'smooth'}),[msgs,load]);
+  const getResp=(q)=>{
+    const ql=q.toLowerCase();
+    if(ql.includes('hanuman'))return VALMIKI_RESPS.hanuman;
+    if(ql.includes('ravana')||ql.includes('ravan'))return VALMIKI_RESPS.ravana;
+    if(ql.includes('sita'))return VALMIKI_RESPS.sita;
+    if(ql.includes('dharma'))return VALMIKI_RESPS.dharma;
+    return VALMIKI_RESPS.default;
+  };
+  const send=async()=>{
+    if(!inp.trim()||load)return;
+    const q=inp.trim();setInp('');
+    setMsgs(m=>[...m,{r:'u',t:q}]);setLoad(true);sfx.valmiki();
+    await new Promise(r=>setTimeout(r,900+Math.random()*500));
+    let resp;
+    try{const res=await fetch('/api/valmiki',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,character:player.char}),signal:AbortSignal.timeout(16000)});if(res.ok){const d=await res.json();resp=d.text;}}catch{}
+    if(!resp)resp=getResp(q);
+    setMsgs(m=>[...m,{r:'g',t:resp}]);setLoad(false);
+  };
+  return(
+    <div className="valmiki-fab">
+      {open&&(
+        <div className="valmiki-chat">
+          <div className="valmiki-hd">
+            <div className="valmiki-hd-nm"><span>📜</span><span style={{fontFamily:'Lora,serif',fontStyle:'italic'}}>Sage Valmiki</span></div>
+            <button style={{background:'none',border:'none',cursor:'pointer',color:'rgba(255,200,100,.4)',fontSize:'.78rem'}} onClick={()=>setOpen(false)}>✕</button>
+          </div>
+          <div className="valmiki-msgs">
+            {msgs.map((m,i)=><div key={i} className={m.r==='g'?'vm-g':'vm-u'}><div className={m.r==='g'?'vb-g':'vb-u'}>{m.t}</div></div>)}
+            {load&&<div className="v-typing"><div className="v-dot"/><div className="v-dot"/><div className="v-dot"/></div>}
+            <div ref={endRef}/>
+          </div>
+          <div className="valmiki-inp-row">
+            <input className="valmiki-inp" placeholder="Ask Sage Valmiki…" value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()}/>
+            <button className="v-send" onClick={send} disabled={!inp.trim()||load}>→</button>
+          </div>
+        </div>
+      )}
+      <div className="valmiki-btn" style={{animation:open?'none':undefined}} onClick={()=>{setOpen(o=>!o);sfx.click()}}>📜</div>
+    </div>
+  );
+}
+/* ─ ROOT APP ─────────────────────────────────────────────────── */
+function App(){
+  const [scene,setScene]=useState('title');
+  const [activeKanda,setActiveKanda]=useState('bala');
+  const [achToast,setAchToast]=useState(null);
+  const [player,setPlayerRaw]=useState(()=>{
+    try{const r=localStorage.getItem('rq_player_v2');if(r)return JSON.parse(r)}catch{}
+    return{char:null,virtues:{dharma:0,courage:0,devotion:0,wisdom:0},sankr:0,consequences:[],completedKandas:[],ach:[]};
+  });
+  const setPlayer=useCallback(p=>{
+    const np=typeof p==='function'?p(player):p;
+    setPlayerRaw(np);try{localStorage.setItem('rq_player_v2',JSON.stringify(np))}catch{}
+  },[player]);
+  const selectChar=(id)=>{
+    const char=CHARS[id];
+    setPlayer(p=>({...p,char:id,virtues:{...char.start}}));
+  };
+  const handleKandaComplete=(kandaId)=>{
+    // Unlock next kanda
+    const idx=KANDAS.findIndex(k=>k.id===kandaId);
+    if(idx<KANDAS.length-1)KANDAS[idx+1].unlocked=true;
+    setPlayer(p=>({...p,completedKandas:[...new Set([...p.completedKandas,kandaId])]}));
+    setScene('map');sfx.fanfare();
+  };
+  const NAVS=[{id:'map',l:'🗺️ Journey'},{id:'char',l:'👤 Character'},{id:'achievements',l:'🏆 Virtues'}];
+  const totalVirtues=Object.values(player.virtues).reduce((a,b)=>a+b,0);
+  if(scene==='title')return(<>
+    <TitleScene onStart={()=>{setScene('char');sfx.fanfare()}}/>
+    <ValmikiWidget player={player}/>
+  </>);
+  return(<div id="root" style={{display:'flex',flexDirection:'column',height:'100%'}}>
+    <div className="nav">
+      <div className="nav-brand">
+        <span style={{fontSize:'1.2rem'}}>🏹</span>
+        <div><div className="nav-title">Ramayana Quest</div><div className="nav-sk">रामायण यात्रा</div></div>
+      </div>
+      <div className="nav-tabs">
+        {NAVS.map(n=><button key={n.id} className={`nav-tab${scene===n.id?' active':''}`} onClick={()=>{setScene(n.id);sfx.click()}}>{n.l}</button>)}
+        {scene==='kanda'&&<button className="nav-tab active">📖 {KANDAS.find(k=>k.id===activeKanda)?.name||'Story'}</button>}
+      </div>
+      <div className="nav-right">
+        <span className="virtue-pill" style={{color:'#FFD700'}}>⚡ {totalVirtues}</span>
+        <span className="virtue-pill" style={{color:'#FFB84D'}}>🪔 {player.sankr||0}</span>
+        {player.char&&<span className="virtue-pill">{CHARS[player.char]?.emoji} {CHARS[player.char]?.name}</span>}
+      </div>
+    </div>
+    <div className="scene">
+      {scene==='char'&&<CharacterSelectScene onSelect={c=>{selectChar(c);}} currentChar={player.char}/>}
+      {(scene==='map'||(scene==='char'&&player.char))&&scene==='map'&&<JourneyMapScene player={player} setScene={setScene} setActiveKanda={setActiveKanda} completedKandas={player.completedKandas}/>}
+      {scene==='kanda'&&<KandaScene kandaId={activeKanda} player={player} setPlayer={setPlayer} onBack={()=>setScene('map')} onComplete={handleKandaComplete} completedKandas={player.completedKandas}/>}
+      {scene==='achievements'&&(
+        <div style={{height:'100%',overflow:'auto',padding:'1rem',background:'linear-gradient(to bottom,#FFF8E7,#EDD890)'}}>
+          <div style={{fontFamily:'Lora,serif',fontSize:'1rem',fontWeight:700,marginBottom:'.8rem'}}>⚡ Virtue Progress</div>
+          <div style={{maxWidth:400}}>
+            {[{k:'dharma',l:'Dharma ☸️',c:'#C8960C',desc:'Right action and moral duty'},{k:'courage',l:'Courage 🔥',c:'#E53935',desc:'Bravery in the face of fear'},{k:'devotion',l:'Devotion 🌸',c:'#E91E63',desc:'Love and loyalty beyond reason'},{k:'wisdom',l:'Wisdom 💡',c:'#1565C0',desc:'Understanding deeper truth'}].map(v=>(
+              <div key={v.k} style={{marginBottom:'1rem',padding:'.85rem',background:'var(--panel-bg)',border:'2.5px solid var(--outline)',borderRadius:4,boxShadow:'3px 3px 0 var(--ink)'}}>
+                <div style={{fontFamily:'Lora,serif',fontSize:'.88rem',fontWeight:700,marginBottom:'.2rem'}}>{v.l}</div>
+                <div style={{fontSize:'.7rem',color:'var(--ink-lt)',fontStyle:'italic',marginBottom:'.45rem'}}>{v.desc}</div>
+                <div style={{display:'flex',alignItems:'center',gap:'.6rem'}}>
+                  <div style={{flex:1,height:14,background:'rgba(0,0,0,.1)',border:'2px solid var(--outline)',borderRadius:2,overflow:'hidden'}}>
+                    <div style={{height:'100%',background:v.c,transition:'width .8s',width:Math.min((player.virtues[v.k]||0),'100')+'%'}}/>
+                  </div>
+                  <div style={{fontFamily:'Lora,serif',fontWeight:700,fontSize:'.88rem'}}>{player.virtues[v.k]||0}</div>
+                </div>
+              </div>
+            ))}
+            <div style={{padding:'.85rem',background:'var(--royal-dk)',border:'2.5px solid var(--outline)',borderRadius:4,boxShadow:'3px 3px 0 var(--ink)',color:'#FFD700',textAlign:'center'}}>
+              <div style={{fontFamily:'Lora,serif',fontSize:'.78rem',opacity:.7,marginBottom:'.2rem'}}>Sanskriti Score</div>
+              <div style={{fontFamily:'Lora,serif',fontSize:'2rem',fontWeight:700}}>{player.sankr||0}</div>
+              <div style={{fontSize:'.62rem',opacity:.55,letterSpacing:'.1em',textTransform:'uppercase'}}>Cultural Knowledge Points</div>
+            </div>
+            {player.char&&<div style={{marginTop:'1rem',padding:'.85rem',background:'var(--panel-bg)',border:'2.5px solid var(--outline)',borderRadius:4,boxShadow:'3px 3px 0 var(--ink)'}}>
+              <div style={{fontFamily:'Lora,serif',fontWeight:700,fontSize:'.88rem',marginBottom:'.3rem'}}>Playing as {CHARS[player.char]?.emoji} {CHARS[player.char]?.name}</div>
+              <div style={{fontSize:'.72rem',color:'var(--royal-dk)',marginBottom:'.2rem'}}>⚡ {CHARS[player.char]?.ability}</div>
+              <div style={{fontSize:'.7rem',color:'var(--ink-lt)',fontStyle:'italic',lineHeight:1.6}}>{CHARS[player.char]?.desc}</div>
+              <div style={{marginTop:'.5rem',fontSize:'.65rem',fontWeight:700,color:'var(--forest)',fontStyle:'italic'}}>Play Style: {CHARS[player.char]?.style}</div>
+            </div>}
+            {player.completedKandas.length>0&&<div style={{marginTop:'.8rem',padding:'.85rem',background:'var(--panel-bg)',border:'2.5px solid var(--outline)',borderRadius:4,boxShadow:'3px 3px 0 var(--ink)'}}>
+              <div style={{fontFamily:'Lora,serif',fontWeight:700,marginBottom:'.4rem'}}>📖 Kandas Completed</div>
+              {KANDAS.filter(k=>player.completedKandas.includes(k.id)).map(k=>(
+                <div key={k.id} style={{display:'flex',alignItems:'center',gap:'.4rem',padding:'.25rem 0',borderBottom:'1px dashed rgba(0,0,0,.1)'}}>
+                  <span>{k.emoji}</span><span style={{fontFamily:'Lora,serif',fontSize:'.78rem',fontWeight:700}}>{k.name}</span><span style={{marginLeft:'auto',fontSize:'.65rem',color:'var(--forest)',fontWeight:700}}>✓</span>
+                </div>
+              ))}
+            </div>}
+          </div>
+        </div>
+      )}
+    </div>
+    <ValmikiWidget player={player}/>
+    {achToast&&<div className="ach-toast"><span style={{fontSize:'1.2rem'}}>{achToast.icon}</span><div><div className="ach-ti">{achToast.label}</div><div className="ach-sb">{achToast.desc}</div></div></div>}
+    {(scene==='char'&&player.char)&&<div style={{position:'fixed',bottom:0,left:0,right:0,background:'var(--saffron-dk)',border:'none',borderTop:'2px solid var(--outline)',padding:'.5rem 1rem',display:'flex',justifyContent:'center'}}>
+      <button className="btn btn-royal" onClick={()=>{setScene('map');sfx.fanfare()}} style={{fontSize:'.75rem'}}>Begin the Journey as {CHARS[player.char]?.name} →</button>
+    </div>}
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

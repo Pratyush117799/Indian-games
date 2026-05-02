@@ -1,0 +1,444 @@
+
+<style>
+  :root { --gap: 16px; --card-r: 12px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, div { font-family: var(--font-sans, sans-serif); }
+
+  .page { padding: 24px 20px 40px; max-width: 680px; }
+
+  .hero { text-align: center; padding: 28px 20px 20px; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 28px; }
+  .hero-badge { display: inline-block; background: var(--color-background-info); color: var(--color-text-info); font-size: 11px; font-weight: 500; letter-spacing: .04em; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
+  .hero h1 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .hero p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: .07em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 12px; margin-top: 28px; display: flex; align-items: center; gap: 8px; }
+  .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--card-r); padding: 14px 16px; }
+  .card-accent { border-left: 3px solid; border-radius: 0 var(--card-r) var(--card-r) 0; padding-left: 14px; }
+  .card h3 { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
+  .card p { font-size: 12px; color: var(--color-text-secondary); line-height: 1.65; }
+  .card ul { list-style: none; margin-top: 6px; }
+  .card ul li { font-size: 12px; color: var(--color-text-secondary); line-height: 1.65; padding-left: 12px; position: relative; }
+  .card ul li::before { content: '–'; position: absolute; left: 0; color: var(--color-text-tertiary); }
+
+  .icon { width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .icon-amber { background: #FAEEDA; color: #854F0B; }
+  .icon-teal  { background: #E1F5EE; color: #0F6E56; }
+  .icon-purple{ background: #EEEDFE; color: #534AB7; }
+  .icon-blue  { background: #E6F1FB; color: #185FA5; }
+  .icon-coral { background: #FAECE7; color: #993C1D; }
+  .icon-green { background: #EAF3DE; color: #3B6D11; }
+  .icon-pink  { background: #FBEAF0; color: #993556; }
+
+  .accent-amber { border-left-color: #EF9F27; }
+  .accent-teal  { border-left-color: #1D9E75; }
+  .accent-purple{ border-left-color: #7F77DD; }
+  .accent-blue  { border-left-color: #378ADD; }
+  .accent-coral { border-left-color: #D85A30; }
+  .accent-green { border-left-color: #639922; }
+
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+  .tag-amber { background: #FAEEDA; color: #854F0B; }
+  .tag-teal  { background: #E1F5EE; color: #0F6E56; }
+  .tag-purple{ background: #EEEDFE; color: #534AB7; }
+  .tag-blue  { background: #E6F1FB; color: #185FA5; }
+  .tag-coral { background: #FAECE7; color: #993C1D; }
+  .tag-green { background: #EAF3DE; color: #3B6D11; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+  .flow-row { display: flex; align-items: stretch; gap: 0; margin: 8px 0; }
+  .flow-step { flex: 1; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); padding: 10px 12px; font-size: 12px; color: var(--color-text-primary); text-align: center; position: relative; }
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child { border-radius: 0 8px 8px 0; }
+  .flow-step span { display: block; font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .flow-arrow { display: flex; align-items: center; padding: 0 2px; color: var(--color-text-tertiary); font-size: 14px; }
+
+  .board-preview { position: relative; width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; }
+  .cross-arm { position: absolute; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; }
+
+  .anim-demo { height: 52px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; margin-top: 8px; }
+
+  @keyframes pawnBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  @keyframes diceRoll { 0%{transform:rotate(0deg)} 25%{transform:rotate(90deg)} 50%{transform:rotate(180deg)} 75%{transform:rotate(270deg)} 100%{transform:rotate(360deg)} }
+  @keyframes captureFlash { 0%{background:#FAECE7} 50%{background:#D85A30;color:#fff} 100%{background:#FAECE7} }
+  @keyframes glowPulse { 0%,100%{box-shadow:0 0 0 0 #EF9F2700} 50%{box-shadow:0 0 0 6px #EF9F2730} }
+  @keyframes slideIn { from{transform:translateX(-40px);opacity:0} to{transform:translateX(0);opacity:1} }
+  @keyframes fadeUp { from{transform:translateY(8px);opacity:0} to{transform:translateY(0);opacity:1} }
+  @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
+  @keyframes safePulse { 0%,100%{background:#E1F5EE} 50%{background:#1D9E75;color:#fff} }
+  @keyframes homeSpin { to{transform:rotate(360deg)} }
+
+  .pawn-anim { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; animation: pawnBounce 1.2s ease-in-out infinite; }
+  .dice-anim { width: 26px; height: 26px; border-radius: 6px; background: var(--color-background-primary); border: 1.5px solid var(--color-border-secondary); display: flex; align-items: center; justify-content: center; font-size: 14px; animation: diceRoll .8s linear infinite; }
+  .capture-anim { width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; animation: captureFlash 1.5s ease-in-out infinite; }
+  .glow-anim { width: 18px; height: 18px; border-radius: 50%; background: #FAEEDA; display: flex; align-items: center; justify-content: center; font-size: 10px; animation: glowPulse 1.4s ease-in-out infinite; }
+  .safe-anim { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; animation: safePulse 2s ease-in-out infinite; }
+
+  .progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 2px; animation: slideIn 1s ease forwards; }
+
+  .stat-row { display: flex; gap: 10px; margin-top: 10px; }
+  .stat { flex: 1; background: var(--color-background-secondary); border-radius: 8px; padding: 10px; text-align: center; }
+  .stat .val { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+  .stat .lbl { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  .timeline { position: relative; padding-left: 20px; margin-top: 8px; }
+  .timeline::before { content:''; position:absolute; left:6px; top:4px; bottom:4px; width:1px; background: var(--color-border-secondary); }
+  .tl-item { position: relative; margin-bottom: 10px; }
+  .tl-item::before { content:''; position:absolute; left:-17px; top:5px; width:7px; height:7px; border-radius:50%; border:1.5px solid; }
+  .tl-amber::before { border-color:#EF9F27; background:#FAEEDA; }
+  .tl-teal::before  { border-color:#1D9E75; background:#E1F5EE; }
+  .tl-purple::before{ border-color:#7F77DD; background:#EEEDFE; }
+  .tl-blue::before  { border-color:#378ADD; background:#E6F1FB; }
+  .tl-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .tl-desc  { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; line-height: 1.5; }
+
+  @media (max-width: 480px) { .grid2,.grid3 { grid-template-columns: 1fr; } }
+</style>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-badge">Step 1 — Design Blueprint</div>
+    <h1>Pagade Online — Game Design System</h1>
+    <p>Mechanics · UI/UX · Animations · Engagement strategy<br>for children, casual players and ancient game lovers</p>
+  </div>
+
+  <!-- CORE DESIGN PHILOSOPHY -->
+  <div class="section-label">Core design philosophy</div>
+  <div class="grid3">
+    <div class="card card-accent accent-amber">
+      <h3><span class="icon icon-amber">✦</span> Minimal text</h3>
+      <p>Icons, colour and animation replace explanatory text. Rules taught through play, not reading.</p>
+    </div>
+    <div class="card card-accent accent-teal">
+      <h3><span class="icon icon-teal">◎</span> Visual first</h3>
+      <p>Every state change — move, capture, safe, home — is communicated purely through visual feedback.</p>
+    </div>
+    <div class="card card-accent accent-purple">
+      <h3><span class="icon icon-purple">⌬</span> Always responsive</h3>
+      <p>One layout adapts from a 320px phone screen to a 1440px desktop — no pinching or zooming needed.</p>
+    </div>
+  </div>
+
+  <!-- BOARD MECHANICS -->
+  <div class="section-label">Board & game mechanics</div>
+  <div class="grid2">
+
+    <div class="card">
+      <h3><span class="icon icon-amber">⊕</span> Board geometry</h3>
+      <ul>
+        <li>Cross-shaped SVG board — rendered as pure vector, crisp at all screen sizes</li>
+        <li>3 columns × 8 rows per arm, all labelled with subtle grid numbers</li>
+        <li>Centre Home square — visually distinct, animated glow ring</li>
+        <li>Each player arm in their signature colour (Red, Green, Yellow, Blue)</li>
+        <li>Safe squares marked with a lotus icon — no text needed</li>
+        <li>Belly zones shown with a subtle inner glow — "private zone" communicated by feel</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-teal">◈</span> Dice mechanics</h3>
+      <ul>
+        <li>Animated cowrie shell dice — tap/click to roll, 3D flip animation</li>
+        <li>Result shown as large icon number + highlighted valid pawn moves</li>
+        <li>Doublet detection auto-highlights two split-move options</li>
+        <li>Invalid moves gently fade — no error messages, just visual cues</li>
+        <li>Optional: stick dice skin available in settings</li>
+      </ul>
+      <div class="anim-demo">
+        <div class="dice-anim">🐚</div>
+        <div style="margin: 0 12px; font-size: 12px; color: var(--color-text-secondary);">Rolling...</div>
+        <div class="dice-anim" style="animation-delay:.3s">🐚</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-purple">◉</span> Pawn movement</h3>
+      <ul>
+        <li>Tap a pawn to select — it rises with a subtle lift shadow</li>
+        <li>Valid destination squares pulse softly in player colour</li>
+        <li>Pawn slides smoothly along the path — not a teleport jump</li>
+        <li>Pawn-pair (blockade) shown with a stacked double pawn icon</li>
+        <li>Path highlighting traces the full route on hover — children learn routes naturally</li>
+      </ul>
+      <div class="anim-demo" style="gap:10px">
+        <div class="pawn-anim" style="background:#E6F1FB;color:#185FA5">♟</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">→ → →</div>
+        <div class="glow-anim" style="color:#854F0B">♟</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-coral">✕</span> Capture system</h3>
+      <ul>
+        <li>Landing on opponent — screen flash in attacker's colour</li>
+        <li>Captured pawn slides back to start with a trail effect</li>
+        <li>Safe square protection — green shield icon appears on hover</li>
+        <li>Blockade squares glow amber — opponent pawns bounce back visually</li>
+        <li>No popup text — just colour and motion</li>
+      </ul>
+      <div class="anim-demo" style="gap:10px">
+        <div class="capture-anim" style="background:#FAECE7;color:#D85A30">♟</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">Captured!</div>
+        <div class="safe-anim">🛡</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TURN FLOW -->
+  <div class="section-label">Turn flow — zero instructions needed</div>
+  <div class="card">
+    <h3><span class="icon icon-blue">↻</span> One turn, six micro-moments</h3>
+    <div style="display:flex;align-items:center;gap:0;margin-top:10px;flex-wrap:wrap">
+      <div class="flow-step" style="border-radius:8px 0 0 8px">Your turn<span>Glow ring</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">Roll<span>Tap dice</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">Select<span>Tap pawn</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">Move<span>Slide anim</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">Result<span>Flash/sound</span></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step" style="border-radius:0 8px 8px 0">Next<span>Auto-pass</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:12px;color:var(--color-text-secondary)">Each step has a distinct visual state — the screen always tells the player what to do next without a single word of instruction.</p>
+  </div>
+
+  <!-- UI/UX DESIGN -->
+  <div class="section-label">UI / UX design</div>
+  <div class="grid2">
+
+    <div class="card">
+      <h3><span class="icon icon-amber">⊡</span> Screen layout</h3>
+      <ul>
+        <li><strong style="font-weight:500">Centre:</strong> The board — full width on mobile, square on desktop</li>
+        <li><strong style="font-weight:500">Top bar:</strong> Player avatars + score dots only — no score numbers for kids</li>
+        <li><strong style="font-weight:500">Bottom tray:</strong> Dice area + a single action button (context-aware)</li>
+        <li><strong style="font-weight:500">Corners:</strong> Mini player colour indicators — always visible</li>
+        <li>No sidebar, no panel, no menu during gameplay</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-teal">◫</span> Player identity</h3>
+      <ul>
+        <li>Each player = one colour + one animal avatar (Lion, Elephant, Peacock, Tiger)</li>
+        <li>Avatar appears on each pawn — no text name needed</li>
+        <li>Active player's corner glows and pulses — instant clarity</li>
+        <li>Colour-blind mode: shape icons supplement colour cues</li>
+        <li>Children mode: extra-large pawns, slower animations</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-purple">⬡</span> Onboarding — learn by doing</h3>
+      <div class="timeline">
+        <div class="tl-item tl-amber">
+          <div class="tl-title">First open — animated demo board</div>
+          <div class="tl-desc">A ghost pawn travels the full route in 8 seconds — no words</div>
+        </div>
+        <div class="tl-item tl-teal">
+          <div class="tl-title">First roll — guided highlight</div>
+          <div class="tl-desc">Only valid pawns pulse; one tap to move</div>
+        </div>
+        <div class="tl-item tl-purple">
+          <div class="tl-title">First capture — brief colour flash</div>
+          <div class="tl-desc">Screen celebrates the capture — player understands instantly</div>
+        </div>
+        <div class="tl-item tl-blue">
+          <div class="tl-title">First home entry — grand celebration</div>
+          <div class="tl-desc">Confetti rain + lotus bloom animation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-blue">⊕</span> Accessibility & comfort</h3>
+      <ul>
+        <li>Large tap targets — minimum 48×48px on mobile</li>
+        <li>Auto-zoom board to active pawn on small screens</li>
+        <li>One-handed play friendly — dice tap anywhere on bottom half</li>
+        <li>Undo last move (within 5 sec) — prevents accidental misclicks</li>
+        <li>Pause / resume game state saved locally</li>
+        <li>Font size scales with system preference</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- VISUAL THEME -->
+  <div class="section-label">Visual theme & art direction</div>
+  <div class="grid2">
+    <div class="card card-accent accent-amber">
+      <h3><span class="icon icon-amber">◈</span> Colour palette</h3>
+      <div class="pill-row">
+        <span class="tag tag-amber">Saffron #EF9F27</span>
+        <span class="tag tag-teal">Forest #1D9E75</span>
+        <span class="tag tag-purple">Indigo #7F77DD</span>
+        <span class="tag tag-coral" style="background:#FAECE7;color:#993C1D">Sindoor #D85A30</span>
+        <span class="tag" style="background:#F1EFE8;color:#5F5E5A">Sandstone</span>
+        <span class="tag tag-green">Neem #639922</span>
+      </div>
+      <p style="margin-top:8px">Drawn from Karnataka's textile and temple art — Kasuti embroidery, Bidriware, Mysore silk. Every colour references a real cultural source.</p>
+    </div>
+    <div class="card card-accent accent-teal">
+      <h3><span class="icon icon-teal">⌘</span> Art style</h3>
+      <ul>
+        <li>Board texture: stylised Kasuti embroidery pattern as subtle SVG overlay</li>
+        <li>Pawns: silhouette shapes inspired by Mysore Dasara procession figures</li>
+        <li>Safe squares: Lotus (🪷) — universally understood symbol of safety</li>
+        <li>Home centre: Yantra geometry pattern, glows gold when a pawn enters</li>
+        <li>Background: warm sandstone — feels like a palace floor</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ANIMATIONS LIBRARY -->
+  <div class="section-label">Animation & effects library</div>
+  <div class="grid3">
+
+    <div class="card">
+      <h3><span class="icon icon-amber">◎</span> Dice roll</h3>
+      <p>3D CSS transform — cowrie shell flips on Y-axis, lands with a subtle bounce. Duration: 600ms ease-out.</p>
+      <div class="anim-demo"><div class="dice-anim">🐚</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-teal">↑</span> Pawn select</h3>
+      <p>Selected pawn scales up 1.2× and lifts — CSS transform translateY(-6px). Valid moves pulse in player colour.</p>
+      <div class="anim-demo"><div class="pawn-anim" style="background:#E1F5EE;color:#0F6E56;font-size:14px">♟</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-purple">→</span> Pawn slide</h3>
+      <p>SVG path animation — pawn follows the exact board path. Not a straight line. 400ms per square.</p>
+      <div class="anim-demo">
+        <div style="width:100%;display:flex;align-items:center;padding:0 12px">
+          <div id="slide-pawn" style="width:16px;height:16px;border-radius:50%;background:#EEEDFE;color:#534AB7;display:flex;align-items:center;justify-content:center;font-size:9px;animation:slideIn 1.5s ease infinite">♟</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-coral">✕</span> Capture flash</h3>
+      <p>Screen border flashes in attacker colour for 300ms. Captured pawn plays a reverse-slide back to belly.</p>
+      <div class="anim-demo" style="gap:8px">
+        <div class="capture-anim" style="color:#D85A30">♟</div>
+        <span style="font-size:11px;color:var(--color-text-tertiary)">→ back home</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-green">◉</span> Safe square</h3>
+      <p>Lotus icon pulses green when occupied. Opponent pawn approach triggers gentle repel bounce effect.</p>
+      <div class="anim-demo"><div class="safe-anim">🪷</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-blue">★</span> Win celebration</h3>
+      <p>All 4 home pawns trigger: confetti burst, lotus bloom from centre, gold yantra spin for 2 seconds.</p>
+      <div class="anim-demo">
+        <div style="font-size:20px;animation:homeSpin 2s linear infinite">✦</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-left:8px">Lotus bloom</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ENGAGEMENT & RETENTION -->
+  <div class="section-label">Engagement & revisit mechanics</div>
+  <div class="grid2">
+
+    <div class="card">
+      <h3><span class="icon icon-amber">◈</span> Daily draw hook</h3>
+      <ul>
+        <li>"Daily Cowrie" — free daily dice roll gift on homepage</li>
+        <li>Streak counter shown as small flame — no text, just fire icon + number</li>
+        <li>7-day streak unlocks an exclusive board skin (Hampi stone)</li>
+        <li>Monthly tournament calendar visible on landing page</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-teal">◫</span> Community features</h3>
+      <ul>
+        <li>Quick emoji reactions during live game — no chat needed</li>
+        <li>Share board state as image — one tap to Instagram/WhatsApp</li>
+        <li>Public replay viewer — watch recorded games</li>
+        <li>Regional leaderboards: Karnataka · Goa · Maharashtra · Tamil Nadu</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-purple">⊕</span> Progression system</h3>
+      <ul>
+        <li>Pawn skins unlocked by wins (Kasuti embroidery, Bidriware, Mysore silk)</li>
+        <li>Board themes: Temple Stone · Royal Silk · Night Festival</li>
+        <li>No pay-to-win — cosmetic only</li>
+        <li>Achievement badges drawn from Karnataka craft motifs</li>
+      </ul>
+      <div class="stat-row">
+        <div class="stat"><div class="val" style="color:#EF9F27">12</div><div class="lbl">Wins</div></div>
+        <div class="stat"><div class="val" style="color:#1D9E75">3</div><div class="lbl">Skins</div></div>
+        <div class="stat"><div class="val" style="color:#7F77DD">🔥5</div><div class="lbl">Streak</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon icon-blue">⌬</span> Game modes</h3>
+      <ul>
+        <li><strong style="font-weight:500">Quick (2P):</strong> 2 pawns each — 10 min — for newcomers</li>
+        <li><strong style="font-weight:500">Classic (4P):</strong> Full 4 pawns — authentic experience</li>
+        <li><strong style="font-weight:500">Solo vs AI:</strong> 3 difficulty levels — Beginner / Prince / Maharaja</li>
+        <li><strong style="font-weight:500">Pass & Play:</strong> same device, for families</li>
+        <li><strong style="font-weight:500">Tournament:</strong> Bracket-based, seasonal</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- SOUND DESIGN -->
+  <div class="section-label">Sound design (minimal, optional)</div>
+  <div class="card">
+    <h3><span class="icon icon-amber">♪</span> Audio palette — 6 sounds total</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">🐚 Cowrie clatter — roll</div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">🥁 Tabla tap — pawn move</div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">🔔 Bell — safe square</div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">💥 Dhol beat — capture</div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">🎺 Nadaswaram — win</div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--color-text-secondary)">🌿 Ambient — Carnatic drone</div>
+    </div>
+    <p style="margin-top:8px;font-size:12px;color:var(--color-text-secondary)">All sounds muted by default. Single toggle (🔇/🔊) in top corner. No music autoplay on page load.</p>
+  </div>
+
+  <!-- TECH APPROACH -->
+  <div class="section-label">Technical approach</div>
+  <div class="grid3">
+    <div class="card card-accent accent-purple">
+      <h3><span class="icon icon-purple">◈</span> Board rendering</h3>
+      <p>Pure SVG board — vector, scalable, no canvas needed. CSS animations for all pawn movement.</p>
+    </div>
+    <div class="card card-accent accent-teal">
+      <h3><span class="icon icon-teal">⊕</span> Multiplayer</h3>
+      <p>WebSocket real-time sync. Game state stored server-side — reconnect and resume anywhere.</p>
+    </div>
+    <div class="card card-accent accent-blue">
+      <h3><span class="icon icon-blue">◎</span> Offline / PWA</h3>
+      <p>Installable as a PWA. Solo vs AI mode works offline. Syncs game state on reconnect.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px;padding-top:20px;border-top:0.5px solid var(--color-border-tertiary)">
+    <p style="font-size:12px;color:var(--color-text-tertiary)">Step 1 complete · Ready for Step 2 — Website Hub Design</p>
+    <button onclick="sendPrompt('Great! Now let us move to Step 2 — design the Pagade website hub')" style="margin-top:10px;padding:8px 20px;font-size:13px;cursor:pointer;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:8px;color:var(--color-text-primary)">Proceed to Step 2 ↗</button>
+  </div>
+
+</div>

@@ -1,0 +1,11 @@
+# 1. Copy env files
+cp backend/.env.example backend/.env
+cp frontend/.env.local.example frontend/.env.local
+
+# 2. Start everything (Docker)
+docker-compose up
+
+# 3. Or without Docker
+psql -U postgres -f database/schema.sql
+cd backend && npm install && npm run dev
+cd frontend && npm install && npm run dev

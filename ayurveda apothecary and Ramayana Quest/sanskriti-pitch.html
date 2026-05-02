@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sanskriti — India's Cultural Learning Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,600&family=Hind:wght@300;400;500;600;700&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+/* ═══ SANSKRITI DESIGN TOKENS ═══════════════════════════════════ */
+:root{
+  --night:    #06070F;
+  --night2:   #0D0F1A;
+  --night3:   #141626;
+  --saffron:  #FF9933;
+  --saff-lt:  #FFB84D;
+  --saff-glow:rgba(255,153,51,.22);
+  --royal:    #1A3A8F;
+  --royal-lt: #2F5FC4;
+  --sage:     #2D6A4F;
+  --sage-lt:  #52B788;
+  --gold:     #C8960C;
+  --gold-lt:  #E8B020;
+  --gold-glow:rgba(200,150,12,.2);
+  --cream:    #FFF8E7;
+  --parch:    #F5EDD6;
+  --ink:      #1C1208;
+  --txt:      rgba(255,248,231,.88);
+  --txt-dim:  rgba(255,248,231,.45);
+  --shadow:   rgba(6,7,15,.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--night);
+  color:var(--txt);
+  font-family:'Hind',system-ui,sans-serif;
+  overflow-x:hidden;
+}
+/* ═══ GRAIN ═══════════════════════════════════════════════════ */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:200;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;opacity:.7;
+}
+/* ═══ NAV ═════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.8rem;
+  background:rgba(6,7,15,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,153,51,.1);
+  transition:box-shadow .3s;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:.65rem;
+}
+.nav-logo-mark{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:900;color:var(--night);
+  box-shadow:0 0 16px var(--saff-glow);
+}
+.nav-name{
+  font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;
+  color:var(--gold-lt);letter-spacing:.04em;
+}
+.nav-name span{
+  display:block;font-family:'Tiro Devanagari Sanskrit',serif;
+  font-style:italic;font-size:.6rem;color:rgba(200,150,12,.5);
+  font-weight:400;letter-spacing:.04em;margin-top:-2px;
+}
+.nav-links{display:flex;align-items:center;gap:1.2rem}
+.nav-link{
+  font-size:.62rem;font-weight:600;letter-spacing:.1em;
+  color:var(--txt-dim);text-decoration:none;
+  text-transform:uppercase;transition:color .2s;
+}
+.nav-link:hover{color:var(--txt)}
+.nav-cta{
+  font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  padding:.38rem .9rem;border-radius:5px;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  color:var(--night);border:none;cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-block;
+  text-transform:uppercase;
+  box-shadow:0 2px 12px var(--saff-glow);
+}
+.nav-cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+/* ═══ SECTIONS ════════════════════════════════════════════════ */
+.section{padding:5.5rem 1.5rem;max-width:1080px;margin:0 auto}
+.section-sm{padding:3.5rem 1.5rem;max-width:1080px;margin:0 auto}
+.section-label{
+  font-size:.58rem;font-weight:700;letter-spacing:.28em;
+  color:var(--saffron);text-transform:uppercase;
+  margin-bottom:.7rem;display:block;
+  opacity:.8;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,4.5vw,3rem);
+  font-weight:900;letter-spacing:-.01em;
+  color:var(--cream);line-height:1.1;margin-bottom:.7rem;
+}
+.section-body{
+  font-size:1rem;font-weight:300;color:var(--txt-dim);
+  line-height:1.8;max-width:540px;
+}
+.divider{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,153,51,.15),transparent);
+  margin:0;
+}
+/* ═══ HERO ════════════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:6rem 1.5rem 3rem;text-align:center;position:relative;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,rgba(26,58,143,.18) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 20% 80%,rgba(255,153,51,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 20%,rgba(200,150,12,.06) 0%,transparent 60%);
+}
+/* Spinning mandala bg */
+.mandala-bg{
+  position:absolute;top:50%;left:50%;
+  width:min(700px,110vw);height:min(700px,110vw);
+  transform:translate(-50%,-50%);
+  opacity:.035;pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:.62rem;font-weight:700;letter-spacing:.28em;
+  color:var(--saffron);text-transform:uppercase;
+  margin-bottom:1.2rem;opacity:.8;
+  animation:fadeIn .6s ease .2s both;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,10vw,7.5rem);
+  font-weight:900;letter-spacing:-.02em;
+  line-height:.95;
+  background:linear-gradient(160deg,var(--cream) 0%,var(--gold-lt) 40%,var(--saffron) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 60px rgba(200,150,12,.2));
+  animation:fadeIn .7s ease .35s both;
+}
+.hero-title-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:clamp(1rem,2.5vw,1.5rem);
+  color:rgba(200,150,12,.6);margin-top:.4rem;
+  letter-spacing:.04em;
+  animation:fadeIn .7s ease .5s both;
+}
+.hero-body{
+  font-size:clamp(.9rem,1.8vw,1.1rem);font-weight:300;
+  color:var(--txt-dim);line-height:1.8;
+  max-width:520px;margin:1.4rem auto;
+  animation:fadeIn .7s ease .65s both;
+}
+.hero-ctas{
+  display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;
+  animation:fadeIn .7s ease .8s both;
+}
+.cta-primary{
+  font-family:'Hind',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.14em;padding:.75rem 1.8rem;border-radius:6px;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  color:var(--night);border:none;cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-block;
+  text-transform:uppercase;
+  box-shadow:0 4px 24px var(--saff-glow),0 0 0 0 var(--saff-glow);
+}
+.cta-primary:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 32px var(--saff-glow)}
+.cta-secondary{
+  font-family:'Hind',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.12em;padding:.75rem 1.6rem;border-radius:6px;
+  background:transparent;color:var(--txt-dim);
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-block;
+  text-transform:uppercase;
+}
+.cta-secondary:hover{border-color:rgba(255,255,255,.25);color:var(--txt);transform:translateY(-2px)}
+.hero-stats{
+  display:flex;gap:2.5rem;justify-content:center;
+  margin-top:3rem;padding-top:2rem;
+  border-top:1px solid rgba(255,153,51,.1);
+  animation:fadeIn .7s ease 1s both;
+  flex-wrap:wrap;
+}
+.hero-stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;
+  background:linear-gradient(135deg,var(--cream),var(--gold-lt));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-stat-l{
+  font-size:.56rem;font-weight:700;letter-spacing:.15em;
+  color:var(--txt-dim);text-transform:uppercase;margin-top:.18rem;
+}
+/* ═══ GAME CARDS ══════════════════════════════════════════════ */
+.games-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;
+  margin-top:2.8rem;
+}
+@media(max-width:680px){.games-grid{grid-template-columns:1fr}}
+.game-card{
+  background:var(--night2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:1.8rem 1.6rem;
+  position:relative;overflow:hidden;
+  transition:transform .3s cubic-bezier(.22,1,.36,1),
+             border-color .25s,box-shadow .3s;
+  cursor:pointer;text-decoration:none;display:block;
+  color:inherit;
+}
+.game-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.12)}
+.game-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:14px 14px 0 0;
+}
+.game-card.ayurveda::before{background:linear-gradient(90deg,var(--sage),var(--sage-lt),var(--gold))}
+.game-card.ramayana::before{background:linear-gradient(90deg,var(--saffron),var(--royal-lt),var(--gold-lt))}
+.game-card.krida::before{background:linear-gradient(90deg,var(--gold),var(--gold-lt))}
+.game-card-num{
+  font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;
+  position:absolute;top:.8rem;right:1.2rem;
+  opacity:.05;line-height:1;
+}
+.game-card-icon{font-size:2rem;margin-bottom:.7rem;display:block}
+.game-card-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;font-weight:700;
+  color:var(--cream);margin-bottom:.18rem;
+}
+.game-card-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.72rem;color:var(--gold-lt);opacity:.7;
+  margin-bottom:.7rem;
+}
+.game-card-desc{font-size:.84rem;color:var(--txt-dim);line-height:1.7;margin-bottom:1.1rem}
+.game-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.game-tag{
+  font-size:.55rem;font-weight:700;letter-spacing:.08em;
+  padding:2px 8px;border-radius:100px;text-transform:uppercase;
+}
+.game-tag-sage  {background:rgba(45,106,79,.2);color:var(--sage-lt);border:1px solid rgba(82,183,136,.25)}
+.game-tag-saff  {background:rgba(255,153,51,.15);color:var(--saff-lt);border:1px solid rgba(255,153,51,.25)}
+.game-tag-royal {background:rgba(26,58,143,.2);color:#90CAF9;border:1px solid rgba(47,95,196,.25)}
+.game-tag-gold  {background:rgba(200,150,12,.15);color:var(--gold-lt);border:1px solid rgba(200,150,12,.25)}
+.game-play-btn{
+  font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  padding:.42rem 1rem;border-radius:5px;border:none;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  text-transform:uppercase;transition:all .18s;
+}
+.game-play-btn.sage  {background:rgba(45,106,79,.2);color:var(--sage-lt);border:1px solid rgba(82,183,136,.3)}
+.game-play-btn.sage:hover{background:rgba(45,106,79,.35)}
+.game-play-btn.saff  {background:rgba(255,153,51,.15);color:var(--saff-lt);border:1px solid rgba(255,153,51,.3)}
+.game-play-btn.saff:hover{background:rgba(255,153,51,.28)}
+.game-play-btn.gold  {background:rgba(200,150,12,.15);color:var(--gold-lt);border:1px solid rgba(200,150,12,.3)}
+.game-play-btn.gold:hover{background:rgba(200,150,12,.28)}
+/* ═══ SANSKRITI SCORE SECTION ═════════════════════════════════ */
+.score-section{
+  background:var(--night2);
+  border-top:1px solid rgba(255,153,51,.08);
+  border-bottom:1px solid rgba(255,153,51,.08);
+  padding:4rem 1.5rem;
+}
+.score-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+@media(max-width:680px){.score-inner{grid-template-columns:1fr}}
+.score-big{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(5rem,12vw,9rem);font-weight:900;
+  line-height:.9;
+  background:linear-gradient(135deg,var(--cream),var(--gold-lt),var(--saffron));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 40px rgba(200,150,12,.3));
+}
+.score-meter{
+  display:flex;flex-direction:column;gap:.8rem;margin-top:1.5rem;
+}
+.score-level{
+  display:flex;align-items:center;gap:.8rem;
+}
+.score-level-icon{font-size:1rem;width:28px;text-align:center;flex-shrink:0}
+.score-level-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.score-level-fill{height:100%;border-radius:4px;transition:width 1.5s cubic-bezier(.22,1,.36,1)}
+.score-level-label{font-size:.6rem;font-weight:600;letter-spacing:.08em;width:80px;text-align:right;color:var(--txt-dim);text-transform:uppercase;flex-shrink:0}
+/* ═══ STANDOUT FEATURES ═══════════════════════════════════════ */
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;
+  margin-top:2.8rem;
+}
+@media(max-width:720px){.features-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.features-grid{grid-template-columns:1fr}}
+.feat-card{
+  background:var(--night2);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:1.2rem 1.1rem;
+  transition:border-color .2s,transform .2s;
+}
+.feat-card:hover{border-color:rgba(255,153,51,.2);transform:translateY(-2px)}
+.feat-icon{font-size:1.5rem;margin-bottom:.55rem;display:block}
+.feat-title{font-size:.82rem;font-weight:700;color:var(--cream);margin-bottom:.28rem}
+.feat-body{font-size:.76rem;color:var(--txt-dim);line-height:1.68}
+.feat-badge{
+  display:inline-block;font-size:.52rem;font-weight:700;letter-spacing:.1em;
+  padding:2px 7px;border-radius:100px;text-transform:uppercase;
+  background:rgba(255,153,51,.12);color:var(--saff-lt);border:1px solid rgba(255,153,51,.2);
+  margin-bottom:.35rem;
+}
+/* ═══ TECH STACK ══════════════════════════════════════════════ */
+.tech-row{
+  display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.8rem;
+}
+.tech-chip{
+  font-size:.64rem;font-weight:600;padding:.32rem .75rem;
+  border-radius:5px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--txt-dim);
+}
+/* ═══ MARKET SECTION ══════════════════════════════════════════ */
+.market-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;
+  margin-top:2rem;
+}
+@media(max-width:640px){.market-grid{grid-template-columns:1fr 1fr}}
+.market-card{
+  background:var(--night2);border:1px solid rgba(255,255,255,.06);
+  border-radius:9px;padding:1.1rem;text-align:center;
+}
+.market-n{
+  font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;
+  color:var(--gold-lt);line-height:1;margin-bottom:.2rem;
+}
+.market-l{font-size:.62rem;color:var(--txt-dim);line-height:1.55}
+/* ═══ TEAM / PITCH ════════════════════════════════════════════ */
+.pitch-box{
+  background:linear-gradient(135deg,rgba(26,58,143,.12),rgba(255,153,51,.08));
+  border:1px solid rgba(255,153,51,.18);
+  border-radius:14px;padding:2rem 2.2rem;
+  margin-top:2rem;
+}
+.pitch-tag{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.58rem;font-weight:700;letter-spacing:.12em;
+  padding:4px 12px;border-radius:100px;text-transform:uppercase;
+  background:rgba(255,153,51,.12);color:var(--saff-lt);border:1px solid rgba(255,153,51,.22);
+  margin-bottom:.9rem;
+}
+.pitch-title{
+  font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;
+  color:var(--cream);margin-bottom:.5rem;line-height:1.25;
+}
+.pitch-body{font-size:.88rem;color:var(--txt-dim);line-height:1.8;max-width:620px}
+/* ═══ FOOTER ══════════════════════════════════════════════════ */
+footer{
+  background:var(--night2);
+  border-top:1px solid rgba(255,153,51,.08);
+  padding:2.5rem 1.5rem 1.5rem;
+  text-align:center;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;
+  color:var(--gold-lt);margin-bottom:.25rem;
+}
+.footer-sk{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.75rem;color:rgba(200,150,12,.4);margin-bottom:1.5rem;
+}
+.footer-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.footer-link{
+  font-size:.58rem;font-weight:600;letter-spacing:.1em;
+  color:var(--txt-dim);text-decoration:none;transition:color .18s;text-transform:uppercase;
+}
+.footer-link:hover{color:var(--txt)}
+.footer-copy{font-size:.68rem;color:var(--txt-dim);opacity:.4;line-height:1.9}
+/* ═══ ANIMATIONS ══════════════════════════════════════════════ */
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes rotateSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes floatUp{
+  0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}
+}
+@keyframes shimmerBar{
+  0%{background-position:-200% center}100%{background-position:200% center}
+}
+.reveal{
+  opacity:0;transform:translateY(22px);
+  transition:opacity .65s ease,transform .65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.vis{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.4s}
+/* ═══ LIVE COUNTER ANIMATION ══════════════════════════════════ */
+.counter-shimmer{
+  background:linear-gradient(90deg,var(--cream) 0%,var(--gold-lt) 50%,var(--cream) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmerBar 2.5s linear infinite;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">
+    <div class="nav-logo-mark">स</div>
+    <div class="nav-name">
+      Sanskriti
+      <span>संस्कृति · Cultural Learning Platform</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#games">Games</a>
+    <a class="nav-link" href="#score">Score</a>
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#market">Market</a>
+    <a class="nav-link" href="#pitch">Pitch</a>
+  </div>
+  <a class="nav-cta" href="ayurveda-apothecary.html">Try Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- Mandala SVG background -->
+  <svg class="mandala-bg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <g style="transform-origin:250px 250px;animation:rotateSlow 120s linear infinite">
+      <circle cx="250" cy="250" r="230" fill="none" stroke="#FF9933" stroke-width=".5" stroke-dasharray="10 8"/>
+    </g>
+    <g style="transform-origin:250px 250px;animation:rotateSlow 80s linear infinite reverse">
+      <circle cx="250" cy="250" r="180" fill="none" stroke="#C8960C" stroke-width=".4" stroke-dasharray="6 10"/>
+    </g>
+    <rect x="130" y="130" width="240" height="240" rx="4" fill="none" stroke="#FF9933" stroke-width=".6"/>
+    <rect x="130" y="130" width="240" height="240" rx="4" transform="rotate(45,250,250)" fill="none" stroke="#C8960C" stroke-width=".4"/>
+    <rect x="165" y="165" width="170" height="170" rx="3" fill="none" stroke="#FF9933" stroke-width=".5"/>
+    <rect x="165" y="165" width="170" height="170" rx="3" transform="rotate(45,250,250)" fill="none" stroke="#C8960C" stroke-width=".3"/>
+    <circle cx="250" cy="250" r="8" fill="#C8960C" opacity=".8"/>
+    <circle cx="250" cy="215" r="4" fill="#FF9933" opacity=".6"/>
+    <circle cx="250" cy="285" r="4" fill="#FF9933" opacity=".6"/>
+    <circle cx="215" cy="250" r="4" fill="#FF9933" opacity=".6"/>
+    <circle cx="285" cy="250" r="4" fill="#FF9933" opacity=".6"/>
+    <line x1="250" y1="20" x2="250" y2="480" stroke="#FF9933" stroke-width=".3" opacity=".5"/>
+    <line x1="20" y1="250" x2="480" y2="250" stroke="#FF9933" stroke-width=".3" opacity=".5"/>
+  </svg>
+
+  <div style="position:relative;z-index:1;width:100%">
+    <div class="hero-eyebrow">Smart India Hackathon 2025 · Cultural Heritage Technology</div>
+    <h1 class="hero-title">Sanskriti</h1>
+    <div class="hero-title-sub">संस्कृति · India's Answer to Duolingo for Cultural Heritage</div>
+    <p class="hero-body">
+      Two ancient games. Three thousand years of stories. One measurable cultural knowledge score.
+      The platform that turns India's greatest heritage into the most engaging games children have ever played.
+    </p>
+    <div class="hero-ctas">
+      <a class="cta-primary" href="ayurveda-apothecary.html">🌿 Play Ayurveda Apothecary</a>
+      <a class="cta-secondary" href="ramayana-quest.html">🏹 Play Ramayana Quest</a>
+      <a class="cta-secondary" href="parent-dashboard.html">📊 Parent Dashboard</a>
+    </div>
+    <div class="hero-stats">
+      <div class="text-center">
+        <div class="hero-stat-n" id="c1">0</div>
+        <div class="hero-stat-l">Herbs in Database</div>
+      </div>
+      <div class="text-center">
+        <div class="hero-stat-n" id="c2">0</div>
+        <div class="hero-stat-l">Ayurvedic Recipes</div>
+      </div>
+      <div class="text-center">
+        <div class="hero-stat-n" id="c3">0</div>
+        <div class="hero-stat-l">Ramayana Shlokas</div>
+      </div>
+      <div class="text-center">
+        <div class="hero-stat-n" id="c4">0</div>
+        <div class="hero-stat-l">Years of Knowledge</div>
+      </div>
+      <div class="text-center">
+        <div class="hero-stat-n" id="c5">0</div>
+        <div class="hero-stat-l">Languages Supported</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GAMES -->
+<section class="section" id="games">
+  <span class="section-label reveal">The Games</span>
+  <h2 class="section-title reveal">Two worlds.<br/>One platform.</h2>
+  <p class="section-body reveal">Each game is built on real classical texts — the Charaka Samhita and the Valmiki Ramayana — and designed so that every minute of play is a minute of genuine learning.</p>
+
+  <div class="games-grid">
+    <!-- Ayurveda Apothecary -->
+    <a class="game-card ayurveda reveal reveal-d1" href="ayurveda-apothecary.html">
+      <div class="game-card-num">I</div>
+      <span class="game-card-icon">🌿</span>
+      <div class="game-card-title">Ayurveda Apothecary</div>
+      <div class="game-card-sub">आयुर्वेद औषधालय · The Healing Art</div>
+      <p class="game-card-desc">
+        You are an apprentice Vaidya under Guru Charaka. Diagnose patients by their dosha imbalance,
+        harvest herbs from a living seasonal garden, grind them in your mortar and pestle,
+        and heal 30 illustrated patients — each with a moral dilemma.
+      </p>
+      <div class="game-tags">
+        <span class="game-tag game-tag-sage">100 Herbs</span>
+        <span class="game-tag game-tag-gold">60 Recipes</span>
+        <span class="game-tag game-tag-sage">30 Patients</span>
+        <span class="game-tag game-tag-sage">AI Guru</span>
+        <span class="game-tag game-tag-gold">Seasonal Garden</span>
+        <span class="game-tag game-tag-sage">5 Languages</span>
+      </div>
+      <a class="game-play-btn sage" href="ayurveda-apothecary.html">Play Now →</a>
+    </a>
+
+    <!-- Ramayana Quest -->
+    <a class="game-card ramayana reveal reveal-d2" href="ramayana-quest.html">
+      <div class="game-card-num">II</div>
+      <span class="game-card-icon">🏹</span>
+      <div class="game-card-title">Ramayana Quest</div>
+      <div class="game-card-sub">रामायण यात्रा · The Living Epic</div>
+      <p class="game-card-desc">
+        Not a retelling — a moral consequence engine. Every choice you make in Kanda I
+        ripples into Kanda VI. Play as Rama, Sita, Hanuman, or Lakshmana. Each character
+        has unique abilities that change the entire story arc.
+      </p>
+      <div class="game-tags">
+        <span class="game-tag game-tag-saff">7 Kandas</span>
+        <span class="game-tag game-tag-royal">4 Characters</span>
+        <span class="game-tag game-tag-saff">Moral Engine</span>
+        <span class="game-tag game-tag-royal">AI Valmiki</span>
+        <span class="game-tag game-tag-saff">Knowledge Quiz</span>
+        <span class="game-tag game-tag-gold">Mini-games</span>
+      </div>
+      <a class="game-play-btn saff" href="ramayana-quest.html">Play Now →</a>
+    </a>
+
+    <!-- Krida -->
+    <a class="game-card krida reveal reveal-d3" href="index.html">
+      <div class="game-card-num">III</div>
+      <span class="game-card-icon">♟️</span>
+      <div class="game-card-title">Krida</div>
+      <div class="game-card-sub">क्रीडा · Ancient Indian Games</div>
+      <p class="game-card-desc">
+        Navakankari and Pallankuzhi — two games carved into temple floors and played at harvest
+        festivals for two thousand years. Online multiplayer, minimax AI at three difficulty levels,
+        authentic sound design. Boards found at Angkor Wat and Mehragarh Fort.
+      </p>
+      <div class="game-tags">
+        <span class="game-tag game-tag-gold">Navakankari</span>
+        <span class="game-tag game-tag-gold">Pallankuzhi</span>
+        <span class="game-tag game-tag-gold">Live Multiplayer</span>
+        <span class="game-tag game-tag-gold">3 AI Levels</span>
+      </div>
+      <a class="game-play-btn gold" href="index.html">Play Now →</a>
+    </a>
+
+    <!-- Guru Charaka -->
+    <a class="game-card reveal reveal-d4" style="border-color:rgba(255,153,51,.15);background:linear-gradient(135deg,rgba(45,106,79,.08),rgba(200,150,12,.06))" href="guru-charaka.html">
+      <div class="game-card-num">✦</div>
+      <span class="game-card-icon">🧙</span>
+      <div class="game-card-title">AI Guru Charaka</div>
+      <div class="game-card-sub">Sarvam AI + Claude · Charaka Samhita Corpus</div>
+      <p class="game-card-desc">
+        Ask the ancient father of Ayurvedic medicine anything — in Hindi, Tamil, Telugu, Kannada,
+        or English. Trained on all 8 Sthanas of the Charaka Samhita. Answers in character,
+        cites classical shlokas, and personalises to your Dosha constitution.
+      </p>
+      <div class="game-tags">
+        <span class="game-tag game-tag-gold">Sarvam AI</span>
+        <span class="game-tag game-tag-sage">Claude</span>
+        <span class="game-tag game-tag-gold">8 Sthanas</span>
+        <span class="game-tag game-tag-sage">Voice Output</span>
+        <span class="game-tag game-tag-gold">5 Languages</span>
+      </div>
+      <a class="game-play-btn gold" href="guru-charaka.html">Ask Charaka →</a>
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SANSKRITI SCORE -->
+<section class="score-section" id="score">
+  <div class="score-inner">
+    <div class="reveal">
+      <span class="section-label">The Innovation</span>
+      <h2 class="section-title" style="font-size:clamp(1.5rem,4vw,2.4rem)">One score.<br/>All of India's<br/>cultural wisdom.</h2>
+      <p class="section-body" style="margin-top:.8rem">
+        The Sanskriti Score is a single number (0–1000) that represents how much Indian
+        cultural knowledge a child has absorbed across all three games. Parents see it.
+        Teachers see it. Schools can track it.
+      </p>
+      <p class="section-body" style="margin-top:.6rem">
+        It is the feature that gets Sanskriti adopted at school level — a measurable
+        cultural education outcome that no other platform offers.
+      </p>
+      <div style="margin-top:1.4rem;display:flex;gap:.6rem;flex-wrap:wrap">
+        <a class="cta-primary" href="parent-dashboard.html" style="font-size:.68rem;padding:.6rem 1.4rem">📊 View Parent Dashboard</a>
+      </div>
+    </div>
+    <div class="reveal reveal-d2">
+      <div class="score-big counter-shimmer" id="live-score">247</div>
+      <div style="font-size:.62rem;font-weight:600;letter-spacing:.14em;color:var(--txt-dim);text-transform:uppercase;margin-top:.2rem;margin-bottom:1.2rem">Current Demo Score</div>
+      <div class="score-meter">
+        <div class="score-level">
+          <span class="score-level-icon">🌿</span>
+          <div class="score-level-bar"><div class="score-level-fill" style="width:100%;background:var(--sage-lt)"></div></div>
+          <span class="score-level-label">Herbs (16/16)</span>
+        </div>
+        <div class="score-level">
+          <span class="score-level-icon">🙏</span>
+          <div class="score-level-bar"><div class="score-level-fill" style="width:62%;background:var(--gold-lt)"></div></div>
+          <span class="score-level-label">Patients (5/8)</span>
+        </div>
+        <div class="score-level">
+          <span class="score-level-icon">🏹</span>
+          <div class="score-level-bar"><div class="score-level-fill" style="width:33%;background:var(--saffron)"></div></div>
+          <span class="score-level-label">Kandas (2/6)</span>
+        </div>
+        <div class="score-level">
+          <span class="score-level-icon">🧙</span>
+          <div class="score-level-bar"><div class="score-level-fill" style="width:40%;background:#90CAF9"></div></div>
+          <span class="score-level-label">Guru Q (8/20)</span>
+        </div>
+        <div class="score-level">
+          <span class="score-level-icon">♟️</span>
+          <div class="score-level-bar"><div class="score-level-fill" style="width:55%;background:var(--gold)"></div></div>
+          <span class="score-level-label">Krida XP (220/400)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STANDOUT FEATURES -->
+<section class="section" id="features">
+  <span class="section-label reveal">Why We Win</span>
+  <h2 class="section-title reveal">Seven features<br/>no competitor has.</h2>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <span class="feat-badge">🌟 Unique</span>
+      <span class="feat-icon">🌱</span>
+      <div class="feat-title">Seasonal Living Garden</div>
+      <div class="feat-body">Reads the device's real date. In June (monsoon), tulsi grows 2×. In December (winter), ashwagandha flourishes. No other educational game does this.</div>
+    </div>
+    <div class="feat-card reveal reveal-d1">
+      <span class="feat-badge">🏆 Hackathon Winner</span>
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">Moral Consequence Engine</div>
+      <div class="feat-body">Choices in Ramayana Kanda I ripple into Kanda VI. Spare Vibhishana → he reveals Ravana's weakness. The epic becomes YOUR story.</div>
+    </div>
+    <div class="feat-card reveal reveal-d2">
+      <span class="feat-badge">🤖 AI-Powered</span>
+      <span class="feat-icon">🧙</span>
+      <div class="feat-title">AI Guru Charaka</div>
+      <div class="feat-body">Sarvam AI (Indian language model) primary. Claude fallback. Trained on all 8 Sthanas of the Charaka Samhita. Answers in character in 5 languages.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-badge">📱 Physical + Digital</span>
+      <span class="feat-icon">🖨️</span>
+      <div class="feat-title">Phygital Herb Cards</div>
+      <div class="feat-body">Print A5 herb cards with QR codes. Scan in real life to unlock the herb in your digital compendium. Zero manufacturing cost. Viral recruitment.</div>
+    </div>
+    <div class="feat-card reveal reveal-d1">
+      <span class="feat-badge">🗣️ Voice</span>
+      <span class="feat-icon">🎙️</span>
+      <div class="feat-title">Voice Narration in 5 Languages</div>
+      <div class="feat-body">Guru Charaka narrates herb facts in Hindi, Tamil, Telugu, Kannada, and English via Web Speech API. Exposing children to other Indian languages naturally.</div>
+    </div>
+    <div class="feat-card reveal reveal-d2">
+      <span class="feat-badge">📊 Schools</span>
+      <span class="feat-icon">👨‍👩‍👧</span>
+      <div class="feat-title">Parent + Teacher Dashboard</div>
+      <div class="feat-body">Every herb studied, patient healed, Kanda completed, and moral choice made feeds a weekly parent report. The institutional adoption hook.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECH STACK -->
+<section class="section-sm">
+  <span class="section-label reveal">Technology</span>
+  <h2 class="section-title reveal" style="font-size:clamp(1.4rem,3.5vw,2rem)">Built on real Indian knowledge systems.<br/>Delivered on modern technology.</h2>
+  <div class="tech-row reveal">
+    <span class="tech-chip">React 18 + Vite</span>
+    <span class="tech-chip">Node.js + Express</span>
+    <span class="tech-chip">PostgreSQL</span>
+    <span class="tech-chip">Socket.io (live multiplayer)</span>
+    <span class="tech-chip">Sarvam AI (sarvam-m)</span>
+    <span class="tech-chip">Claude (Anthropic)</span>
+    <span class="tech-chip">Web Speech API</span>
+    <span class="tech-chip">MediaDevices API (camera)</span>
+    <span class="tech-chip">PWA (offline play)</span>
+    <span class="tech-chip">Redux Toolkit</span>
+    <span class="tech-chip">Charaka Samhita corpus</span>
+    <span class="tech-chip">Valmiki Ramayana corpus</span>
+  </div>
+  <div style="margin-top:1.6rem;padding:1.2rem 1.5rem;background:var(--night2);border:1px solid rgba(255,255,255,.06);border-radius:10px;max-width:640px" class="reveal">
+    <div style="font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--saffron);text-transform:uppercase;margin-bottom:.55rem">Knowledge Sources</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem">
+      <div style="font-size:.76rem;color:var(--txt-dim)">📜 Charaka Samhita (all 8 Sthanas)</div>
+      <div style="font-size:.76rem;color:var(--txt-dim)">📖 Valmiki Ramayana (24,000 shlokas)</div>
+      <div style="font-size:.76rem;color:var(--txt-dim)">🌿 Bhavaprakasha Nighantu (herbs)</div>
+      <div style="font-size:.76rem;color:var(--txt-dim)">🔬 CCRAS research papers (modern)</div>
+      <div style="font-size:.76rem;color:var(--txt-dim)">🏛️ Sushruta Samhita (surgical)</div>
+      <div style="font-size:.76rem;color:var(--txt-dim)">⚗️ Ashtanga Hridayam (Vagbhata)</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MARKET -->
+<section class="section" id="market">
+  <span class="section-label reveal">Market Opportunity</span>
+  <h2 class="section-title reveal">The numbers<br/>demand action.</h2>
+  <p class="section-body reveal">India's toy market imports 80% of its products. NEP 2020 mandates Indian Knowledge Systems in curriculum. 32 million NRIs actively seek cultural education for their children. The gap is enormous.</p>
+
+  <div class="market-grid">
+    <div class="market-card reveal">
+      <div class="market-n">₹15,000Cr</div>
+      <div class="market-l">Indian toy market size, growing 15% annually</div>
+    </div>
+    <div class="market-card reveal reveal-d1">
+      <div class="market-n">80%</div>
+      <div class="market-l">Toys imported — massive opportunity for indigenous products</div>
+    </div>
+    <div class="market-card reveal reveal-d2">
+      <div class="market-n">32M</div>
+      <div class="market-l">NRIs globally actively seeking cultural education for children</div>
+    </div>
+    <div class="market-card reveal reveal-d3">
+      <div class="market-n">NEP 2020</div>
+      <div class="market-l">Mandates Indian Knowledge Systems in school curriculum — we are the tool</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PITCH -->
+<section class="section-sm" id="pitch">
+  <span class="section-label reveal">The Pitch</span>
+  <div class="pitch-box reveal">
+    <div class="pitch-tag">🏆 Smart India Hackathon</div>
+    <div class="pitch-title">
+      "India's answer to Duolingo for cultural heritage —<br/>
+      five thousand years of knowledge, gamified."
+    </div>
+    <div class="pitch-body">
+      Sanskriti is a platform, not just a game. Every child who plays Ayurveda Apothecary
+      learns the Charaka Samhita's herb science. Every child who plays Ramayana Quest
+      engages with the Valmiki Ramayana's moral philosophy. Both feed the Sanskriti Score —
+      a measurable cultural knowledge index visible to parents and teachers.
+      <br/><br/>
+      We are not competing with gaming companies. We are competing with cultural amnesia.
+      And we are winning.
+    </div>
+    <div style="margin-top:1.2rem;display:flex;gap:.6rem;flex-wrap:wrap">
+      <a class="cta-primary" href="ayurveda-apothecary.html" style="font-size:.68rem;padding:.62rem 1.4rem">🌿 Demo: Ayurveda</a>
+      <a class="cta-primary" href="ramayana-quest.html" style="font-size:.68rem;padding:.62rem 1.4rem;background:linear-gradient(135deg,var(--saffron),var(--royal-lt))">🏹 Demo: Ramayana</a>
+      <a class="cta-secondary" href="guru-charaka.html" style="font-size:.68rem;padding:.62rem 1.2rem">🧙 AI Guru</a>
+      <a class="cta-secondary" href="parent-dashboard.html" style="font-size:.68rem;padding:.62rem 1.2rem">📊 Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Sanskriti</div>
+  <div class="footer-sk">संस्कृति · India's Cultural Learning Platform</div>
+  <div class="footer-links">
+    <a class="footer-link" href="ayurveda-apothecary.html">Ayurveda Apothecary</a>
+    <a class="footer-link" href="ramayana-quest.html">Ramayana Quest</a>
+    <a class="footer-link" href="index.html">Krida</a>
+    <a class="footer-link" href="guru-charaka.html">AI Guru Charaka</a>
+    <a class="footer-link" href="herb-cards.html">Herb Cards</a>
+    <a class="footer-link" href="parent-dashboard.html">Parent Dashboard</a>
+  </div>
+  <div class="footer-copy">
+    Built for Smart India Hackathon · Based on Charaka Samhita (300 BCE) and Valmiki Ramayana<br/>
+    Powered by Sarvam AI (Indian languages) + Anthropic Claude<br/>
+    Navakankari boards documented at Angkor Wat, Mehragarh Fort, and the ghats of Varanasi<br/><br/>
+    "Preserve what deserves to be remembered. Play what deserves to be lived."
+  </div>
+</footer>
+
+<script>
+/* ── SCROLL REVEAL ── */
+const revEls=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+revEls.forEach(el=>obs.observe(el));
+
+/* ── NAV SHADOW ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.boxShadow=
+    window.scrollY>60?'0 2px 24px rgba(0,0,0,.6)':'none';
+},{passive:true});
+
+/* ── STAT COUNTERS ── */
+const TARGETS={c1:100,c2:60,c3:24000,c4:5000,c5:5};
+let counted=false;
+const countObs=new IntersectionObserver(es=>{
+  if(counted)return;
+  if(es[0].isIntersecting){
+    counted=true;
+    Object.entries(TARGETS).forEach(([id,target])=>{
+      const el=document.getElementById(id);if(!el)return;
+      const start=performance.now();const dur=2000;
+      const tick=now=>{
+        const p=Math.min((now-start)/dur,1);
+        const ease=1-Math.pow(1-p,3);
+        const val=Math.round(ease*target);
+        el.textContent=val>=1000?val.toLocaleString()+(target>=1000&&target<10000?'':target>=10000?'+':'')+'' :val+(target===5?'':target===60?'':'+');
+        if(p<1)requestAnimationFrame(tick);
+        else el.textContent=target>=1000?target.toLocaleString()+'+':target+'';
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+},{threshold:.3});
+const statsEl=document.querySelector('.hero-stats');
+if(statsEl)countObs.observe(statsEl);
+
+/* ── LIVE SCORE PULSE ── */
+const scoreEl=document.getElementById('live-score');
+if(scoreEl){
+  // Pull from localStorage if available (Ayurveda player data)
+  try{
+    const p=JSON.parse(localStorage.getItem('aa_player_v3')||localStorage.getItem('aa_player_v2')||'{}');
+    const r=JSON.parse(localStorage.getItem('rq_player_v2')||'{}');
+    const k=JSON.parse(localStorage.getItem('krida_player')||'{}');
+    const total=(p.sankr||0)+(r.sankr||0)+(k.xp?Math.floor(k.xp/10):0);
+    if(total>0)scoreEl.textContent=total.toLocaleString();
+  }catch{}
+}
+
+/* ── MANDALA STARS ── */
+/* Already in SVG above — pure CSS animation */
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() 
+{
+/*
+001 Print numbers 1 to N using a loop BEG
+002 Check if a number is Even or Odd BEG
+003 Find the largest among three numbers using if-else 
+004 Print the multiplication table of N BEG
+005 Calculate factorial of N using a loop
+*/
+
+// 1 
+int n;
+scanf("%d", &n);
+printf("Value of n is: %d", n);
+printf("\n");
+for(int i=1;i<=n;i++){
+  printf("%d", i);
+  printf("\n");
+}
+
+
+
+//002
+  int a;
+  scanf("%d", &a);
+  printf("The value of a is %d", a);
+  printf("\n");
+  if(a%2 == 0){
+    printf("The number is even");
+  }
+  else{
+    printf("The number is odd");
+  }
+  
+//003
+ int x,y,z;
+ scanf(" %d %d %d", &x,&y,&z);
+ printf("\n \n");
+ printf("The value of x is %d \n The value of y is %d \n The value of z is %d", x,y,z);
+  printf("\n \n");
+ if(x>y && x>z){
+   printf(" x is greatest");
+ }
+ if(y>x && y>z){
+   printf("y is greatest");
+ }
+ else{
+   printf("z is greatest");
+ }
+ printf("\n \n");
+ 
+ //004
+ int p;
+ scanf("%d", &p);
+ printf("Now we print the multiplication table of %d \n", p);
+ for(int i = 1;i<=10;i++){
+   printf(" %d x %d = %d", p,i,p*i);
+   printf("\n");
+ }
+ 
+ //005 
+ int q;
+ int fact = 1;
+ scanf("%d", &q);
+  printf("\n Now we calculate the factorial of %d using while loop \n", q);
+  if(q == 1 || q == 0){
+    printf(" The factorial of %d is 1 \n",q);
+    int fact = 1;
+  }
+while(q!= 1){
+  fact = fact*q;
+  q = q-1;
+  
+}
+printf("%d", fact);
+
+/* In calculating factorial, we initialise an integer variable to be 1- for storing factorial value of a number
+Then, we multiply factorial value with the value of the integer whose factorial is to be calculated
+Then decrement the value of the number whose factorial to be found by 1 until it equals 1 and then we exit the loop and return the value of factorial
+    return 0;
+}

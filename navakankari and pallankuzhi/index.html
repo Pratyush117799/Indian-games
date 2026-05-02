@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Krida — Ancient Indian Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root{
+  --bg:        #07080B;
+  --bg2:       #0D0E12;
+  --bg3:       #131520;
+  --stone:     #0F1018;
+  --stone-b:   #1C1E28;
+  --stone-h:   #252838;
+
+  --gold:      #C4831A;
+  --gold-lt:   #E8A840;
+  --gold-dim:  #7A5010;
+  --gold-glow: rgba(196,131,26,.22);
+
+  --terra:     #C4521A;
+  --terra-lt:  #E8744A;
+  --terra-dim: #7A3210;
+  --terra-glow:rgba(196,82,26,.22);
+
+  --cream:     #F0D8A8;
+  --cream-dim: #B09870;
+  --cream-mute:#604830;
+
+  --txt:       #D8C8A0;
+  --txt-dim:   #8A7858;
+  --txt-mute:  #3A3020;
+
+  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:'Hind',system-ui,sans-serif;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ══ GRAIN OVERLAY ══ */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:200;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E");
+  opacity:.8;mix-blend-mode:overlay;
+}
+
+/* ══════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.8rem 2rem;
+  background:rgba(7,8,11,.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,131,26,.08);
+  transition:all .3s;
+}
+.nav-logo{
+  font-family:'Cinzel',serif;font-size:1rem;font-weight:900;
+  letter-spacing:.22em;color:var(--gold);
+  text-shadow:0 0 24px var(--gold-glow);
+  text-decoration:none;
+}
+.nav-logo span{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-style:italic;font-size:.72rem;
+  color:var(--cream-mute);letter-spacing:.04em;
+  display:block;margin-top:1px;
+}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-link{
+  font-family:'Cinzel',serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.14em;color:var(--txt-dim);
+  text-decoration:none;transition:color .2s;
+}
+.nav-link:hover{color:var(--cream)}
+.nav-tag{
+  font-family:'Cinzel',serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.1em;padding:4px 12px;border-radius:100px;
+  border:1px solid var(--gold-dim);
+  background:rgba(196,131,26,.08);color:var(--gold);
+  transition:all .2s;
+}
+.nav-tag:hover{background:rgba(196,131,26,.15);border-color:var(--gold)}
+@media(max-width:600px){.nav-links{gap:.8rem}.nav-link{display:none}}
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;padding:7rem 1.5rem 4rem;
+  overflow:hidden;
+  text-align:center;
+}
+
+/* Radial glow behind hero content */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 42%,rgba(196,131,26,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 100% 40% at 50% 100%,rgba(7,8,11,.95) 0%,transparent 60%);
+}
+
+/* Kolam SVG canvas */
+.kolam-wrap{
+  position:absolute;inset:0;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  opacity:.18;
+}
+.kolam-svg{width:min(700px,110vw);height:min(700px,110vw)}
+
+.hero-eyebrow{
+  font-family:'Cinzel',serif;font-size:clamp(.52rem,.9vw,.7rem);
+  font-weight:700;letter-spacing:.35em;
+  color:var(--gold-dim);margin-bottom:1.4rem;
+  opacity:0;animation:slideUp .7s ease .3s both;
+}
+.hero-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(2.8rem,9vw,7rem);
+  font-weight:900;letter-spacing:.08em;
+  line-height:.95;
+  background:linear-gradient(170deg,var(--cream) 0%,var(--gold-lt) 45%,var(--terra-lt) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 60px rgba(196,131,26,.2));
+  opacity:0;animation:slideUp .8s ease .5s both;
+}
+.hero-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-style:italic;
+  font-size:clamp(.85rem,2.2vw,1.25rem);
+  color:var(--cream-dim);letter-spacing:.04em;
+  line-height:1.7;margin-top:1.2rem;
+  max-width:540px;
+  opacity:0;animation:slideUp .8s ease .75s both;
+}
+.hero-scripts{
+  display:flex;gap:1.4rem;align-items:center;justify-content:center;
+  margin-top:1rem;flex-wrap:wrap;
+  opacity:0;animation:slideUp .7s ease .9s both;
+}
+.hero-script{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:clamp(.9rem,2vw,1.1rem);
+  color:var(--cream-mute);letter-spacing:.08em;
+}
+.hero-script-sep{color:var(--txt-mute);font-size:.8rem}
+
+.hero-ctas{
+  display:flex;gap:.75rem;margin-top:2.8rem;flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:slideUp .7s ease 1.05s both;
+}
+.cta-primary{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:900;
+  letter-spacing:.18em;padding:.85rem 2.2rem;border-radius:var(--r-sm);
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  color:#05040A;border:none;cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-block;
+  box-shadow:0 0 0 0 var(--gold-glow);
+}
+.cta-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 30px rgba(196,131,26,.35),0 0 0 3px rgba(196,131,26,.12);
+}
+.cta-secondary{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;padding:.85rem 2rem;border-radius:var(--r-sm);
+  background:transparent;color:var(--txt-dim);
+  border:1px solid var(--stone-b);cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-block;
+}
+.cta-secondary:hover{border-color:var(--stone-h);color:var(--txt);transform:translateY(-2px)}
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  opacity:0;animation:fadeIn .6s ease 1.5s both;
+}
+.scroll-hint span{
+  font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.2em;color:var(--txt-mute);
+}
+.scroll-line{
+  width:1px;height:32px;background:linear-gradient(to bottom,var(--gold-dim),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════
+   SECTION WRAPPER
+══════════════════════════════════════════ */
+.section{
+  max-width:1100px;margin:0 auto;
+  padding:6rem 1.5rem;
+}
+.section-label{
+  font-family:'Cinzel',serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.3em;color:var(--gold-dim);
+  margin-bottom:1rem;display:block;
+}
+.section-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.5rem,4vw,2.6rem);
+  font-weight:900;letter-spacing:.08em;color:var(--cream);
+  line-height:1.15;margin-bottom:.8rem;
+}
+.section-body{
+  font-size:1rem;font-weight:300;color:var(--txt-dim);
+  line-height:1.8;max-width:560px;
+}
+
+/* Horizontal rule */
+.hrul{
+  width:100%;max-width:1100px;margin:0 auto;
+  height:1px;background:linear-gradient(90deg,transparent,var(--stone-b),transparent);
+}
+
+/* ══════════════════════════════════════════
+   GAME CARDS
+══════════════════════════════════════════ */
+.games-section{
+  max-width:1100px;margin:0 auto;
+  padding:6rem 1.5rem;
+}
+.games-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.4rem;margin-top:3rem;
+}
+@media(max-width:700px){.games-grid{grid-template-columns:1fr}}
+
+.game-card{
+  position:relative;
+  background:var(--stone);
+  border:1px solid var(--stone-b);
+  border-radius:var(--r-xl);
+  padding:2.4rem 2rem;
+  text-decoration:none;display:block;
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.22,1,.36,1),
+             box-shadow .35s ease,border-color .3s;
+  cursor:pointer;
+  transform-style:preserve-3d;
+}
+.game-card::before{
+  content:'';position:absolute;inset:0;border-radius:var(--r-xl);
+  opacity:0;transition:opacity .35s;pointer-events:none;
+}
+.game-card.nava::before{
+  background:radial-gradient(ellipse 60% 60% at 25% 30%,rgba(196,131,26,.1),transparent 70%);
+}
+.game-card.palla::before{
+  background:radial-gradient(ellipse 60% 60% at 25% 30%,rgba(196,82,26,.1),transparent 70%);
+}
+.game-card:hover{transform:translateY(-6px) rotateX(1.5deg);border-color:var(--stone-h)}
+.game-card.nava:hover{box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(196,131,26,.15),inset 0 1px 0 rgba(196,131,26,.08)}
+.game-card.palla:hover{box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(196,82,26,.15),inset 0 1px 0 rgba(196,82,26,.08)}
+.game-card:hover::before{opacity:1}
+
+/* Stone slab texture on cards */
+.game-card::after{
+  content:'';position:absolute;inset:0;border-radius:var(--r-xl);pointer-events:none;
+  background:
+    repeating-linear-gradient(94deg,transparent,transparent 80px,rgba(255,255,255,.008) 80px,rgba(255,255,255,.008) 81px),
+    repeating-linear-gradient(3deg,transparent,transparent 60px,rgba(255,255,255,.005) 60px,rgba(255,255,255,.005) 61px);
+}
+
+.gc-num{
+  font-family:'Cinzel',serif;font-size:3.5rem;font-weight:900;
+  line-height:1;margin-bottom:1.2rem;
+  opacity:.06;position:absolute;top:1.5rem;right:2rem;
+  letter-spacing:-.02em;
+}
+.gc-num.nava{color:var(--gold)}
+.gc-num.palla{color:var(--terra)}
+
+.gc-icon{font-size:2rem;margin-bottom:.9rem;display:block}
+
+.gc-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.1rem,3vw,1.55rem);
+  font-weight:900;letter-spacing:.12em;margin-bottom:.25rem;
+}
+.gc-title.nava{color:var(--gold)}
+.gc-title.palla{color:var(--terra-lt)}
+
+.gc-native{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.82rem;color:var(--txt-mute);
+  letter-spacing:.03em;margin-bottom:1rem;display:block;
+}
+.gc-desc{
+  font-size:.88rem;font-weight:300;color:var(--txt-dim);
+  line-height:1.75;margin-bottom:1.5rem;
+}
+.gc-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.6rem}
+.gc-tag{
+  font-family:'Cinzel',serif;font-size:.5rem;font-weight:700;
+  letter-spacing:.1em;padding:3px 9px;border-radius:100px;
+  background:var(--bg3);color:var(--txt-mute);
+  border:1px solid var(--stone-b);
+}
+
+.gc-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--stone-b);padding-top:1.2rem;margin-top:auto;
+}
+.gc-stat{text-align:center}
+.gc-stat-n{
+  font-family:'Cinzel',serif;font-size:1rem;font-weight:700;display:block;
+}
+.gc-stat-n.nava{color:var(--gold)}
+.gc-stat-n.palla{color:var(--terra-lt)}
+.gc-stat-l{font-size:.55rem;color:var(--txt-mute);letter-spacing:.1em}
+
+.gc-play{
+  font-family:'Cinzel',serif;font-size:.6rem;font-weight:900;
+  letter-spacing:.14em;padding:.5rem 1.2rem;border-radius:var(--r-sm);
+  border:none;cursor:pointer;transition:all .2s;
+}
+.gc-play.nava{
+  background:rgba(196,131,26,.12);color:var(--gold);
+  border:1px solid var(--gold-dim);
+}
+.gc-play.nava:hover{background:rgba(196,131,26,.22);transform:scale(1.04)}
+.gc-play.palla{
+  background:rgba(196,82,26,.12);color:var(--terra-lt);
+  border:1px solid var(--terra-dim);
+}
+.gc-play.palla:hover{background:rgba(196,82,26,.22);transform:scale(1.04)}
+
+/* ══════════════════════════════════════════
+   STATS STRIP
+══════════════════════════════════════════ */
+.stats-strip{
+  background:var(--stone);
+  border-top:1px solid var(--stone-b);
+  border-bottom:1px solid var(--stone-b);
+  padding:3rem 1.5rem;
+}
+.stats-inner{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+}
+@media(max-width:600px){.stats-inner{grid-template-columns:1fr 1fr}}
+.stat-card{text-align:center;padding:1rem}
+.stat-n{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.6rem,4vw,2.8rem);
+  font-weight:900;letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--cream),var(--gold-lt));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;display:block;
+}
+.stat-l{
+  font-family:'Cinzel',serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.18em;color:var(--txt-mute);margin-top:.3rem;display:block;
+}
+
+/* ══════════════════════════════════════════
+   LORE SECTION
+══════════════════════════════════════════ */
+.lore-section{
+  max-width:1100px;margin:0 auto;
+  padding:6rem 1.5rem;
+}
+.lore-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.2rem;margin-top:3rem;
+}
+@media(max-width:700px){.lore-grid{grid-template-columns:1fr}}
+
+.lore-card{
+  background:var(--stone);border:1px solid var(--stone-b);
+  border-radius:var(--r-lg);padding:1.8rem 1.6rem;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,transform .3s;
+}
+.lore-card:hover{border-color:var(--stone-h);transform:translateY(-3px)}
+.lore-card-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+}
+.lore-card-accent.gold{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.lore-card-accent.terra{background:linear-gradient(90deg,transparent,var(--terra),transparent)}
+.lore-card-accent.purple{background:linear-gradient(90deg,transparent,#9060D0,transparent)}
+.lore-card-accent.teal{background:linear-gradient(90deg,transparent,#30A090,transparent)}
+
+.lore-era{
+  font-family:'Cinzel',serif;font-size:.52rem;font-weight:700;
+  letter-spacing:.18em;color:var(--txt-mute);margin-bottom:.6rem;display:block;
+}
+.lore-head{
+  font-family:'Cinzel',serif;font-size:1rem;font-weight:700;
+  letter-spacing:.06em;color:var(--cream);margin-bottom:.6rem;
+}
+.lore-body{
+  font-size:.85rem;font-weight:300;color:var(--txt-dim);line-height:1.75;
+}
+.lore-quote{
+  margin-top:1rem;padding:.75rem 1rem;
+  border-left:2px solid var(--gold-dim);
+  background:rgba(196,131,26,.04);border-radius:0 var(--r-sm) var(--r-sm) 0;
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.82rem;color:var(--cream-dim);line-height:1.7;
+}
+
+/* ══════════════════════════════════════════
+   PLAYER TAG SECTION
+══════════════════════════════════════════ */
+.tag-section{
+  background:var(--stone);
+  border-top:1px solid var(--stone-b);
+  border-bottom:1px solid var(--stone-b);
+  padding:5rem 1.5rem;text-align:center;
+}
+.tag-inner{max-width:560px;margin:0 auto}
+.tag-kicker{
+  font-family:'Cinzel',serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.28em;color:var(--gold-dim);margin-bottom:1.2rem;display:block;
+}
+.tag-display{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.8rem,5vw,3rem);
+  font-weight:900;letter-spacing:.12em;
+  color:var(--gold);
+  text-shadow:0 0 40px var(--gold-glow),0 0 80px rgba(196,131,26,.08);
+  margin:.5rem 0 1.2rem;
+}
+.tag-body{
+  font-size:.9rem;font-weight:300;color:var(--txt-dim);
+  line-height:1.75;margin-bottom:1.8rem;
+}
+.rank-ladder{
+  display:flex;align-items:center;justify-content:center;
+  gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;
+}
+.rank-pill{
+  font-family:'Cinzel',serif;font-size:.54rem;font-weight:700;
+  letter-spacing:.1em;padding:4px 12px;border-radius:100px;
+  background:var(--bg3);color:var(--txt-mute);
+  border:1px solid var(--stone-b);
+}
+.rank-pill.active{
+  background:rgba(196,131,26,.1);color:var(--gold);
+  border-color:var(--gold-dim);
+  box-shadow:0 0 12px rgba(196,131,26,.15);
+}
+.rank-sep{color:var(--txt-mute);font-size:.7rem}
+
+/* ══════════════════════════════════════════
+   FEATURE STRIP
+══════════════════════════════════════════ */
+.feature-section{max-width:1100px;margin:0 auto;padding:6rem 1.5rem}
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1rem;margin-top:3rem;
+}
+@media(max-width:700px){.features-grid{grid-template-columns:1fr}}
+.feat{
+  padding:1.6rem;border-radius:var(--r-md);
+  background:var(--stone);border:1px solid var(--stone-b);
+  transition:border-color .25s,transform .25s;
+}
+.feat:hover{border-color:var(--stone-h);transform:translateY(-3px)}
+.feat-icon{font-size:1.6rem;margin-bottom:.8rem;display:block}
+.feat-title{
+  font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;
+  letter-spacing:.08em;color:var(--cream);margin-bottom:.45rem;
+}
+.feat-body{font-size:.82rem;font-weight:300;color:var(--txt-dim);line-height:1.7}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--stone-b);
+  padding:3rem 1.5rem 2rem;
+  text-align:center;
+}
+.footer-logo{
+  font-family:'Cinzel',serif;font-size:1.2rem;font-weight:900;
+  letter-spacing:.22em;color:var(--gold-dim);margin-bottom:.5rem;
+}
+.footer-sub{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
+  font-size:.8rem;color:var(--txt-mute);margin-bottom:1.8rem;
+  letter-spacing:.04em;
+}
+.footer-links{
+  display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+.footer-link{
+  font-family:'Cinzel',serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.12em;color:var(--txt-mute);text-decoration:none;
+  transition:color .2s;
+}
+.footer-link:hover{color:var(--txt-dim)}
+.footer-copy{
+  font-size:.72rem;color:var(--txt-mute);line-height:1.9;
+}
+.footer-sites{
+  display:flex;align-items:center;justify-content:center;
+  gap:.6rem;margin-top:1.5rem;flex-wrap:wrap;
+}
+.footer-sep{color:var(--txt-mute);font-size:.6rem}
+.footer-site{
+  font-family:'Cinzel',serif;font-size:.52rem;font-weight:700;
+  letter-spacing:.1em;
+  padding:3px 10px;border-radius:100px;
+  background:var(--stone);color:var(--txt-mute);
+  border:1px solid var(--stone-b);
+  text-decoration:none;transition:all .2s;
+}
+.footer-site:hover{color:var(--gold);border-color:var(--gold-dim)}
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ══════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════ */
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:none}
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleY(1);opacity:.6}
+  50%{transform:scaleY(1.3);opacity:1}
+}
+@keyframes kolamDraw{
+  to{stroke-dashoffset:0}
+}
+@keyframes rotateSlow{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@keyframes counterUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+@keyframes tagPulse{
+  0%,100%{text-shadow:0 0 30px rgba(196,131,26,.3)}
+  50%{text-shadow:0 0 60px rgba(196,131,26,.5),0 0 120px rgba(196,131,26,.15)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#">
+    KRIDA
+    <span>क्रीडा · Ancient Indian Games</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#games">GAMES</a>
+    <a class="nav-link" href="#lore">HISTORY</a>
+    <a class="nav-link" href="#features">FEATURES</a>
+    <div class="nav-tag" id="navTag">LOADING…</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <!-- Animated kolam background -->
+  <div class="kolam-wrap">
+    <svg class="kolam-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer rotating ring -->
+      <g style="transform-origin:250px 250px;animation:rotateSlow 80s linear infinite">
+        <circle cx="250" cy="250" r="230" fill="none" stroke="#C4831A" stroke-width=".6"
+          stroke-dasharray="8 6" opacity=".6"/>
+      </g>
+      <!-- Kolam geometric pattern — concentric squares rotated -->
+      <g opacity=".8">
+        <rect x="125" y="125" width="250" height="250" rx="4"
+          fill="none" stroke="#C4831A" stroke-width="1"
+          stroke-dasharray="1400" stroke-dashoffset="1400"
+          style="animation:kolamDraw 3s ease 0.2s forwards"/>
+        <rect x="125" y="125" width="250" height="250" rx="4" transform="rotate(45,250,250)"
+          fill="none" stroke="#C4831A" stroke-width=".8"
+          stroke-dasharray="1414" stroke-dashoffset="1414"
+          style="animation:kolamDraw 3s ease .8s forwards"/>
+        <rect x="155" y="155" width="190" height="190" rx="3"
+          fill="none" stroke="#E8A840" stroke-width=".9"
+          stroke-dasharray="760" stroke-dashoffset="760"
+          style="animation:kolamDraw 2.5s ease 1s forwards"/>
+        <rect x="155" y="155" width="190" height="190" rx="3" transform="rotate(45,250,250)"
+          fill="none" stroke="#E8A840" stroke-width=".7"
+          stroke-dasharray="772" stroke-dashoffset="772"
+          style="animation:kolamDraw 2.5s ease 1.4s forwards"/>
+        <rect x="190" y="190" width="120" height="120" rx="2"
+          fill="none" stroke="#C4831A" stroke-width=".8"
+          stroke-dasharray="480" stroke-dashoffset="480"
+          style="animation:kolamDraw 2s ease 1.8s forwards"/>
+        <rect x="190" y="190" width="120" height="120" rx="2" transform="rotate(45,250,250)"
+          fill="none" stroke="#C4831A" stroke-width=".6"
+          stroke-dasharray="490" stroke-dashoffset="490"
+          style="animation:kolamDraw 2s ease 2.1s forwards"/>
+      </g>
+      <!-- Radial lines from centre -->
+      <g stroke="#C4831A" stroke-width=".5" opacity=".5">
+        <line x1="250" y1="20"  x2="250" y2="480"
+          stroke-dasharray="460" stroke-dashoffset="460"
+          style="animation:kolamDraw 2.5s ease .5s forwards"/>
+        <line x1="20"  y1="250" x2="480" y2="250"
+          stroke-dasharray="460" stroke-dashoffset="460"
+          style="animation:kolamDraw 2.5s ease .7s forwards"/>
+        <line x1="72"  y1="72"  x2="428" y2="428" transform="rotate(45,250,250)"
+          stroke-dasharray="504" stroke-dashoffset="504"
+          style="animation:kolamDraw 2.5s ease .9s forwards"/>
+        <line x1="72"  y1="72"  x2="428" y2="428"
+          stroke-dasharray="504" stroke-dashoffset="504"
+          style="animation:kolamDraw 2.5s ease 1.1s forwards"/>
+      </g>
+      <!-- Centre dot cluster -->
+      <g fill="#C4831A" opacity=".7">
+        <circle cx="250" cy="250" r="6"
+          style="animation:fadeIn .5s ease 2.5s both"/>
+        <circle cx="250" cy="220" r="3" style="animation:fadeIn .4s ease 2.7s both"/>
+        <circle cx="250" cy="280" r="3" style="animation:fadeIn .4s ease 2.7s both"/>
+        <circle cx="220" cy="250" r="3" style="animation:fadeIn .4s ease 2.9s both"/>
+        <circle cx="280" cy="250" r="3" style="animation:fadeIn .4s ease 2.9s both"/>
+        <circle cx="228" cy="228" r="2" style="animation:fadeIn .4s ease 3.1s both"/>
+        <circle cx="272" cy="228" r="2" style="animation:fadeIn .4s ease 3.1s both"/>
+        <circle cx="228" cy="272" r="2" style="animation:fadeIn .4s ease 3.3s both"/>
+        <circle cx="272" cy="272" r="2" style="animation:fadeIn .4s ease 3.3s both"/>
+      </g>
+      <!-- Corner kolam petals -->
+      <g fill="none" stroke="#C4831A" stroke-width=".8" opacity=".45">
+        <circle cx="125" cy="125" r="30"
+          stroke-dasharray="188" stroke-dashoffset="188"
+          style="animation:kolamDraw 1.5s ease 2s forwards"/>
+        <circle cx="375" cy="125" r="30"
+          stroke-dasharray="188" stroke-dashoffset="188"
+          style="animation:kolamDraw 1.5s ease 2.2s forwards"/>
+        <circle cx="125" cy="375" r="30"
+          stroke-dasharray="188" stroke-dashoffset="188"
+          style="animation:kolamDraw 1.5s ease 2.4s forwards"/>
+        <circle cx="375" cy="375" r="30"
+          stroke-dasharray="188" stroke-dashoffset="188"
+          style="animation:kolamDraw 1.5s ease 2.6s forwards"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Hero content -->
+  <div style="position:relative;z-index:1">
+    <div class="hero-eyebrow">KRIDA · क्रीडा · ANCIENT INDIAN GAMES PLATFORM</div>
+    <h1 class="hero-title">PLAY<br/>HISTORY</h1>
+    <p class="hero-sub">
+      Two games. Thousands of years.<br/>
+      One board at a time.
+    </p>
+    <div class="hero-scripts">
+      <span class="hero-script">नव कंकड़ी</span>
+      <span class="hero-script-sep">·</span>
+      <span class="hero-script">பல்லாங்குழி</span>
+      <span class="hero-script-sep">·</span>
+      <span class="hero-script" style="color:var(--cream-mute);font-size:.9rem">क्रीडा</span>
+    </div>
+    <div class="hero-ctas">
+      <a class="cta-primary" href="navakankari.html">PLAY NAVAKANKARI</a>
+      <a class="cta-secondary" href="pallankuzhi.html">PLAY PALLANKUZHI</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-card reveal">
+      <span class="stat-n" data-target="2000">0</span>
+      <span class="stat-l">YEARS OF HISTORY</span>
+    </div>
+    <div class="stat-card reveal reveal-delay-1">
+      <span class="stat-n" data-target="2">0</span>
+      <span class="stat-l">GAMES PRESERVED</span>
+    </div>
+    <div class="stat-card reveal reveal-delay-2">
+      <span class="stat-n" data-target="24">0</span>
+      <span class="stat-l">NAVAKANKARI NODES</span>
+    </div>
+    <div class="stat-card reveal reveal-delay-3">
+      <span class="stat-n" data-target="168">0</span>
+      <span class="stat-l">PALLANKUZHI SEEDS</span>
+    </div>
+  </div>
+</div>
+
+<!-- GAME CARDS -->
+<div class="hrul"></div>
+<section class="games-section" id="games">
+  <div class="reveal">
+    <span class="section-label">THE GAMES</span>
+    <h2 class="section-title">Two games.<br/>Two worlds.</h2>
+    <p class="section-body">
+      Born centuries apart, from different corners of the subcontinent —
+      one a war of position, one a harvest ritual. Both deserve to be played.
+    </p>
+  </div>
+
+  <div class="games-grid">
+
+    <!-- Navakankari -->
+    <a class="game-card nava reveal reveal-delay-1" href="navakankari.html">
+      <div class="gc-num nava">I</div>
+      <span class="gc-icon">⚔️</span>
+      <h3 class="gc-title nava">NAVAKANKARI</h3>
+      <span class="gc-native">नव कंकड़ी · Rajasthan / Uttar Pradesh · Ancient</span>
+      <p class="gc-desc">
+        Three concentric squares. Nine pieces per side. Form a line of three
+        to capture. The deepest two-player strategy game of ancient India —
+        its opening theory rivals early chess. Boards carved into the stone
+        floors of Angkor Wat, Mehragarh Fort, and Varanasi's ghats.
+      </p>
+      <div class="gc-tags">
+        <span class="gc-tag">STRATEGY</span>
+        <span class="gc-tag">2 PLAYER</span>
+        <span class="gc-tag">3 PHASES</span>
+        <span class="gc-tag">MINIMAX AI</span>
+        <span class="gc-tag">PRE-1000 CE</span>
+      </div>
+      <div class="gc-meta">
+        <div class="gc-stat">
+          <span class="gc-stat-n nava">24</span>
+          <span class="gc-stat-l">NODES</span>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-stat-n nava">16</span>
+          <span class="gc-stat-l">MILLS</span>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-stat-n nava">9</span>
+          <span class="gc-stat-l">PIECES</span>
+        </div>
+        <button class="gc-play nava" onclick="event.preventDefault();window.location='navakankari.html'">
+          PLAY NOW →
+        </button>
+      </div>
+    </a>
+
+    <!-- Pallankuzhi -->
+    <a class="game-card palla reveal reveal-delay-2" href="pallankuzhi.html">
+      <div class="gc-num palla">II</div>
+      <span class="gc-icon">🪔</span>
+      <h3 class="gc-title palla">PALLANKUZHI</h3>
+      <span class="gc-native">பல்லாங்குழி · Tamil Nadu / Sri Lanka · Ancient</span>
+      <p class="gc-desc">
+        Two rows of seven cups. Sow seeds clockwise, one per cup. Land on four
+        to capture. India's only living mancala tradition — played at harvest
+        festivals for millennia, referenced in 6th-century Tamil epics, and
+        deeply tied to the rhythms of agricultural life.
+      </p>
+      <div class="gc-tags">
+        <span class="gc-tag">MANCALA</span>
+        <span class="gc-tag">2 PLAYER</span>
+        <span class="gc-tag">COUNTING</span>
+        <span class="gc-tag">SEED ANIMATION</span>
+        <span class="gc-tag">SANGAM ERA</span>
+      </div>
+      <div class="gc-meta">
+        <div class="gc-stat">
+          <span class="gc-stat-n palla">14</span>
+          <span class="gc-stat-l">CUPS</span>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-stat-n palla">168</span>
+          <span class="gc-stat-l">SEEDS</span>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-stat-n palla">4</span>
+          <span class="gc-stat-l">TO CAPTURE</span>
+        </div>
+        <button class="gc-play palla" onclick="event.preventDefault();window.location='pallankuzhi.html'">
+          PLAY NOW →
+        </button>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- PLAYER TAG SECTION -->
+<div class="hrul"></div>
+<section class="tag-section">
+  <div class="tag-inner">
+    <span class="tag-kicker reveal">YOUR IDENTITY</span>
+    <div class="tag-display reveal" id="tagDisplay" style="animation:tagPulse 3s ease-in-out infinite">
+      #LOADING…
+    </div>
+    <p class="tag-body reveal reveal-delay-1">
+      No login required. Every visitor receives a unique cultural tag —
+      a name drawn from 200 Indian names, paired with a number.
+      Your tag follows you across games, tracks your XP, and places you
+      on the leaderboard.
+    </p>
+
+    <div class="rank-ladder reveal reveal-delay-2">
+      <span class="rank-pill" id="rk0">PEBBLE</span>
+      <span class="rank-sep">→</span>
+      <span class="rank-pill" id="rk1">STONE</span>
+      <span class="rank-sep">→</span>
+      <span class="rank-pill" id="rk2">WARRIOR</span>
+      <span class="rank-sep">→</span>
+      <span class="rank-pill" id="rk3">SCHOLAR</span>
+      <span class="rank-sep">→</span>
+      <span class="rank-pill" id="rk4">SAGE</span>
+      <span class="rank-sep">→</span>
+      <span class="rank-pill" id="rk5">GRANDMASTER</span>
+    </div>
+
+    <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap" class="reveal reveal-delay-3">
+      <a class="cta-primary" href="navakankari.html" style="font-size:.66rem;padding:.7rem 1.6rem">
+        START PLAYING
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- LORE -->
+<div class="hrul"></div>
+<section class="lore-section" id="lore">
+  <div class="reveal">
+    <span class="section-label">CULTURAL HISTORY</span>
+    <h2 class="section-title">Carved in stone.<br/>Played for millennia.</h2>
+    <p class="section-body">
+      These games are not museum pieces. They were played on temple floors,
+      under banyan trees, at harvest festivals. They still are.
+    </p>
+  </div>
+
+  <div class="lore-grid">
+
+    <div class="lore-card reveal reveal-delay-1">
+      <div class="lore-card-accent gold"></div>
+      <span class="lore-era">NAVAKANKARI · PRE-1000 CE</span>
+      <h3 class="lore-head">Carved into Angkor Wat</h3>
+      <p class="lore-body">
+        Identical Navakankari boards are scratched into the stone floors of
+        Angkor Wat in Cambodia, Mehragarh Fort in Rajasthan, and the
+        ancient ghats of Varanasi — proof that the game travelled with
+        merchants, soldiers, and pilgrims across Asia.
+      </p>
+      <div class="lore-quote">
+        "The most strategic two-player game of the ancient world.
+        Its opening theory rivals early chess."
+      </div>
+    </div>
+
+    <div class="lore-card reveal reveal-delay-2">
+      <div class="lore-card-accent terra"></div>
+      <span class="lore-era">PALLANKUZHI · SANGAM ERA (~300 BCE)</span>
+      <h3 class="lore-head">A Women's Harvest Game</h3>
+      <p class="lore-body">
+        Referenced in the Manimekalai (6th century CE) and Sangam poetry,
+        Pallankuzhi was traditionally played by women during Pongal, the
+        Tamil harvest festival. The act of sowing seeds in the game mirrors
+        the ritual of sowing paddy in fields.
+      </p>
+      <div class="lore-quote">
+        "The counting and sowing mechanic is deeply satisfying —
+        a meditation on rhythm and harvest."
+      </div>
+    </div>
+
+    <div class="lore-card reveal reveal-delay-3">
+      <div class="lore-card-accent purple"></div>
+      <span class="lore-era">GLOBAL PARALLEL</span>
+      <h3 class="lore-head">Before Chess</h3>
+      <p class="lore-body">
+        Navakankari predates Chaturanga (proto-chess) on the Indian
+        subcontinent. Its Western cousin, Nine Men's Morris, appears
+        in ancient Egypt (1400 BCE), was played in the Roman Empire,
+        and was mentioned by Shakespeare. The Indian form is the most
+        strategically deep variant known.
+      </p>
+    </div>
+
+    <div class="lore-card reveal reveal-delay-4">
+      <div class="lore-card-accent teal"></div>
+      <span class="lore-era">THE KRIDA MISSION</span>
+      <h3 class="lore-head">Preservation Through Play</h3>
+      <p class="lore-body">
+        Both games face extinction — displaced by digital entertainment
+        and the loss of the cultural contexts that transmitted them.
+        Krida rebuilds them as living, playable experiences: faithful
+        to their mechanics, beautiful to behold, available to anyone
+        with a browser.
+      </p>
+      <div class="lore-quote">
+        "To preserve a game is to preserve
+        the wisdom of how a civilisation thinks."
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="hrul"></div>
+<section class="feature-section" id="features">
+  <div class="reveal">
+    <span class="section-label">PLATFORM FEATURES</span>
+    <h2 class="section-title">Built to last.<br/>Built to play.</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat reveal reveal-delay-1">
+      <span class="feat-icon">🤖</span>
+      <h3 class="feat-title">MINIMAX AI</h3>
+      <p class="feat-body">
+        Alpha-beta pruning with transposition cache for Navakankari.
+        Greedy look-ahead counting AI for Pallankuzhi. Three difficulty
+        levels. Genuinely challenging at Hard.
+      </p>
+    </div>
+    <div class="feat reveal reveal-delay-2">
+      <span class="feat-icon">🌐</span>
+      <h3 class="feat-title">LIVE MULTIPLAYER</h3>
+      <p class="feat-body">
+        Ranked matchmaking queue. Private rooms with 6-character codes.
+        Server-side move validation. Async play — make your move,
+        come back tomorrow.
+      </p>
+    </div>
+    <div class="feat reveal reveal-delay-3">
+      <span class="feat-icon">🌾</span>
+      <h3 class="feat-title">SEED ANIMATION</h3>
+      <p class="feat-body">
+        The Pallankuzhi showpiece. Seeds arc from cup to cup on a canvas
+        overlay, one by one, with staggered timing that recreates the
+        physical feel of sowing.
+      </p>
+    </div>
+    <div class="feat reveal reveal-delay-1">
+      <span class="feat-icon">🏆</span>
+      <h3 class="feat-title">XP & RANKS</h3>
+      <p class="feat-body">
+        Six ranks from Pebble to Grandmaster. XP awarded per game mode.
+        Daily challenges with streak bonuses. 12 achievement badges.
+        Weekly tournaments.
+      </p>
+    </div>
+    <div class="feat reveal reveal-delay-2">
+      <span class="feat-icon">📱</span>
+      <h3 class="feat-title">RESPONSIVE PWA</h3>
+      <p class="feat-body">
+        Designed for desktop and mobile equally. Installable as a
+        Progressive Web App. Works offline for AI games. Push
+        notifications for ranked opponent moves.
+      </p>
+    </div>
+    <div class="feat reveal reveal-delay-3">
+      <span class="feat-icon">🔊</span>
+      <h3 class="feat-title">WEB AUDIO SFX</h3>
+      <p class="feat-body">
+        Pure Web Audio API synthesis — stone on stone, seeds rattling,
+        mill formation chimes, win fanfares. No audio files loaded.
+        Zero latency. Togglable per session.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="hrul"></div>
+<footer>
+  <div class="footer-logo">KRIDA</div>
+  <div class="footer-sub">क्रीडा · Ancient Indian Games Platform</div>
+  <div class="footer-links">
+    <a class="footer-link" href="navakankari.html">NAVAKANKARI</a>
+    <a class="footer-link" href="pallankuzhi.html">PALLANKUZHI</a>
+    <a class="footer-link" href="#lore">HISTORY</a>
+    <a class="footer-link" href="#features">ABOUT</a>
+  </div>
+  <div class="footer-copy">
+    Navakankari boards documented at Angkor Wat, Mehragarh Fort, and the ghats of Varanasi.<br/>
+    Pallankuzhi referenced in Manimekalai (6th century CE) and Sangam literature (~300 BCE).<br/><br/>
+    Built to preserve what deserves to be played.
+  </div>
+  <div class="footer-sites">
+    <a class="footer-site" href="navakankari.html">⚔ NAVAKANKARI</a>
+    <span class="footer-sep">·</span>
+    <a class="footer-site" href="pallankuzhi.html">🪔 PALLANKUZHI</a>
+  </div>
+</footer>
+
+<script>
+/* ══ CULTURAL NAMES (200 names for tag generation) ══ */
+const NAMES = [
+  'Arjun','Kaveri','Dharma','Priya','Vikram','Meera','Kiran','Tara',
+  'Rajan','Ananya','Surya','Lalita','Mohan','Savitri','Devraj','Kamala',
+  'Harish','Parvati','Gopal','Radha','Siddha','Usha','Ashok','Vimala',
+  'Pratap','Shanti','Nakul','Ganga','Bharat','Yamuna','Chandra','Indra',
+  'Varun','Agni','Veda','Maya','Soma','Shakti','Shiva','Uma','Rohit',
+  'Jyoti','Kedar','Tulsi','Samir','Nandita','Rishi','Durga','Deepa',
+  'Bhuvan','Sarayu','Kritika','Aarav','Ishaan','Vivaan','Aditi','Diya',
+  'Kabir','Zara','Rehan','Aisha','Ishan','Tanvi','Shaan','Nila',
+  'Aryan','Puja','Sagar','Leela','Tarun','Asha','Girish','Padma',
+  'Hemant','Sudha','Balram','Geeta','Dinesh','Lata','Vinod','Sunita',
+  'Ramesh','Urvashi','Naresh','Kamini','Suresh','Sharada','Ganesh','Rani',
+  'Rajesh','Sita','Mahesh','Rekha','Nilesh','Seema','Hitesh','Pooja',
+  'Yogesh','Divya','Lokesh','Shreya','Mukesh','Riya','Rakesh','Komal',
+  'Harshad','Neha','Chirag','Ankita','Nirav','Bhavna','Paresh','Khushbu',
+  'Tejas','Foram','Darshan','Hetal','Vipul','Dimple','Kalpesh','Nisha',
+  'Alpesh','Varsha','Kamlesh','Minal','Jignesh','Pinal','Mihir','Nidhi',
+  'Vatsal','Dhruti','Saumil','Zinkal','Parth','Riddhi','Kush','Siddhi',
+  'Dhruv','Isha','Pranav','Ruhi','Yash','Anika','Aditya','Myra',
+  'Atharv','Tvisha','Vedant','Saanvi','Rudra','Aanya','Shaurya','Avni',
+  'Agastya','Navya','Arnav','Pihu','Reyansh','Pari','Vihaan','Kiara',
+  'Kartik','Aara','Laksh','Disha','Ayaan','Nishka','Ranveer','Siya',
+  'Aaditya','Rhea','Shivansh','Tara','Yuvansh','Kyra','Shivam','Shivani',
+  'Aarav','Stuti','Ansh','Shruti','Taksh','Kriti','Darsh','Mahi',
+];
+
+const generateTag = () => {
+  const n = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const d = String(Math.floor(Math.random() * 9000) + 1000);
+  return `${n}-${d}`;
+};
+
+/* ══ PLAYER TAG INIT ══ */
+const LS_KEY = 'krida_player';
+let playerData = null;
+
+const initPlayer = () => {
+  const stored = localStorage.getItem(LS_KEY);
+  if (stored) {
+    try { playerData = JSON.parse(stored); } catch(e) {}
+  }
+  if (!playerData) {
+    playerData = { tagId: generateTag(), xp: 0, rank: 'Pebble', streak: 0 };
+    localStorage.setItem(LS_KEY, JSON.stringify(playerData));
+  }
+  renderTag();
+};
+
+const RANK_THRESHOLDS = [
+  [4000,'Grandmaster'],[1500,'Sage'],[600,'Scholar'],
+  [200,'Warrior'],[50,'Stone'],[0,'Pebble'],
+];
+const calcRank = xp => (RANK_THRESHOLDS.find(([t]) => xp >= t) ?? [0,'Pebble'])[1];
+
+const RANK_IDX = { Pebble:0, Stone:1, Warrior:2, Scholar:3, Sage:4, Grandmaster:5 };
+
+const renderTag = () => {
+  if (!playerData) return;
+  const tag  = `#${playerData.tagId}`;
+  const rank = calcRank(playerData.xp || 0);
+
+  // Nav tag
+  const navEl = document.getElementById('navTag');
+  if (navEl) navEl.textContent = tag;
+
+  // Hero tag
+  const dispEl = document.getElementById('tagDisplay');
+  if (dispEl) dispEl.textContent = tag;
+
+  // Rank ladder highlight
+  const ri = RANK_IDX[rank] ?? 0;
+  for (let i = 0; i <= 5; i++) {
+    const el = document.getElementById(`rk${i}`);
+    if (el) el.classList.toggle('active', i === ri);
+  }
+};
+
+/* ══ SCROLL REVEAL ══ */
+const revealEls = document.querySelectorAll('.reveal');
+const observer  = new IntersectionObserver(
+  (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+);
+revealEls.forEach(el => observer.observe(el));
+
+/* ══ STAT COUNTER ANIMATION ══ */
+const statEls = document.querySelectorAll('[data-target]');
+let counted = false;
+
+const animateCounters = () => {
+  if (counted) return;
+  counted = true;
+  statEls.forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const dur    = 1800;
+    const start  = performance.now();
+    const tick   = (now) => {
+      const p = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);          // cubic ease-out
+      const suffix = target >= 1000 ? '+' : '';
+      el.textContent = Math.round(ease * target).toLocaleString() + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+};
+
+const statsObserver = new IntersectionObserver(
+  (entries) => entries.forEach(e => { if (e.isIntersecting) animateCounters(); }),
+  { threshold: 0.3 }
+);
+document.querySelector('.stats-strip') && statsObserver.observe(document.querySelector('.stats-strip'));
+
+/* ══ NAV SHADOW ON SCROLL ══ */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if (!nav) return;
+  if (window.scrollY > 60)
+    nav.style.boxShadow = '0 2px 30px rgba(0,0,0,.6)';
+  else
+    nav.style.boxShadow = 'none';
+}, { passive: true });
+
+/* ══ CARD 3D TILT ══ */
+document.querySelectorAll('.game-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r   = card.getBoundingClientRect();
+    const x   = (e.clientX - r.left) / r.width  - .5;
+    const y   = (e.clientY - r.top)  / r.height - .5;
+    card.style.transform = `
+      translateY(-6px)
+      rotateY(${x * 6}deg)
+      rotateX(${-y * 4}deg)
+    `;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .3s';
+  });
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform .15s ease, box-shadow .35s, border-color .3s';
+  });
+});
+
+/* ══ INIT ══ */
+initPlayer();
+</script>
+</body>
+</html>

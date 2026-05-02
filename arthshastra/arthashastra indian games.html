@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthashastra: Rise of Chandragupta</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #FF6B00;
+    --gold: #FFD700;
+    --gold-dark: #C8A400;
+    --deep-red: #8B1A1A;
+    --blood-red: #C0392B;
+    --ivory: #FFF8DC;
+    --parchment: #F5DEB3;
+    --dark-bg: #0A0704;
+    --panel-bg: #110B05;
+    --panel-border: #3D2B1A;
+    --map-bg: #1A0F08;
+    --text-light: #E8D5A3;
+    --text-dim: #8B7355;
+    --dharma-blue: #4A90D9;
+    --nature-green: #2E7D32;
+    --lotus-pink: #E91E8C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Noto Serif', serif;
+    height: 100vh;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  /* ═══════════════════════════════ INTRO SCREEN ═══════════════════════════════ */
+  #intro-screen {
+    position: fixed; inset: 0; z-index: 1000;
+    background: radial-gradient(ellipse at center, #1A0800 0%, #000000 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 1s ease;
+  }
+
+  #intro-screen.fade-out { opacity: 0; pointer-events: none; }
+
+  .intro-lotus {
+    font-size: 80px; margin-bottom: 20px;
+    animation: lotusBloom 2s ease-out forwards;
+    filter: drop-shadow(0 0 30px var(--saffron));
+  }
+
+  @keyframes lotusBloom {
+    from { transform: scale(0) rotate(-180deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .intro-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(28px, 5vw, 56px);
+    color: var(--gold);
+    text-align: center;
+    text-shadow: 0 0 40px rgba(255,215,0,0.6), 0 4px 8px rgba(0,0,0,0.8);
+    animation: fadeInUp 1.5s ease 0.5s both;
+    letter-spacing: 3px;
+  }
+
+  .intro-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(14px, 2vw, 20px);
+    color: var(--saffron);
+    margin-top: 10px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    animation: fadeInUp 1.5s ease 0.9s both;
+  }
+
+  .intro-devanagari {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: 24px;
+    color: var(--text-dim);
+    margin: 15px 0;
+    animation: fadeInUp 1.5s ease 1.1s both;
+  }
+
+  .intro-quote {
+    font-style: italic;
+    color: var(--text-dim);
+    max-width: 500px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.8;
+    animation: fadeInUp 1.5s ease 1.3s both;
+    margin: 20px 0 40px;
+    padding: 0 20px;
+    border-left: 2px solid var(--saffron);
+  }
+
+  .btn-start {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--saffron), var(--gold));
+    color: #000;
+    border: none;
+    padding: 16px 48px;
+    cursor: pointer;
+    clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px);
+    transition: all 0.3s;
+    animation: fadeInUp 1.5s ease 1.7s both;
+    box-shadow: 0 0 30px rgba(255,107,0,0.5);
+  }
+
+  .btn-start:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px rgba(255,215,0,0.8);
+  }
+
+  .ornament-line {
+    display: flex; align-items: center; gap: 15px;
+    color: var(--saffron); font-size: 18px;
+    margin: 15px 0;
+    animation: fadeInUp 1.5s ease 1.5s both;
+  }
+
+  .ornament-line::before,
+  .ornament-line::after {
+    content: '';
+    width: 100px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--saffron));
+  }
+
+  .ornament-line::after { background: linear-gradient(90deg, var(--saffron), transparent); }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════════════════════ GAME LAYOUT ═══════════════════════════════ */
+  #game-wrapper {
+    display: grid;
+    grid-template-rows: 60px 1fr 120px;
+    grid-template-columns: 260px 1fr 280px;
+    height: 100vh;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  #game-wrapper.visible { opacity: 1; }
+
+  /* TOP BAR */
+  #top-bar {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1E0F03 0%, #0D0700 100%);
+    border-bottom: 2px solid var(--panel-border);
+    display: flex; align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+    position: relative;
+  }
+
+  #top-bar::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--saffron) 30%, var(--gold) 50%, var(--saffron) 70%, transparent);
+  }
+
+  .game-logo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .top-resources {
+    display: flex; gap: 20px; flex: 1; justify-content: center; flex-wrap: wrap;
+  }
+
+  .resource-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--panel-border);
+    padding: 4px 14px;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-chip::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(255,215,0,0.05));
+  }
+
+  .resource-icon { font-size: 16px; }
+  .resource-value { color: var(--gold); font-weight: 700; font-size: 14px; }
+  .resource-label { color: var(--text-dim); font-size: 10px; display: block; }
+  .resource-delta { font-size: 10px; margin-left: 2px; }
+  .delta-pos { color: #4CAF50; }
+  .delta-neg { color: var(--blood-red); }
+
+  .turn-info {
+    display: flex; align-items: center; gap: 12px;
+    margin-left: auto;
+  }
+
+  .turn-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .turn-number {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 20px;
+    color: var(--saffron);
+  }
+
+  /* LEFT PANEL */
+  #left-panel {
+    background: linear-gradient(180deg, var(--panel-bg) 0%, #0D0600 100%);
+    border-right: 1px solid var(--panel-border);
+    overflow-y: auto;
+    padding: 15px;
+    display: flex; flex-direction: column; gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-border) transparent;
+  }
+
+  .panel-section {
+    border: 1px solid var(--panel-border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .panel-section-header {
+    background: linear-gradient(135deg, #1E0F05, #150A04);
+    border-bottom: 1px solid var(--panel-border);
+    padding: 8px 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--saffron);
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .panel-section-content { padding: 10px 12px; }
+
+  /* KINGDOM STATUS */
+  .king-portrait {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    background: radial-gradient(circle at 40% 35%, #C8A400, #5D3A00);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    margin-bottom: 8px;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .king-portrait::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+    border-radius: 50% 50% 0 0;
+  }
+
+  .king-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .king-title {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .stat-bar-wrap { margin: 6px 0; }
+  .stat-bar-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-bottom: 3px; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+  .stat-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 0; overflow: hidden; }
+  .stat-bar-fill { height: 100%; transition: width 0.5s ease; }
+  .bar-military { background: linear-gradient(90deg, var(--blood-red), #FF6B6B); }
+  .bar-dharma { background: linear-gradient(90deg, var(--dharma-blue), #7EC8F0); }
+  .bar-economy { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); }
+  .bar-influence { background: linear-gradient(90deg, var(--lotus-pink), #FF80AB); }
+
+  /* TERRITORIES LIST */
+  .territory-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 11px;
+  }
+
+  .territory-item:hover { background: rgba(255,107,0,0.1); }
+  .territory-item.active { background: rgba(255,107,0,0.15); border-left: 2px solid var(--saffron); }
+  .terr-name { color: var(--text-light); font-family: 'Cinzel', serif; }
+  .terr-level { font-size: 10px; color: var(--text-dim); }
+
+  /* CENTER MAP */
+  #map-container {
+    background: var(--map-bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #game-canvas {
+    display: block;
+    cursor: pointer;
+  }
+
+  /* ADVISOR POP */
+  #advisor-box {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    max-width: 600px; width: 90%;
+    background: linear-gradient(135deg, rgba(10,5,2,0.97), rgba(20,10,3,0.97));
+    border: 1px solid var(--gold);
+    padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+    box-shadow: 0 0 40px rgba(255,215,0,0.15), inset 0 0 40px rgba(0,0,0,0.5);
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+    transition: opacity 0.5s, transform 0.5s;
+    pointer-events: none;
+  }
+
+  #advisor-box.hidden { opacity: 0; transform: translateX(-50%) translateY(10px); }
+
+  .advisor-avatar {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #C8A400, #3A2000);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .advisor-text { flex: 1; }
+  .advisor-name { font-family: 'Cinzel', serif; font-size: 10px; color: var(--saffron); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .advisor-quote { font-style: italic; font-size: 13px; line-height: 1.6; color: var(--text-light); }
+
+  /* RIGHT PANEL */
+  #right-panel {
+    background: linear-gradient(180deg, var(--panel-bg) 0%, #0D0600 100%);
+    border-left: 1px solid var(--panel-border);
+    overflow-y: auto;
+    padding: 15px;
+    display: flex; flex-direction: column; gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-border) transparent;
+  }
+
+  /* ACTIONS */
+  .action-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.06));
+    border: 1px solid var(--panel-border);
+    color: var(--text-light);
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .action-btn::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--saffron);
+    transform: scaleY(0);
+    transition: transform 0.25s;
+  }
+
+  .action-btn:hover::before { transform: scaleY(1); }
+  .action-btn:hover { background: rgba(255,107,0,0.1); border-color: var(--saffron); color: var(--gold); }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .action-btn:disabled:hover { background: rgba(255,255,255,0.03); border-color: var(--panel-border); color: var(--text-dim); }
+  .action-btn:disabled:hover::before { transform: scaleY(0); }
+
+  .action-icon { font-size: 18px; }
+  .action-desc { font-size: 9px; color: var(--text-dim); display: block; font-family: 'Noto Serif', serif; font-style: italic; margin-top: 2px; letter-spacing: 0; }
+  .action-cost { margin-left: auto; font-size: 10px; color: var(--gold); }
+
+  /* EVENTS LOG */
+  #event-log {
+    max-height: 160px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-border) transparent;
+  }
+
+  .event-entry {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .event-entry.event-good { color: #81C784; }
+  .event-entry.event-bad { color: #E57373; }
+  .event-entry.event-neutral { color: var(--text-dim); }
+  .event-entry.event-important { color: var(--gold); font-weight: 600; }
+
+  /* BOTTOM BAR */
+  #bottom-bar {
+    grid-column: 1 / -1;
+    background: linear-gradient(0deg, #0A0500 0%, var(--panel-bg) 100%);
+    border-top: 1px solid var(--panel-border);
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 20px;
+    position: relative;
+  }
+
+  #bottom-bar::before {
+    content: '';
+    position: absolute; top: -3px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--saffron) 50%, var(--gold) 70%, transparent);
+  }
+
+  #selected-info {
+    flex: 1;
+  }
+
+  .selected-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .selected-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  .territory-actions {
+    display: flex; gap: 10px;
+  }
+
+  .terr-action-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--panel-border);
+    color: var(--text-light);
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .terr-action-btn:hover { background: rgba(255,107,0,0.15); border-color: var(--saffron); color: var(--gold); }
+  .terr-action-btn.primary { background: linear-gradient(135deg, var(--deep-red), #6B0E0E); border-color: var(--blood-red); }
+  .terr-action-btn.primary:hover { background: linear-gradient(135deg, #A01515, #8B1A1A); }
+
+  .btn-end-turn {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #8B1A1A, #C0392B);
+    color: var(--gold);
+    border: 2px solid var(--blood-red);
+    padding: 12px 30px;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px);
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+
+  .btn-end-turn:hover {
+    background: linear-gradient(135deg, #C0392B, #E74C3C);
+    box-shadow: 0 0 25px rgba(192,57,43,0.6);
+    transform: scale(1.02);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal-box {
+    background: linear-gradient(135deg, #15090400, #1E0F05);
+    background: #130802;
+    border: 1px solid var(--gold);
+    max-width: 480px; width: 90%;
+    padding: 30px;
+    clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px), 0% 15px);
+    box-shadow: 0 0 60px rgba(255,215,0,0.15);
+    transform: scale(0.95);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal-box { transform: scale(1); }
+
+  .modal-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 20px;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .modal-body { text-align: center; line-height: 1.8; font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
+  .modal-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .modal-btn { padding: 10px 20px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; border: 1px solid var(--panel-border); background: rgba(255,255,255,0.05); color: var(--text-light); transition: all 0.2s; }
+  .modal-btn:hover { border-color: var(--saffron); color: var(--gold); background: rgba(255,107,0,0.1); }
+  .modal-btn.confirm { background: linear-gradient(135deg, #8B1A1A, #C0392B); border-color: var(--blood-red); color: var(--gold); }
+
+  /* NOTIFICATION */
+  #notification {
+    position: fixed; top: 80px; right: 20px; z-index: 600;
+    background: #130802;
+    border: 1px solid var(--gold);
+    padding: 14px 20px;
+    max-width: 300px;
+    font-size: 13px;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 30px rgba(255,215,0,0.2);
+  }
+
+  #notification.show { transform: translateX(0); }
+  #notification.notif-good { border-color: #4CAF50; box-shadow: 0 0 30px rgba(76,175,80,0.2); }
+  #notification.notif-bad { border-color: var(--blood-red); box-shadow: 0 0 30px rgba(192,57,43,0.2); }
+
+  .notif-title { font-family: 'Cinzel', serif; font-size: 11px; color: var(--saffron); letter-spacing: 2px; margin-bottom: 5px; }
+
+  /* VICTORY OVERLAY */
+  #victory-screen {
+    position: fixed; inset: 0; z-index: 900;
+    background: radial-gradient(ellipse, #2A1500, #000);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 1s;
+  }
+
+  #victory-screen.show { opacity: 1; pointer-events: all; }
+
+  .victory-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(32px, 6vw, 64px);
+    color: var(--gold);
+    text-shadow: 0 0 60px rgba(255,215,0,0.8);
+    text-align: center;
+    animation: pulse-gold 2s infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { text-shadow: 0 0 60px rgba(255,215,0,0.8); }
+    50% { text-shadow: 0 0 100px rgba(255,215,0,1), 0 0 40px rgba(255,107,0,0.8); }
+  }
+
+  /* ORNAMENTAL CORNERS */
+  .corner-ornament {
+    position: absolute;
+    width: 30px; height: 30px;
+    pointer-events: none;
+  }
+
+  .corner-ornament.tl { top: 5px; left: 5px; border-top: 2px solid var(--saffron); border-left: 2px solid var(--saffron); }
+  .corner-ornament.tr { top: 5px; right: 5px; border-top: 2px solid var(--saffron); border-right: 2px solid var(--saffron); }
+  .corner-ornament.bl { bottom: 5px; left: 5px; border-bottom: 2px solid var(--saffron); border-left: 2px solid var(--saffron); }
+  .corner-ornament.br { bottom: 5px; right: 5px; border-bottom: 2px solid var(--saffron); border-right: 2px solid var(--saffron); }
+
+  /* TECH TREE */
+  .tech-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; margin-bottom: 4px;
+    border: 1px solid var(--panel-border);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 10px;
+  }
+
+  .tech-item:hover { border-color: var(--saffron); background: rgba(255,107,0,0.05); }
+  .tech-item.researched { border-color: var(--gold-dark); background: rgba(255,215,0,0.05); }
+  .tech-item.researched .tech-name { color: var(--gold); }
+  .tech-icon { font-size: 16px; flex-shrink: 0; }
+  .tech-name { font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
+  .tech-effect { color: var(--text-dim); font-size: 9px; font-style: italic; }
+
+  /* FACTION TAGS */
+  .faction-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 9px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    border: 1px solid;
+    border-radius: 0;
+    text-transform: uppercase;
+  }
+
+  .tag-allied { border-color: #4CAF50; color: #4CAF50; background: rgba(76,175,80,0.1); }
+  .tag-hostile { border-color: var(--blood-red); color: var(--blood-red); background: rgba(192,57,43,0.1); }
+  .tag-neutral { border-color: var(--text-dim); color: var(--text-dim); background: rgba(255,255,255,0.03); }
+  .tag-vassal { border-color: var(--dharma-blue); color: var(--dharma-blue); background: rgba(74,144,217,0.1); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--panel-border); border-radius: 2px; }
+
+  /* Decorative divider */
+  .deco-divider {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text-dim); font-size: 12px;
+    margin: 5px 0;
+  }
+  .deco-divider::before, .deco-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--panel-border));
+  }
+  .deco-divider::after { background: linear-gradient(90deg, var(--panel-border), transparent); }
+
+  .hindi-label {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ INTRO SCREEN ═══════ -->
+<div id="intro-screen">
+  <div class="intro-lotus">🪷</div>
+  <div class="intro-title">Arthashastra</div>
+  <div class="intro-subtitle">Rise of Chandragupta</div>
+  <div class="intro-devanagari">अर्थशास्त्र — चन्द्रगुप्त का उत्थान</div>
+  <div class="ornament-line">✦</div>
+  <div class="intro-quote">
+    "The king shall consider as good, not what pleases himself, but what pleases his subjects."
+    <br>— Chanakya, Arthashastra
+  </div>
+  <button class="btn-start" onclick="startGame()">BEGIN YOUR REIGN ⚔️</button>
+</div>
+
+<!-- ═══════ GAME WRAPPER ═══════ -->
+<div id="game-wrapper">
+
+  <!-- TOP BAR -->
+  <div id="top-bar">
+    <div class="game-logo">⚔️ Arthashastra</div>
+    <div class="top-resources">
+      <div class="resource-chip" title="Suvarna - Gold Treasury">
+        <span class="resource-icon">🪙</span>
+        <span>
+          <span class="resource-label">SUVARNA</span>
+          <span class="resource-value" id="res-gold">450</span>
+          <span class="resource-delta delta-pos" id="delta-gold">+35</span>
+        </span>
+      </div>
+      <div class="resource-chip" title="Sena - Military Strength">
+        <span class="resource-icon">⚔️</span>
+        <span>
+          <span class="resource-label">SENA</span>
+          <span class="resource-value" id="res-army">120</span>
+          <span class="resource-delta" id="delta-army">+5</span>
+        </span>
+      </div>
+      <div class="resource-chip" title="Anna - Food Supply">
+        <span class="resource-icon">🌾</span>
+        <span>
+          <span class="resource-label">ANNA</span>
+          <span class="resource-value" id="res-food">280</span>
+          <span class="resource-delta delta-pos" id="delta-food">+20</span>
+        </span>
+      </div>
+      <div class="resource-chip" title="Dharma - Moral Authority">
+        <span class="resource-icon">🪷</span>
+        <span>
+          <span class="resource-label">DHARMA</span>
+          <span class="resource-value" id="res-dharma">65</span>
+          <span class="resource-delta delta-pos" id="delta-dharma">+3</span>
+        </span>
+      </div>
+      <div class="resource-chip" title="Praja - Population Happiness">
+        <span class="resource-icon">😊</span>
+        <span>
+          <span class="resource-label">PRAJA</span>
+          <span class="resource-value" id="res-happiness">72</span>
+          <span class="resource-delta" id="delta-happiness">%</span>
+        </span>
+      </div>
+    </div>
+    <div class="turn-info">
+      <span class="turn-badge">YEAR BCE</span>
+      <span class="turn-number" id="turn-year">321</span>
+    </div>
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div id="left-panel">
+
+    <!-- Kingdom Status -->
+    <div class="panel-section">
+      <div class="panel-section-header">👑 SAMRAJYA</div>
+      <div class="panel-section-content">
+        <div class="king-portrait">👳</div>
+        <div class="king-name">Chandragupta Maurya</div>
+        <div class="king-title">Emperor of Magadha</div>
+        <div class="hindi-label">चन्द्रगुप्त मौर्य</div>
+        <div style="margin-top: 12px;">
+          <div class="stat-bar-wrap">
+            <div class="stat-bar-label"><span>⚔ SAINYA SHAKTI</span><span id="stat-mil">75%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill bar-military" id="bar-mil" style="width:75%"></div></div>
+          </div>
+          <div class="stat-bar-wrap">
+            <div class="stat-bar-label"><span>🪷 DHARMA</span><span id="stat-dharma">65%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill bar-dharma" id="bar-dharma" style="width:65%"></div></div>
+          </div>
+          <div class="stat-bar-wrap">
+            <div class="stat-bar-label"><span>🪙 ARTHA</span><span id="stat-eco">60%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill bar-economy" id="bar-eco" style="width:60%"></div></div>
+          </div>
+          <div class="stat-bar-wrap">
+            <div class="stat-bar-label"><span>👁 PRABHAV</span><span id="stat-inf">45%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill bar-influence" id="bar-inf" style="width:45%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Territories -->
+    <div class="panel-section">
+      <div class="panel-section-header">🏰 RAJYA — TERRITORIES <span id="terr-count" style="margin-left:auto;color:var(--text-dim)">3/16</span></div>
+      <div class="panel-section-content" style="padding: 0;">
+        <div id="territory-list"></div>
+      </div>
+    </div>
+
+    <!-- Factions -->
+    <div class="panel-section">
+      <div class="panel-section-header">🤝 SHAKTI — FACTIONS</div>
+      <div class="panel-section-content" id="faction-list" style="font-size:11px;"></div>
+    </div>
+
+  </div>
+
+  <!-- CENTER MAP -->
+  <div id="map-container">
+    <canvas id="game-canvas"></canvas>
+    <div id="advisor-box" class="hidden">
+      <div class="advisor-avatar">🧙</div>
+      <div class="advisor-text">
+        <div class="advisor-name">Acharya Chanakya</div>
+        <div class="advisor-quote" id="advisor-quote">Awaiting your command, Samrat...</div>
+      </div>
+    </div>
+    <div class="corner-ornament tl"></div>
+    <div class="corner-ornament tr"></div>
+    <div class="corner-ornament bl"></div>
+    <div class="corner-ornament br"></div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div id="right-panel">
+
+    <!-- Actions -->
+    <div class="panel-section">
+      <div class="panel-section-header">📜 KARMA — ACTIONS</div>
+      <div class="panel-section-content">
+        <button class="action-btn" onclick="doAction('recruit')" id="btn-recruit">
+          <span class="action-icon">⚔️</span>
+          <span>
+            RECRUIT SENA
+            <span class="action-desc">Train battalions of warriors for conquest</span>
+          </span>
+          <span class="action-cost">🪙150</span>
+        </button>
+        <button class="action-btn" onclick="doAction('spy')" id="btn-spy">
+          <span class="action-icon">🕵️</span>
+          <span>
+            DEPLOY GUPTA
+            <span class="action-desc">Send spies to weaken enemy kingdoms</span>
+          </span>
+          <span class="action-cost">🪙80</span>
+        </button>
+        <button class="action-btn" onclick="doAction('trade')" id="btn-trade">
+          <span class="action-icon">🐪</span>
+          <span>
+            OPEN VANIK PATH
+            <span class="action-desc">Establish trade routes for prosperity</span>
+          </span>
+          <span class="action-cost">🪙100</span>
+        </button>
+        <button class="action-btn" onclick="doAction('dharma')" id="btn-dharma">
+          <span class="action-icon">🪷</span>
+          <span>
+            SPREAD DHARMA
+            <span class="action-desc">Build temples, raise moral authority</span>
+          </span>
+          <span class="action-cost">🪙60</span>
+        </button>
+        <button class="action-btn" onclick="doAction('harvest')" id="btn-harvest">
+          <span class="action-icon">🌾</span>
+          <span>
+            KRISHI VIKAS
+            <span class="action-desc">Expand farms and water channels</span>
+          </span>
+          <span class="action-cost">🪙50</span>
+        </button>
+        <button class="action-btn" onclick="doAction('diplomacy')" id="btn-diplomacy">
+          <span class="action-icon">📯</span>
+          <span>
+            RAJDOOT
+            <span class="action-desc">Send ambassadors to neutral kingdoms</span>
+          </span>
+          <span class="action-cost">🪙70</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Technologies -->
+    <div class="panel-section">
+      <div class="panel-section-header">📖 VIDYA — ARTHASHASTRA LAWS</div>
+      <div class="panel-section-content" id="tech-list"></div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="panel-section">
+      <div class="panel-section-header">📋 ITIHAS — EVENT LOG</div>
+      <div class="panel-section-content" style="padding: 8px 12px;">
+        <div id="event-log"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div id="bottom-bar">
+    <div id="selected-info">
+      <div class="selected-title" id="sel-title">🗺️ SELECT A PROVINCE</div>
+      <div class="selected-desc" id="sel-desc">Click any territory on the map to view details and available actions</div>
+    </div>
+    <div class="territory-actions" id="territory-actions" style="display:none">
+      <button class="terr-action-btn primary" id="btn-invade" onclick="invadeSelected()">⚔ INVADE</button>
+      <button class="terr-action-btn" id="btn-annex" onclick="annexSelected()">🤝 DIPLOMACY</button>
+      <button class="terr-action-btn" id="btn-spy-terr" onclick="spySelected()">🕵 SPY</button>
+    </div>
+    <button class="btn-end-turn" onclick="endTurn()">⏭ END YUGA (TURN)</button>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Event</div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-options" id="modal-options"></div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div id="notification">
+  <div class="notif-title" id="notif-title">NOTIFICATION</div>
+  <div id="notif-body">Message here</div>
+</div>
+
+<!-- VICTORY SCREEN -->
+<div id="victory-screen">
+  <div style="font-size:80px;margin-bottom:20px">🏆</div>
+  <div class="victory-title">SAMRAT CHAKRAVARTI!</div>
+  <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--saffron);margin:15px 0;letter-spacing:4px;">Emperor of All India</div>
+  <div style="font-style:italic;color:var(--text-dim);max-width:500px;text-align:center;line-height:1.8;padding:20px;font-size:14px;" id="victory-desc"></div>
+  <button class="btn-start" onclick="location.reload()" style="margin-top:30px">⚔ PLAY AGAIN</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// ARTHASHASTRA: RISE OF CHANDRAGUPTA - GAME ENGINE
+// ═══════════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('game-canvas');
+const ctx = canvas.getContext('2d');
+
+// ─── GAME STATE ────────────────────────────────────────────────────
+const state = {
+  turn: 1,
+  year: 321,
+  resources: { gold: 450, army: 120, food: 280, dharma: 65, happiness: 72 },
+  deltas: { gold: 35, army: 5, food: 20, dharma: 3 },
+  stats: { military: 75, dharma: 65, economy: 60, influence: 45 },
+  actionsLeft: 3,
+  selectedTerritory: null,
+  researched: new Set(),
+  events: [],
+  advisorTimeout: null,
+};
+
+// ─── TERRITORIES ──────────────────────────────────────────────────
+const TERRITORIES = [
+  // PLAYER STARTS
+  { id: 'magadha',    name: 'Magadha',     hindi: 'मगध',      x: 0.62, y: 0.55, owner: 'player', strength: 80, wealth: 90, color: '#8B1A1A', type: 'capital', population: 500 },
+  { id: 'pataliputra',name: 'Pataliputra', hindi: 'पाटलिपुत्र', x: 0.60, y: 0.50, owner: 'player', strength: 70, wealth: 80, color: '#8B1A1A', type: 'city', population: 300 },
+  { id: 'nalanda',    name: 'Nalanda',     hindi: 'नालंदा',    x: 0.64, y: 0.47, owner: 'player', strength: 40, wealth: 60, color: '#8B1A1A', type: 'temple', population: 150 },
+
+  // HOSTILE KINGDOMS
+  { id: 'nanda',      name: 'Nanda Kingdom', hindi: 'नंद राज्य', x: 0.55, y: 0.52, owner: 'nanda', strength: 120, wealth: 100, color: '#1A3B6B', type: 'capital', population: 400 },
+  { id: 'taxila',     name: 'Takshashila', hindi: 'तक्षशिला',  x: 0.28, y: 0.32, owner: 'persian', strength: 90, wealth: 110, color: '#4A2B0A', type: 'city', population: 350 },
+  { id: 'kalinga',    name: 'Kalinga',     hindi: 'कलिंग',    x: 0.66, y: 0.68, owner: 'kalinga', strength: 100, wealth: 75, color: '#1A6B3B', type: 'capital', population: 320 },
+  { id: 'saurashtra', name: 'Saurashtra',  hindi: 'सौराष्ट्र',  x: 0.32, y: 0.60, owner: 'saurashtra', strength: 70, wealth: 85, color: '#6B6B1A', type: 'port', population: 200 },
+  { id: 'kosala',     name: 'Kosala',      hindi: 'कोसल',     x: 0.58, y: 0.42, owner: 'kosala', strength: 65, wealth: 60, color: '#6B1A6B', type: 'city', population: 250 },
+
+  // NEUTRAL
+  { id: 'panchala',   name: 'Panchala',    hindi: 'पांचाल',    x: 0.47, y: 0.38, owner: 'neutral', strength: 55, wealth: 65, color: '#555', type: 'plains', population: 180 },
+  { id: 'mathura',    name: 'Mathura',     hindi: 'मथुरा',    x: 0.45, y: 0.44, owner: 'neutral', strength: 50, wealth: 70, color: '#555', type: 'city', population: 200 },
+  { id: 'avanti',     name: 'Avanti',      hindi: 'अवंती',    x: 0.42, y: 0.54, owner: 'neutral', strength: 60, wealth: 65, color: '#555', type: 'plains', population: 170 },
+  { id: 'vatsa',      name: 'Vatsa',       hindi: 'वत्स',     x: 0.53, y: 0.44, owner: 'neutral', strength: 45, wealth: 55, color: '#555', type: 'plains', population: 140 },
+  { id: 'anga',       name: 'Anga',        hindi: 'अंग',      x: 0.70, y: 0.48, owner: 'neutral', strength: 50, wealth: 60, color: '#555', type: 'port', population: 160 },
+  { id: 'gandhara',   name: 'Gandhara',    hindi: 'गंधार',    x: 0.22, y: 0.28, owner: 'neutral', strength: 55, wealth: 70, color: '#555', type: 'mountains', population: 150 },
+  { id: 'sindhu',     name: 'Sindhu',      hindi: 'सिंधु',    x: 0.22, y: 0.45, owner: 'neutral', strength: 60, wealth: 80, color: '#555', type: 'river', population: 220 },
+  { id: 'deccan',     name: 'Deccan',      hindi: 'दक्षिण',   x: 0.52, y: 0.75, owner: 'neutral', strength: 65, wealth: 55, color: '#555', type: 'plains', population: 200 },
+];
+
+// ─── FACTIONS ─────────────────────────────────────────────────────
+const FACTIONS = {
+  nanda:      { name: 'Nanda Empire',    emoji: '⚔️', relation: 'hostile',  color: '#1A3B6B' },
+  persian:    { name: 'Seleucid Force',  emoji: '🏛️', relation: 'hostile',  color: '#8B4513' },
+  kalinga:    { name: 'Kalinga Kingdom', emoji: '🐘', relation: 'hostile',  color: '#1A6B3B' },
+  saurashtra: { name: 'Saurashtra',      emoji: '🚢', relation: 'neutral',  color: '#8B8B00' },
+  kosala:     { name: 'Kosala',          emoji: '🌸', relation: 'neutral',  color: '#8B008B' },
+};
+
+// ─── TECHNOLOGIES ─────────────────────────────────────────────────
+const TECHNOLOGIES = [
+  { id: 'saptanga',  name: 'Saptanga Rajya',  emoji: '👑', desc: '+20% all income',     cost: 200, effect: 'income' },
+  { id: 'dandaniti', name: 'Dandaniti',        emoji: '⚖️', desc: '+30% army strength',  cost: 150, effect: 'military' },
+  { id: 'kosha',     name: 'Kosha Vyavastha',  emoji: '🏦', desc: '+50 gold per turn',   cost: 180, effect: 'gold' },
+  { id: 'gupta',     name: 'Gupta Chakra',     emoji: '🕵️', desc: 'Spies cost 50% less', cost: 120, effect: 'spy' },
+  { id: 'ashvamedha',name: 'Ashvamedha Yajna', emoji: '🐎', desc: '+25 dharma, +10% happiness', cost: 250, effect: 'dharma' },
+  { id: 'vanika',    name: 'Silk Route Trade', emoji: '🐪', desc: 'Unlock luxury markets', cost: 200, effect: 'trade' },
+];
+
+// ─── CHANAKYA QUOTES ──────────────────────────────────────────────
+const CHANAKYA_QUOTES = [
+  "A person should not be too honest. Straight trees are cut first and honest people are screwed first.",
+  "Before you start some work, always ask yourself these questions: Why am I doing this? What results might I get?",
+  "The biggest guru-mantra is: never share your secrets with anybody.",
+  "Never make friends with people who are above or below you in status. Such friendships will never give you happiness.",
+  "Books are as useful to a stupid person as a mirror is useful to a blind person.",
+  "A man is great by deeds, not by birth.",
+  "The world's biggest power is the youth and beauty of a woman.",
+  "Do not reveal what you have thought upon doing, but by wise counsel keep it secret.",
+  "He who is overly attached to his family members experiences fear and sorrow, for the root of all grief is attachment.",
+  "Wealth is not for enjoyment only; it has to be deployed for the welfare of all.",
+  "Once you start a working on something, don't be afraid of failure and don't abandon it.",
+  "The fragrance of flowers spreads only in the direction of the wind. But the goodness of a person spreads in all directions.",
+];
+
+// ─── MAP TERRAIN ──────────────────────────────────────────────────
+const MAP_BG_REGIONS = [
+  // Himalayas
+  { x: 0.10, y: 0.05, w: 0.85, h: 0.20, color: 'rgba(50,35,20,0.5)', label: '🏔 Himalayas' },
+  // Deccan Plateau
+  { x: 0.30, y: 0.65, w: 0.50, h: 0.30, color: 'rgba(30,50,20,0.4)', label: '⛰ Deccan' },
+  // Gangetic Plain
+  { x: 0.30, y: 0.35, w: 0.50, h: 0.35, color: 'rgba(20,40,15,0.3)', label: '🌾 Ganga Plain' },
+  // Western Desert
+  { x: 0.05, y: 0.35, w: 0.20, h: 0.35, color: 'rgba(60,45,10,0.35)', label: '🏜 Desert' },
+  // Eastern sea
+  { x: 0.75, y: 0.30, w: 0.20, h: 0.55, color: 'rgba(10,30,60,0.5)', label: '🌊 Bay' },
+  // Arabian sea
+  { x: 0.05, y: 0.65, w: 0.25, h: 0.30, color: 'rgba(10,30,60,0.5)', label: '🌊 Arabian Sea' },
+];
+
+const RIVERS = [
+  // Ganga
+  [[0.40,0.35],[0.45,0.40],[0.52,0.44],[0.58,0.48],[0.63,0.50],[0.70,0.48],[0.75,0.44]],
+  // Yamuna
+  [[0.40,0.35],[0.43,0.40],[0.45,0.44],[0.47,0.50],[0.50,0.54]],
+  // Sindhu
+  [[0.22,0.18],[0.22,0.28],[0.22,0.45],[0.25,0.58],[0.18,0.68]],
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+function startGame() {
+  document.getElementById('intro-screen').classList.add('fade-out');
+  setTimeout(() => {
+    document.getElementById('intro-screen').style.display = 'none';
+    document.getElementById('game-wrapper').classList.add('visible');
+    initGame();
+  }, 1000);
+}
+
+function initGame() {
+  resizeCanvas();
+  renderTerritoryList();
+  renderFactionList();
+  renderTechList();
+  updateUI();
+  drawMap();
+  showAdvisor("Welcome, Samrat Chandragupta! The year is 321 BCE. Magadha awaits your command. Expand your empire through wisdom, strategy, and righteous warfare.");
+  addEvent("🏰 Year 321 BCE — Chandragupta Maurya ascends the throne of Magadha.", 'important');
+  addEvent("📜 Acharya Chanakya whispers: The path to Chakravarti Samrat begins now.", 'neutral');
+  window.addEventListener('resize', () => { resizeCanvas(); drawMap(); });
+  canvas.addEventListener('click', onCanvasClick);
+  canvas.addEventListener('mousemove', onCanvasHover);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CANVAS RENDERING
+// ═══════════════════════════════════════════════════════════════════
+function resizeCanvas() {
+  const container = document.getElementById('map-container');
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+  drawMap();
+}
+
+let hoveredTerr = null;
+
+function drawMap() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Background gradient
+  const bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H));
+  bg.addColorStop(0, '#1A1005');
+  bg.addColorStop(0.5, '#0F0A04');
+  bg.addColorStop(1, '#060402');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw terrain regions
+  MAP_BG_REGIONS.forEach(r => {
+    const rx = r.x*W, ry = r.y*H, rw = r.w*W, rh = r.h*H;
+    ctx.fillStyle = r.color;
+    ctx.beginPath();
+    ctx.roundRect(rx, ry, rw, rh, 8);
+    ctx.fill();
+  });
+
+  // Draw rivers
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(74,144,217,0.35)';
+  ctx.lineCap = 'round';
+  RIVERS.forEach(river => {
+    ctx.beginPath();
+    river.forEach(([rx, ry], i) => {
+      i === 0 ? ctx.moveTo(rx*W, ry*H) : ctx.lineTo(rx*W, ry*H);
+    });
+    ctx.stroke();
+  });
+
+  // Draw connections between adjacent territories
+  const connections = [
+    ['magadha','pataliputra'],['magadha','nalanda'],['magadha','nanda'],
+    ['magadha','kalinga'],['magadha','anga'],['pataliputra','kosala'],
+    ['pataliputra','vatsa'],['kosala','panchala'],['panchala','mathura'],
+    ['mathura','avanti'],['avanti','saurashtra'],['avanti','sindhu'],
+    ['sindhu','taxila'],['sindhu','gandhara'],['taxila','gandhara'],
+    ['taxila','persian'],['nanda','kosala'],['nanda','vatsa'],
+    ['kalinga','deccan'],['deccan','avanti'],
+  ];
+
+  ctx.setLineDash([4, 6]);
+  ctx.lineWidth = 0.8;
+  ctx.strokeStyle = 'rgba(255,180,50,0.12)';
+  connections.forEach(([a, b]) => {
+    const ta = TERRITORIES.find(t => t.id === a);
+    const tb = TERRITORIES.find(t => t.id === b);
+    if (!ta || !tb) return;
+    ctx.beginPath();
+    ctx.moveTo(ta.x*W, ta.y*H);
+    ctx.lineTo(tb.x*W, tb.y*H);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Grid overlay
+  ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < W; i += 40) {
+    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke();
+  }
+  for (let i = 0; i < H; i += 40) {
+    ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(W, i); ctx.stroke();
+  }
+
+  // Draw territories
+  TERRITORIES.forEach(t => {
+    const tx = t.x * W, ty = t.y * H;
+    const isSelected = state.selectedTerritory?.id === t.id;
+    const isHovered = hoveredTerr?.id === t.id;
+    const isPlayer = t.owner === 'player';
+    const radius = isSelected ? 28 : isHovered ? 24 : 20;
+
+    // Glow effect
+    const glowStrength = isSelected ? 25 : isHovered ? 15 : 8;
+    const glowColor = isPlayer ? 'rgba(255,107,0,' : 'rgba(255,215,0,';
+    const gGlow = ctx.createRadialGradient(tx, ty, 0, tx, ty, radius + glowStrength);
+    gGlow.addColorStop(0, glowColor + '0.3)');
+    gGlow.addColorStop(1, glowColor + '0)');
+    ctx.fillStyle = gGlow;
+    ctx.beginPath();
+    ctx.arc(tx, ty, radius + glowStrength, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Main circle
+    const ownerColor = isPlayer ? '#8B1A1A' : (FACTIONS[t.owner]?.color || '#444');
+    const g = ctx.createRadialGradient(tx-radius/4, ty-radius/4, 0, tx, ty, radius);
+    if (isPlayer) {
+      g.addColorStop(0, '#C44');
+      g.addColorStop(1, '#6B0000');
+    } else if (t.owner === 'neutral') {
+      g.addColorStop(0, '#555');
+      g.addColorStop(1, '#2A2A2A');
+    } else {
+      const c = FACTIONS[t.owner]?.color || '#444';
+      g.addColorStop(0, lightenColor(c, 40));
+      g.addColorStop(1, c);
+    }
+
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(tx, ty, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Border
+    ctx.strokeStyle = isSelected ? '#FFD700' : isPlayer ? '#FF6B00' : isHovered ? '#FFD700' : 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = isSelected ? 3 : 1.5;
+    ctx.stroke();
+
+    // Inner highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath();
+    ctx.arc(tx - radius/4, ty - radius/4, radius/2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Type icon
+    const typeEmoji = { capital:'👑', city:'🏛', temple:'🪷', port:'⚓', plains:'🌾', mountains:'🏔', river:'💧' }[t.type] || '●';
+    ctx.font = `${isSelected ? 14 : 11}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(typeEmoji, tx, ty);
+
+    // Name label
+    ctx.fillStyle = isSelected ? '#FFD700' : '#E8D5A3';
+    ctx.font = `bold ${isSelected ? 12 : 10}px Cinzel, serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 4;
+    ctx.fillText(t.name, tx, ty + radius + 4);
+    ctx.shadowBlur = 0;
+
+    // Devanagari subtitle
+    ctx.fillStyle = 'rgba(255,200,100,0.5)';
+    ctx.font = `9px Tiro Devanagari Sanskrit, serif`;
+    ctx.fillText(t.hindi, tx, ty + radius + 17);
+
+    // Strength indicator
+    if (isSelected || isHovered) {
+      const strengthW = 40, strengthH = 4;
+      const sx = tx - strengthW/2, sy = ty - radius - 12;
+      ctx.fillStyle = 'rgba(0,0,0,0.5)';
+      ctx.fillRect(sx, sy, strengthW, strengthH);
+      const strengthColor = t.owner === 'player' ? '#4CAF50' : '#E53935';
+      ctx.fillStyle = strengthColor;
+      ctx.fillRect(sx, sy, (t.strength/150)*strengthW, strengthH);
+
+      ctx.fillStyle = '#E8D5A3';
+      ctx.font = '8px Cinzel, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`⚔ ${t.strength}`, tx, sy - 8);
+    }
+  });
+
+  // Title watermark
+  ctx.font = 'bold 11px Cinzel Decorative, serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = 'rgba(255,215,0,0.12)';
+  ctx.fillText('BHARATVARSHA — 321 BCE', 15, 15);
+
+  // Compass rose
+  drawCompassRose(W - 55, 55, 30);
+}
+
+function drawCompassRose(cx, cy, r) {
+  const directions = [['N', 0], ['E', 90], ['S', 180], ['W', 270]];
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,215,0,0.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  directions.forEach(([d, angle]) => {
+    const rad = (angle - 90) * Math.PI / 180;
+    ctx.fillStyle = d === 'N' ? '#FF6B00' : 'rgba(255,215,0,0.5)';
+    ctx.font = 'bold 9px Cinzel, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(d, Math.cos(rad)*(r-10), Math.sin(rad)*(r-10));
+  });
+
+  ctx.strokeStyle = 'rgba(255,107,0,0.5)';
+  ctx.lineWidth = 1.5;
+  [[0,-r+5],[0,r-5],[-(r-5),0],[r-5,0]].forEach(([ex,ey], i) => {
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(ex,ey);
+    ctx.stroke();
+  });
+
+  ctx.restore();
+}
+
+function lightenColor(hex, amt) {
+  const num = parseInt(hex.replace('#',''),16);
+  const r = Math.min(255, (num>>16) + amt);
+  const g = Math.min(255, ((num>>8)&0xFF) + amt);
+  const b = Math.min(255, (num&0xFF) + amt);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INTERACTION
+// ═══════════════════════════════════════════════════════════════════
+function getTerritoryAtPos(x, y) {
+  const W = canvas.width, H = canvas.height;
+  return TERRITORIES.find(t => {
+    const dx = t.x*W - x, dy = t.y*H - y;
+    return Math.sqrt(dx*dx + dy*dy) < 26;
+  });
+}
+
+function onCanvasClick(e) {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const t = getTerritoryAtPos(x, y);
+  if (t) selectTerritory(t);
+  else {
+    state.selectedTerritory = null;
+    document.getElementById('sel-title').textContent = '🗺️ SELECT A PROVINCE';
+    document.getElementById('sel-desc').textContent = 'Click any territory on the map to view details and available actions';
+    document.getElementById('territory-actions').style.display = 'none';
+    drawMap();
+  }
+}
+
+function onCanvasHover(e) {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const t = getTerritoryAtPos(x, y);
+  if (t !== hoveredTerr) {
+    hoveredTerr = t;
+    canvas.style.cursor = t ? 'pointer' : 'default';
+    drawMap();
+  }
+}
+
+function selectTerritory(t) {
+  state.selectedTerritory = t;
+  drawMap();
+
+  document.getElementById('territory-actions').style.display = 'flex';
+  const owned = t.owner === 'player';
+  const isNeutral = t.owner === 'neutral';
+  const hostile = !owned;
+  const fName = FACTIONS[t.owner]?.name || 'Independent';
+  const typeLabel = { capital:'Capital', city:'City', temple:'Sacred Temple', port:'Port City', plains:'Plains', mountains:'Mountain Pass', river:'River Valley' }[t.type] || 'Territory';
+
+  document.getElementById('sel-title').textContent = `${owned ? '🏴' : '🚩'} ${t.name} — ${t.hindi}`;
+  document.getElementById('sel-desc').textContent = `${typeLabel} | Owner: ${owned ? 'Your Empire' : fName} | ⚔ Strength: ${t.strength} | 🪙 Wealth: ${t.wealth} | Population: ${t.population}K`;
+
+  const btnInvade = document.getElementById('btn-invade');
+  const btnAnnex = document.getElementById('btn-annex');
+  const btnSpyTerr = document.getElementById('btn-spy-terr');
+
+  if (owned) {
+    btnInvade.textContent = '🏗 FORTIFY';
+    btnAnnex.textContent = '📜 MANAGE';
+    btnSpyTerr.textContent = '🌾 DEVELOP';
+    btnInvade.disabled = false;
+    btnAnnex.disabled = false;
+  } else {
+    btnInvade.textContent = '⚔ INVADE';
+    btnAnnex.textContent = isNeutral ? '🤝 ANNEX' : '📯 DIPLOMACY';
+    btnSpyTerr.textContent = '🕵 SPY';
+    btnInvade.disabled = false;
+    btnAnnex.disabled = false;
+    btnSpyTerr.disabled = false;
+  }
+
+  // Show Chanakya advice
+  if (!owned) {
+    const advice = isNeutral
+      ? `${t.name} is unaligned. We can win them with diplomacy or force. Their strength of ${t.strength} is ${t.strength > state.resources.army ? 'formidable' : 'manageable'}.`
+      : `${fName} controls ${t.name}. Their ${t.strength} warriors will not yield easily. Prepare well, Samrat.`;
+    showAdvisor(advice);
+  } else {
+    showAdvisor(`${t.name} is under your dominion, Samrat. Its people are ${t.population < 200 ? 'few but loyal' : 'many and prosperous'}.`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// GAME ACTIONS
+// ═══════════════════════════════════════════════════════════════════
+function doAction(type) {
+  if (state.actionsLeft <= 0) { showNotification('No Actions Left', 'You have used all actions this turn. End the Yuga to proceed.', 'bad'); return; }
+
+  const costs = { recruit: 150, spy: 80, trade: 100, dharma: 60, harvest: 50, diplomacy: 70 };
+  const cost = costs[type];
+  if (state.resources.gold < cost) {
+    showNotification('Insufficient Suvarna', `You need ${cost} gold for this action. Current treasury: ${state.resources.gold}.`, 'bad');
+    return;
+  }
+
+  state.resources.gold -= cost;
+  state.actionsLeft--;
+
+  switch(type) {
+    case 'recruit':
+      const recruited = 15 + Math.floor(Math.random()*10);
+      state.resources.army += recruited;
+      state.stats.military = Math.min(100, state.stats.military + 5);
+      addEvent(`⚔️ Recruited ${recruited} new warriors for the Mauryan Sena.`, 'good');
+      showAdvisor("An army is the king's power. But remember — a righteous king wins wars before they begin.");
+      showNotification('Sena Strengthened!', `+${recruited} warriors join your army. Total: ${state.resources.army}`, 'good');
+      break;
+    case 'spy':
+      const spyResult = Math.random() > 0.3;
+      if (spyResult) {
+        const target = TERRITORIES.filter(t => t.owner !== 'player')[Math.floor(Math.random()*8)];
+        if (target) {
+          target.strength = Math.max(10, target.strength - 15);
+          addEvent(`🕵️ Gupta agents weakened ${target.name}. Their strength reduced to ${target.strength}.`, 'good');
+          showNotification('Spy Mission Successful!', `${target.name}'s defenses weakened by 15.`, 'good');
+        }
+      } else {
+        addEvent(`🕵️ Our spy was captured. Diplomatic tensions rise.`, 'bad');
+        state.stats.influence = Math.max(0, state.stats.influence - 5);
+        showNotification('Spy Captured!', 'Our agent was discovered. Some influence lost.', 'bad');
+      }
+      drawMap();
+      break;
+    case 'trade':
+      const tradeGold = 60 + Math.floor(Math.random()*40);
+      state.resources.gold += tradeGold;
+      state.deltas.gold += 10;
+      state.stats.economy = Math.min(100, state.stats.economy + 8);
+      addEvent(`🐪 New trade route established. Generated ${tradeGold} Suvarna immediately.`, 'good');
+      showNotification('Trade Route Open!', `+${tradeGold} Suvarna earned. +10 gold per turn.`, 'good');
+      break;
+    case 'dharma':
+      state.resources.dharma = Math.min(100, state.resources.dharma + 12);
+      state.resources.happiness = Math.min(100, state.resources.happiness + 5);
+      state.stats.dharma = Math.min(100, state.stats.dharma + 8);
+      addEvent(`🪷 New temple consecrated. Dharma rises across the land.`, 'good');
+      showAdvisor('"A king who desires spiritual merit, should not be covetous, should be impartial towards all beings and avoid violence." — Arthashastra');
+      showNotification('Dharma Spreads!', '+12 Dharma, +5% Happiness across your realm.', 'good');
+      break;
+    case 'harvest':
+      const foodGain = 40 + Math.floor(Math.random()*20);
+      state.resources.food += foodGain;
+      state.deltas.food += 5;
+      addEvent(`🌾 Agricultural expansion complete. +${foodGain} Anna stored.`, 'good');
+      showNotification('Harvest Successful!', `+${foodGain} Anna. Your people will not go hungry.`, 'good');
+      break;
+    case 'diplomacy':
+      const neutrals = TERRITORIES.filter(t => t.owner === 'neutral');
+      if (neutrals.length > 0) {
+        const target = neutrals[Math.floor(Math.random()*neutrals.length)];
+        target.strength = Math.max(0, target.strength - 10);
+        state.stats.influence = Math.min(100, state.stats.influence + 10);
+        addEvent(`📯 Rajdoot sent to ${target.name}. Their resolve weakens.`, 'good');
+        showNotification('Diplomacy Active!', `${target.name} is warming to your overtures. +10 Influence.`, 'good');
+      }
+      break;
+  }
+
+  updateUI();
+}
+
+function invadeSelected() {
+  const t = state.selectedTerritory;
+  if (!t) return;
+  if (t.owner === 'player') { fortifyTerritory(t); return; }
+
+  const armyNeeded = Math.ceil(t.strength * 0.6);
+  if (state.resources.army < armyNeeded) {
+    showModal(
+      '⚔ Insufficient Sena',
+      `To invade ${t.name}, you need at least ${armyNeeded} warriors. You have ${state.resources.army}. Recruit more troops first.`,
+      [{ label: 'Very well', action: () => {} }]
+    );
+    return;
+  }
+
+  showModal(
+    `⚔ Invade ${t.name}?`,
+    `You will attack ${t.name} with your Sena.\n\nYour Army: ⚔ ${state.resources.army}\nEnemy Strength: ⚔ ${t.strength}\n\nThis battle will cost lives. Is this the righteous path?`,
+    [
+      { label: '⚔ Attack!', cls: 'confirm', action: () => conductBattle(t) },
+      { label: '✋ Retreat', action: () => showAdvisor("Wisdom sometimes lies in choosing NOT to fight, Samrat.") }
+    ]
+  );
+}
+
+function conductBattle(t) {
+  const playerPower = state.resources.army * (1 + state.stats.military/200);
+  const enemyPower = t.strength * (1 + Math.random()*0.3);
+  const spyBonus = state.stats.influence > 50 ? 20 : 0;
+
+  if (playerPower + spyBonus > enemyPower) {
+    // VICTORY
+    const armyLost = Math.floor(t.strength * 0.25 + Math.random()*10);
+    state.resources.army = Math.max(10, state.resources.army - armyLost);
+    const goldLooted = t.wealth + Math.floor(Math.random()*50);
+    state.resources.gold += goldLooted;
+    state.resources.dharma = Math.max(0, state.resources.dharma - 8);
+    const prevOwner = t.owner;
+    t.owner = 'player';
+    t.color = '#8B1A1A';
+
+    addEvent(`🎉 VICTORY! ${t.name} conquered! Lost ${armyLost} warriors. Looted ${goldLooted} Suvarna.`, 'important');
+    showAdvisor(`${t.name} is ours! But remember — "A conquered country should be reorganized so that the king's welfare is linked with the welfare of his subjects."`);
+    showNotification(`${t.name} Conquered!`, `+${goldLooted} gold looted! Lost ${armyLost} warriors.`, 'good');
+
+    if (prevOwner !== 'neutral' && FACTIONS[prevOwner]) {
+      const remaining = TERRITORIES.filter(tt => tt.owner === prevOwner);
+      if (remaining.length === 0) {
+        addEvent(`⚠️ ${FACTIONS[prevOwner].name} has been eliminated!`, 'important');
+      }
+    }
+
+    checkVictory();
+  } else {
+    // DEFEAT
+    const armyLost = Math.floor(state.resources.army * 0.2 + Math.random()*15);
+    state.resources.army = Math.max(5, state.resources.army - armyLost);
+    t.strength += 5;
+    state.resources.dharma = Math.max(0, state.resources.dharma - 5);
+
+    addEvent(`💀 Defeat at ${t.name}! Lost ${armyLost} warriors. The enemy repels our advance.`, 'bad');
+    showAdvisor('"The king who is ignorant of the science of polity cannot see the right path." Regroup, Samrat.');
+    showNotification('Defeated!', `Lost ${armyLost} warriors. ${t.name} held firm.`, 'bad');
+  }
+
+  renderTerritoryList();
+  updateUI();
+  drawMap();
+}
+
+function annexSelected() {
+  const t = state.selectedTerritory;
+  if (!t || t.owner === 'player') return;
+  if (state.resources.dharma < 30 || state.resources.gold < 100) {
+    showNotification('Cannot Annex', 'Need 30 Dharma and 100 gold for diplomatic annexation.', 'bad');
+    return;
+  }
+
+  const chance = t.owner === 'neutral'
+    ? 0.6 + (state.stats.influence / 200)
+    : 0.3 + (state.stats.influence / 300);
+
+  if (Math.random() < chance) {
+    state.resources.gold -= 100;
+    state.resources.dharma -= 10;
+    t.owner = 'player';
+    addEvent(`🤝 ${t.name} joins the Maurya Empire peacefully!`, 'important');
+    showAdvisor(`Excellent, Samrat! A bloodless victory is the greatest victory. "${t.name}" now prospers under your just rule.`);
+    showNotification('Peaceful Annexation!', `${t.name} joins your empire! +${t.wealth} wealth.`, 'good');
+    checkVictory();
+  } else {
+    state.resources.gold -= 50;
+    addEvent(`📯 Diplomatic overtures to ${t.name} were rejected.`, 'bad');
+    showNotification('Rejected!', `${t.name} refuses to submit. Consider other means.`, 'bad');
+  }
+
+  renderTerritoryList();
+  updateUI();
+  drawMap();
+}
+
+function spySelected() {
+  const t = state.selectedTerritory;
+  if (!t || t.owner === 'player') return;
+  if (state.resources.gold < 60) {
+    showNotification('Insufficient Suvarna', 'Spy mission costs 60 gold.', 'bad');
+    return;
+  }
+  state.resources.gold -= 60;
+  const cost = state.researched.has('gupta') ? 30 : 60;
+  if (Math.random() > 0.35) {
+    t.strength = Math.max(5, t.strength - 20);
+    addEvent(`🕵️ Agents planted in ${t.name}! Strength reduced to ${t.strength}.`, 'good');
+    showNotification('Spy Success!', `${t.name}'s strength reduced by 20.`, 'good');
+  } else {
+    addEvent(`🕵️ Spy mission to ${t.name} failed.`, 'bad');
+    showNotification('Mission Failed', `Our agent was exposed.`, 'bad');
+  }
+  updateUI();
+  drawMap();
+}
+
+function fortifyTerritory(t) {
+  if (state.resources.gold < 80) { showNotification('Not enough gold', 'Need 80 gold to fortify.', 'bad'); return; }
+  state.resources.gold -= 80;
+  t.strength = Math.min(200, t.strength + 25);
+  addEvent(`🏰 Fortifications strengthened at ${t.name}. Strength: ${t.strength}`, 'good');
+  showNotification('Fortified!', `${t.name} is now stronger (⚔${t.strength}).`, 'good');
+  updateUI();
+  drawMap();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// END TURN
+// ═══════════════════════════════════════════════════════════════════
+function endTurn() {
+  state.turn++;
+  state.year++;
+  state.actionsLeft = 3;
+
+  // Income phase
+  const playerTerrs = TERRITORIES.filter(t => t.owner === 'player');
+  const incomeGold = playerTerrs.reduce((s, t) => s + Math.floor(t.wealth * 0.25), 0) + state.deltas.gold;
+  const incomeFood = playerTerrs.length * 8 + state.deltas.food;
+
+  state.resources.gold += incomeGold;
+  state.resources.food += incomeFood;
+  state.resources.army += state.deltas.army;
+  state.resources.dharma = Math.min(100, state.resources.dharma + state.deltas.dharma);
+
+  // AI actions
+  aiTurn();
+
+  // Random events
+  if (Math.random() < 0.4) triggerRandomEvent();
+
+  // Happiness calc
+  state.resources.happiness = Math.min(100, Math.max(20,
+    50 + Math.floor((state.resources.food - 200) / 10) + Math.floor(state.resources.dharma / 5) - Math.floor((playerTerrs.length - 3) * 2)
+  ));
+
+  addEvent(`📅 Year ${state.year} BCE begins. Income: +${incomeGold}🪙 +${incomeFood}🌾`, 'neutral');
+
+  if (state.turn % 5 === 0) {
+    showAdvisor(CHANAKYA_QUOTES[Math.floor(Math.random() * CHANAKYA_QUOTES.length)]);
+  }
+
+  updateUI();
+  renderTerritoryList();
+  renderFactionList();
+  drawMap();
+}
+
+// ─── AI TURN ──────────────────────────────────────────────────────
+function aiTurn() {
+  const enemies = ['nanda', 'persian', 'kalinga'];
+  enemies.forEach(faction => {
+    const factionTerrs = TERRITORIES.filter(t => t.owner === faction);
+    if (factionTerrs.length === 0) return;
+
+    if (Math.random() < 0.3) {
+      // AI tries to expand into neutral
+      const adjacent = TERRITORIES.filter(t => t.owner === 'neutral');
+      if (adjacent.length > 0) {
+        const target = adjacent[Math.floor(Math.random()*adjacent.length)];
+        const fStrength = factionTerrs.reduce((s,t) => s+t.strength,0) / factionTerrs.length;
+        if (fStrength > target.strength) {
+          target.owner = faction;
+          addEvent(`⚠️ ${FACTIONS[faction].name} has seized ${target.name}!`, 'bad');
+        }
+      }
+    }
+
+    if (Math.random() < 0.15) {
+      // AI attacks player
+      const playerTerr = TERRITORIES.filter(t => t.owner === 'player');
+      if (playerTerr.length > 0) {
+        const target = playerTerr[Math.floor(Math.random()*playerTerr.length)];
+        const fStrength = factionTerrs.reduce((s,t) => s+t.strength,0) / factionTerrs.length;
+        if (fStrength > target.strength * 0.8) {
+          const defended = target.strength + (state.resources.army / TERRITORIES.filter(t=>t.owner==='player').length);
+          if (fStrength > defended) {
+            target.owner = faction;
+            addEvent(`💀 CRISIS! ${FACTIONS[faction].name} has taken ${target.name} from us!`, 'bad');
+            showNotification('Territory Lost!', `${target.name} was captured by ${FACTIONS[faction].name}!`, 'bad');
+            renderTerritoryList();
+          } else {
+            addEvent(`⚔ ${FACTIONS[faction].name} attacked ${target.name} but was repelled.`, 'neutral');
+          }
+        }
+      }
+    }
+  });
+}
+
+// ─── RANDOM EVENTS ────────────────────────────────────────────────
+const RANDOM_EVENTS = [
+  {
+    title: '🌊 Monsoon Floods',
+    desc: 'Heavy monsoons flood the Gangetic plains. Food production disrupted.',
+    effect: () => { state.resources.food = Math.max(0, state.resources.food - 50); },
+    eventText: '🌊 Monsoon floods damage crops. Lost 50 Anna.', type: 'bad'
+  },
+  {
+    title: '🐘 Royal Elephant Corps',
+    desc: 'A merchant offers a herd of war elephants at a fair price.',
+    choices: [
+      { label: 'Purchase (200🪙)', action: () => { state.resources.gold -= 200; state.stats.military = Math.min(100, state.stats.military + 20); addEvent('🐘 Elephant corps joins your army! +20 Military.', 'good'); } },
+      { label: 'Decline', action: () => {} }
+    ]
+  },
+  {
+    title: '📖 Scholar from Nalanda',
+    desc: 'A renowned scholar offers to teach Arthashastra principles to your advisors.',
+    choices: [
+      { label: 'Accept (50🪙)', action: () => { if(state.resources.gold >= 50) { state.resources.gold -= 50; state.resources.dharma = Math.min(100, state.resources.dharma + 20); state.stats.economy = Math.min(100, state.stats.economy + 10); addEvent('📖 Scholar shares wisdom. +20 Dharma, +10 Economy.', 'good'); } } },
+      { label: 'Dismiss', action: () => {} }
+    ]
+  },
+  {
+    title: '🌾 Bountiful Harvest',
+    desc: 'The land blesses us with abundance.',
+    effect: () => { state.resources.food += 80; state.resources.happiness = Math.min(100, state.resources.happiness + 8); },
+    eventText: '🌾 Excellent harvest! +80 Anna. People rejoice.', type: 'good'
+  },
+  {
+    title: '💰 Silk Road Merchants',
+    desc: 'Traders from distant lands arrive with exotic goods.',
+    effect: () => { state.resources.gold += 120; },
+    eventText: '💰 Silk Road merchants bring 120 Suvarna in trade!', type: 'good'
+  },
+  {
+    title: '⚠️ Rebellion in the East',
+    desc: 'A local chieftain stirs rebellion in an eastern province.',
+    choices: [
+      { label: 'Crush it (army-10)', action: () => { state.resources.army -= 10; addEvent('⚔ Rebellion crushed at cost of 10 warriors.', 'neutral'); } },
+      { label: 'Negotiate (200🪙)', action: () => { if(state.resources.gold >= 200) { state.resources.gold -= 200; state.resources.happiness = Math.min(100, state.resources.happiness + 10); addEvent('🤝 Rebellion settled peacefully.', 'good'); } } }
+    ]
+  },
+];
+
+function triggerRandomEvent() {
+  const evt = RANDOM_EVENTS[Math.floor(Math.random() * RANDOM_EVENTS.length)];
+  if (evt.effect) {
+    evt.effect();
+    addEvent(evt.eventText, evt.type);
+  } else if (evt.choices) {
+    showModal(evt.title, evt.desc, evt.choices.map(c => ({ label: c.label, action: c.action })));
+  }
+  updateUI();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// VICTORY CHECK
+// ═══════════════════════════════════════════════════════════════════
+function checkVictory() {
+  const playerTerrs = TERRITORIES.filter(t => t.owner === 'player');
+  const total = TERRITORIES.length;
+  const pct = playerTerrs.length / total;
+
+  if (pct >= 0.75 || playerTerrs.length >= 12) {
+    setTimeout(() => {
+      const vs = document.getElementById('victory-screen');
+      const turns = state.turn;
+      const dharmaRating = state.resources.dharma > 70 ? 'Dharmic Emperor' : state.resources.dharma > 40 ? 'Pragmatic King' : 'Ruthless Conqueror';
+      document.getElementById('victory-desc').textContent =
+        `In ${turns} turns, you united ${playerTerrs.length} of ${total} provinces under the Mauryan banner. The bards shall sing of ${dharmaRating} Chandragupta for centuries to come!\n\nDharma Rating: ${state.resources.dharma} | Treasury: ${state.resources.gold} Suvarna | Year: ${state.year} BCE`;
+      vs.classList.add('show');
+    }, 1000);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// UI RENDERING
+// ═══════════════════════════════════════════════════════════════════
+function updateUI() {
+  const r = state.resources;
+  document.getElementById('res-gold').textContent = r.gold;
+  document.getElementById('res-army').textContent = r.army;
+  document.getElementById('res-food').textContent = r.food;
+  document.getElementById('res-dharma').textContent = r.dharma;
+  document.getElementById('res-happiness').textContent = r.happiness;
+
+  document.getElementById('delta-gold').textContent = `+${state.deltas.gold}`;
+  document.getElementById('delta-gold').className = 'resource-delta delta-pos';
+
+  document.getElementById('turn-year').textContent = state.year;
+
+  const s = state.stats;
+  ['mil','dharma','eco','inf'].forEach((k, i) => {
+    const vals = [s.military, s.dharma, s.economy, s.influence];
+    document.getElementById(`stat-${k}`).textContent = vals[i] + '%';
+    document.getElementById(`bar-${k}`).style.width = vals[i] + '%';
+  });
+
+  // Update territory count
+  const playerCount = TERRITORIES.filter(t => t.owner === 'player').length;
+  document.getElementById('terr-count').textContent = `${playerCount}/${TERRITORIES.length}`;
+
+  // Disable actions if no actions left
+  ['recruit','spy','trade','dharma','harvest','diplomacy'].forEach(a => {
+    document.getElementById(`btn-${a}`).disabled = state.actionsLeft <= 0;
+  });
+}
+
+function renderTerritoryList() {
+  const container = document.getElementById('territory-list');
+  const playerTerrs = TERRITORIES.filter(t => t.owner === 'player');
+  container.innerHTML = playerTerrs.map(t => `
+    <div class="territory-item ${state.selectedTerritory?.id === t.id ? 'active' : ''}" onclick="selectTerritory(TERRITORIES.find(x=>x.id==='${t.id}'))">
+      <span class="terr-name">${t.name}</span>
+      <span class="terr-level">⚔${t.strength} 🪙${t.wealth}</span>
+    </div>
+  `).join('');
+}
+
+function renderFactionList() {
+  const container = document.getElementById('faction-list');
+  container.innerHTML = Object.entries(FACTIONS).map(([id, f]) => {
+    const terrCount = TERRITORIES.filter(t => t.owner === id).length;
+    const tagClass = f.relation === 'hostile' ? 'hostile' : f.relation === 'allied' ? 'allied' : 'neutral';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+      <span style="font-size:16px">${f.emoji}</span>
+      <span style="flex:1;font-size:10px;font-family:Cinzel,serif">${f.name}<br><span style="color:var(--text-dim);font-size:9px;font-style:italic">${terrCount} territories</span></span>
+      <span class="faction-tag tag-${tagClass}">${f.relation.toUpperCase()}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTechList() {
+  const container = document.getElementById('tech-list');
+  container.innerHTML = TECHNOLOGIES.map(t => `
+    <div class="tech-item ${state.researched.has(t.id) ? 'researched' : ''}" onclick="researchTech('${t.id}')">
+      <span class="tech-icon">${t.emoji}</span>
+      <span>
+        <div class="tech-name">${t.name}</div>
+        <div class="tech-effect">${t.desc}</div>
+      </span>
+      <span style="margin-left:auto;font-size:9px;color:var(--gold);font-family:Cinzel,serif;">
+        ${state.researched.has(t.id) ? '✓ KNOWN' : `🪙${t.cost}`}
+      </span>
+    </div>
+  `).join('');
+}
+
+function researchTech(id) {
+  if (state.researched.has(id)) { showNotification('Already Learned', 'This wisdom is already yours.', null); return; }
+  const tech = TECHNOLOGIES.find(t => t.id === id);
+  if (!tech) return;
+  if (state.resources.gold < tech.cost) {
+    showNotification('Insufficient Suvarna', `Need ${tech.cost} gold to learn ${tech.name}.`, 'bad');
+    return;
+  }
+  state.resources.gold -= tech.cost;
+  state.researched.add(id);
+
+  switch(tech.effect) {
+    case 'income': state.deltas.gold += 20; state.deltas.food += 10; break;
+    case 'military': state.stats.military = Math.min(100, state.stats.military + 20); break;
+    case 'gold': state.deltas.gold += 50; break;
+    case 'spy': break; // handled in spy action
+    case 'dharma': state.resources.dharma = Math.min(100, state.resources.dharma + 25); state.resources.happiness = Math.min(100, state.resources.happiness + 10); break;
+    case 'trade': state.stats.economy = Math.min(100, state.stats.economy + 15); break;
+  }
+
+  addEvent(`📖 Mastered: ${tech.name}. ${tech.desc}`, 'important');
+  showAdvisor(`"${tech.name}" — the wisdom of Arthashastra reveals itself to you, Samrat.`);
+  showNotification(`${tech.emoji} ${tech.name} Learned!`, tech.desc, 'good');
+  renderTechList();
+  updateUI();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HELPER UI
+// ═══════════════════════════════════════════════════════════════════
+function addEvent(text, type='neutral') {
+  const log = document.getElementById('event-log');
+  const entry = document.createElement('div');
+  entry.className = `event-entry event-${type}`;
+  entry.textContent = text;
+  log.insertBefore(entry, log.firstChild);
+  state.events.push({ text, type });
+  if (log.children.length > 20) log.removeChild(log.lastChild);
+}
+
+let advisorTimer = null;
+function showAdvisor(text) {
+  const box = document.getElementById('advisor-box');
+  document.getElementById('advisor-quote').textContent = text;
+  box.classList.remove('hidden');
+  if (advisorTimer) clearTimeout(advisorTimer);
+  advisorTimer = setTimeout(() => box.classList.add('hidden'), 6000);
+}
+
+function showNotification(title, body, type='neutral') {
+  const el = document.getElementById('notification');
+  document.getElementById('notif-title').textContent = title;
+  document.getElementById('notif-body').textContent = body;
+  el.className = '';
+  el.classList.add('show');
+  if (type) el.classList.add(`notif-${type}`);
+  setTimeout(() => el.className = '', 3500);
+}
+
+function showModal(title, body, options) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body.replace(/\n/g, '<br>');
+  const opts = document.getElementById('modal-options');
+  opts.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = `modal-btn ${opt.cls || ''}`;
+    btn.textContent = opt.label;
+    btn.onclick = () => {
+      opt.action();
+      document.getElementById('modal').classList.remove('active');
+      updateUI(); drawMap();
+    };
+    opts.appendChild(btn);
+  });
+  document.getElementById('modal').classList.add('active');
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('active');
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('game-wrapper').classList.contains('visible')) {
+    endTurn();
+  }
+  if (e.key === 'Escape') {
+    document.getElementById('modal').classList.remove('active');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// ATMOSPHERIC EFFECTS
+// ═══════════════════════════════════════════════════════════════════
+// Subtle particle system for ambiance
+const particles = Array.from({length: 15}, () => ({
+  x: Math.random(), y: Math.random(),
+  vx: (Math.random()-0.5)*0.0002, vy: -Math.random()*0.0003,
+  r: Math.random()*2+0.5, alpha: Math.random()*0.3+0.05,
+  color: Math.random() > 0.5 ? '#FFD700' : '#FF6B00'
+}));
+
+function animateParticles() {
+  if (!document.getElementById('game-wrapper').classList.contains('visible')) {
+    requestAnimationFrame(animateParticles);
+    return;
+  }
+  const W = canvas.width, H = canvas.height;
+
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.y < 0) { p.y = 1; p.x = Math.random(); }
+    if (p.x < 0) p.x = 1;
+    if (p.x > 1) p.x = 0;
+
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x*W, p.y*H, p.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  requestAnimationFrame(animateParticles);
+}
+
+// Start particle loop after a delay
+setTimeout(animateParticles, 2000);
+</script>
+</body>
+</html>

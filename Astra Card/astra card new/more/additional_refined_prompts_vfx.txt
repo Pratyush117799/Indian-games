@@ -1,0 +1,7 @@
+Additional Refined Prompts (Mechanics VFX Focus)
+Ability Trigger VFX Overlay
+Prompt:
+"Dynamic ability trigger VFX overlay UI. On activation (e.g., Eternal return): Screen flash with golden serpent coils wrapping card, bounce back to hand with radiant particle trail and Sanskrit rune sparks. Stun: Blue lightning freeze on target with crackle sound. Cataclysm: Full-screen apocalyptic wave with entity disintegration ash. Element-synced colors/particles. Subtle screen shake for impact. Performance-optimized for mobile, 4k cinematic mockup."
+Counter Clash Animation
+Prompt:
+"Mythological counter clash animation sequence. Brahmastra vs Brahmastra: Dual cosmic serpents colliding mid-screen, infinite loop explosion with galaxy shards and mutual fade-to-ash. Neutralization text 'Divine Equilibrium' in glowing script. Sound: Deep Vedic boom. Slow-mo replay option. Epic, reverent VFX respecting lore, 4k sequence mockup."

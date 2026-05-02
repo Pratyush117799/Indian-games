@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Ashtapada · अष्टापद · Ancient Indian Race Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --indigo-dk:#1A2460;--indigo:#2B3A8F;--indigo-lt:#EEF0FA;
+  --saffron:#C8721A;--saffron-mid:#E8831A;--saffron-lt:#FDF0E0;
+  --gold:#C9922A;--gold-lt:#F7E6C4;
+  --sand:#F5EFE0;--sand-dk:#E8DCC8;--cream:#FFFAF3;
+  --stone:#4A3728;--stone-lt:#7A6050;
+  --teal:#0F6E56;--teal-lt:#E1F5EE;
+  --text-h:#1C1206;--text-b:#3D2E1E;--text-m:#7A6050;--text-lt:#A8937E;
+  --border:#E8DCC8;
+  --font-h:'Cinzel',Georgia,serif;
+  --font-b:'Nunito',sans-serif;
+  --font-d:'Noto Sans Devanagari',sans-serif;
+}
+html,body{height:100%;font-family:var(--font-b);background:var(--indigo-dk);color:var(--text-b);-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* ── Screens ── */
+.screen{display:none;align-items:center;justify-content:center;min-height:100dvh;padding:16px}
+.screen.active{display:flex}
+.screen-setup{background:var(--indigo-dk)}
+.screen-game{flex-direction:column;gap:8px;padding:10px 12px;background:var(--indigo-dk);position:relative;overflow:hidden}
+
+/* ── Setup card ── */
+.setup-card{background:var(--cream);border-radius:20px;padding:32px 28px;max-width:420px;width:100%;text-align:center}
+
+/* ── Logo ── */
+.logo-wrap{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:16px}
+.logo-mark{width:50px;height:50px;background:var(--indigo-dk);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-title{font-family:var(--font-h);font-size:25px;font-weight:700;color:var(--text-h);line-height:1.1}
+.logo-sub{font-family:var(--font-d);font-size:11px;color:var(--text-m);display:block;margin-top:2px}
+.tagline{font-size:12px;color:var(--text-m);line-height:1.75;margin-bottom:24px}
+
+/* ── Mode buttons ── */
+.mode-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.mode-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--sand);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;transition:background .18s,border-color .18s,transform .15s;text-align:left;width:100%}
+.mode-btn:hover{background:var(--sand-dk);border-color:var(--saffron);transform:translateY(-2px)}
+.mode-btn-icon{font-size:18px;color:var(--saffron);margin-bottom:2px}
+.mode-btn-title{font-family:var(--font-h);font-size:14px;font-weight:600;color:var(--text-h)}
+.mode-btn-sub{font-size:11px;color:var(--text-m)}
+
+/* ── Legend ── */
+.legend{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding-top:14px;border-top:0.5px solid var(--border)}
+.legend-item{font-size:10px;color:var(--text-m);display:flex;align-items:center;gap:4px}
+.leg-castle{color:var(--gold);font-size:9px}
+.leg-home{color:var(--gold)}
+
+/* ── Difficulty ── */
+.setup-h2{font-family:var(--font-h);font-size:19px;color:var(--text-h);margin-bottom:18px}
+.diff-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.diff-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--sand);border:1.5px solid var(--border);border-radius:11px;padding:13px 16px;cursor:pointer;transition:background .18s,border-color .18s;width:100%}
+.diff-btn:hover{background:var(--sand-dk);border-color:var(--saffron)}
+.diff-icon{font-size:14px;color:var(--saffron)}
+.diff-name{font-family:var(--font-h);font-size:13px;color:var(--text-h)}
+.diff-desc{font-size:10px;color:var(--text-m)}
+.btn-back{background:none;border:none;font-size:12px;color:var(--text-m);cursor:pointer;padding:5px 8px;transition:color .15s}
+.btn-back:hover{color:var(--saffron)}
+
+/* ── Player bars ── */
+.player-bar{background:rgba(255,255,255,.07);border:0.5px solid rgba(255,255,255,.1);border-radius:11px;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px;transition:background .3s,border-color .3s}
+.player-bar.active{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.player-identity{display:flex;align-items:center;gap:8px}
+.player-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.player-name{font-size:13px;font-weight:500;color:#fff}
+.player-counts{font-size:10px;color:rgba(255,255,255,.45)}
+
+/* ── Board ── */
+.board-area{display:flex;align-items:center;justify-content:center;flex:1}
+.board-frame{border-radius:9px;overflow:hidden;border:2px solid rgba(255,255,255,.14);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+
+/* ── Controls ── */
+.controls{display:flex;align-items:center;gap:8px;width:100%;max-width:420px}
+.dice-panel{display:flex;align-items:center;gap:8px;flex:1;background:rgba(255,255,255,.07);border:0.5px solid rgba(255,255,255,.1);border-radius:11px;padding:8px 12px;min-width:0}
+.dice-shells{display:flex;gap:5px;align-items:center;flex:1;flex-wrap:wrap}
+.shell-prompt{font-size:11px;color:rgba(255,255,255,.3)}
+.shell{font-size:14px;transition:all .3s;line-height:1}
+.shell.up{color:#F5A940}.shell.dn{color:rgba(255,255,255,.25)}
+.dice-val{font-family:var(--font-h);font-size:21px;font-weight:700;color:#F5A940;min-width:32px;text-align:right;flex-shrink:0}
+.btn-roll{background:var(--saffron);color:#fff;font-family:var(--font-b);font-size:12px;font-weight:600;padding:9px 16px;border-radius:20px;border:none;cursor:pointer;transition:background .18s,transform .12s;white-space:nowrap;flex-shrink:0}
+.btn-roll:hover:not(:disabled){background:#E8831A;transform:translateY(-1px)}
+.btn-roll:disabled{opacity:.4;cursor:default;transform:none}
+.btn-menu{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:11px;padding:8px 10px;border-radius:18px;border:0.5px solid rgba(255,255,255,.12);cursor:pointer;transition:background .18s;flex-shrink:0}
+.btn-menu:hover{background:rgba(255,255,255,.14)}
+
+/* ── Toast ── */
+.toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);background:rgba(26,36,96,.95);color:#F5A940;font-family:var(--font-h);font-size:15px;font-weight:600;padding:9px 24px;border-radius:26px;border:1px solid rgba(245,169,64,.3);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* ── Game over ── */
+.gameover-card{display:flex;flex-direction:column;align-items:center;gap:12px}
+.win-star{font-size:50px;color:var(--gold);animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.go-title{font-family:var(--font-h);font-size:22px;color:var(--text-h)}
+.go-winner{font-size:14px;font-weight:500;color:var(--saffron)}
+.go-moves{font-size:11px;color:var(--text-m)}
+.go-heritage{font-size:11px;color:var(--text-m);line-height:1.7;font-style:italic;background:var(--sand);border-radius:9px;padding:12px 16px;max-width:320px;text-align:center}
+.btn-primary{background:var(--indigo-dk);color:#fff;font-family:var(--font-b);font-size:13px;font-weight:600;padding:11px 32px;border-radius:22px;border:none;cursor:pointer;transition:background .2s;letter-spacing:.03em}
+.btn-primary:hover{background:var(--saffron-mid)}
+
+/* ── SVG board animations ── */
+@keyframes pulsering{0%,100%{opacity:.18;transform:scale(1)}50%{opacity:.38;transform:scale(1.15)}}
+@keyframes desthighlight{0%,100%{opacity:.9;stroke-width:2}50%{opacity:.3;stroke-width:1}}
+.pulse-ring{animation:pulsering 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dest-hl{animation:desthighlight .9s ease-in-out infinite}
+
+/* ── Intro animation ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.setup-card{animation:fadeUp .4s ease}
+
+/* ── Responsive ── */
+@media(max-width:440px){.setup-card{padding:24px 18px}.logo-title{font-size:21px}.btn-roll{padding:8px 12px;font-size:11px}}
+@media(max-height:680px){.screen-game{gap:5px;padding:7px 10px}.player-bar{padding:7px 12px}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ SCREEN: MODE ══════════════════════════ -->
+<div id="s-mode" class="screen screen-setup active">
+  <div class="setup-card">
+    <div class="logo-wrap">
+      <div class="logo-mark">
+        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+          <rect x="15" y="0" width="6" height="36" rx="1.5" fill="rgba(255,255,255,.9)"/>
+          <rect x="0" y="15" width="36" height="6" rx="1.5" fill="rgba(255,255,255,.9)"/>
+          <rect x="13.5" y="13.5" width="9" height="9" rx="2" fill="#E8831A"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-title">Ashtapada</div>
+        <span class="logo-sub">अष्टापद · c.500 BCE</span>
+      </div>
+    </div>
+    <p class="tagline">The ancient 8×8 spiral race that gave birth to chess.<br>64 squares · 4 cowrie shells · One path to the centre.</p>
+    <div class="mode-grid">
+      <button class="mode-btn" id="btn-vsai">
+        <span class="mode-btn-icon">◈</span>
+        <span class="mode-btn-title">vs Maharaja AI</span>
+        <span class="mode-btn-sub">3 difficulty levels — choose your challenge</span>
+      </button>
+      <button class="mode-btn" id="btn-2p">
+        <span class="mode-btn-icon">◎</span>
+        <span class="mode-btn-title">Two Players</span>
+        <span class="mode-btn-sub">Pass &amp; play on one device</span>
+      </button>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="leg-castle">◆</span> Castle = sanctuary</span>
+      <span class="legend-item">◯ Mouth-up = move</span>
+      <span class="legend-item"><span class="leg-home">✦</span> Centre = home</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SCREEN: DIFFICULTY ════════════════════════ -->
+<div id="s-diff" class="screen screen-setup">
+  <div class="setup-card">
+    <h2 class="setup-h2">Choose your opponent</h2>
+    <div class="diff-grid">
+      <button class="diff-btn" data-d="beginner">
+        <span class="diff-icon">◯</span>
+        <span class="diff-name">Beginner</span>
+        <span class="diff-desc">Plays randomly — learn the spiral path</span>
+      </button>
+      <button class="diff-btn" data-d="prince">
+        <span class="diff-icon">◈</span>
+        <span class="diff-name">Prince</span>
+        <span class="diff-desc">Targets captures &amp; castles — balanced challenge</span>
+      </button>
+      <button class="diff-btn" data-d="maharaja">
+        <span class="diff-icon">✦</span>
+        <span class="diff-name">Maharaja</span>
+        <span class="diff-desc">Full threat analysis — hardest opponent</span>
+      </button>
+    </div>
+    <button class="btn-back" id="btn-back">← Back</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════ SCREEN: GAME ══════════════════════════ -->
+<div id="s-game" class="screen screen-game">
+  <div class="player-bar" id="bar1" data-p="1">
+    <div class="player-identity">
+      <span class="player-dot" style="background:#2B3A8F"></span>
+      <span class="player-name" id="p1-name">Player 2</span>
+    </div>
+    <span class="player-counts" id="p1-counts">Off:4 · On:0 · Home:0</span>
+  </div>
+
+  <div class="board-area">
+    <div class="board-frame">
+      <div id="board"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="dice-panel">
+      <div class="dice-shells" id="shells"><span class="shell-prompt">Tap to roll</span></div>
+      <div class="dice-val" id="dval">—</div>
+    </div>
+    <button class="btn-roll" id="btn-roll">Roll Cowries</button>
+    <button class="btn-menu" id="btn-menu">Menu</button>
+  </div>
+
+  <div class="player-bar active" id="bar0" data-p="0">
+    <div class="player-identity">
+      <span class="player-dot" style="background:#C8721A"></span>
+      <span class="player-name" id="p0-name">Player 1</span>
+    </div>
+    <span class="player-counts" id="p0-counts">Off:4 · On:0 · Home:0</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<!-- ══════════════════════ SCREEN: GAME OVER ═════════════════════════ -->
+<div id="s-over" class="screen screen-setup">
+  <div class="setup-card gameover-card">
+    <span class="win-star">✦</span>
+    <h2 class="go-title">Game Over</h2>
+    <p class="go-winner" id="go-winner"></p>
+    <p class="go-moves" id="go-moves"></p>
+    <p class="go-heritage">This 8×8 board was inherited by Chaturanga, then Shatranj, then Chess — the most played game in human history. Every move you made echoes 2,500 years of play.</p>
+    <button class="btn-primary" id="btn-again">Play Again</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ══════════════════════════════════════════════════════════════
+   CONSTANTS
+   ══════════════════════════════════════════════════════════════ */
+
+const CELL = 48;
+const BOARD_PX = CELL * 8; // 384
+const NS = 'http://www.w3.org/2000/svg';
+
+/*
+ * Full clockwise-inward spiral path: 64 [row,col] pairs.
+ * Index 0 = entry (top-left corner), index 60-63 = HOME centre.
+ */
+const PATH = [
+  // Ring 1 - top row (left→right)
+  [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],
+  // Ring 1 - right col (top→bottom)
+  [1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],
+  // Ring 1 - bottom row (right→left)
+  [7,6],[7,5],[7,4],[7,3],[7,2],[7,1],[7,0],
+  // Ring 1 - left col (bottom→top)
+  [6,0],[5,0],[4,0],[3,0],[2,0],[1,0],
+  // Ring 2 - top (1,1)→(1,6)
+  [1,1],[1,2],[1,3],[1,4],[1,5],[1,6],
+  // Ring 2 - right (2,6)→(6,6)
+  [2,6],[3,6],[4,6],[5,6],[6,6],
+  // Ring 2 - bottom (6,5)→(6,1)
+  [6,5],[6,4],[6,3],[6,2],[6,1],
+  // Ring 2 - left (5,1)→(2,1)
+  [5,1],[4,1],[3,1],[2,1],
+  // Ring 3 - top (2,2)→(2,5)
+  [2,2],[2,3],[2,4],[2,5],
+  // Ring 3 - right (3,5)→(5,5)
+  [3,5],[4,5],[5,5],
+  // Ring 3 - bottom (5,4)→(5,2)
+  [5,4],[5,3],[5,2],
+  // Ring 3 - left (4,2)→(3,2)
+  [4,2],[3,2],
+  // Home centre
+  [3,3],[3,4],[4,4],[4,3]
+];
+
+const PATH_LEN  = 64;
+const HOME_STEP = 60;
+
+// Castle squares (sanctuary — no capture)
+const CASTLE_SET = new Set([0,3,7,10,14,17,21,24,27,31,38,43,60,61,62,63]);
+
+const PLAYERS = [
+  { id:0, name:'Player 1', label:'Saffron', color:'#C8721A', colorDk:'#7A3D08', colorLt:'#FDF0E0' },
+  { id:1, name:'Player 2', label:'Indigo',  color:'#2B3A8F', colorDk:'#111840', colorLt:'#EEF0FA' }
+];
+
+function rollCowries() {
+  const shells = Array.from({length:4}, () => Math.random() < .5);
+  const up = shells.filter(Boolean).length;
+  return { shells, up, value: up === 4 ? 8 : up };
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ══════════════════════════════════════════════════════════════
+   GAME ENGINE
+   ══════════════════════════════════════════════════════════════ */
+
+class Engine {
+  constructor() { this.reset(); }
+
+  reset(mode='vs-ai', diff='prince') {
+    this.mode = mode; this.diff = diff;
+    this.cur  = 0;         // current player
+    this.phase = 'roll';   // roll | move | over
+    this.winner = null;
+    this.dice   = null;
+    this.valid  = [];
+    this.history = [];
+    this.pieces = [];
+    for (let p=0;p<2;p++)
+      for (let id=0;id<4;id++)
+        this.pieces.push({player:p, id, step:-1, idx:p*4+id});
+  }
+
+  roll() {
+    if (this.phase !== 'roll') return null;
+    this.dice = rollCowries();
+    if (this.dice.value === 0) {
+      this._next();
+      return {...this.dice, skip:true, why:'no-mouths'};
+    }
+    this.valid = this._computeValid();
+    if (!this.valid.length) {
+      this._next();
+      return {...this.dice, skip:true, why:'no-moves'};
+    }
+    this.phase = 'move';
+    return {...this.dice, skip:false};
+  }
+
+  move(pIdx) {
+    if (this.phase !== 'move') return null;
+    const mv = this.valid.find(m => m.pIdx === pIdx);
+    if (!mv) return null;
+    const pc = this.pieces[pIdx];
+    pc.step = mv.to;
+    // Capture
+    const caps = [];
+    if (!CASTLE_SET.has(mv.to) && mv.to < HOME_STEP) {
+      const [dr,dc] = PATH[mv.to];
+      this.pieces.forEach((o,i) => {
+        if (i===pIdx || o.player===pc.player || o.step<0 || o.step>=HOME_STEP) return;
+        const [or,oc] = PATH[o.step];
+        if (or===dr && oc===dc) { o.step=-1; caps.push(i); }
+      });
+    }
+    this.history.push({pIdx, from:mv.from, to:mv.to, caps, player:pc.player});
+    const w = this._checkWin();
+    if (w !== null) { this.winner=w; this.phase='over'; }
+    else { this.phase='roll'; this._next(); }
+    this.valid = [];
+    return {from:mv.from, to:mv.to, caps, winner:this.winner};
+  }
+
+  _computeValid() {
+    return this.pieces
+      .filter(p => p.player===this.cur && p.step < HOME_STEP)
+      .map(p => ({
+        pIdx: p.idx,
+        from: p.step,
+        to:   p.step===-1 ? 0 : Math.min(p.step + this.dice.value, PATH_LEN-1)
+      }));
+  }
+
+  _checkWin() {
+    for (let p=0;p<2;p++)
+      if (this.pieces.filter(pc=>pc.player===p).every(pc=>pc.step>=HOME_STEP)) return p;
+    return null;
+  }
+
+  _next() { this.cur = 1-this.cur; this.dice=null; }
+
+  counts(p) {
+    const pp = this.pieces.filter(pc=>pc.player===p);
+    return {
+      off:  pp.filter(pc=>pc.step===-1).length,
+      on:   pp.filter(pc=>pc.step>=0 && pc.step<HOME_STEP).length,
+      home: pp.filter(pc=>pc.step>=HOME_STEP).length
+    };
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDERER
+   ══════════════════════════════════════════════════════════════ */
+
+class Renderer {
+  constructor(containerId) {
+    this.el   = document.getElementById(containerId);
+    this.svg  = null;
+    this.layers = {};
+    this._build();
+  }
+
+  _svg(tag) { return document.createElementNS(NS, tag); }
+
+  _build() {
+    const svg = this._svg('svg');
+    svg.setAttribute('width',  BOARD_PX);
+    svg.setAttribute('height', BOARD_PX);
+    svg.setAttribute('viewBox', `0 0 ${BOARD_PX} ${BOARD_PX}`);
+
+    ['cells','marks','hl','pieces'].forEach(n => {
+      const g = this._svg('g'); g.id = 'L-'+n;
+      svg.appendChild(g); this.layers[n] = g;
+    });
+
+    this._drawCells();
+    this.svg = svg;
+    this.el.appendChild(svg);
+  }
+
+  _drawCells() {
+    // Build path index lookup
+    const lookup = new Map();
+    PATH.forEach(([r,c],i) => lookup.set(`${r},${c}`, i));
+
+    for (let r=0;r<8;r++) {
+      for (let c=0;c<8;c++) {
+        const pi = lookup.get(`${r},${c}`) ?? -1;
+        const isHome    = pi >= HOME_STEP;
+        const isCastle  = pi >= 0 && CASTLE_SET.has(pi) && !isHome;
+        const isPath    = pi >= 0;
+
+        // Cell base
+        const rect = this._svg('rect');
+        rect.setAttribute('x', c*CELL); rect.setAttribute('y', r*CELL);
+        rect.setAttribute('width', CELL); rect.setAttribute('height', CELL);
+        rect.setAttribute('fill', isHome ? '#F0E0A8' : isPath ? '#F5EFE0' : '#EDE7D5');
+        rect.setAttribute('stroke', '#D4C8B0');
+        rect.setAttribute('stroke-width', '0.5');
+        this.layers.cells.appendChild(rect);
+
+        const cx = c*CELL + CELL/2, cy = r*CELL + CELL/2;
+
+        // Castle diamond
+        if (isCastle) {
+          const s = 8;
+          const poly = this._svg('polygon');
+          poly.setAttribute('points', `${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`);
+          poly.setAttribute('fill', 'none');
+          poly.setAttribute('stroke', '#C9922A');
+          poly.setAttribute('stroke-width', '1.2');
+          poly.setAttribute('opacity', '.7');
+          this.layers.marks.appendChild(poly);
+          // cross inside
+          ['h','v'].forEach(d => {
+            const ln = this._svg('line');
+            if (d==='h'){ln.setAttribute('x1',cx-s);ln.setAttribute('y1',cy);ln.setAttribute('x2',cx+s);ln.setAttribute('y2',cy);}
+            else{ln.setAttribute('x1',cx);ln.setAttribute('y1',cy-s);ln.setAttribute('x2',cx);ln.setAttribute('y2',cy+s);}
+            ln.setAttribute('stroke','#C9922A'); ln.setAttribute('stroke-width','.5'); ln.setAttribute('opacity','.45');
+            this.layers.marks.appendChild(ln);
+          });
+        }
+
+        // Home star
+        if (isHome) {
+          const t = this._svg('text');
+          t.setAttribute('x',cx); t.setAttribute('y',cy+6);
+          t.setAttribute('text-anchor','middle');
+          t.setAttribute('font-size','16'); t.setAttribute('fill','#C9922A'); t.setAttribute('opacity','.4');
+          t.textContent = '✦';
+          this.layers.marks.appendChild(t);
+        }
+
+        // Faint step number
+        if (isPath && !isHome) {
+          const t = this._svg('text');
+          t.setAttribute('x', c*CELL+3); t.setAttribute('y', r*CELL+9);
+          t.setAttribute('font-size','6'); t.setAttribute('fill','#A8937E'); t.setAttribute('opacity','.5');
+          t.textContent = String(pi+1);
+          this.layers.marks.appendChild(t);
+        }
+      }
+    }
+  }
+
+  clear(layer) {
+    const L = this.layers[layer];
+    while (L.firstChild) L.removeChild(L.firstChild);
+  }
+
+  renderPieces(pieces, validIdxs, onClick) {
+    this.clear('pieces');
+    // Group by cell
+    const byCell = new Map();
+    pieces.forEach((pc,i) => {
+      if (pc.step<0 || pc.step>=HOME_STEP) return;
+      const [r,c] = PATH[pc.step];
+      const k = `${r},${c}`;
+      if (!byCell.has(k)) byCell.set(k,[]);
+      byCell.get(k).push({i,pc});
+    });
+
+    byCell.forEach((grp, key) => {
+      const [r,c] = key.split(',').map(Number);
+      const offs = this._offsets(grp.length);
+      const bx = c*CELL+CELL/2, by = r*CELL+CELL/2;
+      grp.forEach(({i,pc},k) => {
+        const isValid = validIdxs.includes(i);
+        this._drawPiece(pc, i, bx+offs[k].dx, by+offs[k].dy, isValid, false, onClick);
+      });
+    });
+
+    // Home pieces
+    const homePos = [[3,3],[3,4],[4,4],[4,3]];
+    [0,1].forEach(p => {
+      let slot = 0;
+      pieces.forEach((pc,i) => {
+        if (pc.player!==p || pc.step<HOME_STEP) return;
+        const [r,c] = homePos[slot++%4];
+        this._drawPiece(pc, i, c*CELL+CELL/2, r*CELL+CELL/2, false, true, null);
+      });
+    });
+  }
+
+  _drawPiece(pc, i, cx, cy, isValid, isHome, onClick) {
+    const pl = PLAYERS[pc.player];
+    const g  = this._svg('g');
+    g.style.cursor = isValid ? 'pointer' : 'default';
+    if (isValid && onClick) g.addEventListener('click', ()=>onClick(i));
+
+    if (isValid) {
+      const ring = this._svg('circle');
+      ring.setAttribute('cx',cx); ring.setAttribute('cy',cy); ring.setAttribute('r','15');
+      ring.setAttribute('fill', pl.color); ring.setAttribute('opacity','.2');
+      ring.setAttribute('class','pulse-ring');
+      g.appendChild(ring);
+    }
+
+    const circle = this._svg('circle');
+    circle.setAttribute('cx',cx); circle.setAttribute('cy',cy);
+    circle.setAttribute('r', isHome ? '8' : '10');
+    circle.setAttribute('fill', isHome ? pl.color+'AA' : pl.color);
+    circle.setAttribute('stroke', isValid ? '#fff' : pl.colorDk);
+    circle.setAttribute('stroke-width', isValid ? '2.5' : '1.5');
+    g.appendChild(circle);
+
+    const lbl = this._svg('text');
+    lbl.setAttribute('x',cx); lbl.setAttribute('y',cy+4);
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('font-size','8'); lbl.setAttribute('font-weight','700'); lbl.setAttribute('fill','#fff');
+    lbl.textContent = String(pc.id+1);
+    g.appendChild(lbl);
+
+    this.layers.pieces.appendChild(g);
+  }
+
+  showHighlights(validMoves) {
+    this.clear('hl');
+    validMoves.forEach(mv => {
+      if (mv.to < 0) return;
+      const [r,c] = PATH[mv.to];
+      const rect = this._svg('rect');
+      rect.setAttribute('x', c*CELL+3); rect.setAttribute('y', r*CELL+3);
+      rect.setAttribute('width', CELL-6); rect.setAttribute('height', CELL-6);
+      rect.setAttribute('rx','4');
+      rect.setAttribute('fill','none');
+      rect.setAttribute('stroke','#1D9E75');
+      rect.setAttribute('stroke-width','2');
+      rect.setAttribute('class','dest-hl');
+      this.layers.hl.appendChild(rect);
+    });
+  }
+
+  async animateMove(pc, from, to) {
+    const pl = PLAYERS[pc.player];
+    const startStep = from === -1 ? 0 : from;
+    const [sr,sc] = PATH[startStep];
+    const ghost = this._svg('circle');
+    ghost.setAttribute('r','11');
+    ghost.setAttribute('fill', pl.color);
+    ghost.setAttribute('stroke','#fff'); ghost.setAttribute('stroke-width','2');
+    ghost.setAttribute('cx', sc*CELL+CELL/2); ghost.setAttribute('cy', sr*CELL+CELL/2);
+    ghost.style.pointerEvents='none';
+    this.layers.pieces.appendChild(ghost);
+
+    for (let s=startStep+1; s<=to; s++) {
+      const [r,c] = PATH[s];
+      ghost.setAttribute('cx', c*CELL+CELL/2);
+      ghost.setAttribute('cy', r*CELL+CELL/2);
+      if (CASTLE_SET.has(s)) this._flashCell(r,c,'#F5A940');
+      await delay(160);
+    }
+    ghost.remove();
+  }
+
+  _flashCell(r, c, color) {
+    const fl = this._svg('rect');
+    fl.setAttribute('x',c*CELL); fl.setAttribute('y',r*CELL);
+    fl.setAttribute('width',CELL); fl.setAttribute('height',CELL);
+    fl.setAttribute('fill',color); fl.setAttribute('opacity','.4');
+    fl.style.transition='opacity .45s';
+    this.layers.hl.appendChild(fl);
+    setTimeout(()=>{ fl.style.opacity='0'; setTimeout(()=>fl.remove(),500); },60);
+  }
+
+  flashCapture(r, c) { this._flashCell(r, c, '#D85A30'); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AI
+   ══════════════════════════════════════════════════════════════ */
+
+class AI {
+  constructor(diff) { this.diff = diff; }
+
+  pick(engine) {
+    const moves = engine.valid;
+    if (!moves.length) return null;
+    if (this.diff==='beginner') return moves[Math.floor(Math.random()*moves.length)];
+    if (this.diff==='maharaja') return this._maharaja(moves, engine);
+    return this._greedy(moves, engine);
+  }
+
+  _greedy(moves, engine) {
+    let best=moves[0], bs=-Infinity;
+    for (const m of moves) {
+      const s = this._score(m, engine);
+      if (s>bs) { bs=s; best=m; }
+    }
+    return best;
+  }
+
+  _maharaja(moves, engine) {
+    let best=moves[0], bs=-Infinity;
+    for (const m of moves) {
+      let s = this._score(m, engine);
+      if (!CASTLE_SET.has(m.to) && m.to<HOME_STEP) {
+        const [dr,dc] = PATH[m.to];
+        if (this._threatened(dr,dc,engine)) s -= 80;
+      }
+      // Blockade bonus
+      const same = engine.pieces.filter(p=>
+        p.player===engine.cur && p.step>=0 && p.step<HOME_STEP &&
+        PATH[p.step][0]===PATH[m.to][0] && PATH[p.step][1]===PATH[m.to][1]
+      );
+      if (same.length) s+=55;
+      if (s>bs) { bs=s; best=m; }
+    }
+    return best;
+  }
+
+  _score(m, engine) {
+    if (m.to>=HOME_STEP) return 1000;
+    let s = m.to * 2.5;
+    // Capture bonus
+    if (m.from !== -1 && !CASTLE_SET.has(m.to)) {
+      const pc = engine.pieces[m.pIdx];
+      const [dr,dc] = PATH[m.to];
+      const caps = engine.pieces.filter(o=>
+        o.player!==pc.player && o.step>=0 && o.step<HOME_STEP &&
+        PATH[o.step][0]===dr && PATH[o.step][1]===dc
+      );
+      s += caps.length * 160;
+    }
+    if (CASTLE_SET.has(m.to)) s += 40;
+    return s;
+  }
+
+  _threatened(r, c, engine) {
+    const opp = engine.pieces.filter(p=>p.player!==(engine.cur) && p.step>=0 && p.step<HOME_STEP);
+    for (const p of opp)
+      for (const v of [1,2,3,8]) {
+        const ts = Math.min(p.step+v, PATH_LEN-1);
+        if (ts<HOME_STEP) { const [tr,tc]=PATH[ts]; if(tr===r && tc===c) return true; }
+      }
+    return false;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   APP CONTROLLER
+   ══════════════════════════════════════════════════════════════ */
+
+class App {
+  constructor() {
+    this.engine   = new Engine();
+    this.renderer = new Renderer('board');
+    this.ai       = null;
+    this.busy     = false;
+    this._bind();
+  }
+
+  _bind() {
+    document.getElementById('btn-vsai').onclick   = ()=> this._show('s-diff');
+    document.getElementById('btn-2p').onclick     = ()=> this._start('two-player', null);
+    document.getElementById('btn-back').onclick   = ()=> this._show('s-mode');
+    document.getElementById('btn-roll').onclick   = ()=> this._onRoll();
+    document.getElementById('btn-menu').onclick   = ()=> this._show('s-mode');
+    document.getElementById('btn-again').onclick  = ()=> this._show('s-mode');
+
+    document.querySelectorAll('.diff-btn').forEach(b =>
+      b.addEventListener('click', ()=> this._start('vs-ai', b.dataset.d))
+    );
+  }
+
+  _show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  _start(mode, diff) {
+    this.engine.reset(mode, diff);
+    this.ai   = mode==='vs-ai' ? new AI(diff) : null;
+    this.busy = false;
+
+    // Label AI player
+    if (mode==='vs-ai') {
+      const cap = diff.charAt(0).toUpperCase() + diff.slice(1);
+      document.getElementById('p1-name').textContent = `${cap} AI`;
+    } else {
+      document.getElementById('p1-name').textContent = 'Player 2';
+    }
+
+    this._show('s-game');
+    this._render();
+    this._maybeAI();
+  }
+
+  _render() {
+    const { engine, renderer } = this;
+    const validIdxs = engine.valid.map(m=>m.pIdx);
+    renderer.renderPieces(engine.pieces, validIdxs, idx => this._onPiece(idx));
+    if (engine.phase==='move') renderer.showHighlights(engine.valid);
+    else renderer.clear('hl');
+    this._updateBars();
+    this._updateDice();
+    this._updateBtn();
+  }
+
+  _updateBars() {
+    [0,1].forEach(p => {
+      const c = this.engine.counts(p);
+      document.getElementById(`p${p}-counts`).textContent = `Off:${c.off} · On:${c.on} · Home:${c.home}`;
+      document.getElementById(`bar${p}`).classList.toggle('active', p===this.engine.cur);
+    });
+  }
+
+  _updateDice() {
+    const dr = this.engine.dice;
+    const shellsEl = document.getElementById('shells');
+    const valEl    = document.getElementById('dval');
+    if (!dr) {
+      shellsEl.innerHTML = '<span class="shell-prompt">Tap to roll</span>';
+      valEl.textContent = '—';
+      return;
+    }
+    shellsEl.innerHTML = dr.shells.map(u =>
+      `<span class="shell ${u?'up':'dn'}">${u?'◯':'●'}</span>`
+    ).join('');
+    valEl.textContent = dr.value===0 ? 'Skip' : dr.value===8 ? '8✦' : String(dr.value);
+  }
+
+  _updateBtn() {
+    const { engine } = this;
+    const btn = document.getElementById('btn-roll');
+    if (engine.phase==='over') { btn.style.display='none'; this._showOver(); return; }
+    const isAI = engine.mode==='vs-ai' && engine.cur===1;
+    btn.style.display = isAI ? 'none' : 'block';
+    btn.textContent = engine.phase==='roll' ? 'Roll Cowries' : 'Select a piece ↑';
+    btn.disabled    = engine.phase!=='roll';
+  }
+
+  _onRoll() {
+    if (this.busy || this.engine.phase!=='roll') return;
+    if (this.engine.mode==='vs-ai' && this.engine.cur===1) return;
+    const r = this.engine.roll();
+    this._render();
+    if (r.skip) {
+      this._toast(r.why==='no-mouths' ? 'No mouths up — skip!' : 'No valid moves — skip!');
+      setTimeout(()=>this._maybeAI(), 700);
+    }
+  }
+
+  async _onPiece(pIdx) {
+    if (this.busy || this.engine.phase!=='move') return;
+    if (!this.engine.valid.find(m=>m.pIdx===pIdx)) return;
+    if (this.engine.mode==='vs-ai' && this.engine.cur===1) return;
+    await this._doMove(pIdx);
+  }
+
+  _maybeAI() {
+    const { engine, ai } = this;
+    if (!ai || engine.phase==='over' || engine.cur!==1 || this.busy) return;
+    setTimeout(async ()=> {
+      if (engine.cur!==1 || engine.phase!=='roll') return;
+      const r = engine.roll();
+      this._render();
+      if (r.skip) { this._toast('AI skips'); await delay(600); this._updateBtn(); return; }
+      await delay(480);
+      const mv = ai.pick(engine);
+      if (mv) await this._doMove(mv.pIdx);
+    }, 920);
+  }
+
+  async _doMove(pIdx) {
+    this.busy = true;
+    const { engine, renderer } = this;
+    const mv  = engine.valid.find(m=>m.pIdx===pIdx);
+    const pc  = engine.pieces[pIdx];
+
+    renderer.clear('hl');
+    await renderer.animateMove(pc, mv.from, mv.to);
+
+    const res = engine.move(pIdx);
+
+    if (res.caps.length) {
+      const [cr,cc] = PATH[res.to];
+      renderer.flashCapture(cr,cc);
+      this._toast(`Captured ${res.caps.length} piece${res.caps.length>1?'s':''}!`);
+    }
+
+    this._render();
+    this.busy = false;
+    if (!res.winner) this._maybeAI();
+  }
+
+  _showOver() {
+    const w  = this.engine.winner;
+    const pl = PLAYERS[w];
+    document.getElementById('go-winner').textContent =
+      `${this.engine.mode==='vs-ai' && w===1 ? 'Maharaja AI' : pl.name} (${pl.label}) wins!`;
+    document.getElementById('go-moves').textContent =
+      `${this.engine.history.length} moves played`;
+    setTimeout(()=>this._show('s-over'), 600);
+  }
+
+  _toast(msg, ms=1500) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(this._tt);
+    this._tt = setTimeout(()=>el.classList.remove('show'), ms);
+  }
+}
+
+/* ── Bootstrap ── */
+window.addEventListener('DOMContentLoaded', ()=>{ new App(); });
+</script>
+</body>
+</html>

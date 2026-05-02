@@ -1,0 +1,68 @@
+
+<style>
+.plan { padding: 4px 0; }
+.ph { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); letter-spacing: .07em; text-transform: uppercase; margin: 14px 0 8px; }
+.file-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 6px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); margin-bottom: 5px; }
+.file-name { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); font-weight: 500; flex: 0 0 200px; }
+.file-desc { font-size: 12px; color: var(--color-text-secondary); flex: 1; }
+.tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; flex-shrink: 0; }
+.t-new  { background: var(--color-background-success); color: var(--color-text-success); }
+.t-fix  { background: var(--color-background-warning); color: var(--color-text-warning); }
+.t-ai   { background: var(--color-background-info);    color: var(--color-text-info); }
+.highlight { background: var(--color-background-info); border-color: var(--color-border-info); border-width: 1.5px; }
+</style>
+<div class="plan">
+<p class="ph">Frontend — portal</p>
+<div class="file-row highlight">
+  <div class="file-name">portal/index.html</div>
+  <div class="file-desc">Sign-in screen · player ID creation · campaign select · leaderboard</div>
+  <span class="tag t-new">New</span>
+</div>
+<div class="file-row">
+  <div class="file-name">portal/css/portal.css</div>
+  <div class="file-desc">Parchment + gold aesthetic · Mauryan ornament system</div>
+  <span class="tag t-new">New</span>
+</div>
+<div class="file-row">
+  <div class="file-name">portal/js/auth.js</div>
+  <div class="file-desc">localStorage player profiles · save slots · title system · legacy score</div>
+  <span class="tag t-new">New</span>
+</div>
+
+<p class="ph">Frontend — game</p>
+<div class="file-row highlight">
+  <div class="file-name">game/js/map.js</div>
+  <div class="file-desc">SVG political map · territory polygons · rivers · terrain · zoom/pan · hover tooltips</div>
+  <span class="tag t-fix">Rebuild</span>
+</div>
+<div class="file-row highlight">
+  <div class="file-name">game/js/chanakya.js</div>
+  <div class="file-desc">Rule-based AI advisor · 200+ contextual responses · real Arthashastra concepts</div>
+  <span class="tag t-ai">AI</span>
+</div>
+<div class="file-row">
+  <div class="file-name">game/js/logic.js</div>
+  <div class="file-desc">Pure game logic · territory ownership · resource deltas · faction AI turns</div>
+  <span class="tag t-fix">Refactor</span>
+</div>
+<div class="file-row">
+  <div class="file-name">game/js/ui.js</div>
+  <div class="file-desc">DOM updates · modals · event log · notifications · turn strip</div>
+  <span class="tag t-fix">Refactor</span>
+</div>
+<div class="file-row">
+  <div class="file-name">game/js/main.js</div>
+  <div class="file-desc">State · event wiring · game loop · save/load integration</div>
+  <span class="tag t-fix">Refactor</span>
+</div>
+<div class="file-row">
+  <div class="file-name">game/index.html</div>
+  <div class="file-desc">Game shell · 5-section layout · map canvas replaced with SVG</div>
+  <span class="tag t-fix">Rebuild</span>
+</div>
+<div class="file-row">
+  <div class="file-name">game/css/game.css</div>
+  <div class="file-desc">Full design system · readable text · map legend · advisor panel</div>
+  <span class="tag t-fix">Rebuild</span>
+</div>
+</div>

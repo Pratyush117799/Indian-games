@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Ayurveda Apothecary 🌿</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=Hind:wght@300;400;500;600&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+/* ═══ PARCHMENT DESIGN SYSTEM ═══════════════════════════════════════════════ */
+:root{
+  --ink:        #1C1208;
+  --ink-light:  #3D2A0E;
+  --parch:      #F5EDD6;
+  --parch-dark: #E8D9B8;
+  --parch-deep: #D4C090;
+  --sage:       #2D6A4F;
+  --sage-lt:    #52B788;
+  --sage-pale:  #D8F3DC;
+  --saffron:    #E67E22;
+  --saffron-lt: #F0A55A;
+  --turmeric:   #D4A017;
+  --clay:       #8B3A1A;
+  --clay-lt:    #C45A2A;
+  --gold:       #B8860B;
+  --gold-lt:    #DAA520;
+  --cream:      #FFF8E7;
+  --shadow:     rgba(28,18,8,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--parch);
+  color:var(--ink);
+  font-family:'Hind',system-ui,sans-serif;
+  /* Parchment texture */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23p)' opacity='.06'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 30% 20%, rgba(212,160,23,.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(139,58,26,.05) 0%, transparent 60%);
+}
+
+/* ═══ TYPOGRAPHY ═══════════════════════════════════════════════════════════ */
+.t-display{ font-family:'Playfair Display',Georgia,serif; }
+.t-italic  { font-family:'Playfair Display',serif; font-style:italic; }
+.t-sanskrit{ font-family:'Tiro Devanagari Sanskrit',serif; }
+.t-body    { font-family:'Hind',sans-serif; }
+
+/* ═══ LAYOUT ═══════════════════════════════════════════════════════════════ */
+#root{ height:100%; display:flex; flex-direction:column; }
+
+/* ═══ NAV BAR ═══════════════════════════════════════════════════════════════ */
+.nav{
+  height:54px; min-height:54px;
+  background:var(--ink);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 1rem;
+  border-bottom:2px solid var(--gold);
+  position:relative; z-index:10;
+  box-shadow:0 2px 12px var(--shadow);
+}
+.nav-brand{
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:1.1rem; color:var(--gold-lt);
+  letter-spacing:.03em;
+}
+.nav-brand span{ color:var(--sage-lt); font-size:.7rem; display:block; font-style:normal; letter-spacing:.12em; margin-top:-3px; }
+.nav-tabs{ display:flex; gap:2px; }
+.nav-tab{
+  font-family:'Hind',sans-serif; font-size:.62rem; font-weight:600;
+  letter-spacing:.1em; padding:.36rem .7rem; border-radius:5px;
+  background:transparent; color:rgba(255,248,231,.45);
+  border:1px solid transparent; cursor:pointer; transition:all .2s;
+  text-transform:uppercase;
+}
+.nav-tab:hover{ background:rgba(184,134,11,.12); color:var(--parch); }
+.nav-tab.active{ background:rgba(184,134,11,.22); color:var(--gold-lt); border-color:rgba(184,134,11,.35); }
+.nav-player{
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.62rem; color:rgba(255,248,231,.55); letter-spacing:.06em;
+}
+.xp-bar-wrap{ width:64px; height:5px; background:rgba(255,255,255,.1); border-radius:3px; overflow:hidden; }
+.xp-bar-fill{ height:100%; background:linear-gradient(90deg,var(--sage),var(--gold)); border-radius:3px; transition:width .5s; }
+
+/* ═══ SCENE CONTAINER ══════════════════════════════════════════════════════ */
+.scene{ flex:1; overflow:hidden; position:relative; }
+
+/* ═══ PARCHMENT CARD ════════════════════════════════════════════════════════ */
+.pcard{
+  background:var(--parch);
+  border:1px solid var(--parch-deep);
+  border-radius:8px;
+  box-shadow:0 2px 16px var(--shadow), inset 0 1px 0 rgba(255,255,255,.5);
+  position:relative;
+}
+.pcard::before{
+  content:''; position:absolute; inset:3px; border-radius:5px;
+  border:1px solid rgba(184,134,11,.2); pointer-events:none;
+}
+
+/* ═══ INK DIVIDER ═══════════════════════════════════════════════════════════ */
+.ink-div{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--ink-light),transparent);
+  opacity:.3; margin:.75rem 0;
+}
+
+/* ═══ BOTANICAL TAG ═════════════════════════════════════════════════════════ */
+.btag{
+  display:inline-block; font-size:.58rem; font-weight:600;
+  letter-spacing:.1em; padding:2px 8px; border-radius:100px;
+  border:1px solid currentColor; opacity:.75;
+}
+.btag-sage  { color:var(--sage);    border-color:var(--sage-lt);    background:var(--sage-pale); }
+.btag-gold  { color:var(--gold);    border-color:var(--gold-lt);    background:#FFF8DC; }
+.btag-clay  { color:var(--clay);    border-color:var(--clay-lt);    background:#FFF0E8; }
+.btag-rare  { color:#7B2D8B;        border-color:#B39DDB;           background:#F3E5F5; }
+.btag-legend{ color:#8B4513;        border-color:#D4AC0D;           background:#FFFDE7; }
+
+/* ═══ RARITY COLOURS ════════════════════════════════════════════════════════ */
+.rarity-common   { color:var(--sage); }
+.rarity-uncommon { color:var(--saffron); }
+.rarity-rare     { color:#7B2D8B; }
+.rarity-legendary{ color:var(--gold); }
+
+/* ═══ BUTTONS ═══════════════════════════════════════════════════════════════ */
+.btn{
+  font-family:'Hind',sans-serif; font-size:.7rem; font-weight:600;
+  letter-spacing:.1em; padding:.45rem 1.1rem; border-radius:6px;
+  cursor:pointer; transition:all .15s; border:none; text-transform:uppercase;
+}
+.btn-primary{
+  background:var(--sage); color:#fff;
+  box-shadow:0 2px 8px rgba(45,106,79,.3);
+}
+.btn-primary:hover{ background:var(--sage-lt); transform:translateY(-1px); }
+.btn-secondary{
+  background:transparent; color:var(--ink-light);
+  border:1px solid var(--parch-deep);
+}
+.btn-secondary:hover{ background:var(--parch-dark); }
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));
+  color:var(--ink); font-weight:700;
+  box-shadow:0 2px 10px rgba(184,134,11,.35);
+}
+.btn-gold:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+.btn-clay{ background:var(--clay); color:#fff; }
+.btn-clay:hover{ background:var(--clay-lt); }
+
+/* ═══ SCROLLBAR ═════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar{ width:5px; height:5px; }
+::-webkit-scrollbar-track{ background:var(--parch-dark); }
+::-webkit-scrollbar-thumb{ background:var(--parch-deep); border-radius:3px; }
+
+/* ═══ ANIMATIONS ════════════════════════════════════════════════════════════ */
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+@keyframes slideUp    { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes slideRight { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:none} }
+@keyframes leafSway   { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+@keyframes grow       { from{transform:scaleY(0);transform-origin:bottom} to{transform:scaleY(1)} }
+@keyframes particleFly{ 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)} }
+@keyframes mortarSpin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes pageFlip   { 0%{transform:rotateY(0)} 50%{transform:rotateY(-90deg)} 100%{transform:rotateY(0)} }
+@keyframes pulse      { 0%,100%{opacity:.7} 50%{opacity:1} }
+@keyframes shimmer    { 0%{background-position:-200% center} 100%{background-position:200% center} }
+@keyframes bounceIn   { 0%{transform:scale(.5);opacity:0} 70%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+@keyframes spin       { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes herbFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+.fade-in    { animation:fadeIn .4s ease-out both; }
+.slide-up   { animation:slideUp .45s ease-out both; }
+.bounce-in  { animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* ═══ SCENE: HUB ════════════════════════════════════════════════════════════ */
+.hub-scene{
+  height:100%; overflow-y:auto;
+  display:flex; flex-direction:column;
+  padding:1.2rem;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(82,183,136,.08) 0%, transparent 70%),
+    var(--parch);
+}
+.hub-header{
+  text-align:center; padding:.5rem 0 1rem; border-bottom:1px solid var(--parch-deep);
+  margin-bottom:1.2rem;
+}
+.hub-title{
+  font-family:'Playfair Display',serif; font-size:1.8rem;
+  color:var(--ink); letter-spacing:-.01em; line-height:1.1;
+}
+.hub-title span{ color:var(--sage); }
+.hub-subtitle{
+  font-family:'Tiro Devanagari Sanskrit',serif; font-style:italic;
+  font-size:.82rem; color:var(--ink-light); opacity:.7; margin-top:.3rem;
+}
+.hub-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; max-width:680px; margin:0 auto; width:100%; }
+@media(max-width:540px){ .hub-grid{ grid-template-columns:1fr; } }
+.hub-card{
+  padding:1.1rem; cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+}
+.hub-card:hover{ transform:translateY(-3px); box-shadow:0 8px 24px var(--shadow); }
+.hub-card-icon{ font-size:1.8rem; margin-bottom:.5rem; display:block; }
+.hub-card-title{
+  font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
+  color:var(--ink); margin-bottom:.2rem;
+}
+.hub-card-desc{ font-size:.78rem; color:var(--ink-light); line-height:1.6; }
+.hub-card-accent{ position:absolute; top:0; left:0; right:0; height:3px; border-radius:8px 8px 0 0; }
+.guru-box{
+  background:var(--ink); color:var(--parch);
+  border-radius:10px; padding:1rem 1.2rem;
+  display:flex; gap:.9rem; align-items:flex-start;
+  margin-bottom:1.2rem;
+}
+.guru-avatar{
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--sage),var(--gold));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; border:2px solid var(--gold);
+}
+.guru-name{ font-family:'Playfair Display',serif; font-size:.78rem; color:var(--gold-lt); letter-spacing:.06em; margin-bottom:.2rem; }
+.guru-speech{ font-family:'Playfair Display',serif; font-style:italic; font-size:.85rem; color:rgba(245,237,214,.85); line-height:1.65; }
+.season-badge{
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.3rem .7rem; border-radius:100px;
+  font-size:.62rem; font-weight:600; letter-spacing:.08em;
+  border:1px solid var(--parch-deep); background:var(--cream);
+  color:var(--ink-light); margin-bottom:.8rem;
+}
+.daily-herbs{
+  display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.6rem;
+}
+.daily-herb-chip{
+  display:flex; align-items:center; gap:.3rem;
+  background:var(--sage-pale); border:1px solid var(--sage-lt);
+  border-radius:100px; padding:3px 10px;
+  font-size:.65rem; font-weight:600; color:var(--sage);
+  animation:pulse 2s ease-in-out infinite;
+}
+
+/* ═══ SCENE: GARDEN ═════════════════════════════════════════════════════════ */
+.garden-scene{ height:100%; overflow-y:auto; padding:1rem; }
+.garden-header{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:.9rem;
+}
+.garden-title{ font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--ink); }
+.season-info{ font-size:.68rem; color:var(--ink-light); text-align:right; }
+.plots-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+  gap:.7rem; margin-bottom:1rem;
+}
+.plot{
+  aspect-ratio:1; border-radius:10px; border:2px dashed var(--parch-deep);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s; position:relative; overflow:hidden;
+  background:var(--cream);
+}
+.plot.occupied{ border-style:solid; border-color:var(--sage-lt); background:var(--sage-pale); }
+.plot.ready{ border-color:var(--gold-lt); background:#FFFDE7;
+  animation:pulse 1.5s ease-in-out infinite; }
+.plot.empty:hover{ background:var(--parch-dark); border-color:var(--parch-deep); }
+.plot-herb-name{ font-size:.65rem; font-weight:600; color:var(--ink); text-align:center; margin-top:.3rem; }
+.plot-progress{
+  width:80%; height:4px; background:var(--parch-deep);
+  border-radius:2px; overflow:hidden; margin-top:.3rem;
+}
+.plot-progress-fill{ height:100%; background:var(--sage); border-radius:2px; transition:width .5s; }
+.plot-label{ font-size:.58rem; color:var(--ink-light); margin-top:2px; }
+.herb-emoji{ font-size:2rem; }
+.harvest-btn{
+  position:absolute; bottom:4px; right:4px;
+  font-size:.55rem; font-weight:700; padding:2px 6px; border-radius:4px;
+  background:var(--gold); color:var(--ink); border:none; cursor:pointer;
+  letter-spacing:.06em;
+}
+
+/* ═══ SCENE: APOTHECARY / CRAFTING ═════════════════════════════════════════ */
+.craft-scene{ height:100%; overflow-y:auto; padding:1rem; }
+.craft-layout{ display:grid; grid-template-columns:1fr 280px; gap:1rem; height:calc(100% - 2rem); }
+@media(max-width:680px){ .craft-layout{ grid-template-columns:1fr; } }
+.mortar-area{
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:1rem; gap:.8rem;
+}
+.mortar-wrap{
+  position:relative; width:220px; height:220px;
+  cursor:crosshair; user-select:none; -webkit-user-select:none;
+}
+.mortar-bowl{
+  width:200px; height:120px; position:absolute;
+  bottom:10px; left:50%; transform:translateX(-50%);
+  border-radius:0 0 100px 100px;
+  border:3px solid var(--parch-deep);
+  background:radial-gradient(ellipse at 50% 20%, var(--parch-dark), var(--parch-deep));
+  overflow:hidden;
+}
+.mortar-contents{
+  position:absolute; bottom:0; left:0; right:0;
+  border-radius:0 0 100px 100px;
+  transition:height .3s, background .5s;
+}
+.mortar-pestle{
+  width:20px; height:90px; background:linear-gradient(to bottom, var(--parch-deep), var(--clay-lt));
+  border-radius:10px; position:absolute;
+  top:10px; left:50%; transform-origin:bottom center;
+  transition:transform .1s;
+  box-shadow:2px 4px 8px var(--shadow);
+}
+.mortar-pestle-top{
+  width:32px; height:16px; background:var(--parch-deep);
+  border-radius:8px; position:absolute; top:0; left:-6px;
+}
+.grind-progress{
+  width:100%; max-width:200px; height:8px;
+  background:var(--parch-deep); border-radius:4px; overflow:hidden;
+}
+.grind-progress-fill{
+  height:100%; border-radius:4px;
+  background:linear-gradient(90deg,var(--sage),var(--gold-lt));
+  transition:width .3s;
+}
+.ingredients-tray{
+  display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center;
+  padding:.6rem; background:var(--parch-dark); border-radius:8px;
+  border:1px solid var(--parch-deep); min-height:44px;
+}
+.ingredient-chip{
+  display:flex; align-items:center; gap:.3rem;
+  background:var(--cream); border:1px solid var(--parch-deep);
+  border-radius:100px; padding:3px 10px; font-size:.65rem; font-weight:600;
+  color:var(--ink); cursor:pointer; transition:all .15s;
+}
+.ingredient-chip:hover{ background:var(--clay-lt); color:#fff; border-color:var(--clay); }
+.ingredient-chip.added{ background:var(--sage-pale); border-color:var(--sage-lt); color:var(--sage); }
+.craft-sidebar{ overflow-y:auto; }
+.recipe-list{ display:flex; flex-direction:column; gap:.5rem; }
+.recipe-item{
+  padding:.65rem .8rem; border-radius:8px; cursor:pointer;
+  border:1px solid var(--parch-deep); background:var(--cream);
+  transition:all .15s;
+}
+.recipe-item:hover{ background:var(--parch-dark); border-color:var(--sage-lt); }
+.recipe-item.selected{ background:var(--sage-pale); border-color:var(--sage); }
+.recipe-name{ font-family:'Playfair Display',serif; font-size:.85rem; font-weight:700; color:var(--ink); }
+.recipe-cat{ font-size:.6rem; color:var(--ink-light); letter-spacing:.08em; text-transform:uppercase; }
+.craft-result{
+  background:var(--ink); color:var(--parch);
+  border-radius:10px; padding:1rem; text-align:center;
+  animation:bounceIn .5s ease both;
+}
+.craft-result-title{ font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold-lt); margin-bottom:.3rem; }
+.craft-result-tier{ font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.5rem; }
+
+/* ═══ SCENE: PATIENT ROOM ═══════════════════════════════════════════════════ */
+.patient-scene{ height:100%; overflow-y:auto; padding:1rem; }
+.patient-portrait{
+  width:80px; height:80px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.2rem; border:3px solid var(--parch-deep);
+  background:var(--parch-dark);
+  box-shadow:0 4px 16px var(--shadow);
+}
+.dialogue-box{
+  background:var(--ink); color:var(--parch);
+  border-radius:0 12px 12px 12px; padding:.9rem 1.1rem;
+  position:relative; margin-bottom:.5rem;
+}
+.dialogue-box::before{
+  content:''; position:absolute; top:0; left:-10px;
+  border:8px solid transparent;
+  border-right-color:var(--ink); border-top:0;
+}
+.dialogue-text{
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:.88rem; line-height:1.7; color:rgba(245,237,214,.9);
+}
+.symptom-chips{ display:flex; flex-wrap:wrap; gap:.35rem; margin:.6rem 0; }
+.symptom-chip{
+  padding:3px 10px; border-radius:100px; font-size:.63rem; font-weight:600;
+  background:#FFF3CD; border:1px solid var(--turmeric); color:var(--ink-light);
+  letter-spacing:.04em;
+}
+.diagnosis-panel{
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:.6rem; margin:.8rem 0;
+}
+.dosha-option{
+  padding:.75rem; border-radius:8px; border:2px solid var(--parch-deep);
+  cursor:pointer; text-align:center; transition:all .2s;
+  background:var(--cream);
+}
+.dosha-option:hover{ transform:translateY(-2px); box-shadow:0 4px 12px var(--shadow); }
+.dosha-option.selected.vata { border-color:#A8DADC; background:#EAF7F8; }
+.dosha-option.selected.pitta{ border-color:#FFB347; background:#FFF3E0; }
+.dosha-option.selected.kapha{ border-color:#95D5B2; background:#E8F5E9; }
+.dosha-emoji{ font-size:1.5rem; margin-bottom:.3rem; }
+.dosha-name{ font-family:'Playfair Display',serif; font-size:.82rem; font-weight:700; color:var(--ink); }
+.dosha-desc{ font-size:.62rem; color:var(--ink-light); margin-top:.15rem; }
+.moral-choice-btn{
+  width:100%; padding:.75rem 1rem; border-radius:8px;
+  border:1px solid var(--parch-deep); background:var(--cream);
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:.83rem; color:var(--ink); cursor:pointer; text-align:left;
+  transition:all .15s; margin-bottom:.45rem;
+}
+.moral-choice-btn:hover{ background:var(--parch-dark); border-color:var(--sage-lt); }
+.outcome-card{
+  border-radius:10px; padding:1.1rem;
+  animation:slideUp .4s ease both;
+}
+.outcome-card.success{ background:#E8F5E9; border:1px solid var(--sage-lt); }
+.outcome-card.partial { background:#FFF8DC; border:1px solid var(--turmeric); }
+.outcome-card.failure { background:#FFF0E8; border:1px solid var(--clay-lt); }
+.herb-fact-chip{
+  display:inline-flex; align-items:center; gap:.4rem;
+  background:var(--ink); color:var(--parch); border-radius:8px;
+  padding:.5rem .75rem; font-size:.72rem; margin-top:.6rem;
+  font-family:'Playfair Display',serif; font-style:italic;
+  line-height:1.5;
+}
+
+/* ═══ SCENE: COMPENDIUM ═════════════════════════════════════════════════════ */
+.compendium-scene{
+  height:100%; display:grid;
+  grid-template-columns:260px 1fr;
+  gap:0;
+}
+@media(max-width:640px){ .compendium-scene{ grid-template-columns:1fr; } }
+.compendium-list{
+  border-right:1px solid var(--parch-deep);
+  overflow-y:auto; padding:.75rem;
+  background:var(--cream);
+}
+.comp-search{
+  width:100%; padding:.45rem .7rem; border-radius:6px;
+  border:1px solid var(--parch-deep); background:var(--parch);
+  font-family:'Hind',sans-serif; font-size:.75rem; color:var(--ink);
+  margin-bottom:.6rem; outline:none;
+}
+.comp-search:focus{ border-color:var(--sage-lt); }
+.comp-filter-row{ display:flex; gap:.3rem; flex-wrap:wrap; margin-bottom:.6rem; }
+.comp-filter-btn{
+  font-size:.58rem; font-weight:600; letter-spacing:.06em;
+  padding:3px 8px; border-radius:100px;
+  border:1px solid var(--parch-deep); background:var(--cream);
+  color:var(--ink-light); cursor:pointer; transition:all .12s; text-transform:uppercase;
+}
+.comp-filter-btn.active{ background:var(--sage); color:#fff; border-color:var(--sage); }
+.herb-list-item{
+  display:flex; align-items:center; gap:.6rem;
+  padding:.5rem .6rem; border-radius:6px; cursor:pointer; transition:all .15s;
+}
+.herb-list-item:hover{ background:var(--parch-dark); }
+.herb-list-item.selected{ background:var(--sage-pale); }
+.herb-list-item.locked{ opacity:.45; cursor:default; }
+.herb-color-dot{
+  width:12px; height:12px; border-radius:50%; flex-shrink:0;
+  border:1px solid rgba(0,0,0,.1);
+}
+.herb-list-name{ font-size:.75rem; font-weight:600; color:var(--ink); flex:1; }
+.herb-list-sanskrit{ font-family:'Tiro Devanagari Sanskrit',serif; font-size:.65rem; color:var(--ink-light); }
+.lock-icon{ font-size:.75rem; color:var(--ink-light); opacity:.5; }
+.compendium-detail{ overflow-y:auto; padding:1.2rem; }
+.herb-detail-header{ display:flex; align-items:flex-start; gap:1rem; margin-bottom:1rem; }
+.herb-color-swatch{
+  width:60px; height:60px; border-radius:10px; flex-shrink:0;
+  border:2px solid var(--parch-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem;
+}
+.herb-detail-name{
+  font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700;
+  color:var(--ink); line-height:1.1; margin-bottom:.15rem;
+}
+.herb-detail-sanskrit{
+  font-family:'Tiro Devanagari Sanskrit',serif; font-style:italic;
+  font-size:.9rem; color:var(--gold); margin-bottom:.3rem;
+}
+.herb-regional-names{ display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem; }
+.herb-regional{ font-size:.68rem; color:var(--ink-light); }
+.herb-regional span{ color:var(--ink); font-weight:600; }
+.herb-fun-fact{
+  background:var(--ink); color:var(--parch);
+  border-radius:8px; padding:.8rem 1rem;
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:.82rem; line-height:1.7; margin:.8rem 0;
+}
+.dosha-effects{
+  display:flex; gap:.5rem; margin:.6rem 0;
+}
+.dosha-eff{
+  display:flex; align-items:center; gap:.3rem;
+  padding:.3rem .65rem; border-radius:100px; font-size:.65rem; font-weight:600;
+}
+.dosha-eff.decrease{ background:#E8F5E9; color:var(--sage); border:1px solid var(--sage-lt); }
+.dosha-eff.increase{ background:#FDECEA; color:var(--clay); border:1px solid var(--clay-lt); }
+.dosha-eff.neutral { background:var(--parch-dark); color:var(--ink-light); border:1px solid var(--parch-deep); }
+.uses-list{
+  display:flex; flex-wrap:wrap; gap:.35rem; margin:.5rem 0;
+}
+.use-chip{
+  padding:3px 10px; border-radius:100px; font-size:.63rem; font-weight:600;
+  background:var(--sage-pale); border:1px solid var(--sage-lt); color:var(--sage);
+}
+
+/* ═══ PARTICLE CANVAS ════════════════════════════════════════════════════════ */
+.particle-canvas{
+  position:absolute; inset:0; pointer-events:none; z-index:10;
+}
+
+/* ═══ OVERLAY MODAL ═════════════════════════════════════════════════════════ */
+.modal-overlay{
+  position:absolute; inset:0; background:rgba(28,18,8,.55);
+  display:flex; align-items:center; justify-content:center;
+  z-index:30; backdrop-filter:blur(3px);
+}
+.modal-box{
+  width:min(420px,92%); max-height:85%;
+  overflow-y:auto; animation:bounceIn .35s ease both;
+}
+
+/* ═══ DOSHA QUIZ ════════════════════════════════════════════════════════════ */
+.quiz-wrap{ max-width:480px; margin:0 auto; padding:1rem; }
+.quiz-progress{ height:5px; background:var(--parch-deep); border-radius:3px; overflow:hidden; margin-bottom:1.2rem; }
+.quiz-progress-fill{ height:100%; background:linear-gradient(90deg,var(--sage),var(--gold)); border-radius:3px; transition:width .3s; }
+.quiz-q{ font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--ink); margin-bottom:.8rem; line-height:1.4; }
+.quiz-opt{
+  width:100%; padding:.75rem 1rem; border-radius:8px; cursor:pointer;
+  border:2px solid var(--parch-deep); background:var(--cream); margin-bottom:.45rem;
+  font-family:'Hind',sans-serif; font-size:.82rem; color:var(--ink); text-align:left;
+  transition:all .15s;
+}
+.quiz-opt:hover{ background:var(--parch-dark); border-color:var(--sage-lt); }
+.quiz-opt.selected{ background:var(--sage-pale); border-color:var(--sage); color:var(--sage); font-weight:600; }
+.quiz-result{
+  text-align:center; padding:1.5rem 1rem;
+}
+.quiz-dosha-name{
+  font-family:'Playfair Display',serif; font-size:2rem; font-weight:700;
+  margin:1rem 0 .3rem;
+}
+.quiz-dosha-sanskrit{
+  font-family:'Tiro Devanagari Sanskrit',serif; font-style:italic;
+  font-size:1.1rem; color:var(--gold); margin-bottom:1rem;
+}
+
+/* ═══ LEVEL UP TOAST ════════════════════════════════════════════════════════ */
+.levelup-toast{
+  position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  background:var(--gold); color:var(--ink); border-radius:100px;
+  padding:.5rem 1.4rem; font-family:'Playfair Display',serif; font-weight:700;
+  font-size:.85rem; letter-spacing:.06em; z-index:50;
+  animation:bounceIn .5s ease both, fadeIn 2s ease 2s reverse both;
+  box-shadow:0 4px 20px rgba(184,134,11,.4);
+  white-space:nowrap;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo} = React;
+
+/* ════════════════════════════════════════════════════════════════
+   INLINE GAME ENGINE (subset of Phase 1 for standalone demo)
+════════════════════════════════════════════════════════════════ */
+
+// 40 herbs (representative subset of the full 100 for demo)
+const HERBS = [
+  {id:'tulsi',     name:'Holy Basil',       sanskrit:'Tulasī',      hindi:'तुलसी', tamil:'துளசி', rarity:'common',   season:'monsoon', dosha:{vata:-1,pitta:0,kapha:-1},  color:'#2D6A4F', emoji:'🌿', uses:['colds & flu','fever','immunity'],    funFact:'Tulsi is found in almost every Indian home and is worshipped as a goddess. It has 27 varieties!', habitat:'garden', growTime:7,  yieldAmount:5, xpValue:10},
+  {id:'turmeric',  name:'Turmeric',         sanskrit:'Haridrā',     hindi:'हल्दी', tamil:'மஞ்சள்', rarity:'common',  season:'monsoon', dosha:{vata:-1,pitta:0,kapha:-1},  color:'#F4A261', emoji:'🟡', uses:['inflammation','skin','wounds'],       funFact:'Turmeric turns yellow because of curcumin. Ancient Indians used it as dye, medicine, and in wedding rituals!', habitat:'garden', growTime:6, yieldAmount:4, xpValue:10},
+  {id:'ginger',    name:'Ginger',           sanskrit:'Śuṇṭhī',      hindi:'अदरक', tamil:'இஞ்சி', rarity:'common',    season:'spring',  dosha:{vata:-1,pitta:1,kapha:-1},  color:'#E9C46A', emoji:'🫚', uses:['nausea','digestion','cold'],          funFact:'Ginger is called "Vishwabheshaja" — medicine of the world. It was the first spice on the Silk Road!', habitat:'garden', growTime:5, yieldAmount:4, xpValue:10},
+  {id:'neem',      name:'Neem',             sanskrit:'Nimba',       hindi:'नीम', tamil:'வேம்பு', rarity:'common',     season:'summer',  dosha:{vata:1,pitta:-1,kapha:-1},  color:'#52B788', emoji:'🌳', uses:['skin diseases','fever','dental'],     funFact:'Neem is called "sarvaroganivarini" — curer of all diseases. People used neem twigs as toothbrushes for 4000 years!', habitat:'forest', growTime:10, yieldAmount:6, xpValue:10},
+  {id:'amla',      name:'Indian Gooseberry',sanskrit:'Āmalakī',     hindi:'आंवला', tamil:'நெல்லிக்காய்', rarity:'common', season:'autumn', dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#95D5B2', emoji:'🫐', uses:['immunity','hair','anti-aging'],    funFact:'Amla has 20x more Vitamin C than oranges! Key ingredient in Chyawanprash made by sage Chyavana to regain youth.', habitat:'forest', growTime:9, yieldAmount:6, xpValue:15},
+  {id:'ashwagandha',name:'Winter Cherry',   sanskrit:'Aśvagandha',  hindi:'अश्वगंधा', tamil:'அஸ்வகந்தா', rarity:'uncommon', season:'winter', dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#BC6C25', emoji:'🌰', uses:['stress','fatigue','memory'],       funFact:'Ashwagandha means "smell of a horse" — it was believed to give you the strength and stamina of a stallion!', habitat:'desert', growTime:14, yieldAmount:3, xpValue:25},
+  {id:'brahmi',    name:'Water Hyssop',     sanskrit:'Brāhmī',      hindi:'ब्राह्मी', tamil:'பிரம்மி', rarity:'uncommon', season:'monsoon', dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#40916C', emoji:'🍃', uses:['memory','anxiety','learning'],    funFact:'Brahmi is named after Brahma, the creator god — believed to unlock the full power of the human mind!', habitat:'wetland', growTime:8, yieldAmount:4, xpValue:25},
+  {id:'shatavari', name:'Indian Asparagus', sanskrit:'Śatāvarī',    hindi:'शतावरी', tamil:'சதாவரி', rarity:'uncommon',  season:'winter',  dosha:{vata:-1,pitta:-1,kapha:1},  color:'#74C69D', emoji:'🌱', uses:['immunity','digestion','strength'], funFact:'Shatavari means "she who has 100 husbands" — indicating its supreme nourishing power!', habitat:'forest', growTime:12, yieldAmount:3, xpValue:25},
+  {id:'aloe',      name:'Aloe Vera',        sanskrit:'Kumārī',      hindi:'घृतकुमारी', tamil:'கற்றாழை', rarity:'common', season:'summer', dosha:{vata:-1,pitta:-1,kapha:0},   color:'#B7E4C7', emoji:'🌵', uses:['burns','skin','constipation'],    funFact:'Aloe vera is called "Kumari" (young maiden) because it keeps skin youthful. Cleopatra bathed in aloe juice!', habitat:'desert', growTime:6, yieldAmount:5, xpValue:10},
+  {id:'rose',      name:'Rose',             sanskrit:'Tarūṇī',      hindi:'गुलाब', tamil:'ரோஜா', rarity:'common',      season:'spring',  dosha:{vata:-1,pitta:-1,kapha:0},  color:'#FF4D6D', emoji:'🌹', uses:['heart health','skin','mood'],       funFact:'Rose water was invented by Persian physician Ibn Sina who learned distillation from Indian Ayurvedic texts!', habitat:'garden', growTime:8, yieldAmount:5, xpValue:15},
+  {id:'kesar',     name:'Saffron',          sanskrit:'Kumkuma',     hindi:'केसर', tamil:'குங்குமப்பூ', rarity:'rare',   season:'autumn',  dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#FF7700', emoji:'🌸', uses:['depression','skin','memory'],       funFact:'Saffron is the world\'s most expensive spice — it takes 150 flowers to make just 1 gram!', habitat:'mountain', growTime:30, yieldAmount:1, xpValue:100},
+  {id:'guggul',    name:'Indian Bdellium',  sanskrit:'Guggulu',     hindi:'गुग्गुल', tamil:'கோரோஷணை', rarity:'rare',    season:'winter',  dosha:{vata:-1,pitta:0,kapha:-1},  color:'#C98B4A', emoji:'🪨', uses:['cholesterol','joints','obesity'],  funFact:'Guggul resin is mentioned in texts from 600 BCE for heart disease. Modern science confirmed this in the 1960s!', habitat:'desert', growTime:28, yieldAmount:1, xpValue:90},
+  {id:'sanjeevani',name:'Life Restorer',    sanskrit:'Sañjīvanī',   hindi:'संजीवनी', tamil:'சஞ்சீவினி', rarity:'legendary', season:'monsoon', dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#80ED99', emoji:'✨', uses:['revival','deep restoration'],    funFact:'Hanuman flew to the Himalayas to fetch Sanjeevani to revive Lakshmana! The real plant literally comes back to life after drying.', habitat:'mountain', growTime:60, yieldAmount:1, xpValue:500},
+  {id:'triphala',  name:'Three Fruits',     sanskrit:'Triphalā',    hindi:'त्रिफला', tamil:'திரிபலா', rarity:'uncommon',  season:'autumn',  dosha:{vata:-1,pitta:-1,kapha:-1}, color:'#D4A373', emoji:'🫐', uses:['constipation','eye health','detox'], funFact:'Triphala contains all 6 tastes of Ayurveda in one formula — the only substance that balances all three doshas!', habitat:'forest', growTime:11, yieldAmount:4, xpValue:30},
+  {id:'cinnamon',  name:'Cinnamon',         sanskrit:'Tvak',        hindi:'दालचीनी', tamil:'இலவங்கப்பட்டை', rarity:'common', season:'spring', dosha:{vata:-1,pitta:0,kapha:-1}, color:'#8B4513', emoji:'🟤', uses:['blood sugar','circulation','cold'], funFact:'True cinnamon comes only from Sri Lanka. Ancient Egyptians imported it from India and valued it more than gold!', habitat:'forest', growTime:8, yieldAmount:4, xpValue:15},
+  {id:'moringa',   name:'Drumstick Tree',   sanskrit:'Śigru',       hindi:'सहजन', tamil:'முருங்கை', rarity:'common',     season:'spring',  dosha:{vata:-1,pitta:1,kapha:-1},  color:'#40916C', emoji:'🌿', uses:['malnutrition','diabetes','bones'],  funFact:'Moringa has 7x more Vitamin C than oranges, 4x more calcium than milk. The UN calls it "the miracle tree"!', habitat:'garden', growTime:7, yieldAmount:6, xpValue:15},
+];
+
+const RECIPES = [
+  {id:'triphala_churna',  name:'Triphala Churna',    category:'churna',  targetDosha:'all',   ingredients:[{id:'triphala',qty:3}], grindLevel:3, desc:'The supreme tridoshic formula. Three fruits in equal parts.', dosage:'1 tsp with warm water at bedtime', xpReward:30, potency:90},
+  {id:'trikatu_churna',   name:'Trikatu Churna',     category:'churna',  targetDosha:'kapha', ingredients:[{id:'ginger',qty:1},{id:'cinnamon',qty:1}], grindLevel:3, desc:'Three pungents to kindle digestive fire.', dosage:'¼ tsp with honey before meals', xpReward:25, potency:85},
+  {id:'brahmi_churna',    name:'Brahmi Churna',      category:'churna',  targetDosha:'pitta', ingredients:[{id:'brahmi',qty:2}], grindLevel:4, desc:'The scholar\'s formula for memory and focus.', dosage:'½ tsp with ghee, morning empty stomach', xpReward:45, potency:85},
+  {id:'tulsi_kwatha',     name:'Tulsi Kwatha',       category:'kwatha',  targetDosha:'kapha', ingredients:[{id:'tulsi',qty:3},{id:'ginger',qty:1}], grindLevel:1, desc:'The household cold remedy — grandmother\'s prescription.', dosage:'One cup warm, 3 times daily with honey', xpReward:20, potency:78},
+  {id:'chandan_lepa',     name:'Chandan-Rose Lepa',  category:'lepa',    targetDosha:'pitta', ingredients:[{id:'rose',qty:2},{id:'aloe',qty:2}], grindLevel:4, desc:'Cooling paste for skin inflammation and fever.', dosage:'Apply to forehead or affected skin', xpReward:35, potency:80},
+  {id:'neem_lepa',        name:'Neem-Turmeric Lepa', category:'lepa',    targetDosha:'pitta', ingredients:[{id:'neem',qty:3},{id:'turmeric',qty:1}], grindLevel:4, desc:'Antimicrobial paste for acne and skin infections.', dosage:'Apply on affected area, leave 15 min', xpReward:20, potency:78},
+  {id:'ashwagandha_churna',name:'Ashwagandha Churna',category:'churna',  targetDosha:'vata',  ingredients:[{id:'ashwagandha',qty:2}], grindLevel:4, desc:'The royal stress formula — adaptogen supreme.', dosage:'1 tsp with warm milk at bedtime', xpReward:40, potency:88},
+  {id:'saffron_milk',     name:'Kesar Dugdha',       category:'swarasa', targetDosha:'all',   ingredients:[{id:'kesar',qty:1}], grindLevel:1, desc:'Golden milk — the Ayurvedic elixir of wellness.', dosage:'One cup warm saffron milk each morning', xpReward:60, potency:92},
+];
+
+const PATIENTS = [
+  {id:'raju', name:'Raju', title:'A young farmer', age:28, emoji:'👨‍🌾', dosha:'pitta', urgency:'moderate', symptoms:['acid reflux','burning sensation','anger','irritability'], dialogue:'"The burning starts one hour after eating. And last week I shouted at my daughter for nothing. What is wrong with me?"', arrival:'"Namaste Vaidyaji. My wife said I must come."', correctRecipe:'trikatu_churna', alternateRecipes:['tulsi_kwatha'], moralOptions:['Give herbs from your own garden at no cost','Suggest simple kitchen remedies instead','Offer herbs at a later date when he can pay'], healingSuccess:'Two weeks later, Raju sends a note: "The burning is gone. I played with my daughter yesterday — really played!" The remedies worked.', funFact:'Ginger increases metabolic rate by up to 20% for 3 hours. Ancient texts say it "kindles the digestive fire" — metabolically literal!', xpReward:50},
+  {id:'priya', name:'Priya', title:'A 14-year-old student', age:14, emoji:'👧', dosha:'vata', urgency:'high', symptoms:['insomnia','forgetfulness','anxiety','headache','poor appetite'], dialogue:'"I study until midnight but by morning I\'ve forgotten everything. And I keep thinking: what if I fail? What if I disappoint everyone?"', arrival:'"My mother said you would help. But I don\'t think herbs work for exams." (with a small smile)', correctRecipe:'brahmi_churna', alternateRecipes:['ashwagandha_churna'], moralOptions:['Explain that Ayurveda values rest as much as study','Give Brahmi and prescribe a structured sleep routine','Give whatever the mother asks — she knows her child best'], healingSuccess:'Priya returns after her exams. She passed! "The herb milk tasted horrible but Amma says I\'ve been sleeping properly for the first time in months."', funFact:'Research confirms Brahmi improves information retention by 33% after 12 weeks. Ancient Indian students had this figured out millennia ago!', xpReward:60},
+  {id:'meena', name:'Meena Ammachi', title:'A 72-year-old grandmother', age:72, emoji:'👵', dosha:'vata', urgency:'low', symptoms:['joint stiffness','dry skin','fatigue','constipation','cracking joints'], dialogue:'"Every morning, I need fifteen minutes just to open my fists. See these hands? Dry like the month of May."', arrival:'"Here, eat this first." (places a tiffin of homemade idlis on your table)', correctRecipe:'ashwagandha_churna', alternateRecipes:['triphala_churna'], moralOptions:['Teach her free sesame oil self-massage practice','Give her oil from your apothecary for one month','Suggest simpler dietary modifications instead'], healingSuccess:'Three months later: "I wake at 5am now and do MY OWN yoga before the house wakes!" Her hands are smooth, oiled, flexible.', funFact:'Ashwagandha rebuilds myelin sheaths — the protective coating around nerves — which thin with age. The original anti-aging nerve supplement!', xpReward:55},
+  {id:'arjun', name:'Arjun Singh', title:'A 19-year-old wrestler', age:19, emoji:'🤼', dosha:'pitta', urgency:'high', symptoms:['inflammation','burning sensation','swelling','skin redness','joint pain'], dialogue:'"I don\'t believe in herbs. My coach sent me because he ran out of options. I have a national competition in 6 weeks."', arrival:'"Namaste. I was told you might help."', correctRecipe:'chandan_lepa', alternateRecipes:['neem_lepa'], moralOptions:['Firmly advise complete rest — the injury needs it to heal','Design a partial rest programme protecting the shoulder','Give stronger remedies so he can continue training'], healingSuccess:'Arjun competes three months later and wins his regional bout! He sends a photo from the competition: "My guru heals my technique. You healed my body. Pranam."', funFact:'Sandalwood reduces inflamed tissue temperature by 2–3 degrees — measurable! Ancient surgeons applied it after procedures instead of ice.', xpReward:75},
+];
+
+const DOSHA_QUIZ = [
+  {q:'My body frame is naturally…', cText:'My body looks…', opts:[{l:'Thin and light',v:2,p:0,k:0},{l:'Medium and muscular',v:0,p:2,k:0},{l:'Larger and sturdy',v:0,p:0,k:2}]},
+  {q:'My skin is usually…', cText:'My skin feels…', opts:[{l:'Dry, rough, flaky',v:2,p:0,k:0},{l:'Warm, reddish, oily',v:0,p:2,k:0},{l:'Smooth, soft, oily',v:0,p:0,k:2}]},
+  {q:'Under stress, I tend to…', cText:'When things go wrong, I…', opts:[{l:'Worry and feel anxious',v:2,p:0,k:0},{l:'Get irritable and controlling',v:0,p:2,k:0},{l:'Withdraw and feel stuck',v:0,p:0,k:2}]},
+  {q:'My memory is…', cText:'When I learn new things…', opts:[{l:'Quick to learn, quick to forget',v:2,p:0,k:0},{l:'Sharp and focused',v:0,p:2,k:0},{l:'Slow to learn, never forget',v:0,p:0,k:2}]},
+  {q:'My sleep pattern is…', cText:'At night, I…', opts:[{l:'Light and interrupted',v:2,p:0,k:0},{l:'Moderate — 6-7 hours fine',v:0,p:2,k:0},{l:'Deep and long — hard to wake',v:0,p:0,k:2}]},
+  {q:'My appetite is…', cText:'When it comes to eating, I…', opts:[{l:'Irregular — sometimes hungry, sometimes not',v:2,p:0,k:0},{l:'Strong — irritable if I miss meals',v:0,p:2,k:0},{l:'Steady but I can skip meals',v:0,p:0,k:2}]},
+];
+
+const DOSHA_INFO = {
+  vata:  {name:'Vata',  sanskrit:'वात', emoji:'💨', element:'Air + Space', colour:'#A8DADC', qualities:['Creative','Quick-thinking','Enthusiastic'], desc:'You are the wind — creative, energetic, and always in motion. Your mind is quick but needs grounding.', herbs:['ashwagandha','brahmi','shatavari','ginger','cinnamon']},
+  pitta: {name:'Pitta', sanskrit:'पित्त', emoji:'🔥', element:'Fire + Water', colour:'#F4A261', qualities:['Intelligent','Focused','Courageous'], desc:'You are the fire — sharp, driven, and naturally a leader. Your power needs cooling and moderation.', herbs:['amla','rose','aloe','brahmi','shatavari']},
+  kapha: {name:'Kapha', sanskrit:'कफ', emoji:'🌊', element:'Earth + Water', colour:'#95D5B2', qualities:['Caring','Patient','Loyal'], desc:'You are the earth — stable, nurturing, and deeply loyal. Your strength needs movement and stimulation.', herbs:['ginger','turmeric','neem','tulsi','moringa']},
+};
+
+const SEASONS = {
+  0:'shishira',1:'shishira',2:'vasanta',3:'vasanta',4:'grishma',5:'grishma',
+  6:'varsha',7:'varsha',8:'sharad',9:'sharad',10:'hemanta',11:'hemanta',
+};
+const SEASON_INFO = {
+  vasanta:  {name:'Vasanta',   english:'Spring',        emoji:'🌸', dosha:'kapha', colour:'#FFD166'},
+  grishma:  {name:'Grishma',   english:'Summer',        emoji:'☀️', dosha:'pitta', colour:'#F4A261'},
+  varsha:   {name:'Varsha',    english:'Monsoon',       emoji:'🌧️', dosha:'vata',  colour:'#48CAE4'},
+  sharad:   {name:'Sharad',    english:'Autumn',        emoji:'🍂', dosha:'pitta', colour:'#F6B73C'},
+  hemanta:  {name:'Hemanta',   english:'Early Winter',  emoji:'🍃', dosha:'kapha', colour:'#B5C8B4'},
+  shishira: {name:'Shishira',  english:'Late Winter',   emoji:'❄️', dosha:'vata',  colour:'#A8C4D8'},
+};
+const FLOURISHING = {
+  vasanta:['tulsi','arjuna','rose','moringa'],grishma:['aloe','rose','shatavari','amla'],
+  varsha:['tulsi','brahmi','ginger','turmeric'],sharad:['amla','triphala','kesar'],
+  hemanta:['ashwagandha','shatavari','guggul','cinnamon'],shishira:['ashwagandha','guggul','kesar'],
+};
+
+function getCurrentSeason(){ return SEASONS[new Date().getMonth()] || 'vasanta'; }
+function isFlourishingHerb(herbId){ return (FLOURISHING[getCurrentSeason()]||[]).includes(herbId); }
+
+/* ════════════════════════════════════════════════════════════════
+   SOUND ENGINE
+════════════════════════════════════════════════════════════════ */
+let actx=null;
+const getCtx=()=>{ if(!actx) try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){} return actx; };
+const tone=(f,t,d,v=.1)=>{ try{ const c=getCtx();if(!c)return; const o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.type=t;o.frequency.value=f; g.gain.setValueAtTime(v,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d); o.start();o.stop(c.currentTime+d); }catch(e){} };
+const sfx={
+  harvest:()=>{[440,554,660].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.2,.08),i*70));},
+  plant:  ()=>{tone(300,'triangle',.15,.1);},
+  craft:  ()=>{[300,400,500].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.25,.08),i*80));},
+  success:()=>{[440,550,660,880].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.4,.1),i*90));},
+  click:  ()=>{tone(350,'triangle',.08,.06);},
+  grind:  ()=>{tone(180+Math.random()*40,'sawtooth',.08,.04);},
+  page:   ()=>{tone(600,'sine',.12,.06);setTimeout(()=>tone(400,'sine',.1,.04),80);},
+};
+
+/* ════════════════════════════════════════════════════════════════
+   PARTICLE SYSTEM
+════════════════════════════════════════════════════════════════ */
+function useParticles(){
+  const [particles,setParticles]=useState([]);
+  const spawnParticles=useCallback((x,y,color='#52B788',count=12,type='herb')=>{
+    const newP=Array.from({length:count},(_,i)=>({
+      id:Date.now()+i, x, y, color, type,
+      tx: (Math.random()-0.5)*120,
+      ty: -(Math.random()*80+20),
+      size: Math.random()*6+4,
+    }));
+    setParticles(p=>[...p,...newP]);
+    setTimeout(()=>setParticles(p=>p.filter(pt=>!newP.find(n=>n.id===pt.id))),1200);
+  },[]);
+  return {particles,spawnParticles};
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SCENES
+════════════════════════════════════════════════════════════════ */
+
+/* ── HUB SCENE ── */
+function HubScene({setScene,player,setPlayer,showQuiz,setShowQuiz}){
+  const season=getCurrentSeason();
+  const si=SEASON_INFO[season];
+  const hour=new Date().getHours();
+  const timeGreet=hour<12?'Good morning':'hour<17?'Good afternoon':'Good evening';
+  const flourishing=FLOURISHING[season]||[];
+  const guru_msgs=[
+    `The ${si.english} season is upon us. ${si.dosha==='vata'?'Vata is high — warm yourself with ginger and sesame oil.':si.dosha==='pitta'?'Pitta rises — cool yourself with amla and rose.':'Kapha accumulates — stimulate with trikatu and movement.'}`,
+    `Today I prescribe one cup of warm water with lemon at dawn. Simple. Ancient. Effective.`,
+    `The garden teaches us patience. A herb grown too fast has weak medicine. So too with healing.`,
+  ];
+  const guruMsg=guru_msgs[Math.floor(Date.now()/86400000)%guru_msgs.length];
+  return(
+    <div className="hub-scene">
+      <div className="hub-header">
+        <div className="hub-title t-display">Ayurveda <span>Apothecary</span></div>
+        <div className="hub-subtitle t-sanskrit">आयुर्वेद औषधालय · The Healing Art</div>
+      </div>
+
+      <div className="guru-box fade-in">
+        <div className="guru-avatar">🧙</div>
+        <div>
+          <div className="guru-name t-display">Guru Charaka speaks</div>
+          <div className="guru-speech">&ldquo;{guruMsg}&rdquo;</div>
+        </div>
+      </div>
+
+      <div style={{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.9rem',flexWrap:'wrap'}}>
+        <div className="season-badge">
+          <span>{si.emoji}</span>
+          <span>{si.name} · {si.english}</span>
+        </div>
+        {!player.doshaType&&(
+          <div className="season-badge" style={{cursor:'pointer',background:'#FFF8DC',borderColor:'#DAA520',color:'#B8860B'}}
+            onClick={()=>setShowQuiz(true)}>
+            ✨ Discover your Dosha →
+          </div>
+        )}
+        {player.doshaType&&(
+          <div className="season-badge" style={{background:'#E8F5E9',borderColor:'#52B788',color:'#2D6A4F'}}>
+            {DOSHA_INFO[player.doshaType]?.emoji} {DOSHA_INFO[player.doshaType]?.name} Prakriti
+          </div>
+        )}
+      </div>
+
+      <div style={{marginBottom:'1rem'}}>
+        <div style={{fontSize:'.68rem',fontWeight:600,letterSpacing:'.1em',color:'var(--ink-light)',marginBottom:'.4rem',textTransform:'uppercase'}}>
+          Flourishing this season
+        </div>
+        <div className="daily-herbs">
+          {flourishing.slice(0,4).map(hid=>{
+            const h=HERBS.find(x=>x.id===hid);
+            return h?<div key={hid} className="daily-herb-chip">{h.emoji} {h.name}</div>:null;
+          })}
+        </div>
+      </div>
+
+      <div className="hub-grid">
+        {[
+          {scene:'garden',   icon:'🌿', title:'Herb Garden', desc:'Tend your living apothecary garden. Plant, water, and harvest as the seasons turn.', accent:'var(--sage)'},
+          {scene:'craft',    icon:'⚗️', title:'Crafting Room',desc:'Grind herbs in the mortar and pestle. Create churnas, kwathas, and ancient remedies.', accent:'var(--saffron)'},
+          {scene:'patients', icon:'🙏', title:'Patient Room', desc:'Hear the stories of those who seek healing. Diagnose, prescribe, and change lives.', accent:'var(--clay)'},
+          {scene:'compendium',icon:'📜',title:'Herb Compendium',desc:'Your encyclopaedia of plants. Unlock and explore all 100 herbs of Ayurveda.', accent:'var(--gold)'},
+        ].map(card=>(
+          <div key={card.scene} className="pcard hub-card slide-up"
+            onClick={()=>{sfx.click();setScene(card.scene);}}>
+            <div className="hub-card-accent" style={{background:card.accent}}/>
+            <span className="hub-card-icon">{card.icon}</span>
+            <div className="hub-card-title t-display">{card.title}</div>
+            <div className="hub-card-desc t-body">{card.desc}</div>
+          </div>
+        ))}
+      </div>
+
+      {showQuiz&&<DoshaQuizModal onClose={()=>setShowQuiz(false)} onComplete={(dt)=>{ setPlayer(p=>({...p,doshaType:dt})); setShowQuiz(false); sfx.success(); }}/>}
+    </div>
+  );
+}
+
+/* ── GARDEN SCENE ── */
+function GardenScene({player,setPlayer,soundOn}){
+  const season=getCurrentSeason();
+  const si=SEASON_INFO[season];
+  const {particles,spawnParticles}=useParticles();
+  const [plots,setPlots]=useState(()=>{
+    const saved=localStorage.getItem('aa_garden');
+    if(saved) return JSON.parse(saved);
+    return Array.from({length:8},(_,i)=>({id:i,herbId:null,plantedAt:null,progress:0,ready:false}));
+  });
+  const [showPlantModal,setShowPlantModal]=useState(null);
+  const [justHarvested,setJustHarvested]=useState(null);
+
+  useEffect(()=>{ localStorage.setItem('aa_garden',JSON.stringify(plots)); },[plots]);
+
+  // Tick growth every 30s
+  useEffect(()=>{
+    const tick=()=>setPlots(ps=>ps.map(p=>{
+      if(!p.herbId||p.ready) return p;
+      const herb=HERBS.find(h=>h.id===p.herbId);
+      if(!herb) return p;
+      const mult=isFlourishingHerb(p.herbId)?2:1;
+      const totalMs=herb.growTime*24*60*60*1000/mult;
+      const elapsed=Date.now()-new Date(p.plantedAt).getTime();
+      const progress=Math.min(elapsed/totalMs,1);
+      return {...p,progress,ready:progress>=1};
+    }));
+    tick();
+    const id=setInterval(tick,30000);
+    return()=>clearInterval(id);
+  },[]);
+
+  const plant=(plotId,herbId)=>{
+    setPlots(ps=>ps.map(p=>p.id===plotId?{...p,herbId,plantedAt:new Date().toISOString(),progress:0,ready:false}:p));
+    if(soundOn) sfx.plant();
+    setShowPlantModal(null);
+  };
+
+  const harvest=(plot,e)=>{
+    if(!plot.ready) return;
+    const herb=HERBS.find(h=>h.id===plot.herbId);
+    if(!herb) return;
+    const rect=e.currentTarget.getBoundingClientRect();
+    spawnParticles(rect.left+rect.width/2-window.innerWidth*.1, rect.top-54, herb.color, 14);
+    if(soundOn) sfx.harvest();
+    setJustHarvested(herb);
+    setPlayer(p=>({...p,xp:(p.xp||0)+herb.xpValue,inventory:{...p.inventory,[herb.id]:((p.inventory||{})[herb.id]||0)+herb.yieldAmount}}));
+    setPlots(ps=>ps.map(pp=>pp.id===plot.id?{...pp,herbId:null,plantedAt:null,progress:0,ready:false}:pp));
+    setTimeout(()=>setJustHarvested(null),2500);
+  };
+
+  return(
+    <div className="garden-scene" style={{position:'relative'}}>
+      <div className="garden-header">
+        <div>
+          <div className="garden-title t-display">Herb Garden</div>
+          <div style={{fontSize:'.7rem',color:'var(--ink-light)',marginTop:'.1rem'}}>
+            {si.emoji} {si.english} · {si.dosha} season
+          </div>
+        </div>
+        <div className="season-info">
+          <div style={{fontSize:'.75rem',fontWeight:600,color:'var(--ink)',marginBottom:'.15rem'}}>Flourishing now</div>
+          {(FLOURISHING[season]||[]).slice(0,2).map(id=>{
+            const h=HERBS.find(x=>x.id===id);
+            return h?<div key={id} style={{fontSize:'.65rem',color:'var(--sage)'}}>{h.emoji} {h.name} (2×)</div>:null;
+          })}
+        </div>
+      </div>
+
+      {justHarvested&&(
+        <div className="levelup-toast">🌿 Harvested {justHarvested.name}! +{justHarvested.xpValue} XP</div>
+      )}
+
+      <div className="plots-grid">
+        {plots.map(plot=>{
+          const herb=plot.herbId?HERBS.find(h=>h.id===plot.herbId):null;
+          const flourish=plot.herbId&&isFlourishingHerb(plot.herbId);
+          return(
+            <div key={plot.id}
+              className={`plot ${plot.ready?'ready':plot.herbId?'occupied':'empty'}`}
+              onClick={e=>plot.ready?harvest(plot,e):!plot.herbId?setShowPlantModal(plot.id):null}
+              style={{border:flourish?'2px solid var(--gold-lt)':undefined}}>
+
+              {!plot.herbId&&(
+                <div style={{textAlign:'center',opacity:.5}}>
+                  <div style={{fontSize:'1.4rem',marginBottom:'.2rem'}}>＋</div>
+                  <div style={{fontSize:'.62rem',letterSpacing:'.06em',textTransform:'uppercase'}}>Plant here</div>
+                </div>
+              )}
+              {plot.herbId&&(
+                <>
+                  <div className="herb-emoji" style={{animation:flourish?'herbFloat 2s ease-in-out infinite':undefined}}>{herb?.emoji||'🌱'}</div>
+                  {flourish&&<div style={{position:'absolute',top:4,right:4,fontSize:'.58rem',color:'var(--gold)',fontWeight:700}}>2×</div>}
+                  <div className="plot-herb-name">{herb?.name||'...'}</div>
+                  <div className="plot-progress">
+                    <div className="plot-progress-fill" style={{width:`${(plot.progress||0)*100}%`}}/>
+                  </div>
+                  <div className="plot-label">{plot.ready?'🌟 Ready!':Math.round((plot.progress||0)*100)+'%'}</div>
+                  {plot.ready&&<button className="harvest-btn" onClick={e=>{e.stopPropagation();harvest(plot,e);}}>HARVEST</button>}
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{fontSize:'.72rem',color:'var(--ink-light)',fontStyle:'italic',textAlign:'center',marginTop:'.5rem'}}>
+        🌿 Plants grow in real time — check back tomorrow for a full harvest!
+      </div>
+
+      {/* Particle layer */}
+      {particles.map(p=>(
+        <div key={p.id} style={{
+          position:'fixed',left:p.x,top:p.y,width:p.size,height:p.size,
+          borderRadius:'50%',background:p.color,pointerEvents:'none',zIndex:20,
+          '--tx':p.tx+'px','--ty':p.ty+'px',
+          animation:'particleFly 1.2s ease-out both',
+        }}/>
+      ))}
+
+      {/* Plant modal */}
+      {showPlantModal!==null&&(
+        <div className="modal-overlay" onClick={()=>setShowPlantModal(null)}>
+          <div className="modal-box pcard" style={{padding:'1.2rem'}} onClick={e=>e.stopPropagation()}>
+            <div style={{fontFamily:'Playfair Display',fontSize:'1rem',fontWeight:700,marginBottom:'.8rem'}}>
+              Choose a herb to plant
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'.4rem',maxHeight:'320px',overflowY:'auto'}}>
+              {HERBS.filter(h=>(player.inventory?.[h.id]||0)>0||true).map(h=>{
+                const inv=player.inventory?.[h.id]||0;
+                const flourish=isFlourishingHerb(h.id);
+                return(
+                  <div key={h.id}
+                    style={{padding:'.55rem',borderRadius:6,border:`1px solid ${flourish?'var(--gold-lt)':'var(--parch-deep)'}`,
+                      cursor:'pointer',background:flourish?'#FFFDE7':'var(--cream)',transition:'all .15s'}}
+                    onClick={()=>plant(showPlantModal,h.id)}
+                    onMouseEnter={e=>e.currentTarget.style.background='var(--parch-dark)'}
+                    onMouseLeave={e=>e.currentTarget.style.background=flourish?'#FFFDE7':'var(--cream)'}>
+                    <div style={{fontSize:'1.2rem'}}>{h.emoji}</div>
+                    <div style={{fontSize:'.72rem',fontWeight:700,color:'var(--ink)'}}>{h.name}</div>
+                    <div style={{fontSize:'.58rem',color:'var(--ink-light)'}}>{h.growTime}d{flourish?' · 🌟 2×':''}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <button className="btn btn-secondary" style={{width:'100%',marginTop:'.8rem'}} onClick={()=>setShowPlantModal(null)}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── CRAFTING SCENE ── */
+function CraftScene({player,setPlayer,soundOn}){
+  const [selectedRecipe,setSelectedRecipe]=useState(RECIPES[0]);
+  const [addedIngredients,setAddedIngredients]=useState([]);
+  const [grindProgress,setGrindProgress]=useState(0);
+  const [isGrinding,setIsGrinding]=useState(false);
+  const [pestleAngle,setPestleAngle]=useState(0);
+  const [result,setResult]=useState(null);
+  const [mortarColor,setMortarColor]=useState('rgba(212,160,23,.15)');
+  const mortarRef=useRef(null);
+  const lastPos=useRef(null);
+  const grinding=useRef(false);
+
+  const canCraft=useMemo(()=>{
+    if(!selectedRecipe) return false;
+    return selectedRecipe.ingredients.every(ing=>addedIngredients.includes(ing.id));
+  },[selectedRecipe,addedIngredients]);
+
+  const addIngredient=(herbId)=>{
+    if(addedIngredients.includes(herbId)) return;
+    setAddedIngredients(p=>[...p,herbId]);
+    const h=HERBS.find(x=>x.id===herbId);
+    if(h){ setMortarColor(`${h.color}55`); }
+    if(soundOn) sfx.grind();
+  };
+
+  const handleMortarMove=useCallback((e)=>{
+    if(!grinding.current) return;
+    const rect=mortarRef.current?.getBoundingClientRect();
+    if(!rect) return;
+    const cx=rect.left+rect.width/2, cy=rect.top+rect.height*.6;
+    const clientX=e.touches?e.touches[0].clientX:e.clientX;
+    const clientY=e.touches?e.touches[0].clientY:e.clientY;
+    const angle=Math.atan2(clientY-cy,clientX-cx)*180/Math.PI;
+    if(lastPos.current!==null){
+      const diff=Math.abs(angle-lastPos.current);
+      if(diff>2&&diff<90){
+        setGrindProgress(p=>Math.min(100,p+1.5));
+        setPestleAngle(a=>a+15);
+        if(soundOn) sfx.grind();
+      }
+    }
+    lastPos.current=angle;
+  },[soundOn]);
+
+  const startGrind=(e)=>{ grinding.current=true; setIsGrinding(true); e.preventDefault(); };
+  const stopGrind=()=>{ grinding.current=false; setIsGrinding(false); lastPos.current=null; };
+
+  const craft=()=>{
+    if(!canCraft||grindProgress<60) return;
+    const potency=Math.round(selectedRecipe.potency*(0.7+grindProgress/333));
+    const tier=potency>=95?'Masterwork':potency>=85?'Excellent':potency>=70?'Good':'Average';
+    setResult({recipe:selectedRecipe,potency,tier,xp:Math.round(selectedRecipe.xpReward*(tier==='Masterwork'?1.5:tier==='Excellent'?1.2:1))});
+    setPlayer(p=>({...p,xp:(p.xp||0)+selectedRecipe.xpReward,
+      remedies:{...p.remedies,[selectedRecipe.id]:((p.remedies||{})[selectedRecipe.id]||0)+1}}));
+    if(soundOn) sfx.success();
+  };
+
+  const reset=()=>{ setAddedIngredients([]); setGrindProgress(0); setResult(null); setMortarColor('rgba(212,160,23,.15)'); setPestleAngle(0); };
+
+  const TIER_COLORS={'Masterwork':'var(--gold-lt)','Excellent':'var(--sage-lt)','Good':'var(--saffron-lt)','Average':'var(--ink-light)'};
+
+  return(
+    <div className="craft-scene">
+      <div style={{fontFamily:'Playfair Display',fontSize:'1.1rem',fontWeight:700,marginBottom:'.8rem'}}>
+        ⚗️ Crafting Room
+      </div>
+      <div className="craft-layout">
+        {/* Left: Mortar area */}
+        <div className="mortar-area">
+          {/* Ingredients tray */}
+          <div style={{width:'100%',maxWidth:280}}>
+            <div style={{fontSize:'.65rem',fontWeight:600,letterSpacing:'.1em',color:'var(--ink-light)',marginBottom:'.3rem',textTransform:'uppercase'}}>
+              Add ingredients
+            </div>
+            <div className="ingredients-tray">
+              {selectedRecipe?.ingredients.map(ing=>{
+                const h=HERBS.find(x=>x.id===ing.id);
+                const added=addedIngredients.includes(ing.id);
+                return h?(
+                  <div key={ing.id}
+                    className={`ingredient-chip ${added?'added':''}`}
+                    onClick={()=>!added&&addIngredient(ing.id)}>
+                    {h.emoji} {h.name} {added&&'✓'}
+                  </div>
+                ):null;
+              })}
+            </div>
+          </div>
+
+          {/* Mortar & Pestle */}
+          <div className="mortar-wrap" ref={mortarRef}
+            onMouseDown={startGrind} onMouseUp={stopGrind} onMouseLeave={stopGrind}
+            onMouseMove={handleMortarMove}
+            onTouchStart={startGrind} onTouchEnd={stopGrind} onTouchMove={handleMortarMove}>
+
+            {/* Pestle */}
+            <div className="mortar-pestle" style={{
+              transform:`translateX(-50%) rotate(${pestleAngle}deg)`,
+              left:'50%',
+              boxShadow:isGrinding?'0 0 12px rgba(212,160,23,.4)':'2px 4px 8px var(--shadow)',
+            }}>
+              <div className="mortar-pestle-top"/>
+            </div>
+
+            {/* Bowl */}
+            <div className="mortar-bowl">
+              {/* Contents */}
+              <div className="mortar-contents" style={{
+                height:`${Math.min(addedIngredients.length*20,80)}%`,
+                background:mortarColor,
+                minHeight:addedIngredients.length>0?'20px':0,
+              }}/>
+              {/* Grinding sparkles */}
+              {isGrinding&&grindProgress>20&&Array.from({length:4}).map((_,i)=>(
+                <div key={i} style={{
+                  position:'absolute',
+                  left:30+Math.random()*120+'px',
+                  top:20+Math.random()*60+'px',
+                  width:4,height:4,borderRadius:'50%',
+                  background:mortarColor.replace('55','cc'),
+                  '--tx':(Math.random()-0.5)*40+'px',
+                  '--ty':-(Math.random()*30+10)+'px',
+                  animation:'particleFly .6s ease-out both',
+                }}/>
+              ))}
+            </div>
+
+            {/* Rim */}
+            <div style={{
+              position:'absolute',bottom:6,left:'50%',transform:'translateX(-50%)',
+              width:220,height:16,borderRadius:'0 0 50px 50px',
+              background:'var(--parch-deep)',border:'2px solid var(--parch-deep)',
+            }}/>
+          </div>
+
+          <div style={{fontSize:'.68rem',fontStyle:'italic',color:'var(--ink-light)',textAlign:'center'}}>
+            {addedIngredients.length===0?'Add ingredients above, then grind in circles':
+             grindProgress<60?`Grind in circles (${Math.round(grindProgress)}% — need 60%)`:
+             canCraft?'✓ Ready to craft!':'Add remaining ingredients'}
+          </div>
+
+          {/* Grind progress */}
+          <div className="grind-progress">
+            <div className="grind-progress-fill" style={{width:grindProgress+'%'}}/>
+          </div>
+
+          {/* Craft button */}
+          {!result?(
+            <button className="btn btn-gold"
+              disabled={!canCraft||grindProgress<60}
+              style={{opacity:canCraft&&grindProgress>=60?1:.45}}
+              onClick={craft}>
+              ⚗️ Brew Remedy
+            </button>
+          ):(
+            <div className="craft-result" style={{width:'100%',maxWidth:280}}>
+              <div style={{fontSize:'1.2rem',marginBottom:'.2rem'}}>✨</div>
+              <div className="craft-result-title">{result.recipe.name}</div>
+              <div className="craft-result-tier" style={{color:TIER_COLORS[result.tier]||'var(--gold-lt)'}}>
+                {result.tier} Remedy
+              </div>
+              <div style={{fontSize:'.72rem',color:'rgba(245,237,214,.7)',marginBottom:'.4rem'}}>
+                Potency: {result.potency}% · +{result.xp} XP
+              </div>
+              <div style={{fontSize:'.72rem',fontStyle:'italic',color:'rgba(245,237,214,.6)',marginBottom:'.8rem',lineHeight:1.5}}>
+                {result.recipe.dosage}
+              </div>
+              <button className="btn btn-secondary" style={{width:'100%',background:'rgba(255,255,255,.1)',color:'var(--parch)',borderColor:'rgba(255,255,255,.2)'}} onClick={reset}>
+                Craft Another
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Right: Recipe list */}
+        <div className="craft-sidebar">
+          <div style={{fontSize:'.65rem',fontWeight:600,letterSpacing:'.1em',color:'var(--ink-light)',marginBottom:'.5rem',textTransform:'uppercase'}}>
+            Known Recipes
+          </div>
+          <div className="recipe-list">
+            {RECIPES.map(r=>(
+              <div key={r.id} className={`recipe-item ${selectedRecipe?.id===r.id?'selected':''}`}
+                onClick={()=>{setSelectedRecipe(r);reset();sfx.click();}}>
+                <div className="recipe-name">{r.name}</div>
+                <div className="recipe-cat">{r.category} · {r.targetDosha} dosha</div>
+                <div style={{fontSize:'.65rem',color:'var(--ink-light)',marginTop:'.2rem',lineHeight:1.4}}>{r.desc}</div>
+                <div style={{display:'flex',gap:'.3rem',marginTop:'.3rem',flexWrap:'wrap'}}>
+                  {r.ingredients.map(ing=>{
+                    const h=HERBS.find(x=>x.id===ing.id);
+                    return h?<span key={ing.id} style={{fontSize:'.6rem',background:'var(--sage-pale)',borderRadius:4,padding:'1px 6px',color:'var(--sage)'}}>{h.emoji} {h.name}</span>:null;
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── PATIENT SCENE ── */
+function PatientScene({player,setPlayer,soundOn}){
+  const [activePatient,setActivePatient]=useState(null);
+  const [phase,setPhase]=useState('list'); // list|arrival|diagnosis|prescription|moral|outcome
+  const [diagnosis,setDiagnosis]=useState(null);
+  const [prescribedRecipe,setPrescribedRecipe]=useState(null);
+  const [moralChoice,setMoralChoice]=useState(null);
+  const [outcome,setOutcome]=useState(null);
+  const [completedIds,setCompletedIds]=useState([]);
+
+  const startQuest=(patient)=>{
+    setActivePatient(patient);
+    setPhase('arrival');
+    setDiagnosis(null);
+    setPrescribedRecipe(null);
+    setMoralChoice(null);
+    setOutcome(null);
+    sfx.click();
+  };
+
+  const prescribe=(recipeId)=>{
+    setPrescribedRecipe(recipeId);
+    setPhase('moral');
+  };
+
+  const resolveQuest=(choiceIdx)=>{
+    const isCorrect=prescribedRecipe===activePatient.correctRecipe||activePatient.alternateRecipes.includes(prescribedRecipe);
+    const tier=isCorrect&&choiceIdx!==2?'success':isCorrect?'partial':'failure';
+    setMoralChoice(choiceIdx);
+    setOutcome(tier);
+    setPhase('outcome');
+    if(tier==='success') sfx.success();
+    const xpEarned=tier==='success'?activePatient.xpReward:tier==='partial'?Math.round(activePatient.xpReward*.6):Math.round(activePatient.xpReward*.3);
+    setPlayer(p=>({...p,xp:(p.xp||0)+xpEarned}));
+    setCompletedIds(ids=>[...ids.filter(id=>id!==activePatient.id),activePatient.id]);
+  };
+
+  const DOSHA_META={vata:{emoji:'💨',colour:'#A8DADC',desc:'Air & Space — anxiety, dryness, irregularity'},pitta:{emoji:'🔥',colour:'#F4A261',desc:'Fire & Water — inflammation, anger, heat'},kapha:{emoji:'🌊',colour:'#95D5B2',desc:'Earth & Water — congestion, lethargy, heaviness'}};
+
+  if(phase!=='list'&&activePatient){
+    return(
+      <div className="patient-scene">
+        {/* Header */}
+        <div style={{display:'flex',alignItems:'center',gap:'.8rem',marginBottom:'1rem'}}>
+          <div className="patient-portrait" style={{fontSize:'2.4rem'}}>{activePatient.emoji}</div>
+          <div>
+            <div style={{fontFamily:'Playfair Display',fontSize:'1rem',fontWeight:700}}>{activePatient.name}</div>
+            <div style={{fontSize:'.72rem',color:'var(--ink-light)'}}>{activePatient.title}, age {activePatient.age}</div>
+            <div style={{display:'flex',gap:'.3rem',marginTop:'.3rem',flexWrap:'wrap'}}>
+              {activePatient.symptoms.map(s=><span key={s} className="symptom-chip">{s}</span>)}
+            </div>
+          </div>
+        </div>
+        <div className="ink-div"/>
+
+        {/* ARRIVAL */}
+        {phase==='arrival'&&(
+          <div className="fade-in">
+            <div style={{fontSize:'.68rem',fontWeight:600,color:'var(--ink-light)',letterSpacing:'.1em',marginBottom:'.5rem',textTransform:'uppercase'}}>Patient arrives</div>
+            <div className="dialogue-box"><div className="dialogue-text">{activePatient.arrival}</div></div>
+            <div className="dialogue-box" style={{borderRadius:'12px 12px 12px 0',marginTop:'.5rem'}}><div className="dialogue-text">{activePatient.dialogue}</div></div>
+            <button className="btn btn-primary" style={{marginTop:'1rem'}} onClick={()=>{setPhase('diagnosis');sfx.click();}}>
+              → Begin Diagnosis
+            </button>
+          </div>
+        )}
+
+        {/* DIAGNOSIS */}
+        {phase==='diagnosis'&&(
+          <div className="fade-in">
+            <div style={{fontSize:'.68rem',fontWeight:600,color:'var(--ink-light)',letterSpacing:'.1em',marginBottom:'.6rem',textTransform:'uppercase'}}>Identify the dosha imbalance</div>
+            <div style={{fontFamily:'Playfair Display',fontSize:'.88rem',color:'var(--ink-light)',fontStyle:'italic',marginBottom:'.8rem'}}>
+              Based on the symptoms, which dosha is aggravated?
+            </div>
+            <div className="diagnosis-panel">
+              {['vata','pitta','kapha'].map(d=>{
+                const dm=DOSHA_META[d];
+                return(
+                  <div key={d} className={`dosha-option ${diagnosis===d?'selected '+d:''}`}
+                    onClick={()=>setDiagnosis(d)}>
+                    <div className="dosha-emoji">{dm.emoji}</div>
+                    <div className="dosha-name">{d.charAt(0).toUpperCase()+d.slice(1)}</div>
+                    <div className="dosha-desc">{dm.desc}</div>
+                  </div>
+                );
+              })}
+            </div>
+            {diagnosis&&(
+              <div style={{background:DOSHA_META[diagnosis]?.colour+'33',border:`1px solid ${DOSHA_META[diagnosis]?.colour}`,borderRadius:8,padding:'.7rem .9rem',marginTop:'.6rem',fontSize:'.8rem',color:'var(--ink)',fontStyle:'italic'}}>
+                {diagnosis===activePatient.dosha?`✓ Correct. ${DOSHA_META[diagnosis].emoji} ${diagnosis.charAt(0).toUpperCase()+diagnosis.slice(1)} aggravation matches these symptoms.`:`⚠ Consider again. These symptoms may point to a different dosha imbalance.`}
+              </div>
+            )}
+            {diagnosis&&<button className="btn btn-primary" style={{marginTop:'.8rem'}} onClick={()=>{setPhase('prescription');sfx.click();}}>→ Prescribe Remedy</button>}
+          </div>
+        )}
+
+        {/* PRESCRIPTION */}
+        {phase==='prescription'&&(
+          <div className="fade-in">
+            <div style={{fontSize:'.68rem',fontWeight:600,color:'var(--ink-light)',letterSpacing:'.1em',marginBottom:'.6rem',textTransform:'uppercase'}}>Choose a remedy</div>
+            <div style={{display:'flex',flexDirection:'column',gap:'.4rem'}}>
+              {RECIPES.filter(r=>r.targetDosha===activePatient.dosha||r.targetDosha==='all').slice(0,4).map(r=>(
+                <div key={r.id} className="recipe-item" style={{cursor:'pointer'}}
+                  onClick={()=>prescribe(r.id)}>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                    <div className="recipe-name">{r.name}</div>
+                    {(r.id===activePatient.correctRecipe||activePatient.alternateRecipes.includes(r.id))&&
+                      <span style={{fontSize:'.6rem',background:'var(--sage-pale)',borderRadius:4,padding:'1px 6px',color:'var(--sage)'}}>Recommended</span>}
+                  </div>
+                  <div className="recipe-cat">{r.category} · {r.desc}</div>
+                  <div style={{fontSize:'.68rem',color:'var(--ink-light)',marginTop:'.2rem',fontStyle:'italic'}}>{r.dosage}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* MORAL CHOICE */}
+        {phase==='moral'&&(
+          <div className="fade-in">
+            <div style={{fontSize:'.68rem',fontWeight:600,color:'var(--ink-light)',letterSpacing:'.1em',marginBottom:'.6rem',textTransform:'uppercase'}}>A Moral Question</div>
+            <div style={{fontFamily:'Playfair Display',fontStyle:'italic',fontSize:'.9rem',color:'var(--ink)',marginBottom:'.9rem',lineHeight:1.6,padding:'.8rem 1rem',background:'var(--cream)',borderRadius:8,border:'1px solid var(--parch-deep)'}}>
+              {activePatient.name} presents you with a difficult situation. What do you do?
+            </div>
+            {activePatient.moralOptions.map((opt,i)=>(
+              <button key={i} className="moral-choice-btn" onClick={()=>{setMoralChoice(i);resolveQuest(i);}}>
+                {String.fromCharCode(65+i)}. {opt}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* OUTCOME */}
+        {phase==='outcome'&&(
+          <div className="fade-in">
+            <div className={`outcome-card ${outcome}`}>
+              <div style={{fontFamily:'Playfair Display',fontSize:'1rem',fontWeight:700,marginBottom:'.4rem',color:outcome==='success'?'var(--sage)':outcome==='partial'?'var(--gold)':'var(--clay)'}}>
+                {outcome==='success'?'🌟 Full Healing':'outcome==='partial'?'⚡ Partial Recovery':'⚠ Needs More Work'}
+              </div>
+              <div style={{fontSize:'.82rem',lineHeight:1.7,color:'var(--ink)',fontStyle:'italic',fontFamily:'Playfair Display'}}>
+                {outcome==='success'?activePatient.healingSuccess:'The patient shows improvement but the healing continues. Try adjusting your approach.'}
+              </div>
+            </div>
+
+            <div className="herb-fact-chip">
+              🌿 Herb Wisdom: {activePatient.funFact}
+            </div>
+
+            <button className="btn btn-primary" style={{marginTop:'1rem'}} onClick={()=>setPhase('list')}>
+              ← Back to Patients
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return(
+    <div className="patient-scene">
+      <div style={{fontFamily:'Playfair Display',fontSize:'1.1rem',fontWeight:700,marginBottom:'.2rem'}}>🙏 Patient Room</div>
+      <div style={{fontSize:'.75rem',color:'var(--ink-light)',fontStyle:'italic',marginBottom:'1rem'}}>
+        {PATIENTS.length - completedIds.length} patients await your healing today
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:'.6rem'}}>
+        {PATIENTS.map(p=>{
+          const done=completedIds.includes(p.id);
+          return(
+            <div key={p.id} className="pcard" style={{padding:'.85rem 1rem',cursor:'pointer',opacity:done?.75:1,transition:'all .15s'}}
+              onClick={()=>startQuest(p)}
+              onMouseEnter={e=>!done&&(e.currentTarget.style.boxShadow='0 4px 16px var(--shadow)')}
+              onMouseLeave={e=>e.currentTarget.style.boxShadow=''}>
+              <div style={{display:'flex',alignItems:'center',gap:'.8rem'}}>
+                <div style={{fontSize:'1.8rem'}}>{p.emoji}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontFamily:'Playfair Display',fontSize:'.92rem',fontWeight:700}}>{p.name}</div>
+                  <div style={{fontSize:'.72rem',color:'var(--ink-light)'}}>{p.title}</div>
+                  <div className="symptom-chips" style={{marginTop:'.3rem'}}>
+                    {p.symptoms.slice(0,3).map(s=><span key={s} className="symptom-chip">{s}</span>)}
+                  </div>
+                </div>
+                <div style={{textAlign:'right',flexShrink:0}}>
+                  <div style={{fontSize:'.62rem',fontWeight:600,padding:'3px 8px',borderRadius:4,background:p.urgency==='high'?'#FDECEA':p.urgency==='moderate'?'#FFF3CD':'#E8F5E9',color:p.urgency==='high'?'var(--clay)':p.urgency==='moderate'?'var(--turmeric)':'var(--sage)'}}>
+                    {p.urgency}
+                  </div>
+                  {done&&<div style={{fontSize:'.62rem',marginTop:'.3rem',color:'var(--sage)'}}>✓ Treated</div>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── COMPENDIUM SCENE ── */
+function CompendiumScene({player}){
+  const [search,setSearch]=useState('');
+  const [filter,setFilter]=useState('all');
+  const [selectedHerb,setSelectedHerb]=useState(HERBS[0]);
+  const unlocked=player.unlockedHerbs||['tulsi','turmeric','ginger','neem','amla','aloe','rose','cinnamon','moringa'];
+
+  const filtered=useMemo(()=>
+    HERBS.filter(h=>{
+      if(filter!=='all'&&h.rarity!==filter) return false;
+      if(search){
+        const q=search.toLowerCase();
+        return h.name.toLowerCase().includes(q)||h.sanskrit.toLowerCase().includes(q)||h.uses.some(u=>u.includes(q));
+      }
+      return true;
+    }),
+  [filter,search]);
+
+  const DOSHA_ARROW={'-1':'↓','1':'↑','0':'→'};
+  const RARITY_EMOJI={common:'○',uncommon:'◉',rare:'●',legendary:'★'};
+
+  return(
+    <div className="compendium-scene">
+      {/* List panel */}
+      <div className="compendium-list">
+        <input className="comp-search t-body" placeholder="Search herbs, uses, Sanskrit…"
+          value={search} onChange={e=>setSearch(e.target.value)}/>
+        <div className="comp-filter-row">
+          {['all','common','uncommon','rare','legendary'].map(r=>(
+            <button key={r} className={`comp-filter-btn ${filter===r?'active':''}`}
+              onClick={()=>{setFilter(r);sfx.click();}}>
+              {r==='all'?'All':r}
+            </button>
+          ))}
+        </div>
+        <div style={{fontSize:'.62rem',color:'var(--ink-light)',marginBottom:'.4rem'}}>{filtered.length} herbs</div>
+        {filtered.map(h=>{
+          const isUnlocked=unlocked.includes(h.id)||true; // all unlocked for demo
+          return(
+            <div key={h.id}
+              className={`herb-list-item ${selectedHerb?.id===h.id?'selected':''} ${!isUnlocked?'locked':''}`}
+              onClick={()=>{ if(isUnlocked){setSelectedHerb(h);sfx.page();} }}>
+              <div className="herb-color-dot" style={{background:h.color}}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div className="herb-list-name">{h.emoji} {h.name}</div>
+                <div className="herb-list-sanskrit">{h.sanskrit}</div>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:2}}>
+                <span className={`rarity-${h.rarity}`} style={{fontSize:'.65rem'}}>{RARITY_EMOJI[h.rarity]}</span>
+                {!isUnlocked&&<span className="lock-icon">🔒</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Detail panel */}
+      {selectedHerb?(
+        <div className="compendium-detail">
+          <div className="herb-detail-header">
+            <div className="herb-color-swatch" style={{background:selectedHerb.color+'22',border:`2px solid ${selectedHerb.color}`}}>
+              <span style={{fontSize:'1.8rem'}}>{selectedHerb.emoji}</span>
+            </div>
+            <div>
+              <div className="herb-detail-name">{selectedHerb.name}</div>
+              <div className="herb-detail-sanskrit">{selectedHerb.sanskrit}</div>
+              <div style={{display:'flex',gap:'.4rem',flexWrap:'wrap'}}>
+                <span className={`btag btag-${selectedHerb.rarity==='common'?'sage':selectedHerb.rarity==='uncommon'?'gold':selectedHerb.rarity==='rare'?'clay':'legend'}`}>
+                  {selectedHerb.rarity}
+                </span>
+                <span className="btag btag-sage">{selectedHerb.season}</span>
+                <span className="btag btag-gold">+{selectedHerb.xpValue} XP</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="ink-div"/>
+
+          {/* Regional names */}
+          <div className="herb-regional-names">
+            <div className="herb-regional">Hindi: <span>{selectedHerb.hindi}</span></div>
+            <div className="herb-regional">Tamil: <span>{selectedHerb.tamil}</span></div>
+          </div>
+          <div style={{fontSize:'.72rem',color:'var(--ink-light)',marginBottom:'.5rem'}}>
+            <em>Botanical:</em> {selectedHerb.botanical||'—'}
+          </div>
+
+          {/* Dosha effects */}
+          <div style={{fontSize:'.65rem',fontWeight:600,letterSpacing:'.08em',color:'var(--ink-light)',textTransform:'uppercase',marginBottom:'.35rem'}}>Dosha Effects</div>
+          <div className="dosha-effects">
+            {['vata','pitta','kapha'].map(d=>{
+              const val=selectedHerb.dosha[d];
+              return(
+                <div key={d} className={`dosha-eff ${val<0?'decrease':val>0?'increase':'neutral'}`}>
+                  {d.charAt(0).toUpperCase()+d.slice(1)} {DOSHA_ARROW[String(val)]}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Uses */}
+          <div style={{fontSize:'.65rem',fontWeight:600,letterSpacing:'.08em',color:'var(--ink-light)',textTransform:'uppercase',marginBottom:'.35rem',marginTop:'.7rem'}}>Therapeutic Uses</div>
+          <div className="uses-list">
+            {selectedHerb.uses.map(u=><span key={u} className="use-chip">{u}</span>)}
+          </div>
+
+          {/* Fun fact */}
+          <div className="herb-fun-fact">
+            📜 &ldquo;{selectedHerb.funFact}&rdquo;
+          </div>
+
+          {/* Grow info */}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'.5rem',marginTop:'.6rem'}}>
+            {[
+              {l:'Grow time',v:`${selectedHerb.growTime} days`},
+              {l:'Habitat',  v:selectedHerb.habitat},
+              {l:'Yield',    v:`${selectedHerb.yieldAmount} units`},
+            ].map(item=>(
+              <div key={item.l} style={{background:'var(--cream)',borderRadius:8,padding:'.5rem .7rem',border:'1px solid var(--parch-deep)',textAlign:'center'}}>
+                <div style={{fontSize:'.6rem',color:'var(--ink-light)',letterSpacing:'.06em',textTransform:'uppercase'}}>{item.l}</div>
+                <div style={{fontSize:'.78rem',fontWeight:600,color:'var(--ink)',marginTop:'.15rem'}}>{item.v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ):(
+        <div className="compendium-detail" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div style={{textAlign:'center',opacity:.4}}>
+            <div style={{fontSize:'2rem',marginBottom:'.5rem'}}>📜</div>
+            <div style={{fontFamily:'Playfair Display',fontStyle:'italic'}}>Select a herb to read its entry</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── DOSHA QUIZ MODAL ── */
+function DoshaQuizModal({onClose,onComplete}){
+  const [qIdx,setQIdx]=useState(0);
+  const [scores,setScores]=useState({vata:0,pitta:0,kapha:0});
+  const [selected,setSelected]=useState(null);
+  const [done,setDone]=useState(false);
+  const [result,setResult]=useState(null);
+
+  const answer=(opt)=>{
+    setSelected(opt);
+    setTimeout(()=>{
+      const ns={vata:scores.vata+opt.v, pitta:scores.pitta+opt.p, kapha:scores.kapha+opt.k};
+      if(qIdx>=DOSHA_QUIZ.length-1){
+        const dom=Object.entries(ns).sort((a,b)=>b[1]-a[1])[0][0];
+        setResult({dosha:dom,scores:ns});
+        setDone(true);
+      } else {
+        setScores(ns);
+        setQIdx(i=>i+1);
+        setSelected(null);
+      }
+    },300);
+  };
+
+  const q=DOSHA_QUIZ[qIdx];
+  const di=result?DOSHA_INFO[result.dosha]:null;
+
+  return(
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box pcard" style={{padding:'1.4rem'}} onClick={e=>e.stopPropagation()}>
+        {!done?(
+          <div className="quiz-wrap" style={{padding:0}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'.8rem'}}>
+              <div style={{fontFamily:'Playfair Display',fontSize:.95+'rem',fontWeight:700}}>Discover Your Dosha</div>
+              <div style={{fontSize:'.68rem',color:'var(--ink-light)'}}>{qIdx+1}/{DOSHA_QUIZ.length}</div>
+            </div>
+            <div className="quiz-progress">
+              <div className="quiz-progress-fill" style={{width:`${(qIdx/DOSHA_QUIZ.length)*100}%`}}/>
+            </div>
+            <div className="quiz-q">{q.cText}</div>
+            {q.opts.map((opt,i)=>(
+              <button key={i} className={`quiz-opt ${selected===opt?'selected':''}`} onClick={()=>answer(opt)}>
+                {opt.l}
+              </button>
+            ))}
+          </div>
+        ):(
+          <div className="quiz-result">
+            <div style={{fontSize:'2.5rem'}}>{di?.emoji}</div>
+            <div className="quiz-dosha-name t-display" style={{color:di?.colour}}>{di?.name} Prakriti</div>
+            <div className="quiz-dosha-sanskrit t-sanskrit">{di?.sanskrit} · {di?.element}</div>
+            <div style={{fontFamily:'Playfair Display',fontStyle:'italic',fontSize:'.88rem',color:'var(--ink-light)',lineHeight:1.7,marginBottom:1+'rem'}}>
+              {di?.desc}
+            </div>
+            <div style={{marginBottom:'.8rem'}}>
+              <div style={{fontSize:'.68rem',fontWeight:600,letterSpacing:'.1em',color:'var(--ink-light)',textTransform:'uppercase',marginBottom:'.4rem'}}>Your Balancing Herbs</div>
+              <div style={{display:'flex',gap:'.3rem',flexWrap:'wrap',justifyContent:'center'}}>
+                {di?.herbs.map(hid=>{
+                  const h=HERBS.find(x=>x.id===hid);
+                  return h?<span key={hid} style={{fontSize:'.7rem',background:'var(--sage-pale)',padding:'3px 10px',borderRadius:100,color:'var(--sage)',fontWeight:600}}>{h.emoji} {h.name}</span>:null;
+                })}
+              </div>
+            </div>
+            <button className="btn btn-gold" onClick={()=>onComplete(result.dosha)}>
+              Begin My Healing Journey →
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ROOT APP
+════════════════════════════════════════════════════════════════ */
+function App(){
+  const [scene,setScene]=useState('hub');
+  const [soundOn,setSoundOn]=useState(true);
+  const [showQuiz,setShowQuiz]=useState(false);
+  const [player,setPlayer]=useState(()=>{
+    try{ const s=localStorage.getItem('aa_player'); if(s) return JSON.parse(s); }catch(e){}
+    return{xp:0,level:1,rank:'Shishya',doshaType:null,inventory:{},remedies:{},unlockedHerbs:['tulsi','turmeric','ginger','neem','amla']};
+  });
+
+  // Save player
+  useEffect(()=>{ localStorage.setItem('aa_player',JSON.stringify(player)); },[player]);
+
+  // Level calculation
+  const level=Math.floor(Math.sqrt((player.xp||0)/30))+1;
+  const xpForLevel=(l)=>(l-1)*(l-1)*30;
+  const xpPct=Math.round(((player.xp||0)-xpForLevel(level))/(xpForLevel(level+1)-xpForLevel(level))*100);
+
+  const SCENES={
+    hub:       <HubScene setScene={setScene} player={player} setPlayer={setPlayer} showQuiz={showQuiz} setShowQuiz={setShowQuiz}/>,
+    garden:    <GardenScene player={player} setPlayer={setPlayer} soundOn={soundOn}/>,
+    craft:     <CraftScene player={player} setPlayer={setPlayer} soundOn={soundOn}/>,
+    patients:  <PatientScene player={player} setPlayer={setPlayer} soundOn={soundOn}/>,
+    compendium:<CompendiumScene player={player}/>,
+  };
+
+  const NAV_TABS=[
+    {id:'hub',       label:'🏠 Hub'},
+    {id:'garden',    label:'🌿 Garden'},
+    {id:'craft',     label:'⚗️ Craft'},
+    {id:'patients',  label:'🙏 Patients'},
+    {id:'compendium',label:'📜 Compendium'},
+  ];
+
+  return(
+    <div id="root" style={{display:'flex',flexDirection:'column',height:'100%'}}>
+      {/* Nav */}
+      <div className="nav">
+        <div className="nav-brand t-display">
+          Ayurveda Apothecary
+          <span>{player.rank||'Shishya'} · {player.xp||0} XP</span>
+        </div>
+        <div className="nav-tabs">
+          {NAV_TABS.map(t=>(
+            <button key={t.id} className={`nav-tab ${scene===t.id?'active':''}`}
+              onClick={()=>{setScene(t.id);sfx.click();}}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <div className="nav-player">
+          <div className="xp-bar-wrap"><div className="xp-bar-fill" style={{width:xpPct+'%'}}/></div>
+          <button style={{background:'none',border:'none',cursor:'pointer',fontSize:'.8rem',opacity:.6}} onClick={()=>setSoundOn(s=>!s)}>
+            {soundOn?'🔊':'🔇'}
+          </button>
+        </div>
+      </div>
+
+      {/* Scene */}
+      <div className="scene">
+        {SCENES[scene]||SCENES.hub}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

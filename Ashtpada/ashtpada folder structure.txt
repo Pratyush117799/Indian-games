@@ -1,0 +1,26 @@
+ashtapada_complete.zip
+│
+├── ashtapada_game.html          ← Open this to play immediately
+│
+└── ashtapada/
+    ├── README.md
+    ├── package.json
+    ├── frontend/
+    │   ├── index.html
+    │   ├── css/style.css
+    │   └── js/
+    │       ├── constants.js     ← Spiral path, castle squares, cowrie dice
+    │       ├── engine.js        ← Game logic (no DOM)
+    │       ├── renderer.js      ← SVG board + animations
+    │       ├── ai.js            ← Beginner / Prince / Maharaja
+    │       └── app.js           ← App controller
+    ├── backend/
+    │   ├── server.js
+    │   ├── routes/game.js
+    │   ├── routes/users.js
+    │   ├── routes/leaderboard.js
+    │   └── middleware/ws.js
+    ├── database/
+    │   ├── schema.sql
+    │   └── models/Game.js, User.js
+    └── features/FEATURES.md

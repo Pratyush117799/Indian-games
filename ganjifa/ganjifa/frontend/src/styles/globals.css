@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-felt text-ivory font-sans;
+    background: radial-gradient(ellipse at center, #2D6A4F 0%, #1B4332 50%, #0F2419 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply bg-gold text-felt-dark px-5 py-2.5 rounded-lg font-semibold font-mughal
+           hover:bg-gold-light active:scale-95 transition-all duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed
+           shadow-[0_2px_8px_rgba(218,165,32,0.4)];
+  }
+  .btn-crimson {
+    @apply bg-crimson text-ivory px-5 py-2.5 rounded-lg font-semibold
+           hover:bg-crimson-dark active:scale-95 transition-all;
+  }
+  .btn-ghost {
+    @apply border border-gold/30 text-gold px-5 py-2.5 rounded-lg font-semibold
+           hover:bg-gold/10 active:scale-95 transition-all;
+  }
+  .card-table {
+    @apply rounded-3xl shadow-table relative overflow-hidden;
+    background: radial-gradient(ellipse at center, #2D6A4F 0%, #1B4332 60%, #0F2419 100%);
+    border: 2px solid rgba(218,165,32,0.3);
+  }
+  .panel {
+    @apply bg-black/40 backdrop-blur-sm rounded-2xl border border-gold/20 p-4;
+  }
+  .badge-suit {
+    @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full
+           border border-gold/40 bg-gold/10 text-gold;
+  }
+}
+
+/* ── Card styles ─────────────────────────────────────────── */
+.ganjifa-card {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.2s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(218,165,32,0.2);
+}
+.ganjifa-card:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 16px rgba(218,165,32,0.5);
+  z-index: 10;
+}
+.ganjifa-card.selected {
+  transform: translateY(-20px) scale(1.08);
+  box-shadow: 0 0 24px rgba(218,165,32,0.9), 0 0 8px rgba(218,165,32,0.4);
+  outline: 3px solid #DAA520;
+  outline-offset: 3px;
+}
+.ganjifa-card.legal {
+  animation: legalPulse 1.5s ease-in-out infinite;
+}
+.ganjifa-card.illegal {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(60%);
+}
+.ganjifa-card.played {
+  animation: cardPlay 0.4s ease-out;
+}
+.ganjifa-card.dealing {
+  animation: cardDeal var(--deal-delay, 0.5s) cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+@keyframes legalPulse {
+  0%,100% { box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 rgba(218,165,32,0); }
+  50%      { box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 20px rgba(218,165,32,0.7); }
+}
+
+/* ── Hand fan layout ────────────────────────────────────── */
+.hand-fan {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  height: 180px;
+}
+.hand-fan .ganjifa-card {
+  position: absolute;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  transform-origin: bottom center;
+}
+
+/* ── Trick centre glow ──────────────────────────────────── */
+.trick-area {
+  position: relative;
+}
+.trick-area::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218,165,32,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Hukm flash overlay ─────────────────────────────────── */
+.hukm-flash {
+  animation: hukmFlash 1s ease-out;
+}
+
+/* ── Score counter animation ────────────────────────────── */
+.score-tick {
+  animation: scoreTick 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes scoreTick {
+  0%   { transform: scale(1) }
+  50%  { transform: scale(1.5) }
+  100% { transform: scale(1) }
+}
+
+/* ── Win rain ────────────────────────────────────────────── */
+.win-particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 24px;
+  animation: winRain linear infinite;
+}
+
+/* ── Mughal border ornament ─────────────────────────────── */
+.mughal-border {
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.mughal-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #B8860B, #DAA520, #F5C842, #DAA520, #B8860B);
+  z-index: -1;
+}
+
+/* ── Input ──────────────────────────────────────────────── */
+.input {
+  @apply w-full bg-black/30 border border-gold/30 rounded-lg px-4 py-2.5 text-ivory text-sm
+         focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold placeholder-ivory/30;
+}
+
+/* ── Dot flash (AI thinking / waiting) ──────────────────── */
+.dot-flash span { animation: dotFlash 1.4s ease-in-out infinite; }
+.dot-flash span:nth-child(2) { animation-delay: .2s; }
+.dot-flash span:nth-child(3) { animation-delay: .4s; }
+@keyframes dotFlash {
+  0%,80%,100% { opacity:0.2; transform:scale(0.8); }
+  40%          { opacity:1;   transform:scale(1);   }
+}
+
+/* ── Badge (generic) ────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+}
+
+/* ── Face-down card back ────────────────────────────────── */
+.card-back-pattern {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(218,165,32,0.15) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(218,165,32,0.08) 0px, rgba(218,165,32,0.08) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(-45deg, rgba(218,165,32,0.08) 0px, rgba(218,165,32,0.08) 1px, transparent 1px, transparent 8px),
+    #1a0a2e;
+}
+
+/* ── Card dealing from deck ─────────────────────────────── */
+.card-deal-source {
+  position: relative;
+  cursor: default;
+}
+.card-deal-source::after {
+  content: attr(data-count);
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: rgba(218,165,32,0.5);
+  white-space: nowrap;
+}
+
+/* ── Player seat active glow ────────────────────────────── */
+.seat-active {
+  box-shadow: 0 0 0 2px rgba(218,165,32,0.6), 0 0 12px rgba(218,165,32,0.3);
+}
+
+/* ── Suit type badge colours ─────────────────────────────── */
+.bishbar { color: #f59e0b; border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.1); }
+.kambar  { color: #818cf8; border-color: rgba(129,140,248,0.3); background: rgba(129,140,248,0.1); }

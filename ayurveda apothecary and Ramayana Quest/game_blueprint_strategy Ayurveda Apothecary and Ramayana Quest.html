@@ -1,0 +1,474 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0 2rem}
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.tab{font-size:13px;padding:6px 14px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.tab.active,.tab:hover{background:var(--color-background-primary);color:var(--color-text-primary);border-color:var(--color-border-secondary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.card-head{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.4rem}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;font-weight:500;margin-bottom:.5rem}
+.b-green{background:#EAF3DE;color:#27500A}
+.b-amber{background:#FAEEDA;color:#633806}
+.b-teal{background:#E1F5EE;color:#085041}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-coral{background:#FAECE7;color:#712B13}
+.b-blue{background:#E6F1FB;color:#0C447C}
+@media(prefers-color-scheme:dark){
+  .b-green{background:#173404;color:#C0DD97}
+  .b-amber{background:#412402;color:#FAC775}
+  .b-teal{background:#04342C;color:#9FE1CB}
+  .b-purple{background:#26215C;color:#CECBF6}
+  .b-coral{background:#4A1B0C;color:#F5C4B3}
+  .b-blue{background:#042C53;color:#B5D4F4}
+}
+.hl{border-left:3px solid;border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:10px}
+.hl-green{border-color:#3B6D11;background:#EAF3DE}
+.hl-amber{border-color:#854F0B;background:#FAEEDA}
+.hl-purple{border-color:#534AB7;background:#EEEDFE}
+.hl-coral{border-color:#993C1D;background:#FAECE7}
+@media(prefers-color-scheme:dark){
+  .hl-green{background:#173404}.hl-amber{background:#412402}
+  .hl-purple{background:#26215C}.hl-coral{background:#4A1B0C}
+}
+.hl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.3rem}
+.hl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+.tree{font-family:var(--font-mono);font-size:12px;color:var(--color-text-secondary);line-height:1.9;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;border:.5px solid var(--color-border-tertiary)}
+.tree .dir{color:var(--color-text-info);font-weight:500}
+.tree .cmt{color:var(--color-text-tertiary)}
+.sep{height:.5px;background:var(--color-border-tertiary);margin:1.25rem 0}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:.5rem 0}
+.fbox{background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 10px;font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.farr{color:var(--color-text-tertiary);font-size:14px}
+.pill{display:inline-block;font-size:11px;padding:3px 9px;border-radius:100px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);margin:2px}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;text-align:center}
+.metric-n{font-size:24px;font-weight:500;color:var(--color-text-primary)}
+.metric-l{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;border:.5px solid var(--color-border-tertiary)}
+.feat-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:.2rem}
+.feat-body{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.phase{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:8px}
+.phase-head{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
+.phase-num{width:24px;height:24px;border-radius:50%;background:var(--color-background-info);color:var(--color-text-info);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phase-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.phase-body{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+.ask-btn{background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);color:var(--color-text-secondary);font-size:12px;padding:5px 10px;border-radius:var(--border-radius-md);cursor:pointer;margin-top:8px;transition:all .15s}
+.ask-btn:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.standout{display:flex;gap:6px;align-items:flex-start;margin-bottom:8px}
+.star{font-size:14px;flex-shrink:0;margin-top:1px}
+.standout-body{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.standout-body strong{color:var(--color-text-primary);font-weight:500}
+</style>
+
+<div class="wrap">
+  <div class="tab-row">
+    <div class="tab active" onclick="show('overview',this)">Overview</div>
+    <div class="tab" onclick="show('ayurveda',this)">Ayurveda Apothecary</div>
+    <div class="tab" onclick="show('ramayana',this)">Ramayana Quest</div>
+    <div class="tab" onclick="show('standout',this)">Standout ideas</div>
+    <div class="tab" onclick="show('folders',this)">Folder structure</div>
+    <div class="tab" onclick="show('roadmap',this)">Build roadmap</div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="p-overview" class="panel active">
+    <div class="grid3" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n">2</div><div class="metric-l">Games to build</div></div>
+      <div class="metric"><div class="metric-n">3</div><div class="metric-l">Platforms (PWA + Desktop + Browser)</div></div>
+      <div class="metric"><div class="metric-n">6→60</div><div class="metric-l">Target age range</div></div>
+    </div>
+    <div class="grid2">
+      <div class="hl hl-green">
+        <div class="hl-title">Ayurveda Apothecary — first</div>
+        <div class="hl-body">Vintage botanical illustration aesthetic. Herb collection, dosha diagnosis, mortar-and-pestle crafting, patient healing quests. The living herb garden that changes with real-world seasons is the key differentiator.</div>
+      </div>
+      <div class="hl hl-amber">
+        <div class="hl-title">Ramayana Quest — second</div>
+        <div class="hl-body">Amar Chitra Katha bold flat-colour style. Moral consequence engine — choices ripple forward through the story. Mini-games at each location. Journey map Ayodhya → Lanka with parallax depth.</div>
+      </div>
+    </div>
+    <div class="hl hl-purple" style="margin-top:0">
+      <div class="hl-title">The shared hackathon pitch: Sanskriti Score</div>
+      <div class="hl-body">Both games feed one cultural knowledge index — visible to parents and teachers. One platform, two games, one measurable outcome. "India's answer to Duolingo for cultural heritage." That's what wins Smart India Hackathon.</div>
+    </div>
+    <div class="sep"/>
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem">Design decisions made</div>
+    <div class="grid2">
+      <div class="card">
+        <span class="badge b-green">Confirmed</span>
+        <div class="card-head">Your answers</div>
+        <div class="card-body">Ayurveda first · Browser + PWA + Electron · Family ages 6–60</div>
+      </div>
+      <div class="card">
+        <span class="badge b-amber">My decisions</span>
+        <div class="card-head">Filled in boldly</div>
+        <div class="card-body">Botanical illustration visual style · React + Vite · Node + PostgreSQL · Hackathon demo goal · ALL features enabled · Local co-op + Online multiplayer · Voice narration + phygital + parent dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AYURVEDA -->
+  <div id="p-ayurveda" class="panel">
+    <div class="hl hl-green" style="margin-bottom:12px">
+      <div class="hl-title">Core concept: "The Healing Apothecary"</div>
+      <div class="hl-body">You are an apprentice Vaidya (Ayurvedic healer). Your guru Charaka assigns you patients each day. You must diagnose their dosha imbalance, go to your living herb garden, harvest the right plants, grind them in your mortar and pestle, and prepare the remedy. Get it right → patient heals → you unlock deeper herb lore and new recipes.</div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <span class="badge b-green">Visual style</span>
+        <div class="card-head">Vintage botanical illustration</div>
+        <div class="card-body">Hand-inked herb drawings with watercolour washes. Aged parchment card backs. Ornate Sanskrit-lettered borders. Colour palette: saffron, forest green, turmeric gold, clay red, ink black. Looks like a 200-year-old Ayurvedic manuscript come to life.</div>
+      </div>
+      <div class="card">
+        <span class="badge b-teal">Core loop (3 minutes per session)</span>
+        <div class="card-head">Diagnose → Harvest → Craft → Heal</div>
+        <div class="card-body">
+          1. Patient arrives with symptoms<br/>
+          2. Dosha quiz (Vata / Pitta / Kapha)<br/>
+          3. Herb garden: pick ingredients<br/>
+          4. Mortar &amp; pestle crafting mini-game<br/>
+          5. Remedy administered → story outcome<br/>
+          6. Herb fact card unlocked
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom:10px">
+      <div class="feat">
+        <div class="feat-title">Living herb garden</div>
+        <div class="feat-body">Changes with device date/time. Monsoon = tulsi + ginger flourishing. Summer = aloe + rose. Winter = ashwagandha + turmeric. Plants grow in real time. You water them daily. This drives daily return.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Mortar &amp; pestle mini-game</div>
+        <div class="feat-body">Click-and-drag ingredients into bowl. Circular grinding motion (mouse/touch) activates. Speed + duration affects remedy potency. Particles swirl. Colour changes as ingredients combine. Deeply satisfying for all ages.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Dosha personality quiz</div>
+        <div class="feat-body">Children discover their own dosha constitution (Vata / Pitta / Kapha). Their character in-game reflects this — different starting herbs, different strengths. "You are Pitta — fiery, sharp-minded" etc. Personal = engaging.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">100 herb compendium</div>
+        <div class="feat-body">Each herb has: Sanskrit name, regional names (5 languages), botanical illustration, properties, season, and a fun fact. Unlocked through gameplay. Becomes a collectible encyclopedia. Printable phygital cards link back to game.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Patient story quests</div>
+        <div class="feat-body">30+ illustrated patient encounters with branching outcomes. A farmer with joint pain. A child who can't sleep. An elder with digestion issues. Moral choices woven in — do you give the expensive rare herb or the accessible common one?</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Multiplayer herb bazaar</div>
+        <div class="feat-body">Online trade/barter market. Players grow herbs their region specialises in and trade for others. Seasonal scarcity creates real economics. Family co-op: split roles (one diagnoses, one harvests, one crafts).</div>
+      </div>
+    </div>
+
+    <div class="sep"/>
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem">Key animations</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="pill">Herb particles float when harvesting</span>
+      <span class="pill">Card flip with parchment texture</span>
+      <span class="pill">Mortar grinding with colour swirl</span>
+      <span class="pill">Day/night + seasonal garden cycle</span>
+      <span class="pill">Remedy bottle filling animation</span>
+      <span class="pill">Patient healing glow effect</span>
+      <span class="pill">Herb compendium page-turn</span>
+      <span class="pill">Guru Charaka floating dialogue</span>
+    </div>
+    <button class="ask-btn" onclick="sendPrompt('Start building Ayurveda Apothecary — begin with the game engine, herb data, and dosha system first')">Start building Ayurveda Apothecary ↗</button>
+  </div>
+
+  <!-- RAMAYANA -->
+  <div id="p-ramayana" class="panel">
+    <div class="hl hl-amber" style="margin-bottom:12px">
+      <div class="hl-title">Core concept: "The Living Ramayana"</div>
+      <div class="hl-body">This is NOT a retelling. It's a moral consequence engine. You play AS Rama (or choose Sita, Hanuman, Lakshmana). Every decision you make — spare or fight, trust or doubt, act swiftly or with patience — echoes forward. Characters you show mercy to appear later as allies. It makes the Ramayana feel like YOUR story.</div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <span class="badge b-amber">Visual style</span>
+        <div class="card-head">Amar Chitra Katha reimagined</div>
+        <div class="card-body">Bold black outlines, flat jewel-tone colours (saffron, royal blue, forest green, gold). Panoramic scene panels like comic pages. Characters have expressive eyes. Location art uses parallax depth — clouds, forest layers, ocean waves move as you scroll. Iconic, nostalgic, instantly recognisable.</div>
+      </div>
+      <div class="card">
+        <span class="badge b-coral">Moral consequence engine</span>
+        <div class="card-head">Choices ripple forward</div>
+        <div class="card-body">
+          Choice A: Spare Vibhishana → he becomes key ally in Lanka<br/>
+          Choice B: Trust Shabari's berries → she gives you a secret path<br/>
+          Choice C: Send Lakshmana back patiently → he arrives in time<br/>
+          Each Kanda (chapter) remembers your decisions from the last
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom:10px">
+      <div class="feat">
+        <div class="feat-title">Journey map (7 Kandas)</div>
+        <div class="feat-body">Bala → Ayodhya → Aranya → Kishkindha → Sundara → Yuddha → Uttara. Animated map with sea, forest, mountains. Each location unlocks on completion. Real geography overlaid on ancient India map.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Virtue points system</div>
+        <div class="feat-body">Dharma (right action), Courage, Devotion, Wisdom. Every choice shifts your balance. Your character's aura colour changes. High Dharma unlocks Rama's divine bow powers. High Devotion gives Hanuman special moves.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Mini-games at each location</div>
+        <div class="feat-body">Ayodhya: Lift Shiva's bow (physics puzzle). Panchavati: Build Parna Kuti (Tetris-like). Kishkindha: Sugriva's strength trial. Lanka: Bridge-building with floating stones. Each teaches a story beat through play.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Animated cutscenes</div>
+        <div class="feat-body">Illustrated panels animate like a motion comic. Hanuman flying is a parallax scroll sequence. Ravana's palace — golden towers, swaying palms. Rendered in Amar Chitra Katha style with subtle CSS animation. No video files needed.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Knowledge challenges</div>
+        <div class="feat-body">After each mini-game: 3 questions about the Ramayana moment you just played. Wrong answer = guru explains with context. Right answer = Sanskrit shloka revealed with pronunciation. Earns Sanskriti Score points.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-title">Character abilities</div>
+        <div class="feat-body">Rama: precision + dharma. Lakshmana: loyalty shield (protects others). Hanuman: strength + flight traversal. Sita: inner wisdom (sees through illusion). Each plays differently — encourages replay.</div>
+      </div>
+    </div>
+    <button class="ask-btn" onclick="sendPrompt('Start building Ramayana Quest — begin with the journey map, virtue system, and first Kanda mini-game')">Start building Ramayana Quest ↗</button>
+  </div>
+
+  <!-- STANDOUT IDEAS -->
+  <div id="p-standout" class="panel">
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem">Ideas that will win the hackathon</div>
+
+    <div class="standout">
+      <div class="star">🌱</div>
+      <div class="standout-body"><strong>Seasonal living garden (real-world time)</strong> — The herb garden in Ayurveda Apothecary reads your device's date. In June-September (monsoon), tulsi, ginger, and pepper grow abundantly. In winter, ashwagandha, sesame, and turmeric. In summer, aloe, rose, and amla. Players are incentivised to return at different times of year to access different herbs. No other educational game does this.</div>
+    </div>
+    <div class="standout">
+      <div class="star">🎯</div>
+      <div class="standout-body"><strong>Phygital printable cards</strong> — Every herb card and Ramayana character card can be printed from the app. Each has a QR code that, when scanned, launches the game with that herb/character highlighted. Physical cards act as "save points" and "cheat codes." Children naturally carry them around, show friends, and recruit new players. Zero manufacturing cost.</div>
+    </div>
+    <div class="standout">
+      <div class="star">🔬</div>
+      <div class="standout-body"><strong>Camera herb scanner (PWA)</strong> — Using the device camera + a lightweight plant recognition model (or shape-matching heuristic), players can point their phone at real plants in their garden or kitchen. Identified plants appear in their in-game herb compendium. Turmeric root in the kitchen? Scan it → unlock the turmeric card. Brings the physical world into the game.</div>
+    </div>
+    <div class="standout">
+      <div class="star">📊</div>
+      <div class="standout-body"><strong>Sanskriti Score + Parent Dashboard</strong> — One number (0–1000) that represents how much Indian cultural knowledge a child has absorbed across both games. Parents see a weekly report: "Priya learned about 8 herbs, identified 3 doshas, completed Kishkindha Kanda, and earned the Scholar of Tulsi badge." This is the feature that gets schools to adopt it.</div>
+    </div>
+    <div class="standout">
+      <div class="star">🗣️</div>
+      <div class="standout-body"><strong>Voice narration in 5 languages</strong> — Guru Charaka narrates herb facts in Hindi, Tamil, Telugu, Kannada, and English. Valmiki narrates Ramayana passages. Children can switch languages mid-game. Exposes them to other Indian languages naturally. Uses the Web Speech API (zero cost) with text-to-speech, upgraded to recorded audio for demo.</div>
+    </div>
+    <div class="standout">
+      <div class="star">🤖</div>
+      <div class="standout-body"><strong>AI Guru mode (via Anthropic API)</strong> — Children can ask Sage Charaka questions: "Why is ashwagandha good for sleep?" "What did Hanuman eat?" The game routes these to Claude with a cultural-accuracy system prompt. The AI stays in character, answers in age-appropriate language, and always ties answers back to the game. This is the demo moment that makes judges gasp.</div>
+    </div>
+    <div class="standout">
+      <div class="star">🎨</div>
+      <div class="standout-body"><strong>Warli / Madhubani art mode</strong> — An accessibility toggle that renders the entire game in Warli tribal art style (white stick figures on terracotta) or Madhubani (intricate line-art flowers and geometric patterns). Same game, completely different visual experience. Showcases India's art diversity. Unique in any game, anywhere.</div>
+    </div>
+  </div>
+
+  <!-- FOLDERS -->
+  <div id="p-folders" class="panel">
+    <div class="grid2">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Ayurveda Apothecary</div>
+        <div class="tree">
+<span class="dir">ayurveda-apothecary/</span>
+<span class="dir">├── frontend/</span>
+│   <span class="dir">├── public/</span>
+│   │   <span class="dir">├── assets/</span>
+│   │   │   <span class="dir">├── herbs/</span>        <span class="cmt"># SVG botanical art</span>
+│   │   │   <span class="dir">├── sounds/</span>       <span class="cmt"># mortar grind, harvest</span>
+│   │   │   <span class="dir">├── cards/</span>        <span class="cmt"># printable PDFs</span>
+│   │   │   └── <span class="dir">narration/</span>    <span class="cmt"># voice MP3s</span>
+│   │   └── manifest.json
+│   <span class="dir">└── src/</span>
+│       <span class="dir">├── scenes/</span>
+│       │   ├── Garden.jsx        <span class="cmt"># seasonal herb garden</span>
+│       │   ├── Apothecary.jsx   <span class="cmt"># main crafting room</span>
+│       │   ├── PatientRoom.jsx  <span class="cmt"># healing quests</span>
+│       │   ├── Compendium.jsx   <span class="cmt"># herb encyclopedia</span>
+│       │   └── Bazaar.jsx       <span class="cmt"># multiplayer market</span>
+│       <span class="dir">├── components/</span>
+│       │   ├── HerbCard.jsx
+│       │   ├── MortarPestle.jsx <span class="cmt"># crafting mini-game</span>
+│       │   ├── DoshaQuiz.jsx
+│       │   ├── PatientCard.jsx
+│       │   ├── SeasonClock.jsx  <span class="cmt"># real-time season</span>
+│       │   ├── HerbScanner.jsx  <span class="cmt"># camera feature</span>
+│       │   ├── AIGuru.jsx       <span class="cmt"># Charaka chatbot</span>
+│       │   └── SanskritScore.jsx
+│       <span class="dir">├── game-engine/</span>
+│       │   ├── herbs.data.js    <span class="cmt"># 100 herbs database</span>
+│       │   ├── doshas.js        <span class="cmt"># Vata/Pitta/Kapha logic</span>
+│       │   ├── crafting.js      <span class="cmt"># recipe engine</span>
+│       │   ├── seasons.js       <span class="cmt"># real-time season calc</span>
+│       │   └── patients.js      <span class="cmt"># quest story engine</span>
+│       <span class="dir">├── store/</span>
+│       │   ├── playerSlice.js
+│       │   ├── gardenSlice.js
+│       │   └── compendiumSlice.js
+│       <span class="dir">├── hooks/</span>
+│       │   ├── useSeason.js
+│       │   ├── useCamera.js
+│       │   └── useNarration.js
+│       └── <span class="dir">styles/</span>
+│           ├── botanical.css    <span class="cmt"># parchment + ink theme</span>
+│           └── animations.css
+<span class="dir">├── backend/</span>
+│   <span class="dir">└── src/</span>
+│       ├── routes/
+│       │   ├── player.js
+│       │   ├── garden.js
+│       │   ├── bazaar.js        <span class="cmt"># herb trading market</span>
+│       │   └── sanskriti.js     <span class="cmt"># score API</span>
+│       ├── websocket/
+│       │   └── bazaarRoom.js    <span class="cmt"># live herb trading</span>
+│       └── ai/
+│           └── guru.js          <span class="cmt"># Charaka AI handler</span>
+<span class="dir">└── database/</span>
+    ├── migrations/
+    │   ├── 001_players.sql
+    │   ├── 002_gardens.sql      <span class="cmt"># herb inventory</span>
+    │   ├── 003_compendium.sql   <span class="cmt"># unlocked herbs</span>
+    │   ├── 004_quests.sql       <span class="cmt"># patient history</span>
+    │   └── 005_bazaar.sql       <span class="cmt"># trade log</span>
+    └── seeds/
+        ├── herbs.json           <span class="cmt"># 100 herbs</span>
+        └── patients.json        <span class="cmt"># 30 quest stories</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Ramayana Quest</div>
+        <div class="tree">
+<span class="dir">ramayana-quest/</span>
+<span class="dir">├── frontend/</span>
+│   <span class="dir">├── public/</span>
+│   │   <span class="dir">└── assets/</span>
+│   │       <span class="dir">├── characters/</span>  <span class="cmt"># SVG ACK-style art</span>
+│   │       <span class="dir">├── locations/</span>   <span class="cmt"># panoramic scenes</span>
+│   │       <span class="dir">├── music/</span>       <span class="cmt"># ambient per-Kanda</span>
+│   │       └── <span class="dir">narration/</span>
+│   <span class="dir">└── src/</span>
+│       <span class="dir">├── kandas/</span>           <span class="cmt"># 7 story chapters</span>
+│       │   ├── Bala.jsx
+│       │   ├── Ayodhya.jsx
+│       │   ├── Aranya.jsx
+│       │   ├── Kishkindha.jsx
+│       │   ├── Sundara.jsx
+│       │   ├── Yuddha.jsx
+│       │   └── Uttara.jsx
+│       <span class="dir">├── minigames/</span>
+│       │   ├── BowLift.jsx      <span class="cmt"># physics puzzle</span>
+│       │   ├── BridgeBuilder.jsx <span class="cmt"># stone placement</span>
+│       │   ├── ForestSurvival.jsx
+│       │   └── LankaRaid.jsx
+│       <span class="dir">├── components/</span>
+│       │   ├── JourneyMap.jsx   <span class="cmt"># animated map</span>
+│       │   ├── VirtueBar.jsx    <span class="cmt"># Dharma/Courage/etc</span>
+│       │   ├── ChoicePanel.jsx  <span class="cmt"># moral decisions</span>
+│       │   ├── CharacterCard.jsx
+│       │   ├── Cutscene.jsx     <span class="cmt"># motion comic panels</span>
+│       │   ├── KnowledgeQuiz.jsx
+│       │   └── AIValmiki.jsx    <span class="cmt"># story chatbot</span>
+│       <span class="dir">├── game-engine/</span>
+│       │   ├── story.data.js    <span class="cmt"># all Ramayana events</span>
+│       │   ├── consequence.js   <span class="cmt"># ripple system</span>
+│       │   ├── virtues.js       <span class="cmt"># virtue point calc</span>
+│       │   ├── characters.js    <span class="cmt"># abilities + stats</span>
+│       │   └── geography.js     <span class="cmt"># ancient India map</span>
+│       <span class="dir">└── store/</span>
+│           ├── storySlice.js    <span class="cmt"># choice history</span>
+│           ├── virtueSlice.js
+│           └── playerSlice.js
+<span class="dir">├── backend/</span>
+│   <span class="dir">└── src/</span>
+│       ├── routes/
+│       │   ├── player.js
+│       │   ├── story.js         <span class="cmt"># save/load choices</span>
+│       │   └── sanskriti.js
+│       └── ai/
+│           └── valmiki.js       <span class="cmt"># Valmiki AI handler</span>
+<span class="dir">└── database/</span>
+    ├── migrations/
+    │   ├── 001_players.sql
+    │   ├── 002_story_state.sql  <span class="cmt"># choices + progress</span>
+    │   ├── 003_virtues.sql
+    │   └── 004_knowledge.sql    <span class="cmt"># quiz history</span>
+    └── seeds/
+        ├── story_events.json    <span class="cmt"># all Ramayana moments</span>
+        └── quiz_questions.json  <span class="cmt"># 200+ questions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="p-roadmap" class="panel">
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">1</div>
+        <div class="phase-title">Ayurveda core engine + herb data (Days 1–3)</div>
+      </div>
+      <div class="phase-body">Herb database (100 herbs with all metadata) · Dosha quiz engine (Vata/Pitta/Kapha) · Crafting recipe system · Season calculator (real-time) · Patient quest story engine · No UI yet — pure logic + data</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">2</div>
+        <div class="phase-title">Ayurveda UI — botanical aesthetic (Days 4–6)</div>
+      </div>
+      <div class="phase-body">Parchment + ink design system · Herb garden scene with seasonal plants · Mortar &amp; pestle crafting mini-game with particle animation · Card flip animations · Patient room with dialogue system · Herb compendium with page-turn</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">3</div>
+        <div class="phase-title">Standout features (Days 7–9)</div>
+      </div>
+      <div class="phase-body">AI Guru Charaka (Anthropic API) · Seasonal garden (real-world time) · Phygital card printer · Voice narration (Web Speech API) · Parent dashboard · Sanskriti Score system · Camera herb scanner (basic)</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">4</div>
+        <div class="phase-title">Backend + database (Days 10–12)</div>
+      </div>
+      <div class="phase-body">Player accounts · Garden state persistence · Herb compendium save · Herb bazaar (Socket.io trading) · Sanskriti Score API · Parent dashboard backend · PWA service worker</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">5</div>
+        <div class="phase-title">Ramayana Quest (Days 13–20)</div>
+      </div>
+      <div class="phase-body">Journey map with 7 Kandas · Moral consequence engine · 4 character abilities · 4 mini-games · Cutscene motion comic system · Knowledge quiz · AI Valmiki · Virtue points system · Connect to shared Sanskriti Score</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head">
+        <div class="phase-num">6</div>
+        <div class="phase-title">Hackathon polish + pitch (Days 21–28)</div>
+      </div>
+      <div class="phase-body">Electron desktop wrapper · Demo video · Pitch deck · Teacher/school onboarding flow · Press demo mode (auto-plays best moments) · Market research slide (₹15,000cr toy market) · Working prototype ready</div>
+    </div>
+
+    <div class="sep"/>
+    <div class="flow">
+      <div class="fbox">Herb engine</div><div class="farr">→</div>
+      <div class="fbox">Botanical UI</div><div class="farr">→</div>
+      <div class="fbox">AI Guru</div><div class="farr">→</div>
+      <div class="fbox">Backend</div><div class="farr">→</div>
+      <div class="fbox">Ramayana</div><div class="farr">→</div>
+      <div class="fbox">Pitch-ready</div>
+    </div>
+    <button class="ask-btn" onclick="sendPrompt('Start building Ayurveda Apothecary — Phase 1: herb database, dosha engine, crafting system, season calculator, and patient quest engine')">Begin Phase 1 now ↗</button>
+  </div>
+</div>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  el.classList.add('active');
+}
+</script>

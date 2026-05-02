@@ -1,0 +1,84 @@
+/* ── global.css ── Krida Design System ── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-x: hidden; }
+
+:root {
+  /* Brand */
+  --gold:        #C4831A;
+  --gold-dim:    #7A5210;
+  --gold-glow:   rgba(196,131,26,.25);
+  --blue-piece:  #3898C0;
+  --blue-dim:    #205878;
+  --purple-fly:  #9060D0;
+
+  /* Surface */
+  --bg-base:     #07080B;
+  --bg-surface:  #0A0C10;
+  --bg-raised:   #0D1018;
+  --border-dim:  #181C24;
+  --border-mid:  #282E3A;
+
+  /* Text */
+  --txt-primary:   #C8B890;
+  --txt-secondary: #607080;
+  --txt-muted:     #38404C;
+
+  /* Fonts */
+  --font-display: 'Cinzel', Georgia, serif;
+  --font-body:    'Hind', system-ui, sans-serif;
+  --font-italic:  'IM Fell English', Georgia, serif;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--txt-primary);
+  font-family: var(--font-display);
+  /* Stone grain */
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.004) 2px, rgba(255,255,255,.004) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,.003) 3px, rgba(255,255,255,.003) 6px);
+}
+
+/* Vignette overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 35%, transparent 20%, rgba(3,4,6,.7) 100%);
+}
+
+#root { position: relative; z-index: 1; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+/* Utility classes */
+.cinzel   { font-family: var(--font-display); }
+.hind     { font-family: var(--font-body); }
+.italic   { font-family: var(--font-italic); font-style: italic; }
+.gold     { color: var(--gold); }
+.muted    { color: var(--txt-muted); }
+.center   { text-align: center; }
+
+/* Keyframe library */
+@keyframes fadeIn       { from { opacity: 0 } to { opacity: 1 } }
+@keyframes fadeUp       { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+@keyframes pulseGold    { 0%,100% { opacity: .12 } 50% { opacity: .5 } }
+@keyframes blink        { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+@keyframes millGlow     { 0%,100% { stroke-opacity: .08 } 50% { stroke-opacity: .55 } }
+@keyframes spinDash     { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -80 } }
+@keyframes seedFly      { 0% { transform: scale(0); opacity: 0 } 60% { transform: scale(1.3) } 100% { transform: scale(1); opacity: 1 } }
+@keyframes glowPulse    { 0%,100% { box-shadow: 0 0 8px var(--gold-glow) } 50% { box-shadow: 0 0 24px var(--gold-glow) } }
+
+.fade-in  { animation: fadeIn  .3s ease-out both; }
+.fade-up  { animation: fadeUp  .4s ease-out both; }
+.blink    { animation: blink   1s ease-in-out infinite; }

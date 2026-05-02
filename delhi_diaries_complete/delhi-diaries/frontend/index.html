@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delhi Diaries: Ultimate Edition</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     AUTH SCREEN (full-screen overlay, shown first)
+     ══════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <h2 class="auth-title">DELHI DIARIES</h2>
+    <p class="auth-subtitle">ULTIMATE EDITION · A Student RPG</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login">Login</button>
+      <button class="auth-tab" id="tab-register">Sign Up</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="login-form">
+      <div class="auth-field">
+        <label>Username</label>
+        <input type="text" id="login-username" placeholder="your_username" autocomplete="username"/>
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="auth-btn" id="login-btn">Login</button>
+    </div>
+
+    <!-- Register form -->
+    <div id="register-form" style="display:none">
+      <div class="auth-field">
+        <label>Username (3–32 chars, letters/numbers/_)</label>
+        <input type="text" id="reg-username" placeholder="choose_username" autocomplete="username"/>
+      </div>
+      <div class="auth-field">
+        <label>Password (min 6 chars)</label>
+        <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password"/>
+      </div>
+      <div class="auth-field">
+        <label>Confirm Password</label>
+        <input type="password" id="reg-password2" placeholder="••••••••" autocomplete="new-password"/>
+      </div>
+      <button class="auth-btn" id="register-btn">Create Account</button>
+    </div>
+
+    <p class="auth-error" id="auth-error"></p>
+    <button class="auth-guest" id="guest-btn">Play as Guest (progress not saved)</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAME SCREEN
+     ══════════════════════════════════════════════════════════ -->
+<div id="game-screen">
+  <h2 class="game-title">DELHI DIARIES: ULTIMATE EDITION</h2>
+
+  <div id="main-layout">
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <h3 class="sidebar-title">ACTIONS</h3>
+      <button id="taxi-btn" class="sidebar-btn" onclick="openTravelMenu()">🚕 Call Taxi (₹5)</button>
+      <button class="sidebar-btn green" onclick="openShopMenu()">🛒 View Shop</button>
+      <button id="btn-save" class="sidebar-btn" style="background:#7c3aed">💾 Save Game</button>
+      <button id="btn-logout" class="sidebar-btn red">🚪 Logout</button>
+
+      <div id="controls-help">
+        <p><span>ARROWS:</span> Move Character</p>
+        <p><span>SPACE:</span> Interact / Talk</p>
+        <p><span>Ctrl+S:</span> Quick Save</p>
+        <hr style="border-color:#333;margin:8px 0"/>
+        <p style="color:#fcd34d;font-size:12px">Hint: Follow wooden signboards on roads!</p>
+      </div>
+
+      <div id="user-info"></div>
+      <div id="save-status"></div>
+    </div>
+
+    <!-- Game section -->
+    <div id="game-section">
+      <div id="hud">
+        <div class="hud-row">
+          <span id="day-display" style="color:#fcd34d">Day: 1</span>
+          <span id="cash-display" style="color:#4ade80">Money: ₹5000</span>
+          <span id="xp-display" style="color:#c084fc">Level: 1 | XP: 0</span>
+          <span id="club-display" style="color:#f87171">Club: 0/33</span>
+        </div>
+        <div class="hud-row" style="color:#a78bfa;font-size:12px">
+          <span id="du-display">DU: None (Intv: 0/25)</span>
+          <span id="assets-display">Assets: None</span>
+          <span id="lib-display">Library Pass: No</span>
+        </div>
+      </div>
+
+      <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="500" tabindex="0"></canvas>
+        <div id="dialogue-box">Press SPACE to interact.</div>
+
+        <!-- Debate modal -->
+        <div id="debate-modal" class="modal">
+          <h2 id="debate-title" style="color:#60a5fa">DEBATE</h2>
+          <div id="wager-section" style="display:none">
+            <p>Select your wager (Min ₹200):</p>
+            <input type="range" id="wager-slider" min="200" max="5000" step="100" value="200" oninput="updateWager()"/>
+            <h3 style="color:#4ade80">Wager: ₹<span id="wager-value">200</span></h3>
+          </div>
+          <h3 id="debate-question" class="question-text">Question?</h3>
+          <div id="modal-error" class="error-msg"></div>
+          <div id="debate-options" style="display:flex;flex-direction:column;width:100%;align-items:center"></div>
+          <button id="cancel-debate-btn" class="btn danger" style="margin-top:16px" onclick="closeModals()">Leave</button>
+        </div>
+
+        <!-- Result modal -->
+        <div id="result-modal" class="modal">
+          <h2 id="result-title">Result</h2>
+          <p id="result-desc" style="font-size:17px;white-space:pre-wrap;line-height:1.6">Description</p>
+          <button class="btn" onclick="closeModals()">Continue</button>
+        </div>
+
+        <!-- Tic-Tac-Toe modal -->
+        <div id="ttt-modal" class="modal">
+          <h2 style="color:#38bdf8">TIC-TAC-TOE (Win = ₹500)</h2>
+          <h3 id="ttt-status" style="color:yellow">Your Turn (X)</h3>
+          <div id="ttt-board"></div>
+          <button class="btn" onclick="closeModals()">Quit Game</button>
+        </div>
+
+        <!-- Travel modal -->
+        <div id="travel-modal" class="modal">
+          <h2 style="color:#facc15">TRANSPORT SERVICE</h2>
+          <p id="taxi-desc">Where would you like to go?</p>
+          <div id="taxi-error" class="error-msg"></div>
+          <button class="btn" onclick="travelTo(285,280)">🏠 Home (Residential Colony)</button>
+          <button class="btn" onclick="travelTo(140,144)">🎓 Intellects Club &amp; Library</button>
+          <button class="btn" onclick="travelTo(130,126)">🏛 Delhi University Main Gate</button>
+          <button class="btn" onclick="travelTo(28,37)">🏟 Parliament of India</button>
+          <button class="btn" onclick="travelTo(35,262)">🛍 The Great Mall</button>
+          <button class="btn danger" style="margin-top:14px" onclick="closeModals()">Cancel</button>
+        </div>
+
+        <!-- Shop modal -->
+        <div id="shop-modal" class="modal">
+          <h2 style="color:#4ade80">THE GREAT MALL</h2>
+          <p>Your Money: ₹<span id="shop-money"></span></p>
+          <div id="shop-error" class="error-msg"></div>
+          <button class="btn" onclick="buyItem('Car',50000)">🚙 Buy Car (₹50,000) — FREE Taxi forever!</button>
+          <button class="btn" onclick="buyItem('Mansion',5000000)">🏰 Buy Mansion (₹50,00,000) — Ultimate Flex</button>
+          <button class="btn" onclick="buyItem('Rolex',250000)">⌚ Gold Watch (₹2,50,000) — Looks Cool</button>
+          <button class="btn danger" style="margin-top:14px" onclick="closeModals()">Leave Mall</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts in dependency order -->
+<script src="js/questions.js"></script>
+<script src="js/game.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+:root{--gold:#B8860B;--deep:#1A3C6E;--teal:#0F6E56;--coral:#D85A30}
+.wrap{padding:1.5rem 1rem 2rem}
+.section{margin-bottom:2rem}
+.sec-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:.5rem}
+.sec-title{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+.tab-row{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{font-size:13px;padding:6px 14px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.tab.active,.tab:hover{background:var(--color-background-primary);color:var(--color-text-primary);border-color:var(--color-border-secondary)}
+.tab.active{font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.card-head{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.4rem}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;font-weight:500;margin-bottom:.5rem}
+.b-gold{background:#FDF3DC;color:#856209}
+.b-teal{background:#E1F5EE;color:#085041}
+.b-blue{background:#E6F1FB;color:#0C447C}
+.b-coral{background:#FAECE7;color:#712B13}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.dark .b-gold{background:#412402;color:#FAC775}
+.dark .b-teal{background:#04342C;color:#9FE1CB}
+.dark .b-blue{background:#042C53;color:#B5D4F4}
+.dark .b-coral{background:#4A1B0C;color:#F5C4B3}
+.dark .b-purple{background:#26215C;color:#CECBF6}
+@media (prefers-color-scheme: dark){
+  .b-gold{background:#412402;color:#FAC775}
+  .b-teal{background:#04342C;color:#9FE1CB}
+  .b-blue{background:#042C53;color:#B5D4F4}
+  .b-coral{background:#4A1B0C;color:#F5C4B3}
+  .b-purple{background:#26215C;color:#CECBF6}
+}
+.highlight-card{border-left:3px solid;border-radius:var(--border-radius-lg);padding:1rem}
+.hc-gold{border-color:#B8860B;background:#FDF3DC}
+.hc-teal{border-color:#0F6E56;background:#E1F5EE}
+.hc-blue{border-color:#1A3C6E;background:#E6F1FB}
+.hc-coral{border-color:#D85A30;background:#FAECE7}
+@media(prefers-color-scheme:dark){
+  .hc-gold{background:#412402}.hc-teal{background:#04342C}.hc-blue{background:#042C53}.hc-coral{background:#4A1B0C}
+}
+.hc-title{font-size:13px;font-weight:500;margin-bottom:.3rem;color:var(--color-text-primary)}
+.hc-body{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.tree{font-family:var(--font-mono);font-size:12px;color:var(--color-text-secondary);line-height:1.9;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;overflow-x:auto;border:.5px solid var(--color-border-tertiary)}
+.tree .dir{color:var(--color-text-info);font-weight:500}
+.tree .file{color:var(--color-text-secondary)}
+.tree .comment{color:var(--color-text-tertiary)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:.5rem 0}
+.flow-box{background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 10px;font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.flow-arr{color:var(--color-text-tertiary);font-size:14px}
+.pill{display:inline-block;font-size:11px;padding:3px 9px;border-radius:100px;border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);margin:2px}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.metric-n{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.metric-l{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.sep{height:.5px;background:var(--color-border-tertiary);margin:1.25rem 0}
+.portal-card{border-radius:var(--border-radius-lg);padding:1.25rem;border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.portal-title{font-size:16px;font-weight:500;margin-bottom:.3rem;color:var(--color-text-primary)}
+.portal-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:.75rem}
+.feature-list{list-style:none;font-size:12px;color:var(--color-text-secondary);line-height:2}
+.feature-list li::before{content:"◆ ";font-size:9px;opacity:.5}
+.tag-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:.75rem}
+button.ask{background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);color:var(--color-text-secondary);font-size:12px;padding:5px 10px;border-radius:var(--border-radius-md);cursor:pointer;transition:all .15s}
+button.ask:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.db-table{width:100%;border-collapse:collapse;font-size:12px}
+.db-table th{text-align:left;padding:6px 10px;background:var(--color-background-secondary);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary)}
+.db-table td{padding:6px 10px;border-top:.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px}
+.db-table tr:hover td{background:var(--color-background-secondary)}
+.pk{color:var(--color-text-warning);font-weight:500}
+.fk{color:var(--color-text-info)}
+</style>
+
+<div class="wrap">
+  <div style="margin-bottom:1.5rem">
+    <div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:.25rem">Krida — Indian Games Project</div>
+    <div style="font-size:22px;font-weight:500;color:var(--color-text-primary)">Full Game Strategy & Architecture</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-top:.3rem">Design blueprint for Navakankari &amp; Pallankuzhi online portals</div>
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active" onclick="show('philosophy',this)">Design philosophy</div>
+    <div class="tab" onclick="show('portals',this)">Game portals</div>
+    <div class="tab" onclick="show('engagement',this)">Engagement system</div>
+    <div class="tab" onclick="show('folder',this)">Folder structure</div>
+    <div class="tab" onclick="show('database',this)">Database schema</div>
+    <div class="tab" onclick="show('stack',this)">Tech stack</div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <div id="p-philosophy" class="panel active">
+    <div class="sec-title">Core design philosophy</div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="highlight-card hc-gold">
+        <div class="hc-title">Zero friction, maximum play</div>
+        <div class="hc-body">Game loads in under 2 seconds. No login required to play vs AI. One click to start. Text is decoration — the board is the hero. Every pixel serves the game.</div>
+      </div>
+      <div class="highlight-card hc-teal">
+        <div class="hc-title">Cultural immersion, not museum exhibit</div>
+        <div class="hc-body">Traditional motifs (rangoli, kolam, mehndi geometry) woven into UI. Sounds of clay pots, dhol, nature. Games feel alive and rooted — not digital artefacts.</div>
+      </div>
+      <div class="highlight-card hc-blue">
+        <div class="hc-title">Children &amp; elders share the same portal</div>
+        <div class="hc-body">Font scales, high contrast, simple iconography. Kids see a storybook; scholars see depth. Difficulty unlocks — tutorial mode hides complexity until earned.</div>
+      </div>
+      <div class="highlight-card hc-coral">
+        <div class="hc-title">Every session leaves a trace</div>
+        <div class="hc-body">XP, streaks, personal best, replay share link. The game remembers you. Returning feels like coming home — not starting over.</div>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="sec-title">The minimal UI principle</div>
+    <div class="grid3">
+      <div class="card">
+        <span class="badge b-gold">Rule 1</span>
+        <div class="card-head">Board occupies 70% of screen</div>
+        <div class="card-body">Score, timer, and controls live in a slim strip. The board is never competing for attention. On mobile, it fills the entire viewport.</div>
+      </div>
+      <div class="card">
+        <span class="badge b-teal">Rule 2</span>
+        <div class="card-head">Text only on hover / tap</div>
+        <div class="card-body">Legal moves, scores, and hints appear only when the player interacts. The resting state is pure board — no clutter, no noise.</div>
+      </div>
+      <div class="card">
+        <span class="badge b-blue">Rule 3</span>
+        <div class="card-head">Animations teach the rules</div>
+        <div class="card-body">First-time players watch the game animate itself. Seeds pour from cup to cup. Pieces glide. Rules are felt before they are read.</div>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="sec-title">Retention hook: the 3-visit loop</div>
+    <div class="flow">
+      <div class="flow-box">🎮 First visit</div><div class="flow-arr">→</div>
+      <div class="flow-box">Watch intro animation</div><div class="flow-arr">→</div>
+      <div class="flow-box">Play vs AI (easy)</div><div class="flow-arr">→</div>
+      <div class="flow-box">Win = earn tag ID</div>
+    </div>
+    <div class="flow">
+      <div class="flow-box">🔁 Second visit</div><div class="flow-arr">→</div>
+      <div class="flow-box">Daily challenge appears</div><div class="flow-arr">→</div>
+      <div class="flow-box">Streak unlocks avatar skin</div><div class="flow-arr">→</div>
+      <div class="flow-box">Challenge a friend</div>
+    </div>
+    <div class="flow">
+      <div class="flow-box">🏆 Third+ visit</div><div class="flow-arr">→</div>
+      <div class="flow-box">Ranked ladder visible</div><div class="flow-arr">→</div>
+      <div class="flow-box">Tournament entry</div><div class="flow-arr">→</div>
+      <div class="flow-box">Cultural lore unlocked</div>
+    </div>
+  </div>
+
+  <!-- PORTALS -->
+  <div id="p-portals" class="panel">
+    <div class="sec-title">Three-portal architecture</div>
+    <div style="margin-bottom:10px">
+      <div class="portal-card" style="border-top:3px solid #B8860B;margin-bottom:10px">
+        <div class="portal-title">🏛 Krida Hub — main portal</div>
+        <div class="portal-sub">krida.in — the gateway. Cultural storytelling, game selection, leaderboard, news</div>
+        <div class="grid3">
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.4rem">LANDING</div>
+            <ul class="feature-list">
+              <li>Animated hero with both games</li>
+              <li>Cultural origin story (30s)</li>
+              <li>Choose your game CTA</li>
+              <li>Live global player count</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.4rem">COMMUNITY</div>
+            <ul class="feature-list">
+              <li>Global leaderboard</li>
+              <li>Weekly tournament banner</li>
+              <li>Hall of fame (top 10)</li>
+              <li>Friend challenge links</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.4rem">LORE</div>
+            <ul class="feature-list">
+              <li>Story mode — game histories</li>
+              <li>Board archaeology photos</li>
+              <li>Cultural context comics</li>
+              <li>Download printable boards</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="pill">React SPA</span><span class="pill">Framer Motion</span><span class="pill">Three.js hero</span><span class="pill">WebSockets (live count)</span>
+        </div>
+      </div>
+
+      <div class="grid2" style="gap:10px">
+        <div class="portal-card" style="border-top:3px solid #1A3C6E">
+          <div class="portal-title">⬛ Navakankari portal</div>
+          <div class="portal-sub">krida.in/navakankari — The Strategic War Room</div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin:.5rem 0 .3rem">VISUAL THEME</div>
+          <div class="card-body">Dark slate + indigo. Stone-carved board aesthetic. Pieces glow amber when selected. Mill detection sparks gold. Sounds of stone on stone. Night-time ghat atmosphere.</div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin:.6rem 0 .3rem">GAME MODES</div>
+          <ul class="feature-list">
+            <li>vs AI (3 difficulty levels)</li>
+            <li>vs Friend (share link)</li>
+            <li>Ranked online (with ID tag)</li>
+            <li>Puzzle mode (win in N moves)</li>
+            <li>Daily challenge board</li>
+            <li>Tutorial (animated walkthroughs)</li>
+          </ul>
+          <div class="tag-row">
+            <span class="pill">SVG board</span><span class="pill">Minimax AI</span><span class="pill">Mill detection O(n)</span><span class="pill">Socket.io PvP</span>
+          </div>
+        </div>
+
+        <div class="portal-card" style="border-top:3px solid #0F6E56">
+          <div class="portal-title">🟤 Pallankuzhi portal</div>
+          <div class="portal-sub">krida.in/pallankuzhi — The Harvest Garden</div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin:.5rem 0 .3rem">VISUAL THEME</div>
+          <div class="card-body">Warm saffron + terracotta + earth. Wooden board rendered in 3D perspective. Seeds animate one-by-one in a flowing arc. Harvest festival sounds — wind, seeds rattling, distant music.</div>
+          <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin:.6rem 0 .3rem">GAME MODES</div>
+          <ul class="feature-list">
+            <li>vs AI (smart counter)</li>
+            <li>Pass-and-play (2 on same screen)</li>
+            <li>Ranked online (with ID tag)</li>
+            <li>Speed Pallanku (timed)</li>
+            <li>Kids mode (5-seed easy)</li>
+            <li>Tutorial (seed-by-seed visual)</li>
+          </ul>
+          <div class="tag-row">
+            <span class="pill">Canvas animation</span><span class="pill">Seed physics</span><span class="pill">Counting AI</span><span class="pill">Socket.io PvP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="sec-title">Portal UI wireframe — game screen anatomy</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-head">Navakankari screen layout</div>
+        <div style="background:var(--color-background-secondary);border-radius:8px;padding:.75rem;margin-top:.5rem;font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);line-height:2">
+          ┌──────────────────────────────────┐<br>
+          │  &lt;back&gt;    ⚔ NAVAKANKARI    ⚙  │ ← 40px header<br>
+          │──────────────────────────────────│<br>
+          │  [You ●●●●●●●] vs [AI ●●●●●●●]  │ ← 36px player strip<br>
+          │──────────────────────────────────│<br>
+          │                                  │<br>
+          │      ┌──────────────────┐        │<br>
+          │      │                  │        │<br>
+          │      │   BOARD  (SVG)   │        │<br>
+          │      │                  │        │<br>
+          │      │   70% of screen  │        │<br>
+          │      └──────────────────┘        │<br>
+          │                                  │<br>
+          │──────────────────────────────────│<br>
+          │  Phase: 1  Mills: You 0 / AI 0   │ ← 32px status<br>
+          │──────────────────────────────────│<br>
+          │  [Hint]  [Undo]  [New]  [Share]  │ ← 48px action bar<br>
+          └──────────────────────────────────┘
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">Pallankuzhi screen layout</div>
+        <div style="background:var(--color-background-secondary);border-radius:8px;padding:.75rem;margin-top:.5rem;font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);line-height:2">
+          ┌──────────────────────────────────┐<br>
+          │  &lt;back&gt;   🪔 PALLANKUZHI   ⚙   │ ← 40px header<br>
+          │──────────────────────────────────│<br>
+          │  AI [━━━━━━━━━━━ 73 seeds ]       │<br>
+          │──────────────────────────────────│<br>
+          │  ┌────────────────────────────┐  │<br>
+          │  │ ○  ○  ○  ○  ○  ○  ○       │  │ ← AI row<br>
+          │  │──────────────────────────  │  │<br>
+          │  │ ○  ○  ○  ○  ○  ○  ○       │  │ ← Your row<br>
+          │  └────────────────────────────┘  │<br>
+          │   (seed animation overlay here)   │<br>
+          │──────────────────────────────────│<br>
+          │  You [73 seeds ━━━━━━━━━━━ ]      │<br>
+          │──────────────────────────────────│<br>
+          │  [Hint]  [Undo]  [New]  [Share]  │<br>
+          └──────────────────────────────────┘
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGEMENT -->
+  <div id="p-engagement" class="panel">
+    <div class="sec-title">Engagement &amp; retention system</div>
+    <div class="grid4" style="margin-bottom:1rem">
+      <div class="metric"><div class="metric-n">7</div><div class="metric-l">Day streak goal</div></div>
+      <div class="metric"><div class="metric-n">5</div><div class="metric-l">XP systems</div></div>
+      <div class="metric"><div class="metric-n">12</div><div class="metric-l">Achievement badges</div></div>
+      <div class="metric"><div class="metric-n">3</div><div class="metric-l">Daily challenges</div></div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <span class="badge b-gold">Identity</span>
+        <div class="card-head">Player ID Tag system</div>
+        <div class="card-body">Every player auto-assigned a unique tag: <strong>#Krida-xxxxxxx</strong>. Format: Cultural prefix (Arjun, Kaveri, Dharma…) + 4-digit number. Display on leaderboard, share links, challenge invites. Optional name + avatar later — but the tag gets them playing instantly.</div>
+        <div class="tag-row">
+          <span class="pill">#Arjun-4291</span><span class="pill">#Kaveri-0072</span><span class="pill">#Dharma-1138</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="badge b-teal">Progress</span>
+        <div class="card-head">XP &amp; rank ladder</div>
+        <div class="card-body">Win vs AI (easy) → +5 XP. Win vs AI (hard) → +20 XP. Win ranked → +40 XP. Daily challenge → +15 XP. Streak day → +10 XP. Ranks: Pebble → Stone → Warrior → Scholar → Sage → Grandmaster.</div>
+        <div class="flow" style="margin-top:.5rem">
+          <span class="pill">🪨 Pebble</span><span style="color:var(--color-text-tertiary);font-size:12px">→</span>
+          <span class="pill">⚔ Warrior</span><span style="color:var(--color-text-tertiary);font-size:12px">→</span>
+          <span class="pill">📜 Scholar</span><span style="color:var(--color-text-tertiary);font-size:12px">→</span>
+          <span class="pill">🏆 Sage</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="badge b-blue">Habit</span>
+        <div class="card-head">Daily challenge loop</div>
+        <div class="card-body">Every day at midnight IST, 3 new challenges appear: one Navakankari puzzle (win in N moves), one Pallankuzhi capture puzzle, one speed round. Completing all 3 grants a flame badge on profile. 7-day streak unlocks exclusive avatar skin.</div>
+      </div>
+      <div class="card">
+        <span class="badge b-coral">Social</span>
+        <div class="card-head">Challenge &amp; share system</div>
+        <div class="card-body">One-click share: generates a short URL with current game state. Friends click to challenge you to the same position. "Replay link" lets you share a full game replay. WhatsApp / Instagram share card auto-generated with your move highlight.</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+    <div class="sec-title">Achievement badges (12 unlockables)</div>
+    <div class="grid4">
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">🏛</div>
+        <div class="card-head">First Mill</div>
+        <div class="card-body">Form your first mill in Navakankari</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">🌊</div>
+        <div class="card-head">Sower</div>
+        <div class="card-body">Complete 10 turns in Pallankuzhi</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">🔥</div>
+        <div class="card-head">Flame Streak</div>
+        <div class="card-body">7 days in a row — any game</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">⚡</div>
+        <div class="card-head">Double Mill</div>
+        <div class="card-body">Execute a zwicker (double mill threat)</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">🌾</div>
+        <div class="card-head">Harvest</div>
+        <div class="card-body">Capture 50+ seeds in one Pallankuzhi game</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">🦅</div>
+        <div class="card-head">Flight</div>
+        <div class="card-body">Win a game from the 3-piece fly phase</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">👑</div>
+        <div class="card-head">Grandmaster</div>
+        <div class="card-body">Reach top 10 on leaderboard</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:24px;margin-bottom:.3rem">📜</div>
+        <div class="card-head">Historian</div>
+        <div class="card-body">Read all cultural lore entries</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+    <div class="sec-title">Offline-first hook — what brings players back</div>
+    <div class="grid3">
+      <div class="highlight-card hc-gold">
+        <div class="hc-title">Push notifications (PWA)</div>
+        <div class="hc-body">Daily challenge ready. Your ranked opponent just made a move. Streak expiring in 2 hours. Friend challenged you. Tournament starts tomorrow.</div>
+      </div>
+      <div class="highlight-card hc-teal">
+        <div class="hc-title">Async multiplayer</div>
+        <div class="hc-body">Games don't need both players online simultaneously. Make your move, close the app. Opponent gets notified. Games persist for 72 hours.</div>
+      </div>
+      <div class="highlight-card hc-blue">
+        <div class="hc-title">Weekly tournament</div>
+        <div class="hc-body">Every Sunday: 8-player Swiss-format bracket. Free to enter with tag ID. Winners featured on the Hub homepage for the entire week.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOLDER STRUCTURE -->
+  <div id="p-folder" class="panel">
+    <div class="sec-title">Complete project folder structure</div>
+    <div class="grid2">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em">Frontend</div>
+        <div class="tree">
+<span class="dir">krida/</span>
+<span class="dir">├── frontend/</span>
+│   <span class="dir">├── public/</span>
+│   │   <span class="file">├── index.html</span>
+│   │   <span class="file">├── manifest.json      </span><span class="comment"># PWA</span>
+│   │   <span class="file">└── assets/</span>
+│   │       <span class="file">├── sounds/</span>
+│   │       <span class="file">├── fonts/</span>
+│   │       <span class="file">└── images/</span>
+│   <span class="dir">└── src/</span>
+│       <span class="dir">├── portals/</span>
+│       │   <span class="dir">├── hub/</span>           <span class="comment"># Main landing</span>
+│       │   <span class="dir">├── navakankari/</span>  <span class="comment"># Game portal 1</span>
+│       │   <span class="dir">└── pallankuzhi/</span>  <span class="comment"># Game portal 2</span>
+│       <span class="dir">├── components/</span>
+│       │   <span class="dir">├── shared/</span>
+│       │   │   <span class="file">├── Navbar.jsx</span>
+│       │   │   <span class="file">├── PlayerHUD.jsx</span>
+│       │   │   <span class="file">├── Leaderboard.jsx</span>
+│       │   │   <span class="file">├── AchievementToast.jsx</span>
+│       │   │   <span class="file">└── DailyChallenge.jsx</span>
+│       │   <span class="dir">├── navakankari/</span>
+│       │   │   <span class="file">├── Board.jsx         </span><span class="comment"># SVG board</span>
+│       │   │   <span class="file">├── Piece.jsx</span>
+│       │   │   <span class="file">├── MillFlash.jsx     </span><span class="comment"># Mill animation</span>
+│       │   │   <span class="file">├── PhaseIndicator.jsx</span>
+│       │   │   <span class="file">└── MoveHistory.jsx</span>
+│       │   <span class="dir">└── pallankuzhi/</span>
+│       │       <span class="file">├── Board.jsx         </span><span class="comment"># Canvas board</span>
+│       │       <span class="file">├── Cup.jsx</span>
+│       │       <span class="file">├── SeedAnimation.jsx </span><span class="comment"># Key showpiece</span>
+│       │       <span class="file">├── SeedCounter.jsx</span>
+│       │       <span class="file">└── CaptureFlash.jsx</span>
+│       <span class="dir">├── game-engine/</span>
+│       │   <span class="dir">├── navakankari/</span>
+│       │   │   <span class="file">├── boardState.js</span>
+│       │   │   <span class="file">├── millDetection.js  </span><span class="comment"># O(n)</span>
+│       │   │   <span class="file">├── legalMoves.js</span>
+│       │   │   <span class="file">├── minimax.js        </span><span class="comment"># AI</span>
+│       │   │   <span class="file">└── phases.js         </span><span class="comment"># Phase 1/2/3</span>
+│       │   <span class="dir">└── pallankuzhi/</span>
+│       │       <span class="file">├── boardState.js</span>
+│       │       <span class="file">├── sowingEngine.js   </span><span class="comment"># Core mechanic</span>
+│       │       <span class="file">├── captureRules.js</span>
+│       │       <span class="file">├── aiCounter.js      </span><span class="comment"># Counting AI</span>
+│       │       <span class="file">└── variants.js       </span><span class="comment"># Regional variants</span>
+│       <span class="dir">├── store/</span>               <span class="comment"># Redux Toolkit</span>
+│       │   <span class="file">├── playerSlice.js</span>
+│       │   <span class="file">├── gameSlice.js</span>
+│       │   <span class="file">└── leaderboardSlice.js</span>
+│       <span class="dir">├── hooks/</span>
+│       │   <span class="file">├── useGameSocket.js  </span><span class="comment"># Live PvP</span>
+│       │   <span class="file">├── useAI.js</span>
+│       │   <span class="file">└── useXP.js</span>
+│       <span class="dir">├── services/</span>
+│       │   <span class="file">├── api.js</span>
+│       │   <span class="file">├── socket.js</span>
+│       │   <span class="file">└── pwa.js            </span><span class="comment"># Push notifications</span>
+│       <span class="dir">├── styles/</span>
+│       │   <span class="file">├── navakankari.css   </span><span class="comment"># Dark stone theme</span>
+│       │   <span class="file">├── pallankuzhi.css   </span><span class="comment"># Warm earth theme</span>
+│       │   └── shared.css
+│       <span class="file">├── App.jsx</span>
+│       <span class="file">└── main.jsx</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em">Backend &amp; Database</div>
+        <div class="tree">
+<span class="dir">├── backend/</span>
+│   <span class="dir">├── src/</span>
+│   │   <span class="dir">├── api/</span>
+│   │   │   <span class="file">├── routes/</span>
+│   │   │   │   <span class="file">├── auth.js       </span><span class="comment"># Tag ID gen</span>
+│   │   │   │   <span class="file">├── game.js</span>
+│   │   │   │   <span class="file">├── player.js</span>
+│   │   │   │   <span class="file">├── leaderboard.js</span>
+│   │   │   │   <span class="file">└── challenge.js</span>
+│   │   │   <span class="file">└── middleware/</span>
+│   │   │       <span class="file">├── auth.js</span>
+│   │   │       <span class="file">├── rateLimit.js</span>
+│   │   │       <span class="file">└── validate.js</span>
+│   │   <span class="dir">├── websocket/</span>       <span class="comment"># Socket.io</span>
+│   │   │   <span class="file">├── gameRoom.js   </span><span class="comment"># PvP rooms</span>
+│   │   │   <span class="file">├── matchmaking.js</span>
+│   │   │   <span class="file">└── spectator.js</span>
+│   │   <span class="dir">├── game-engine/</span>    <span class="comment"># Server-side validation</span>
+│   │   │   <span class="file">├── navakankari/</span>
+│   │   │   <span class="file">│   └── validator.js</span>
+│   │   │   <span class="file">└── pallankuzhi/</span>
+│   │   │       <span class="file">└── validator.js</span>
+│   │   <span class="dir">├── services/</span>
+│   │   │   <span class="file">├── xpService.js</span>
+│   │   │   <span class="file">├── tagGenerator.js  </span><span class="comment"># #Arjun-4291</span>
+│   │   │   <span class="file">├── challengeService.js</span>
+│   │   │   <span class="file">└── notifyService.js </span><span class="comment"># Push / email</span>
+│   │   <span class="file">├── app.js</span>
+│   │   <span class="file">└── server.js</span>
+│   <span class="dir">└── config/</span>
+│       <span class="file">├── db.js</span>
+│       <span class="file">└── env.js</span>
+<span class="dir">├── database/</span>
+│   <span class="dir">├── migrations/</span>
+│   │   <span class="file">├── 001_players.sql</span>
+│   │   <span class="file">├── 002_games.sql</span>
+│   │   <span class="file">├── 003_moves.sql</span>
+│   │   <span class="file">├── 004_xp_log.sql</span>
+│   │   <span class="file">├── 005_achievements.sql</span>
+│   │   <span class="file">└── 006_daily_challenges.sql</span>
+│   <span class="dir">├── seeds/</span>
+│   │   <span class="file">├── achievements.json</span>
+│   │   <span class="file">└── daily_challenges.json</span>
+│   <span class="dir">└── schemas/</span>
+│       <span class="file">├── erd.png</span>
+│       <span class="file">└── schema.dbml</span>
+<span class="dir">├── shared/</span>                <span class="comment"># Shared types/constants</span>
+│   <span class="file">├── gameConstants.js</span>
+│   <span class="file">└── types.d.ts</span>
+<span class="file">├── docker-compose.yml</span>
+<span class="file">├── .env.example</span>
+<span class="file">└── README.md</span>
+        </div>
+      </div>
+    </div>
+    <button class="ask" onclick="sendPrompt('Now start building the Navakankari game portal — begin with the SVG board component and the game engine logic')">Start building Navakankari portal ↗</button>
+    <button class="ask" style="margin-left:8px" onclick="sendPrompt('Now start building the Pallankuzhi game portal — begin with the board component and the seed animation system')">Start building Pallankuzhi portal ↗</button>
+  </div>
+
+  <!-- DATABASE -->
+  <div id="p-database" class="panel">
+    <div class="sec-title">Database schema — key tables</div>
+    <div class="grid2" style="gap:10px;margin-bottom:10px">
+      <div class="card">
+        <span class="badge b-gold">players</span>
+        <div class="card-head">Player identity &amp; stats</div>
+        <table class="db-table" style="margin-top:.5rem">
+          <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+          <tr><td class="pk">id</td><td>UUID PK</td><td>Auto-generated</td></tr>
+          <tr><td>tag_id</td><td>VARCHAR(20)</td><td>#Arjun-4291 — unique</td></tr>
+          <tr><td>display_name</td><td>VARCHAR(40)</td><td>Optional, set later</td></tr>
+          <tr><td>avatar_skin</td><td>VARCHAR(30)</td><td>Unlocked skin key</td></tr>
+          <tr><td>xp_total</td><td>INTEGER</td><td>Cumulative XP</td></tr>
+          <tr><td>rank</td><td>VARCHAR(20)</td><td>Pebble→Grandmaster</td></tr>
+          <tr><td>streak_current</td><td>INTEGER</td><td>Active daily streak</td></tr>
+          <tr><td>streak_best</td><td>INTEGER</td><td>All-time best streak</td></tr>
+          <tr><td>created_at</td><td>TIMESTAMP</td><td>First visit</td></tr>
+          <tr><td>last_seen</td><td>TIMESTAMP</td><td>For streak calc</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <span class="badge b-teal">games</span>
+        <div class="card-head">Game sessions (both games)</div>
+        <table class="db-table" style="margin-top:.5rem">
+          <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+          <tr><td class="pk">id</td><td>UUID PK</td><td></td></tr>
+          <tr><td>game_type</td><td>ENUM</td><td>navakankari / pallankuzhi</td></tr>
+          <tr><td>mode</td><td>ENUM</td><td>ai / ranked / friendly / daily</td></tr>
+          <tr><td class="fk">player1_id</td><td>UUID FK</td><td>→ players.id</td></tr>
+          <tr><td class="fk">player2_id</td><td>UUID FK</td><td>→ players.id (null=AI)</td></tr>
+          <tr><td>winner_id</td><td>UUID</td><td>null = in progress</td></tr>
+          <tr><td>state_json</td><td>JSONB</td><td>Full board state</td></tr>
+          <tr><td>total_moves</td><td>INTEGER</td><td></td></tr>
+          <tr><td>duration_sec</td><td>INTEGER</td><td></td></tr>
+          <tr><td>share_token</td><td>VARCHAR(12)</td><td>For replay links</td></tr>
+          <tr><td>started_at</td><td>TIMESTAMP</td><td></td></tr>
+          <tr><td>ended_at</td><td>TIMESTAMP</td><td></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <span class="badge b-blue">moves</span>
+        <div class="card-head">Move-by-move game log</div>
+        <table class="db-table" style="margin-top:.5rem">
+          <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+          <tr><td class="pk">id</td><td>BIGSERIAL PK</td><td></td></tr>
+          <tr><td class="fk">game_id</td><td>UUID FK</td><td>→ games.id</td></tr>
+          <tr><td>move_number</td><td>INTEGER</td><td>Turn sequence</td></tr>
+          <tr><td class="fk">player_id</td><td>UUID FK</td><td>→ players.id</td></tr>
+          <tr><td>move_data</td><td>JSONB</td><td>from/to/phase/captures</td></tr>
+          <tr><td>time_taken_ms</td><td>INTEGER</td><td>Per-move timer</td></tr>
+          <tr><td>created_at</td><td>TIMESTAMP</td><td></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <span class="badge b-purple">achievements &amp; xp_log</span>
+        <div class="card-head">Progress tracking</div>
+        <table class="db-table" style="margin-top:.5rem">
+          <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+          <tr><td class="pk">id</td><td>UUID PK</td><td>xp_log table</td></tr>
+          <tr><td class="fk">player_id</td><td>UUID FK</td><td>→ players.id</td></tr>
+          <tr><td>event_type</td><td>VARCHAR</td><td>win_ai / win_ranked / streak…</td></tr>
+          <tr><td>xp_delta</td><td>INTEGER</td><td>+5 / +20 / +40</td></tr>
+          <tr><td>created_at</td><td>TIMESTAMP</td><td></td></tr>
+        </table>
+        <div style="margin-top:.75rem">
+        <table class="db-table">
+          <tr><th>player_achievements</th><th></th></tr>
+          <tr><td class="fk">player_id</td><td>UUID FK</td></tr>
+          <tr><td>achievement_key</td><td>VARCHAR — first_mill, sower…</td></tr>
+          <tr><td>unlocked_at</td><td>TIMESTAMP</td></tr>
+        </table>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-card hc-teal">
+      <div class="hc-title">Online player ID tag — how it works</div>
+      <div class="hc-body">On first visit, the browser fingerprint + timestamp seeds a tag generator. A cultural name is drawn randomly from a curated list of 200 Indian names (Arjun, Kaveri, Dharma, Priya…) and combined with a 4-digit sequence. The tag is stored in localStorage and the DB simultaneously. No email, no password — just a tag. Players who want to persist across devices can optionally link an email later to claim their tag permanently.</div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div id="p-stack" class="panel">
+    <div class="sec-title">Recommended tech stack</div>
+    <div class="grid3" style="margin-bottom:10px">
+      <div class="card">
+        <span class="badge b-blue">Frontend</span>
+        <ul class="feature-list" style="margin-top:.5rem">
+          <li>React 18 + Vite</li>
+          <li>Redux Toolkit (game state)</li>
+          <li>Framer Motion (UI animations)</li>
+          <li>SVG (Navakankari board)</li>
+          <li>Canvas API (Pallankuzhi seeds)</li>
+          <li>Socket.io-client (PvP)</li>
+          <li>Workbox (PWA + offline)</li>
+          <li>Zustand (lightweight local state)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge b-teal">Backend</span>
+        <ul class="feature-list" style="margin-top:.5rem">
+          <li>Node.js + Express</li>
+          <li>Socket.io (WebSockets)</li>
+          <li>JWT (tag-based auth)</li>
+          <li>Zod (input validation)</li>
+          <li>Bull (job queues for daily challenges)</li>
+          <li>Web Push API (notifications)</li>
+          <li>Redis (matchmaking queue + sessions)</li>
+          <li>Helmet + rate-limiter</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge b-gold">Database &amp; Infra</span>
+        <ul class="feature-list" style="margin-top:.5rem">
+          <li>PostgreSQL (primary DB)</li>
+          <li>Redis (sessions + caching)</li>
+          <li>Prisma ORM</li>
+          <li>Cloudflare Pages (frontend CDN)</li>
+          <li>Railway / Render (backend)</li>
+          <li>Supabase (managed Postgres)</li>
+          <li>GitHub Actions (CI/CD)</li>
+          <li>Sentry (error monitoring)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="sec-title">Build sequence — recommended order</div>
+    <div class="grid2">
+      <div class="highlight-card hc-blue">
+        <div class="hc-title">Phase 1 — Core game (2 weeks)</div>
+        <div class="hc-body">
+          1. Navakankari SVG board + legal move engine<br>
+          2. Navakankari minimax AI (3 levels)<br>
+          3. Pallankuzhi canvas board + sowing engine<br>
+          4. Pallankuzhi counting AI<br>
+          5. Both games fully playable offline vs AI
+        </div>
+      </div>
+      <div class="highlight-card hc-teal">
+        <div class="hc-title">Phase 2 — Player identity (1 week)</div>
+        <div class="hc-body">
+          6. Tag ID generator + localStorage persistence<br>
+          7. PostgreSQL schema + Prisma setup<br>
+          8. Basic XP tracking on win/loss<br>
+          9. Leaderboard API + frontend widget<br>
+          10. Share link / replay link generation
+        </div>
+      </div>
+      <div class="highlight-card hc-gold">
+        <div class="hc-title">Phase 3 — Live multiplayer (2 weeks)</div>
+        <div class="hc-body">
+          11. Socket.io room system (create/join game)<br>
+          12. Server-side move validation<br>
+          13. Async game persistence (72hr window)<br>
+          14. Ranked matchmaking queue (Redis)<br>
+          15. Spectator mode
+        </div>
+      </div>
+      <div class="highlight-card hc-coral">
+        <div class="hc-title">Phase 4 — Engagement loops (1 week)</div>
+        <div class="hc-body">
+          16. Daily challenge cron job (Bull)<br>
+          17. Achievement unlock system<br>
+          18. Push notification subscription<br>
+          19. Avatar skin unlocks<br>
+          20. Tournament bracket (weekly)
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ask" onclick="sendPrompt('Start Phase 1 — build the Navakankari SVG board component with legal move highlighting in React')">Begin Phase 1: Navakankari board ↗</button>
+      <button class="ask" onclick="sendPrompt('Start Phase 1 — build the Pallankuzhi canvas board with seed sowing animation in React')">Begin Phase 1: Pallankuzhi board ↗</button>
+      <button class="ask" onclick="sendPrompt('Set up the backend Express server with Socket.io and PostgreSQL schema using Prisma')">Set up backend + database ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  el.classList.add('active');
+}
+</script>

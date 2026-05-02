@@ -1,0 +1,57 @@
+client/src/
+  App.jsx                   ← AnimatePresence routing: intro ↔ game
+  main.jsx                  ← React 18 root
+  context/GameContext.jsx   ← all state + async game loop (no Redux needed)
+  game/                     ← pure JS (config, geometry, paths, engine, ai)
+  styles/index.css          ← all CSS variables + layout
+  components/
+    IntroScreen.jsx         ← staggered fadeUp entrance, glow title loop
+    Board.jsx               ← castle pulse, lotus petal breathe, centre jewel glow
+    PawnLayer.jsx           ← spring motion values, selectable bounce loop
+    CowriePanel.jsx         ← shell scatter with spring stagger, grace scale burst
+    PlayerCard.jsx          ← active state morph, pip glow pulse
+    GameLog.jsx             ← slide-in entries with AnimatePresence
+    FactCard.jsx            ← spring slide-up from bottom
+    WinOverlay.jsx          ← 24-particle burst, staggered text entrance
+
+
+Intro title/devatextShadow keyframe loop via animate
+
+Board entrancespring scale from 0.90 → 1
+
+Castle squaresopacity keyframe loop, staggered per-castle delay
+
+Lotus petalsopacity breathe loop, individual delays
+
+Charkoni jewelfilter drop-shadow pulse
+
+Pawn movement useMotionValue + animate() with spring physics
+
+Selectable pawn scale + filter keyframe bounce loop, whileHover, whileTap
+Cowrie shells initial scatter → animate settle, spring stagger by index
+Grace flash scale keyframe [0.3, 1.5, 1.1] + opacity fade
+Player card border Color + background Color transition on active change
+Pip glow box Shadow keyframe loop when active
+Active bar Animate Presence scaleX slide-in/out
+Hint text Animate Presence mode="wait" y-fade swap per message
+Log entries Animate Presence x slide + opacity per entry
+Fact card Spring y slide from 110%
+
+Win particles24 radial translate + scale + rotate stagger
+Win deva text Spring scale [0.3 → 1.15 → 1]
+Win text lines Staggered y fade-in
+Win player dots scale pulse loop per player
+
+
+
+RUN COMMAND:
+
+unzip pachisi-framer.zip && cd pachisi
+
+# Install both server and client deps
+npm install
+cd client && npm install && npm run build && cd ..
+
+# Start Express (serves the built React app)
+npm start   # → http://localhost:3000
+

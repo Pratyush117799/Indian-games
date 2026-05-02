@@ -1,0 +1,14 @@
+{
+  "name": "Krida — Ancient Indian Games",
+  "short_name": "Krida",
+  "description": "Play Navakankari and Pallankuzhi online",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07080B",
+  "theme_color": "#C4831A",
+  "orientation": "any",
+  "icons": [
+    { "src": "/assets/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

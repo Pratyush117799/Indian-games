@@ -1,0 +1,194 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{padding:22px 20px 36px;font-family:var(--font-sans,sans-serif)}
+.hero{text-align:center;padding:20px 0 18px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:24px}
+.badge{display:inline-block;background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;margin-bottom:10px;border:0.5px solid var(--color-border-tertiary)}
+.hero h1{font-size:19px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.hero p{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.slabel{font-size:10px;font-weight:500;letter-spacing:.07em;color:var(--color-text-tertiary);text-transform:uppercase;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.slabel::after{content:'';flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:13px 15px}
+.card h3{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.card p,.card li{font-size:11px;color:var(--color-text-secondary);line-height:1.65}
+.card ul{list-style:none;padding:0}
+.card li{padding-left:12px;position:relative}.card li::before{content:'–';position:absolute;left:0;color:var(--color-text-tertiary)}
+.ico{width:20px;height:20px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.ia{background:#FAEEDA;color:#633806}.ib{background:#EEEDFE;color:#3C3489}.ic{background:#E1F5EE;color:#085041}.id{background:#E6F1FB;color:#0C447C}.ie{background:#FAECE7;color:#712B13}
+.al{border-left:3px solid;border-radius:0 10px 10px 0;padding-left:12px}
+.al-a{border-left-color:#EF9F27}.al-b{border-left-color:#7F77DD}.al-c{border-left-color:#1D9E75}.al-d{border-left-color:#378ADD}
+.tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:12px;margin:2px}
+.ta{background:#FAEEDA;color:#633806}.tb{background:#EEEDFE;color:#3C3489}.tc{background:#E1F5EE;color:#085041}.td{background:#E6F1FB;color:#0C447C}.te{background:#FAECE7;color:#712B13}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+.stat{background:var(--color-background-secondary);border-radius:8px;padding:8px 12px;flex:1;min-width:80px;text-align:center}
+.sv{font-size:16px;font-weight:500;color:var(--color-text-primary)}.sl{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.diff-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.diff-cell{background:var(--color-background-secondary);border-radius:6px;padding:7px 9px}
+.diff-label{font-size:10px;color:var(--color-text-tertiary);font-weight:500;margin-bottom:3px}
+.diff-val{font-size:11px;color:var(--color-text-primary)}
+@keyframes spiralPulse{0%,100%{opacity:.4}50%{opacity:1}}
+.sp{animation:spiralPulse 2s ease-in-out infinite}
+.castle-dot{display:inline-block;width:8px;height:8px;background:#EF9F27;border-radius:2px;transform:rotate(45deg)}
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <div class="badge">Ashtapada · Step 1 — Design Blueprint</div>
+  <h1>The Game That Gave Birth to Chess</h1>
+  <p>8×8 spiral race · Castle sanctuaries · Cowrie dice · c.500 BCE · Pan-India</p>
+</div>
+
+<div class="slabel">What makes Ashtapada unique vs Pagade</div>
+<div class="g3">
+  <div class="card al al-a">
+    <h3><span class="ico ia">⊕</span> Spiral board</h3>
+    <p>Path covers all 64 squares in a clockwise-inward spiral — no dead squares. Every cell matters. The board IS the path.</p>
+  </div>
+  <div class="card al al-b">
+    <h3><span class="ico ib">◈</span> Castle sanctuaries</h3>
+    <p>12 special squares (corners + edge midpoints + centre) where pieces are completely safe. Strategic refuge is the core tension.</p>
+  </div>
+  <div class="card al al-c">
+    <h3><span class="ico ic">◎</span> The chess origin</h3>
+    <p>This 8×8 board was inherited by Chaturanga (chess ancestor). Players feel they're touching the root of chess itself.</p>
+  </div>
+</div>
+
+<div class="slabel">Board mechanics</div>
+<div class="g2">
+  <div class="card">
+    <h3><span class="ico ia">⊙</span> The spiral path — 64 squares</h3>
+    <ul>
+      <li>Outer ring: 28 squares clockwise (top → right → bottom → left)</li>
+      <li>Ring 2: 20 squares (same clockwise direction, one layer in)</li>
+      <li>Ring 3: 12 squares spiralling inward</li>
+      <li>Ring 4: 4 centre squares — the final HOME destination</li>
+      <li>Total journey: 64 steps from entry to centre</li>
+      <li>Path visualised with subtle numbered overlay — player always knows where they are</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="ico ia">◈</span> Castle squares (12 total)</h3>
+    <ul>
+      <li>4 corners: the starting "home" castles for each player</li>
+      <li>4 edge midpoints top/bottom: mid-journey sanctuaries</li>
+      <li>4 edge midpoints left/right: tactical safe zones</li>
+      <li>Centre 4 squares: the ultimate destination / home</li>
+      <li>Visual: golden cross-mark on castle cells, glows when occupied</li>
+      <li>No capture possible on a castle — opponent piece bounces away visually</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="ico ib">◉</span> Cowrie shell dice (4 shells)</h3>
+    <div class="diff-row">
+      <div class="diff-cell"><div class="diff-label">0 mouth-up</div><div class="diff-val">Skip turn</div></div>
+      <div class="diff-cell"><div class="diff-label">1 mouth-up</div><div class="diff-val">Move 1</div></div>
+      <div class="diff-cell"><div class="diff-label">2 mouth-up</div><div class="diff-val">Move 2</div></div>
+      <div class="diff-cell"><div class="diff-label">3 mouth-up</div><div class="diff-val">Move 3</div></div>
+      <div class="diff-cell" style="grid-column:span 2"><div class="diff-label">4 mouth-up (rare — 6.25%)</div><div class="diff-val">Move 8 squares — special throw</div></div>
+    </div>
+    <p style="margin-top:8px">Probability distribution: 25% chance of 1 or 3, 37.5% chance of 2, 6.25% for skip or the special 8. Tension built into the math.</p>
+  </div>
+  <div class="card">
+    <h3><span class="ico ic">◎</span> Capturing & blocking</h3>
+    <ul>
+      <li>Land on opponent's piece (non-castle): they're sent back to start</li>
+      <li>Opponent on a castle: safe — your piece just passes over</li>
+      <li>Own two pieces on same square: form a blockade — opponent cannot pass</li>
+      <li>Blockade visual: two stacked pieces with a shield icon</li>
+      <li>Capture animation: attacker glows, captured piece spirals back</li>
+      <li>Centre squares: no capture — all pieces coexist peacefully in home</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slabel">UI / UX design principles</div>
+<div class="g3">
+  <div class="card">
+    <h3><span class="ico id">◫</span> Board visual language</h3>
+    <ul>
+      <li>Monochrome base (historically authentic — no chess-style alternating colour)</li>
+      <li>Subtle spiral path trace visible at all times</li>
+      <li>Castle cells: gold diamond marker</li>
+      <li>Selected piece: white ring + valid moves pulse green</li>
+      <li>Path numbers fade in on hover for new players</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="ico ib">⊕</span> Zero-instruction onboarding</h3>
+    <ul>
+      <li>First game: ghost piece auto-traces the full spiral before start</li>
+      <li>Castle squares introduced via first interaction — player lands, safe shield pops</li>
+      <li>Dice values shown as large icons, not text</li>
+      <li>Valid pieces pulse — tap any to move</li>
+      <li>"Chess ancestor" lore card appears on first win</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="ico ic">◈</span> Cultural identity</h3>
+    <ul>
+      <li>Board texture: faint Vedic geometric pattern overlay</li>
+      <li>Castle marker: based on Indus Valley cross-hatch motif</li>
+      <li>Colour palette matches Pagade hub (indigo, saffron, sandstone)</li>
+      <li>Pieces: abstract pawns, not chess pieces (distinct identity)</li>
+      <li>Win screen: "You've traced the path of chess"</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slabel">Animation library</div>
+<div class="g4">
+  <div class="card"><h3><span class="ico ia">◎</span> Cowrie roll</h3><p>4 shells scatter, flip, settle one by one. Each mouth-up shell glows. Result shown as large number.</p></div>
+  <div class="card"><h3><span class="ico ib">↻</span> Spiral move</h3><p>Piece slides step-by-step along path (200ms/cell). Castle cells flash gold as piece passes through.</p></div>
+  <div class="card"><h3><span class="ico ic">✕</span> Capture</h3><p>Captured piece spins and retraces path back to start corner — reverse spiral animation.</p></div>
+  <div class="card"><h3><span class="ico id">★</span> Castle safety</h3><p>Attempted capture on castle: attacker bounces back 1 square with a ripple effect. Shield icon pulses.</p></div>
+  <div class="card"><h3><span class="ico ia">◈</span> Blockade</h3><p>Two same-colour pieces merge visually into a double-pawn with a lock icon. Enemy piece bounces at the blockade.</p></div>
+  <div class="card"><h3><span class="ico ib">◉</span> Home entry</h3><p>Piece reaching centre 4 squares: lotus bloom + gold spin on that cell. Piece locks in with a satisfying click sound.</p></div>
+  <div class="card"><h3><span class="ico ic">✦</span> Win celebration</h3><p>All 4 home pieces glow simultaneously. "You've traced the path of chess" banner rises from board centre.</p></div>
+  <div class="card"><h3><span class="ico id">⊙</span> Skip turn</h3><p>Roll 0: shells all face-down, board briefly dims, "Pass" badge fades across screen. No text needed.</p></div>
+</div>
+
+<div class="slabel">Game modes & exclusive features</div>
+<div class="g2">
+  <div class="card">
+    <h3><span class="ico ia">◈</span> Game modes</h3>
+    <ul>
+      <li>vs AI — 3 levels: Beginner / Prince / Maharaja</li>
+      <li>2-player local — pass-and-play on same device</li>
+      <li>Online multiplayer — real-time via WebSocket</li>
+      <li>Solo sprint — race all 4 pieces home, compare times</li>
+      <li>Historic mode — Vedic board skin + parchment UI</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3><span class="ico ib">◉</span> Exclusive features</h3>
+    <ul>
+      <li>"Chess ancestry tree" — visual showing Ashtapada → Chaturanga → Chess</li>
+      <li>Castle strategy guide unlocked after 5 games</li>
+      <li>Probability overlay: shows real-time % chance of rolling each value</li>
+      <li>Replay mode: watch any completed game step-by-step</li>
+      <li>Daily spiral challenge: specific board state, fewest moves to win</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slabel">Folder structure (Step 3)</div>
+<div class="card">
+  <h3><span class="ico ic">◈</span> Organised build structure</h3>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+    <div style="background:var(--color-background-secondary);border-radius:7px;padding:9px 10px"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px">frontend/</div><div style="font-size:10px;color:var(--color-text-secondary);line-height:1.7">index.html<br>css/style.css<br>js/constants.js<br>js/engine.js<br>js/renderer.js<br>js/ai.js<br>js/app.js</div></div>
+    <div style="background:var(--color-background-secondary);border-radius:7px;padding:9px 10px"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px">backend/</div><div style="font-size:10px;color:var(--color-text-secondary);line-height:1.7">server.js<br>routes/game.js<br>routes/users.js<br>routes/leaderboard.js<br>middleware/auth.js<br>middleware/ws.js</div></div>
+    <div style="background:var(--color-background-secondary);border-radius:7px;padding:9px 10px"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px">database/</div><div style="font-size:10px;color:var(--color-text-secondary);line-height:1.7">schema.sql<br>seeds.sql<br>models/Game.js<br>models/User.js<br>models/Move.js</div></div>
+    <div style="background:var(--color-background-secondary);border-radius:7px;padding:9px 10px"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px">features/</div><div style="font-size:10px;color:var(--color-text-secondary);line-height:1.7">ai-engine.md<br>multiplayer.md<br>progression.md<br>daily-challenge.md<br>replay-system.md</div></div>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:22px;padding-top:16px;border-top:0.5px solid var(--color-border-tertiary)">
+  <p style="font-size:11px;color:var(--color-text-tertiary)">Step 1 complete · Building the full game now</p>
+</div>
+
+</div>

@@ -1,0 +1,203 @@
+Love this concept — Warli Tales has incredible potential as a cultural + creative game! Before we build, let me ask the right questions so we architect this perfectly from the start.While you answer those — let me lay out the **full game strategy and architecture** I'm thinking of, so you can react to it and we'll refine before writing a single line of code.
+
+---
+
+## 🎨 Warli Tales — Game Strategy & Architecture Blueprint
+
+---
+
+### 🧠 Core Game Philosophy
+
+Warli art is **minimalist geometry** — circles, triangles, lines. This makes it *perfect* for a stick/shape builder because every Warli figure (human, animal, tree, hut) is composed of just **3 shapes**: ○ △ |. The game isn't about "drawing" — it's about **snapping shapes together to tell a story**, like magnetic poetry but visual and Indian.
+
+The magic happens at the intersection of **creative freedom + guided folktale structure**.
+
+---
+
+### 🏗️ Proposed Folder Structure
+
+```
+warli-tales/
+│
+├── frontend/                          # React + Vite
+│   ├── public/
+│   │   ├── sounds/                    # Audio assets
+│   │   │   ├── ambient/               # Forest, rain, festival loops
+│   │   │   ├── effects/               # Snap, place, celebrate sounds
+│   │   │   └── narration/             # Story narration audio (Hindi/English)
+│   │   ├── fonts/                     # Devanagari + English fonts
+│   │   └── warli-assets/
+│   │       ├── stickers/              # SVG Warli shapes (circle, triangle, line)
+│   │       └── backgrounds/           # Scene backgrounds (forest, village, river)
+│   │
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── canvas/
+│   │   │   │   ├── WarliCanvas.jsx    # Main drag-and-drop build area
+│   │   │   │   ├── MagnetGrid.jsx     # Snap-to-grid magnetic logic
+│   │   │   │   ├── ShapeElement.jsx   # Individual draggable shape
+│   │   │   │   └── SceneBackground.jsx
+│   │   │   ├── toolbar/
+│   │   │   │   ├── ShapePanel.jsx     # Shapes palette (○ △ | + combos)
+│   │   │   │   ├── CharacterPanel.jsx # Pre-built Warli characters
+│   │   │   │   ├── BackgroundPicker.jsx
+│   │   │   │   └── ColorPalette.jsx   # Warli colors (white, ochre, brown)
+│   │   │   ├── story/
+│   │   │   │   ├── StoryMode.jsx      # Guided folktale mode
+│   │   │   │   ├── NarrationBox.jsx   # Story text + audio player
+│   │   │   │   ├── StoryChapter.jsx   # Chapter-by-chapter flow
+│   │   │   │   └── QuestPrompt.jsx    # "Now place the tiger near the tree"
+│   │   │   ├── game/
+│   │   │   │   ├── FreePlayMode.jsx   # Open sandbox
+│   │   │   │   ├── ChallengeMode.jsx  # Recreate a given scene
+│   │   │   │   ├── ScoreBoard.jsx
+│   │   │   │   └── AchievementBadge.jsx
+│   │   │   └── ui/
+│   │   │       ├── ChildFriendlyBtn.jsx  # Big, round, colourful buttons
+│   │   │       ├── LoadingWarli.jsx       # Warli animation loader
+│   │   │       ├── Modal.jsx
+│   │   │       └── LanguageToggle.jsx
+│   │   │
+│   │   ├── features/
+│   │   │   ├── snap-engine/           # Magnetic snapping logic
+│   │   │   │   ├── snapToGrid.js
+│   │   │   │   ├── detectProximity.js
+│   │   │   │   └── magneticForce.js
+│   │   │   ├── story-engine/
+│   │   │   │   ├── storyParser.js     # Parse story JSON into steps
+│   │   │   │   ├── questValidator.js  # Check if child placed right shapes
+│   │   │   │   └── narratorAI.js      # Claude API narration
+│   │   │   ├── save-share/
+│   │   │   │   ├── exportCanvas.js    # Export as PNG/SVG
+│   │   │   │   ├── shareLink.js       # Generate shareable URL
+│   │   │   │   └── saveProgress.js
+│   │   │   └── audio/
+│   │   │       ├── soundManager.js
+│   │   │       └── narratorVoice.js
+│   │   │
+│   │   ├── animations/                # Framer Motion configs
+│   │   │   ├── shapeAnimations.js     # Bounce, snap, glow effects
+│   │   │   ├── pageTransitions.js     # Between screens
+│   │   │   ├── celebrationBurst.js    # Confetti/fireworks on success
+│   │   │   └── warliWalk.js          # Animated Warli figure walks
+│   │   │
+│   │   ├── styles/
+│   │   │   ├── globals.css
+│   │   │   ├── warli-theme.css        # Earth tones, textures
+│   │   │   ├── canvas.css
+│   │   │   └── components/
+│   │   │
+│   │   ├── data/
+│   │   │   ├── stories/
+│   │   │   │   ├── the-clever-crane.json
+│   │   │   │   ├── tiger-and-rabbit.json
+│   │   │   │   └── festival-of-lights.json
+│   │   │   ├── shapes-library.json    # All Warli shapes with metadata
+│   │   │   └── achievements.json
+│   │   │
+│   │   ├── hooks/
+│   │   │   ├── useSnap.js
+│   │   │   ├── useStory.js
+│   │   │   ├── useAudio.js
+│   │   │   └── useCanvas.js
+│   │   │
+│   │   └── pages/
+│   │       ├── Home.jsx               # Landing / character select
+│   │       ├── StoryWorld.jsx         # Story selection map
+│   │       ├── GameCanvas.jsx         # The main play screen
+│   │       ├── Gallery.jsx            # Saved creations
+│   │       └── HowToPlay.jsx
+│   │
+├── backend/                           # Node.js + Express
+│   ├── src/
+│   │   ├── routes/
+│   │   │   ├── stories.js             # Serve story JSON
+│   │   │   ├── gallery.js             # Save/fetch user creations
+│   │   │   ├── narration.js           # Claude API proxy
+│   │   │   └── auth.js               # Simple child-safe auth (name only)
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   │   └── rateLimiter.js        # Protect AI narration endpoint
+│   │   └── services/
+│   │       └── claudeNarrator.js     # Calls Claude to narrate scenes
+│   │
+├── database/                          # Schema definitions
+│   ├── schema.sql                     # (PostgreSQL) or
+│   ├── models/                        # (Mongoose) MongoDB models
+│   │   ├── User.js                    # Child profile (name, avatar, age)
+│   │   ├── Creation.js               # Saved canvas scenes
+│   │   ├── Progress.js               # Story progress, badges earned
+│   │   └── Gallery.js                # Public community gallery
+│   │
+└── docs/
+    ├── GAME_DESIGN.md
+    ├── STORY_FORMAT.md
+    └── API.md
+```
+
+---
+
+### 🎮 Game Modes (Detailed)
+
+| Mode | Description | Age | Tech |
+|---|---|---|---|
+| **Free Play** | Open sandbox — place any shapes, any arrangement | 5+ | Canvas + Framer |
+| **Story Mode** | Follow a folktale chapter by chapter, build each scene | 6+ | Story engine + Audio |
+| **Challenge Mode** | Recreate a given Warli scene — scored on accuracy | 8+ | Quest validator |
+| **Narrate Mode** | Build a scene, then AI narrates your story back to you | 7+ | Claude API |
+| **Festival Mode** | Seasonal: Diwali/Holi/Navratri themed scenes | All | Special asset packs |
+
+---
+
+### 🌟 Exclusive Features (Hackathon Differentiators)
+
+**1. 🧲 Magnetic Snap Engine**
+Shapes don't just drag — they *snap* together with a satisfying magnetic pull. Circles (heads) automatically centre over triangles (bodies). This prevents frustration for young children and creates authentic Warli proportions.
+
+**2. 🗣️ AI Story Narrator (Claude-powered)**
+Child builds a scene → presses "Tell My Story" → Claude API analyses the shapes placed and narrates an original folktale about that scene in Hindi or English. Every child's creation gets a *unique* story.
+
+**3. 🏕️ Scene Intelligence**
+The system detects what elements are on canvas (trees + animals = forest, huts + people = village) and **automatically suggests** matching backgrounds and ambient sounds. Drop a tiger → forest sounds fade in.
+
+**4. 🎖️ Warli Artisan Badges**
+Progressive achievement system with culturally named ranks: *Shagird (Apprentice)* → *Kalakar (Artist)* → *Chitrakaar (Master Painter)*. Badges are themselves tiny Warli artworks.
+
+**5. 📖 Community Gallery (Class Wall)**
+Classroom feature — teacher creates a "wall" and children share their scenes. Gallery displays creations as a collective Warli mural (all scenes stitched together).
+
+**6. 🔊 Tribal Audio Ecosystem**
+Authentic Warli/Adivasi ambient sounds (dhol, tarpa wind instrument, forest sounds). Each background has its own soundscape. Shapes make different sounds when placed (water → splash, fire → crackle).
+
+**7. 👆 One-Finger Mode**
+For ages 5–7: simplified mode where tapping a shape places it automatically in a pre-defined zone, no dragging required. Reduces motor skill barrier.
+
+---
+
+### 🎨 Visual Design Language
+
+- **Canvas texture**: Terracotta/mud wall look (not white screen)
+- **Shapes**: Chalk-white Warli strokes on brown background
+- **UI elements**: Organic, hand-drawn feel — no sharp corporate corners
+- **Typography**: Rounded, playful Devanagari for Hindi; Nunito/Baloo for English
+- **Palette**: Ochre `#C4692A`, Mud brown `#8B4513`, Chalk white `#F5F0E8`, Leaf green `#4A7C59`
+
+---
+
+### 📅 Build Phases
+
+```
+Phase 1 (Week 1-2):  Core Canvas + Snap Engine + Shape Library
+Phase 2 (Week 2-3):  Story Mode (2 stories) + Audio + Animations
+Phase 3 (Week 3-4):  AI Narration + Gallery + Badges
+Phase 4 (Polish):    Language toggle + Festival Mode + Demo video
+```
+
+---
+
+**Answer the questions above and let me know:**
+1. Any features you'd remove or change?
+2. Should I start with the **Canvas + Snap Engine** first (the heart of the game), or do you want the **full folder scaffold** set up first?
+3. Do you want the AI Narrator (Claude API) built into the game itself?
+
+Once you respond, I'll start building module by module. 🚀

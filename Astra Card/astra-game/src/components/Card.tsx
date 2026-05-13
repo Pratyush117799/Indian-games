@@ -33,18 +33,20 @@ export const Card: React.FC<CardProps> = ({ data, isActive = false }) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { stiffness: 150, damping: 20 });
-    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { stiffness: 150, damping: 20 });
+    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [20, -20]), { stiffness: 150, damping: 20 });
+    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-20, 20]), { stiffness: 150, damping: 20 });
+    
+    // Holographic shine effect
+    const shineX = useTransform(x, [-0.5, 0.5], ["0%", "100%"]);
+    const shineY = useTransform(y, [-0.5, 0.5], ["0%", "100%"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const rect = ref.current.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        const xPct = mouseX / width - 0.5;
-        const yPct = mouseY / height - 0.5;
+        const xPct = mouseX / rect.width - 0.5;
+        const yPct = mouseY / rect.height - 0.5;
         x.set(xPct);
         y.set(yPct);
     };
@@ -53,6 +55,8 @@ export const Card: React.FC<CardProps> = ({ data, isActive = false }) => {
         x.set(0);
         y.set(0);
     };
+
+    const rarityColor = data.rarity === 'Mythic' ? 'text-purple-400' : data.rarity === 'Legendary' ? 'text-yellow-400' : 'text-blue-400';
 
     return (
         <motion.div
@@ -66,71 +70,96 @@ export const Card: React.FC<CardProps> = ({ data, isActive = false }) => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             className={twMerge(
-                "relative w-[300px] h-[450px] rounded-xl border-2 p-1 shadow-2xl cursor-pointer transition-all duration-300",
+                "relative w-[300px] h-[450px] rounded-2xl border-2 p-1.5 shadow-2xl cursor-pointer transition-all duration-300 group",
                 getRarityGradient(data.rarity),
-                isActive ? "ring-4 ring-yellow-400/50" : ""
+                isActive ? "ring-8 ring-yellow-400/30 scale-105" : ""
             )}
         >
+            {/* Holographic Layer */}
+            <motion.div 
+                className="absolute inset-0 z-0 opacity-0 group-hover:opacity-20 pointer-events-none rounded-2xl bg-gradient-to-tr from-transparent via-white to-transparent"
+                style={{ 
+                    backgroundSize: '200% 200%',
+                    backgroundPositionX: shineX,
+                    backgroundPositionY: shineY,
+                }}
+            />
+
             <div
-                className="relative w-full h-full bg-black/40 rounded-lg p-4 flex flex-col justify-between overflow-hidden"
-                style={{ transform: "translateZ(20px)" }} // Depth effect
+                className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-xl p-5 flex flex-col justify-between overflow-hidden border border-white/5"
+                style={{ transform: "translateZ(30px)" }} 
             >
                 {/* Header */}
                 <div className="flex justify-between items-start z-10">
                     <div>
-                        <h3 className="font-bold text-lg text-white font-display tracking-wider drop-shadow-md">{data.name}</h3>
-                        <div className="flex items-center gap-1 text-xs text-gray-300">
+                        <h3 className={twMerge("font-black text-xl font-display tracking-tighter drop-shadow-lg leading-tight", rarityColor)}>
+                            {data.name.toUpperCase()}
+                        </h3>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
                             {getElementIcon(data.element)}
                             <span>{data.element}</span>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold text-yellow-500 drop-shadow-glow">
-                            {data.mantraCost}⚡
+                    <div className="bg-black/60 rounded-full w-12 h-12 flex items-center justify-center border border-yellow-500/50 shadow-inner">
+                        <span className="text-xl font-black text-yellow-500">
+                            {data.mantraCost}
                         </span>
                     </div>
                 </div>
 
-                {/* Artwork Placeholder */}
-                <div className="absolute inset-0 top-16 bottom-32 opacity-30 flex items-center justify-center">
-                    <Swords size={120} className="text-white/20" />
+                {/* Artwork Area */}
+                <div className="absolute inset-0 top-16 bottom-32 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+                    <motion.div 
+                        animate={{ scale: [1, 1.05, 1], rotate: [0, 2, 0, -2, 0] }}
+                        transition={{ duration: 5, repeat: Infinity }}
+                        className="opacity-40"
+                    >
+                        <Swords size={160} className="text-white/20" />
+                    </motion.div>
+                    
+                    {/* Element-specific particles (simplified) */}
+                    {data.element.includes('Fire') && <div className="absolute inset-0 bg-orange-500/5 animate-pulse" />}
+                    {data.element.includes('Thunder') && <div className="absolute inset-0 bg-yellow-400/5 animate-pulse" />}
                 </div>
 
-                {/* Description Box */}
-                <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg border border-white/10 z-10">
-                    <div className="flex justify-between items-center mb-2 border-b border-white/10 pb-1">
-                        <span className="text-xs font-semibold text-gray-400">{data.tier} Tier</span>
-                        <span className="text-lg font-bold text-red-400 tracking-wider">PWR {data.power}</span>
+                {/* Description & Ability Box */}
+                <div className="bg-black/80 backdrop-blur-xl p-4 rounded-xl border border-white/10 z-10 shadow-2xl">
+                    <div className="flex justify-between items-center mb-3 border-b border-white/10 pb-2">
+                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{data.tier} TIER</span>
+                        <div className="flex items-center gap-1">
+                            <span className="text-[10px] text-gray-400">POWER</span>
+                            <span className="text-xl font-black text-red-500 tracking-tighter">{data.power}</span>
+                        </div>
                     </div>
 
-                    <p className="text-xs text-gray-300 italic mb-2 min-h-[40px]">
+                    <p className="text-[11px] text-gray-400 italic mb-3 leading-relaxed">
                         "{data.description}"
                     </p>
 
                     {data.ability && (
-                        <div className="bg-white/5 p-2 rounded text-xs border-l-2 border-yellow-500">
-                            <span className="font-bold text-yellow-200">{data.ability.name}: </span>
-                            <span className="text-gray-300">{data.ability.effect}</span>
+                        <div className="bg-yellow-500/10 p-2.5 rounded-lg border-l-4 border-yellow-500/80">
+                            <div className="text-[10px] font-black text-yellow-500 uppercase mb-0.5">{data.ability.name}</div>
+                            <div className="text-[10px] text-gray-300 leading-snug">{data.ability.effect}</div>
                         </div>
                     )}
                 </div>
 
                 {/* Footer */}
                 <div className="flex justify-between items-center z-10 mt-2">
-                    <span className={clsx(
-                        "text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-bold",
-                        data.rarity === 'Mythic' ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"
+                    <div className={twMerge(
+                        "text-[9px] px-3 py-1 rounded-full uppercase tracking-widest font-black",
+                        data.rarity === 'Mythic' ? "bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]" : 
+                        data.rarity === 'Legendary' ? "bg-yellow-600 text-black" : "bg-gray-700 text-gray-300"
                     )}>
                         {data.rarity}
-                    </span>
-                    <div className="flex gap-1">
-                        {/* Small counters indicators could go here */}
                     </div>
+                    <div className="text-[8px] text-gray-500 font-mono">ASTRA-#{data.id.toString().padStart(3, '0')}</div>
                 </div>
             </div>
 
-            {/* Gloss/Shine Effect Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 rounded-xl pointer-events-none" />
+            {/* Glass Glare Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </motion.div>
     );
 };

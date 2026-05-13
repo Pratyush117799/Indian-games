@@ -110,3 +110,122 @@
 ... (Prompts 121–150 follow similar detailed pattern for cards like Naagastra, Garudastra, Durga Trishul, Kali Khadga, Parashurama Parashu, etc. – each with unique elemental/dynamic effects)
 
 **Total Prompts**: 50+ (expanded list available; these cover Supreme + key expansions with visual dynamism for game animations).
+# ASTRA: Weapons of the Gods – Card Mechanics Integration Guide
+
+This document provides a comprehensive, structured overview of integrating the core card mechanics from the 200-card database into the game's systems. The mechanics—**Power**, **Mantra Cost**, **Element**, **Tier**, **Rarity**, **Ability**, **Counters**, and **Countered By**—form the strategic backbone, rooted in mythological fidelity (e.g., Brahmastra's mutual neutralization).
+
+Integration is explored across **both game modes** (Classic strategic duel and Clash real-time battler), with attention to **UI/UX display**, **animation/VFX hooks**, **technical considerations** (balance, edge cases, performance), **gameplay implications**, and **nuances** (risk-reward, counterplay depth). Examples draw from supreme/elemental cards for clarity.
+
+## Core Mechanics Recap & Design Principles
+- **Power**: Raw strength (1–12). Base for combat/damage.
+- **Mantra Cost**: Invocation resource (1–6). Balances tempo.
+- **Element**: Primary/secondary (e.g., Divine/Thunder). Drives +3 counter bonus.
+- **Tier**: Supreme > Celestial > Elemental > Conventional (+2 Power vs lower).
+- **Rarity**: Visual flair (holographic Mythic) + progression gating.
+- **Ability**: Special text (e.g., Eternal, Stun). Triggers on play/resolution.
+- **Counters/Countered By**: Mythological overrides (auto-win if matched).
+
+**Principles**:
+- **Fidelity**: Mechanics mirror epics (e.g., Narayanastra countered by "surrender").
+- **Depth vs Accessibility**: Visual cues teach counters intuitively.
+- **Balance Nuances**: Supreme cards high-risk (mutual destruction); abilities cost-equivalent.
+- **Edge Cases**: Simultaneous supremes → draw/no damage; unopposed Brahmashirsha → wipe.
+- **Digital Hooks**: All mechanics trigger VFX/particles synced to element (e.g., serpent coils for poison).
+
+## Integration in Classic Mode (Turn-Based Strategic Duel)
+Classic Mode emphasizes thoughtful counterplay. Mechanics integrate via phased resolution.
+
+### Combat Resolution Flow
+1. **Play Phase**: Pay Mantra Cost (orb depletion animation). Card snaps to field with invocation flash + element particles.
+2. **Battle Phase**: Select attacker → target. Overlay shows breakdown:
+   - Base Power comparison.
+   - Tier bonus (+2 glow pulse).
+   - Elemental counter (+3 flare if active).
+   - Specific counter (override trumpet fanfare + neutralization explosion).
+3. **Resolution**: Winner deals difference damage (pop-up numbers). Loser to graveyard (fade with ash/serpent particles for supremes).
+4. **Ability Triggers**: On-play (e.g., Eternal return hand bounce), on-clash (e.g., Stun skip icon).
+
+**Examples**:
+- Brahmastra (Power 10, Divine) vs Agneyastra (Power 7, Fire): Tier + Element → +5 total → overwhelming win.
+- Brahmastra vs Brahmastra: Specific counter → mutual cosmic serpent explosion, both destroyed.
+
+**Nuances & Edge Cases**:
+- Ties: Both destroyed (dramatic equal energy clash VFX).
+- Surrender Mechanic (Narayanastra): Prompt opponent "Discard hand to negate?" (yes → no effect).
+- Multi-Element: Check all combinations for counters.
+
+**Implications**: Encourages reading opponents' field; rewards lore knowledge.
+
+## Integration in Clash Mode (Real-Time Lane Battle)
+Clash transforms cards into deployable units/spells. Mechanics derive stats dynamically.
+
+### Deployment & Stat Derivation
+- **Cost**: Direct Mantra Cost (orb spend with nectar splash).
+- **Power → Stats**:
+  - HP: Power × 60–80 (tanky for artifacts).
+  - Damage: Power × 20–30.
+  - Speed/Range: Scaled by tier (Supreme slow/global).
+- **Element/Tier**: Targeting priority (e.g., Garuda prefers serpents) + VFX trails.
+- **Ability**: Passive/active (e.g., Vajra stun on hit → freeze frame).
+- **Counters**: Auto-resolve in collisions (e.g., countered unit instant defeat with thematic VFX).
+
+**Examples**:
+- Sudarshana Chakra (Supreme): Deploys as homing unit, returns on kill (boomerang animation).
+- Mohanastra (Illusion): Area spell → confusion (units random walk 8s).
+
+**Nuances & Edge Cases**:
+- Supreme Spells: Require "no counter in opponent hand" check (peek mechanic or honor system).
+- Swarm Abilities (Naagastra): Multi-entity spawn with poison DoT ticks.
+- Mirror Matches: Mutual counters → spectacular neutralization (field clear).
+
+**Implications**: Fast decisions; abilities create comeback swings.
+
+## UI/UX Integration: Displaying & Interacting with Mechanics
+Mechanics must be visible, teachable, and spectacular.
+
+### Key UI Elements
+- **Card Detail View**: Full breakdown overlay.
+- **In-Battle Tooltips**: Hover/tap for predictions.
+- **Combat Overlay**: Step-by-step resolution log.
+- **VFX Pipeline**: Element-specific (thunder crackle, fire embers).
+
+### Refined UI Prompts for Mechanics-Focused Elements
+
+#### 1. Card Detail / Preview Overlay (Core Mechanic Display)
+**Explanation**: Central to learning. Shows all stats interactively. Tap sections expand (e.g., counters list with opponent deck hints). 3D flip for premium feel. Edge case: Long abilities scroll.
+
+**Prompt**:  
+"Highly detailed card detail overlay UI for mythology game card. Large centered holographic card with 3D tilt/rotate on drag, element-based border glow pulsing (gold divine for Supreme, blue lightning for Thunder). Top: Name in ornate Cinzel with rarity foil shine (Mythic rainbow hologram). Stats row: Power orb (glowing numeral with strength aura), Mantra Cost orbs (filling nectar animation on hover). Element icons in chakra wheel (multi-element composite glow). Tier badge as jeweled crown (Supreme brightest). Ability text in illuminated scroll with keyword highlights (e.g., 'Eternal' bold gold). Counters section: 'Counters:' list with glowing icons, 'Countered By:' warning red alerts. Flavor quote bottom in Devanagari-accent script. Interactive: Tap counters for lore popup. Background: Ethereal pedestal with weapon-specific particles (serpent coils for Brahmastra). Intuitive teaching UI with zoom/pan and share button, 4k premium mockup."
+
+#### 2. Combat Resolution Overlay (Classic Mode Specific)
+**Explanation**: Transparent mid-screen during clashes. Builds tension with sequential reveals. Log for replay analysis.
+
+**Prompt**:  
+"Dynamic combat resolution overlay for turn-based duel. Semi-transparent mandala frame centering clash: Attacker card left, defender right, connecting energy beams (color by element). Step-by-step breakdown panels revealing sequentially: Base Power numerals pulsing, Tier bonus (+2 gold flare animation), Elemental counter (+3 matching icon explosion), Specific counter (trumpet fanfare + override text 'Mythological Neutralization!'). Final damage pop-up with flying numbers and life chakra depletion. Tie case: Mutual serpent coil explosion VFX filling screen. Ability triggers as side banners. Close on resolution with ripple fade. Background dimmed battlefield. Clear, educational UI teaching mechanics visually, with pause for reading, 4k cinematic mockup."
+
+#### 3. Unit Stat & Ability Display (Clash Mode Specific)
+**Explanation**: Above units during battle. Health bar with shields for abilities. Tooltip on tap.
+
+**Prompt**:  
+"Clash Mode unit overhead UI. Health bar as jeweled chakra orb depleting with element crack effects. Damage icon with Power-derived numeral. Ability badges as glowing mandala icons (e.g., Stun lightning bolt pulsing). On tap: Expanded tooltip with full card preview and counter predictions vs nearby enemies. Trail particles matching element. Supreme units larger scale with cosmic aura. Performance-optimized for multi-unit battles, 4k mobile mockup."
+
+#### 4. Mantra Resource Display (Shared Across Modes)
+**Explanation**: Universal resource. Visual fill for satisfaction. Overcap warning subtle.
+
+**Prompt**:  
+"Mantra resource bar UI shared element. Horizontal/vertical elixir gauge with 10 orb slots filling sequentially with blue-gold nectar drops and splash particles on gain. Current count large glowing numeral overlay. Overfill prevention: Orbs shimmer red if at max. Classic: Turn-based +1 bloom animation. Clash: Continuous regen with timer droplets. Icon: Conch shell motif. Elegant, satisfying resource UI with haptic feedback on spend, 4k mockup."
+
+#### 5. Counter Prediction Tooltip (Advanced Interaction)
+**Explanation**: Proactive teaching. Hover over opponent field predicts outcomes.
+
+**Prompt**:  
+"Intelligent counter prediction tooltip UI. On hover/tap opponent card: Floating mandala overlay showing 'Your [Card] vs This: Likely Win/Loss' with mini breakdown (tier/element icons glowing green/red). Specific counter warning: Dramatic red serpent alert 'Neutralized by Brahmastra!'. Helps new players without spoiling strategy. Subtle, optional toggle in settings, 4k insightful mockup."
+
+## Digital Implementation Notes & Edge Cases
+- **Code Hooks**: Use database JSON for stat lookup. Ability engine: Event system (onPlay, onClash, onDeath).
+- **Balance Testing**: Simulate 1000 matches for supreme win rates (<10% ideal).
+- **Performance**: Cache VFX; particle limits on mobile.
+- **Accessibility**: Text-to-speech for abilities; color-blind element shapes.
+- **Monetization Tie-In**: Rarity affects crafting cost; abilities gated by levels.
+
+This integration ensures mechanics feel alive, mythic, and fair—rewarding skill and lore mastery while remaining approachable. If you'd like code snippets (e.g., ability resolver in TypeScript), more prompts, or balance simulations, let me know!

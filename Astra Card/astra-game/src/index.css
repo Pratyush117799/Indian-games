@@ -4,11 +4,42 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-white overflow-x-hidden;
+    @apply bg-slate-950 text-white overflow-x-hidden antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: 'Cinzel', serif;
   }
 }
 
-/* Custom Gradients if needed */
-.card-glow {
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+@layer utilities {
+  .bg-astra-gold {
+    @apply bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600;
+  }
+  .text-glow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  .shadow-glow {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }

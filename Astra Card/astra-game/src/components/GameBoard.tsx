@@ -54,42 +54,96 @@ export const GameBoard: React.FC<GameBoardProps> = ({ playerDeck, onExit }) => {
         addLog(`Invoked ${card.name} to Slot ${fieldIdx + 1}`);
     };
 
-    const endTurn = () => {
-        // Trigger Battle Phase for all fielded cards
-        setPhase('battle');
-        addLog("Battle Phase Initiated!");
+    const aiTurn = () => {
+        addLog("Opponent's Turn...");
         
-        // Resolve combat for each slot
-        playerField.forEach((pCard, idx) => {
-            const eCard = enemyField[idx];
-            if (pCard && eCard) {
-                const result = calculateCombatResult(pCard, eCard);
-                result.log.forEach(l => addLog(l));
-                if (result.winner === 'attacker') {
-                    // Enemy card destroyed (simulation)
-                    const newEnemyField = [...enemyField];
-                    newEnemyField[idx] = null;
-                    setEnemyField(newEnemyField);
-                    setEnemyLife(l => Math.max(0, l - result.damageDealt));
-                } else {
-                    const newPlayerField = [...playerField];
-                    newPlayerField[idx] = null;
-                    setPlayerField(newPlayerField);
-                    setPlayerLife(l => Math.max(0, l - result.damageDealt));
-                }
-            } else if (pCard && !eCard) {
-                addLog(`${pCard.name} attacks directly!`);
-                setEnemyLife(l => Math.max(0, l - pCard.power));
-            }
-        });
-
-        // AI Sim turn (simple)
+        // Simulating AI thinking
         setTimeout(() => {
-            setMantra(m => Math.min(m + 2, 10));
-            setTurn(t => t + 1);
-            setPhase('main');
-            addLog(`Turn ${turn + 1} Started.`);
-        }, 1500);
+            const newEnemyField = [...enemyField];
+            const newEnemyHand = [...enemyHand];
+            
+            // Try to play up to 2 cards
+            let cardsPlayed = 0;
+            for (let i = 0; i < newEnemyHand.length && cardsPlayed < 2; i++) {
+                const card = newEnemyHand[i];
+                // Find empty slot
+                const emptySlot = newEnemyField.findIndex(s => s === null);
+                if (emptySlot !== -1 && mantra >= card.mantraCost) {
+                    newEnemyField[emptySlot] = card;
+                    newEnemyHand.splice(i, 1);
+                    cardsPlayed++;
+                    addLog(`Opponent invoked ${card.name}!`);
+                }
+            }
+            
+            setEnemyField(newEnemyField);
+            setEnemyHand(newEnemyHand);
+            
+            // Proceed to Battle
+            setTimeout(resolveBattle, 1000);
+        }, 1000);
+    };
+
+    const endTurn = () => {
+        if (phase !== 'main') return;
+        setPhase('battle');
+        aiTurn();
+    };
+
+    const resolveBattle = () => {
+        addLog("Battle Commencing!");
+        
+        // Sequential resolution for drama
+        let currentSlot = 0;
+        const interval = setInterval(() => {
+            if (currentSlot >= 5) {
+                clearInterval(interval);
+                finalizeTurn();
+                return;
+            }
+
+            const pCard = playerField[currentSlot];
+            const eCard = enemyField[currentSlot];
+
+            if (pCard || eCard) {
+                if (pCard && eCard) {
+                    const result = calculateCombatResult(pCard, eCard);
+                    result.log.forEach(l => addLog(l));
+                    
+                    if (result.winner === 'attacker') {
+                        setEnemyField(prev => {
+                            const n = [...prev]; n[currentSlot] = null; return n;
+                        });
+                        setEnemyLife(l => Math.max(0, l - result.damageDealt));
+                    } else {
+                        setPlayerField(prev => {
+                            const n = [...prev]; n[currentSlot] = null; return n;
+                        });
+                        setPlayerLife(l => Math.max(0, l - result.damageDealt));
+                    }
+                } else if (pCard) {
+                    addLog(`${pCard.name} strikes the opponent directly!`);
+                    setEnemyLife(l => Math.max(0, l - pCard.power));
+                } else if (eCard) {
+                    addLog(`Opponent's ${eCard.name} strikes you directly!`);
+                    setPlayerLife(l => Math.max(0, l - eCard.power));
+                }
+            }
+            currentSlot++;
+        }, 800);
+    };
+
+    const finalizeTurn = () => {
+        setMantra(m => Math.min(m + 2, 10));
+        setTurn(t => t + 1);
+        
+        // Draw 1 card each
+        if (playerDeck.length > playerHand.length + 5) {
+            setPlayerHand(prev => [...prev, playerDeck[Math.floor(Math.random() * playerDeck.length)]]);
+        }
+        
+        setPhase('main');
+        addLog(`--- Turn ${turn + 1} ---`);
     };
 
     return (

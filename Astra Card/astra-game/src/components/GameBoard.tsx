@@ -242,4 +242,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ playerDeck, onExit }) => {
 
                 {/* Surrender */}
                 <button onClick={onExit} className="absolute bottom-4 right-4 text-gray-600 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest">
-      
+                    Surrender Duel
+                </button>
+            </div>
+        </div>
+    );
+};

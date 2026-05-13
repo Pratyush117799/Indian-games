@@ -16,7 +16,7 @@ client = SarvamAI(api_subscription_key=api_key)
 # 3. Call the Chat API (Generating Code)
 print("Sending request to Sarvam AI...")
 try:
-    response = client.chat.completions.create(
+    response = client.chat.completions(
         model="sarvam-2-beta",
         messages=[
             {"role": "user", "content": "Write a Python function to check if a number is prime and explain it briefly."}

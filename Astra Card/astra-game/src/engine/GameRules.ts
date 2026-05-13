@@ -30,28 +30,39 @@ export const calculateCombatResult = (attacker: Weapon, defender: Weapon) => {
         log.push(`${attacker.name} overpowers ${defender.name} due to higher Tier! (+2 Power)`);
     }
 
-    // 2. Check Elemental Counters (Simple contains check)
+    // 2. Check Elemental Counters
     const attackerElements = attacker.element.split('/');
     const defenderElements = defender.element.split('/');
 
     let counterBonus = 0;
-
     attackerElements.forEach(aEl => {
-        // Check main chart
         if (ELEMENTAL_CHART[aEl]) {
             defenderElements.forEach(dEl => {
                 if (ELEMENTAL_CHART[aEl].includes(dEl)) {
-                    counterBonus += 2;
-                    log.push(`${aEl} counters ${dEl}! (+2 Power)`);
+                    counterBonus += 3; // +3 as per manual
+                    log.push(`${aEl} counters ${dEl}! (+3 Power)`);
                 }
             });
         }
     });
 
-    // Explicit Counters from Card Data
-    if (attacker.counters.some(c => defender.name.includes(c) || defender.element.includes(c))) {
-        counterBonus += 3;
-        log.push(`${attacker.name} specifically counters ${defender.name}! (+3 Power)`);
+    // 3. Explicit Counters (Mythological Override)
+    // If matched, the attacker automatically wins the clash.
+    const isSpecificCounter = attacker.counters.some(c => 
+        defender.name.toLowerCase().includes(c.toLowerCase()) || 
+        defender.element.toLowerCase().includes(c.toLowerCase())
+    );
+
+    if (isSpecificCounter) {
+        log.push(`${attacker.name} specifically counters ${defender.name}! Mythological Neutralization (Auto-win)!`);
+        return {
+            winner: 'attacker',
+            damageDealt: attacker.power, // Deals full power as damage in case of auto-win? 
+            // Or difference? Manual says "Countering card wins the clash automatically".
+            // I'll assume it bypasses defense.
+            log,
+            neutralized: true
+        };
     }
 
     const totalAttack = attackPower + counterBonus;
@@ -62,6 +73,7 @@ export const calculateCombatResult = (attacker: Weapon, defender: Weapon) => {
     return {
         winner: totalAttack >= defensePower ? 'attacker' : 'defender',
         damageDealt: damage,
-        log
+        log,
+        neutralized: false
     };
 };

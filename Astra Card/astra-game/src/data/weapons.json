@@ -1,8 +1,8 @@
 [
     {
         "id": 1,
-        "name": "Brahmastra",
-        "tier": "Supreme",
+        "name": "BRAHMASTRA",
+        "tier": "Conventional",
         "power": 10,
         "mantraCost": 5,
         "element": "Divine",
@@ -13,17 +13,17 @@
             "Brahmastra",
             "Brahmashirsha"
         ],
-        "rarity": "Legendary",
+        "rarity": "Epic",
         "ability": {
-            "name": "Eternal",
-            "effect": "Returns to hand if destroyed"
+            "name": "Special",
+            "effect": "Eternal - returns to hand if destroyed"
         },
-        "description": "Brahma's ultimate weapon of creation and destruction."
+        "description": "Infinite serpent holding cosmos"
     },
     {
         "id": 2,
-        "name": "Brahmashirsha Astra",
-        "tier": "Supreme",
+        "name": "BRAHMASHIRSHA ASTRA",
+        "tier": "Conventional",
         "power": 12,
         "mantraCost": 6,
         "element": "Divine",
@@ -36,15 +36,15 @@
         ],
         "rarity": "Mythic",
         "ability": {
-            "name": "Uncounterable",
+            "name": "Special",
             "effect": "Cannot be countered by Brahmastra; deals double damage if uncountered"
         },
-        "description": "Four-headed Brahmastra, four times more powerful."
+        "description": "Four-headed Brahmastra, four times more powerful"
     },
     {
         "id": 3,
-        "name": "Pashupatastra",
-        "tier": "Supreme",
+        "name": "PASHUPATASTRA",
+        "tier": "Conventional",
         "power": 12,
         "mantraCost": 6,
         "element": "Divine",
@@ -52,19 +52,19 @@
             "All weapons"
         ],
         "counteredBy": [
-            "Pashupatastra"
+            "Pashupatastra only"
         ],
         "rarity": "Mythic",
         "ability": {
-            "name": "Destroyer",
+            "name": "Special",
             "effect": "If this wins, opponent discards 2 random cards"
         },
-        "description": "Shiva's most destructive weapon, destroyer of all creation."
+        "description": "Shiva's most destructive weapon, destroyer of all creation"
     },
     {
         "id": 4,
-        "name": "Narayanastra",
-        "tier": "Supreme",
+        "name": "NARAYANASTRA",
+        "tier": "Conventional",
         "power": 11,
         "mantraCost": 6,
         "element": "Divine",
@@ -72,20 +72,20 @@
             "All lower weapons"
         ],
         "counteredBy": [
-            "Submission",
+            "Submission (player must not resist)",
             "Supreme weapons"
         ],
         "rarity": "Mythic",
         "ability": {
-            "name": "Surrender",
-            "effect": "Grows stronger if opponent defends (+2 power per defense card)"
+            "name": "Special",
+            "effect": "Grows stronger if opponent defends (add +2 power per defense card)"
         },
-        "description": "Vishnu's weapon that only respects surrender."
+        "description": "Vishnu's weapon that only respects surrender"
     },
     {
         "id": 5,
-        "name": "Vaishnavastra",
-        "tier": "Supreme",
+        "name": "VAISHNAVASTRA",
+        "tier": "Conventional",
         "power": 10,
         "mantraCost": 5,
         "element": "Divine",
@@ -94,46 +94,168 @@
             "Dark element"
         ],
         "counteredBy": [
-            "Supreme tier"
+            "Supreme tier only"
         ],
         "rarity": "Legendary",
         "ability": {
-            "name": "Preserver",
+            "name": "Special",
             "effect": "Gain 2 Life Points when played"
         },
-        "description": "Vishnu's protective and destructive force."
+        "description": "Vishnu's protective and destructive force"
     },
     {
         "id": 6,
-        "name": "Maheswarastra",
-        "tier": "Supreme",
+        "name": "MAHESWARASTRA (Aishika)",
+        "tier": "Conventional",
         "power": 11,
         "mantraCost": 6,
         "element": "Divine",
         "counters": [
-            "All demons",
-            "Asuras"
+            "All demons and Asuras"
         ],
         "counteredBy": [
             "Supreme weapons"
         ],
         "rarity": "Mythic",
         "ability": {
-            "name": "Banish",
-            "effect": "Banish target weapon permanently"
+            "name": "Special",
+            "effect": "Banish target weapon permanently (remove from game)"
         },
-        "description": "Combined power of Shiva's arsenal."
+        "description": "Combined power of Shiva's arsenal"
+    },
+    {
+        "id": 7,
+        "name": "BRAHMANDA ASTRA",
+        "tier": "Conventional",
+        "power": 10,
+        "mantraCost": 5,
+        "element": "Divine/Cosmic",
+        "counters": [
+            "Multiple targets (all opponents)"
+        ],
+        "counteredBy": [
+            "Supreme weapons",
+            "Cosmic shields"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Special",
+            "effect": "Damages all opponents for full power"
+        },
+        "description": "Contains the power of the universe itself"
+    },
+    {
+        "id": 8,
+        "name": "SUDARSHANA CHAKRA (Supreme Version)",
+        "tier": "Conventional",
+        "power": 10,
+        "mantraCost": 5,
+        "element": "Divine/Fire",
+        "counters": [
+            "Cannot be dodged or blocked by lower tiers"
+        ],
+        "counteredBy": [
+            "Supreme weapons"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Special",
+            "effect": "Pierce - ignores all defense cards"
+        },
+        "description": "Vishnu's spinning disc that never misses"
+    },
+    {
+        "id": 9,
+        "name": "TRISHUL (Supreme Version)",
+        "tier": "Conventional",
+        "power": 11,
+        "mantraCost": 6,
+        "element": "Divine",
+        "counters": [
+            "Grants immunity to elemental effects"
+        ],
+        "counteredBy": [
+            "Supreme divine weapons"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Special",
+            "effect": "Remove all status effects from yourself"
+        },
+        "description": "Shiva's trident representing past, present, future"
+    },
+    {
+        "id": 10,
+        "name": "VASAVI SHAKTI",
+        "tier": "Conventional",
+        "power": 11,
+        "mantraCost": 6,
+        "element": "Divine/Thunder",
+        "counters": [
+            "Any single target",
+            "cannot be countered by lower tiers"
+        ],
+        "counteredBy": [
+            "Supreme weapons only"
+        ],
+        "rarity": "Mythic",
+        "ability": {
+            "name": "Special",
+            "effect": "One-time use per game; guaranteed hit on target"
+        },
+        "description": "Indra's spear given to Karna, ensures one kill"
+    },
+    {
+        "id": 11,
+        "name": "SHIVA DHANUSH",
+        "tier": "Conventional",
+        "power": 10,
+        "mantraCost": 5,
+        "element": "Divine",
+        "counters": [
+            "Can fire multiple Elemental astras in one turn"
+        ],
+        "counteredBy": [
+            "Supreme weapons"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Special",
+            "effect": "When played, may play one Elemental weapon for free"
+        },
+        "description": "Shiva's bow that launches divine arrows"
+    },
+    {
+        "id": 12,
+        "name": "MODAKI (Gada Supreme)",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Divine/Force",
+        "counters": [
+            "All physical weapons"
+        ],
+        "counteredBy": [
+            "Supreme weapons"
+        ],
+        "rarity": "Legendary",
+        "ability": {
+            "name": "Special",
+            "effect": "Stun - opponent skips next attack phase"
+        },
+        "description": "Vishnu's mace of overwhelming force"
     },
     {
         "id": 13,
-        "name": "Vajra",
-        "tier": "Celestial",
+        "name": "VAJRA",
+        "tier": "Conventional",
         "power": 8,
         "mantraCost": 4,
         "element": "Thunder",
         "counters": [
             "Water",
-            "Demons"
+            "Demons",
+            "Asuras"
         ],
         "counteredBy": [
             "Earth",
@@ -141,15 +263,35 @@
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Stun",
-            "effect": "Target cannot attack next turn"
+            "name": "Special",
+            "effect": "Stun - target cannot attack next turn"
         },
-        "description": "Indra's thunderbolt forged from Dadhichi's bones."
+        "description": "Indra's thunderbolt forged from Dadhichi's bones"
+    },
+    {
+        "id": 14,
+        "name": "PINAKA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Divine/Multi",
+        "counters": [
+            "Can shoot any elemental arrow"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Choose element when played"
+        },
+        "description": "Shiva's bow that destroys three cities"
     },
     {
         "id": 15,
-        "name": "Gandiva",
-        "tier": "Celestial",
+        "name": "GANDIVA",
+        "tier": "Conventional",
         "power": 7,
         "mantraCost": 3,
         "element": "Divine",
@@ -157,41 +299,380 @@
             "Never runs out of arrows"
         ],
         "counteredBy": [
-            "Celestial",
-            "Supreme"
+            "Celestial/Supreme"
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Multishot",
+            "name": "Special",
             "effect": "Draw 1 card when played"
         },
-        "description": "Arjuna's divine bow gifted by Agni."
+        "description": "Arjuna's divine bow gifted by Agni"
+    },
+    {
+        "id": 16,
+        "name": "SHARANGA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Divine",
+        "counters": [
+            "Multiple enemies"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Can target 2 players for half damage each"
+        },
+        "description": "Vishnu's/Rama's bow of great power"
     },
     {
         "id": 17,
-        "name": "Sudarshana Chakra",
-        "tier": "Celestial",
+        "name": "SUDARSHANA CHAKRA (Standard)",
+        "tier": "Conventional",
         "power": 7,
         "mantraCost": 4,
         "element": "Fire/Divine",
         "counters": [
+            "Returns after use",
             "Fire weapons"
         ],
         "counteredBy": [
             "Water",
-            "Celestial"
+            "Celestial/Supreme"
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Return",
-            "effect": "Returns to hand after use"
+            "name": "Special",
+            "effect": "This card returns to hand after use"
         },
-        "description": "Vishnu's disc weapon that always returns."
+        "description": "Vishnu's disc weapon that always returns"
+    },
+    {
+        "id": 18,
+        "name": "KAUMODAKI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Force",
+        "counters": [
+            "Armored enemies",
+            "Shields"
+        ],
+        "counteredBy": [
+            "Ranged weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Pierce shields"
+        },
+        "description": "Vishnu's mace representing Prana"
+    },
+    {
+        "id": 19,
+        "name": "NANDAKA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Divine",
+        "counters": [
+            "Dark forces",
+            "Demons"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Deals +2 damage to Asura-type cards"
+        },
+        "description": "Vishnu's sword of discrimination"
+    },
+    {
+        "id": 20,
+        "name": "PASHA (Varuna's Noose)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Water/Binding",
+        "counters": [
+            "Cannot be escaped"
+        ],
+        "counteredBy": [
+            "Sharp weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Bind - target cannot play weapons next turn"
+        },
+        "description": "Varuna's noose that binds lawbreakers"
+    },
+    {
+        "id": 21,
+        "name": "GADA (Bhima's Mace)",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Force",
+        "counters": [
+            "Heavy armor",
+            "structures"
+        ],
+        "counteredBy": [
+            "Speed weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Breakthrough - excess damage carries to next opponent"
+        },
+        "description": "Bhima's mighty mace of incredible strength"
+    },
+    {
+        "id": 22,
+        "name": "INDRA'S NET",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 3,
+        "element": "Divine/Trap",
+        "counters": [
+            "All projectile weapons"
+        ],
+        "counteredBy": [
+            "Cutting weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - reflects projectile damage back"
+        },
+        "description": "Net of infinite jewels reflecting all reality"
+    },
+    {
+        "id": 23,
+        "name": "KHATVANGA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Divine/Dark",
+        "counters": [
+            "Spiritual enemies"
+        ],
+        "counteredBy": [
+            "Light weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Sacrifice 2 Life Points to deal +4 damage"
+        },
+        "description": "Tantric staff with skull, Shiva's weapon"
+    },
+    {
+        "id": 24,
+        "name": "PARSHU (Parashurama's Axe)",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Force/Divine",
+        "counters": [
+            "Warriors",
+            "Kshatriyas"
+        ],
+        "counteredBy": [
+            "Brahmin weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Cleave - damages 2 adjacent targets"
+        },
+        "description": "Shiva's axe wielded by Parashurama"
+    },
+    {
+        "id": 25,
+        "name": "KODANDA (Rama's Bow Form)",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Divine",
+        "counters": [
+            "Demons",
+            "Rakshasas"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "+3 damage vs Demon-type cards"
+        },
+        "description": "Another form of Shiva's bow used by Rama"
+    },
+    {
+        "id": 26,
+        "name": "VIJAYA DHANUSH",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Divine",
+        "counters": [
+            "Grants invincibility during use"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme divine weapons"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Take 2 less damage from all sources this turn"
+        },
+        "description": "Bow of assured victory given by Shiva"
+    },
+    {
+        "id": 27,
+        "name": "KAUNDINYA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Earth/Divine",
+        "counters": [
+            "Flying enemies"
+        ],
+        "counteredBy": [
+            "Earth weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Ground - prevents flying/evasion abilities"
+        },
+        "description": "Sacred weapon of earth binding"
+    },
+    {
+        "id": 28,
+        "name": "NARASIMHA CLAWS",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Divine/Fury",
+        "counters": [
+            "Invulnerable enemies",
+            "demons"
+        ],
+        "counteredBy": [
+            "Calming weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Bypasses immunity effects"
+        },
+        "description": "Vishnu's avatar claws that tear anything"
+    },
+    {
+        "id": 29,
+        "name": "TRISHULA (Standard)",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Divine",
+        "counters": [
+            "Removes status effects"
+        ],
+        "counteredBy": [
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Cleanse all negative effects"
+        },
+        "description": "Shiva's three-pronged weapon"
+    },
+    {
+        "id": 30,
+        "name": "KAMADEVA'S BOW",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 3,
+        "element": "Charm",
+        "counters": [
+            "Mind",
+            "Will"
+        ],
+        "counteredBy": [
+            "Meditation weapons",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Mind Control - steal opponent's card"
+        },
+        "description": "Bow of desire that pierces hearts"
+    },
+    {
+        "id": 31,
+        "name": "YAMA'S DANDA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Death/Divine",
+        "counters": [
+            "All mortals"
+        ],
+        "counteredBy": [
+            "Immortality",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Execute - if target below 5 Life Points, instant defeat"
+        },
+        "description": "Staff of death that claims souls"
+    },
+    {
+        "id": 32,
+        "name": "TUMBURU VEENA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Sound/Divine",
+        "counters": [
+            "Creates harmony",
+            "pacifies"
+        ],
+        "counteredBy": [
+            "Silence",
+            "Celestial/Supreme"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Heal 3 Life Points when played"
+        },
+        "description": "Divine instrument creating cosmic music"
     },
     {
         "id": 33,
-        "name": "Agneyastra",
-        "tier": "Elemental",
+        "name": "AGNEYASTRA",
+        "tier": "Conventional",
         "power": 7,
         "mantraCost": 3,
         "element": "Fire",
@@ -202,41 +683,105 @@
         ],
         "counteredBy": [
             "Varunastra",
-            "Water"
+            "Water weapons"
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Burn",
-            "effect": "Deal 1 damage at start of opponent's turn"
+            "name": "Special",
+            "effect": "Burn - deal 1 damage at start of opponent's turn"
         },
-        "description": "Agni's fire weapon consuming all."
+        "description": "Agni's fire weapon consuming all"
     },
     {
-        "id": 45,
-        "name": "Varunastra",
-        "tier": "Elemental",
+        "id": 34,
+        "name": "SURYA ASTRA",
+        "tier": "Conventional",
         "power": 7,
         "mantraCost": 3,
-        "element": "Water",
+        "element": "Fire/Light",
         "counters": [
-            "Fire",
-            "Heat"
+            "Darkness",
+            "Ice",
+            "Wind"
         ],
         "counteredBy": [
-            "Vayavastra",
-            "Wind"
+            "Water",
+            "Eclipse weapons"
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Extinguish",
-            "effect": "Remove all burn effects"
+            "name": "Special",
+            "effect": "Illuminate - reveal opponent's hand"
         },
-        "description": "Varuna's ocean weapon."
+        "description": "Solar weapon of blinding light"
+    },
+    {
+        "id": 35,
+        "name": "DAHANA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Fire",
+        "counters": [
+            "Wood",
+            "Wind"
+        ],
+        "counteredBy": [
+            "Water",
+            "Earth"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Burn (stackable)"
+        },
+        "description": "Flames of consumption"
+    },
+    {
+        "id": 36,
+        "name": "JWALA SHAKTI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Fire",
+        "counters": [
+            "Physical defenses"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Melts shields"
+        },
+        "description": "Spear of eternal flame"
+    },
+    {
+        "id": 37,
+        "name": "TAPA ASTRA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Fire/Heat",
+        "counters": [
+            "Cold",
+            "Ice"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Remove freeze effects"
+        },
+        "description": "Weapon of intense heat"
     },
     {
         "id": 38,
-        "name": "Raudra Astra",
-        "tier": "Elemental",
+        "name": "RAUDRA ASTRA",
+        "tier": "Conventional",
         "power": 7,
         "mantraCost": 3,
         "element": "Fire/Fury",
@@ -244,73 +789,3326 @@
             "Peace weapons"
         ],
         "counteredBy": [
+            "Water",
+            "Calm"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Rage - +2 damage if you took damage last turn"
+        },
+        "description": "Weapon of Shiva's fury"
+    },
+    {
+        "id": 39,
+        "name": "CHANDRA TAPANA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Fire/Moon",
+        "counters": [
+            "Night creatures"
+        ],
+        "counteredBy": [
             "Water"
         ],
         "rarity": "Rare",
         "ability": {
-            "name": "Rage",
-            "effect": "+2 damage if you took damage last turn"
+            "name": "Special",
+            "effect": "Eclipse - blinds for 1 turn"
         },
-        "description": "Weapon of Shiva's fury."
+        "description": "Moonfire that burns cold"
     },
     {
-        "id": 101,
-        "name": "Indrastra",
-        "tier": "Celestial",
+        "id": 40,
+        "name": "VADAVA ASTRA",
+        "tier": "Conventional",
         "power": 8,
         "mantraCost": 4,
-        "element": "Thunder/Divine",
+        "element": "Fire/Ocean",
         "counters": [
-            "Sky"
+            "Water creatures paradoxically"
+        ],
+        "counteredBy": [
+            "Divine intervention"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Cannot be extinguished by normal water"
+        },
+        "description": "Submarine fire that burns in ocean"
+    },
+    {
+        "id": 41,
+        "name": "ARKA BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Fire/Light",
+        "counters": [
+            "Shadows",
+            "Dark"
+        ],
+        "counteredBy": [
+            "Water",
+            "Eclipse"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Draw 1 card"
+        },
+        "description": "Sun arrow of illumination"
+    },
+    {
+        "id": 42,
+        "name": "AGNI BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 1,
+        "element": "Fire",
+        "counters": [
+            "Mundane defenses"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Fast - can be played during opponent's turn"
+        },
+        "description": "Simple fire arrow"
+    },
+    {
+        "id": 43,
+        "name": "TEJAS KAVACH (Fire Shield)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 2,
+        "element": "Fire/Defense",
+        "counters": [
+            "Physical attacks"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - block 4 damage, burn attacker for 2"
+        },
+        "description": "Shield of flames protecting wielder"
+    },
+    {
+        "id": 44,
+        "name": "PRATIHARA AGNI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Fire/Counter",
+        "counters": [
+            "Reflects fire attacks"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "When opponent plays Fire weapon, deal its power to them"
+        },
+        "description": "Counter-flame that mirrors fire"
+    },
+    {
+        "id": 45,
+        "name": "VARUNASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Water",
+        "counters": [
+            "Fire",
+            "Heat",
+            "Drought"
+        ],
+        "counteredBy": [
+            "Vayavastra",
+            "Wind"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Extinguish - remove all burn effects"
+        },
+        "description": "Varuna's ocean weapon"
+    },
+    {
+        "id": 46,
+        "name": "JALASHASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Water",
+        "counters": [
+            "Fire"
+        ],
+        "counteredBy": [
+            "Wind",
+            "Lightning"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Flood - reduces all fire damage to 0 this turn"
+        },
+        "description": "Water weapon creating floods"
+    },
+    {
+        "id": 47,
+        "name": "NAGA PASHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Water/Serpent",
+        "counters": [
+            "Fire",
+            "constricts"
+        ],
+        "counteredBy": [
+            "Garuda",
+            "Wind"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Bind - opponent discards 1 card"
+        },
+        "description": "Serpent noose of water"
+    },
+    {
+        "id": 48,
+        "name": "MEGHA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Water/Storm",
+        "counters": [
+            "Fire",
+            "Dust"
+        ],
+        "counteredBy": [
+            "Wind"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Obscure - opponent cannot draw extra cards next turn"
+        },
+        "description": "Cloud weapon bringing monsoon"
+    },
+    {
+        "id": 49,
+        "name": "SAMUDRA SHAKTI",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Water/Ocean",
+        "counters": [
+            "Fire",
+            "Earth (erosion)"
+        ],
+        "counteredBy": [
+            "Wind",
+            "Drain"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Tsunami - hits all opponents for half damage"
+        },
+        "description": "Ocean spear of tidal force"
+    },
+    {
+        "id": 50,
+        "name": "AMRITA DHARA",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 2,
+        "element": "Water/Healing",
+        "counters": [
+            "Poison",
+            "Burn"
+        ],
+        "counteredBy": [
+            "Poison negates"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Heal 4 Life Points"
+        },
+        "description": "Stream of divine nectar"
+    },
+    {
+        "id": 51,
+        "name": "GANGA PRAVAHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Water/Sacred",
+        "counters": [
+            "Impurity",
+            "Sin weapons"
+        ],
+        "counteredBy": [
+            "Earth (absorption)"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Purify - remove all status effects"
+        },
+        "description": "Holy Ganges flow purifying all"
+    },
+    {
+        "id": 52,
+        "name": "YAMUNA VEGA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Water/River",
+        "counters": [
+            "Fire"
+        ],
+        "counteredBy": [
+            "Earth",
+            "Wind"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Swift - +1 Mantra next turn"
+        },
+        "description": "River current's force"
+    },
+    {
+        "id": 53,
+        "name": "VARSHA BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Water/Rain",
+        "counters": [
+            "Fire"
+        ],
+        "counteredBy": [
+            "Wind"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Drench - reduces fire damage by 3"
+        },
+        "description": "Rain arrow cooling flames"
+    },
+    {
+        "id": 54,
+        "name": "HIMASHAKTI (Ice Weapon)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Water/Ice",
+        "counters": [
+            "Fire",
+            "slows enemies"
+        ],
+        "counteredBy": [
+            "Fire",
+            "Earth"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Freeze - opponent skips Mantra generation"
+        },
+        "description": "Glacial weapon freezing all"
+    },
+    {
+        "id": 55,
+        "name": "APAH KAVACH (Water Shield)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 2,
+        "element": "Water/Defense",
+        "counters": [
+            "Fire attacks"
+        ],
+        "counteredBy": [
+            "Lightning"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - block 5 damage from Fire sources"
+        },
+        "description": "Liquid barrier flowing around wielder"
+    },
+    {
+        "id": 56,
+        "name": "SARIT SANGAM",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Water",
+        "counters": [
+            "Divides enemy forces"
+        ],
+        "counteredBy": [
+            "Bridge/Earth"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Split - deal damage to 2 targets"
+        },
+        "description": "Confluence of rivers separating armies"
+    },
+    {
+        "id": 57,
+        "name": "VAYAVASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Wind",
+        "counters": [
+            "Water",
+            "Earth",
+            "disrupts formations"
+        ],
+        "counteredBy": [
+            "Earth (mountain)",
+            "Fire (wind feeds)"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Dispersal - opponent discards 1 card"
+        },
+        "description": "Vayu's wind weapon scattering all"
+    },
+    {
+        "id": 58,
+        "name": "MARUT SHAKTI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Wind/Storm",
+        "counters": [
+            "Water",
+            "projectiles"
         ],
         "counteredBy": [
             "Earth"
         ],
         "rarity": "Epic",
         "ability": {
-            "name": "Storm",
-            "effect": "Deals damage to all active enemy cards"
+            "name": "Special",
+            "effect": "Deflect - return projectile damage"
+        },
+        "description": "Storm gods' weapon of hurricane force"
+    },
+    {
+        "id": 59,
+        "name": "PAVAN ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Wind",
+        "counters": [
+            "Poison clouds",
+            "water"
+        ],
+        "counteredBy": [
+            "Earth",
+            "Heavy weapons"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Dispel - remove negative effects"
+        },
+        "description": "Pure wind clearing all impurities"
+    },
+    {
+        "id": 60,
+        "name": "TUFAN SHAKTI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Wind/Tornado",
+        "counters": [
+            "Structures",
+            "formations"
+        ],
+        "counteredBy": [
+            "Earth"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Chaos - shuffle opponent's hand"
+        },
+        "description": "Tornado weapon causing disorder"
+    },
+    {
+        "id": 61,
+        "name": "VAYU CHAKRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Wind/Vortex",
+        "counters": [
+            "Flying enemies",
+            "water"
+        ],
+        "counteredBy": [
+            "Void",
+            "Earth"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Trap flying weapons"
+        },
+        "description": "Whirlwind disc trapping air"
+    },
+    {
+        "id": 62,
+        "name": "SUSHUMNA SHAKTI",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Wind/Breath",
+        "counters": [
+            "Life-draining attacks"
+        ],
+        "counteredBy": [
+            "Suffocation"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Revitalize - gain 2 Life Points"
+        },
+        "description": "Breath of life force"
+    },
+    {
+        "id": 63,
+        "name": "GARUDA ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Wind/Divine",
+        "counters": [
+            "Naagastra",
+            "Serpents",
+            "Poison"
+        ],
+        "counteredBy": [
+            "Divine bows",
+            "Celestial"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Anti-Serpent - instant kill on Naga weapons"
+        },
+        "description": "Garuda's wing strike, serpent destroyer"
+    },
+    {
+        "id": 64,
+        "name": "PAKSHI BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Wind/Bird",
+        "counters": [
+            "Swift strike"
+        ],
+        "counteredBy": [
+            "Earth"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Fast - strike before opponent can defend"
+        },
+        "description": "Swift bird arrow"
+    },
+    {
+        "id": 65,
+        "name": "AKASHA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Wind/Space",
+        "counters": [
+            "Cannot be physically blocked"
+        ],
+        "counteredBy": [
+            "Void weapons"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Unblockable by physical shields"
+        },
+        "description": "Spatial weapon transcending matter"
+    },
+    {
+        "id": 66,
+        "name": "CHANCHAL PRAHAR",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Wind",
+        "counters": [
+            "Predictable attacks"
+        ],
+        "counteredBy": [
+            "Earth"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Evasive - +2 defense this turn"
+        },
+        "description": "Unpredictable wind strike"
+    },
+    {
+        "id": 67,
+        "name": "VAYU KAVACH",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 2,
+        "element": "Wind/Defense",
+        "counters": [
+            "Projectiles"
+        ],
+        "counteredBy": [
+            "Piercing"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - redirect 4 ranged damage"
+        },
+        "description": "Wind barrier deflecting arrows"
+    },
+    {
+        "id": 68,
+        "name": "ANILA CHAKRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Wind",
+        "counters": [
+            "Boosts other Wind weapons"
+        ],
+        "counteredBy": [
+            "Earth"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "All your Wind weapons +1 power this turn"
+        },
+        "description": "Cyclone amplifying wind force"
+    },
+    {
+        "id": 69,
+        "name": "PARTHIVASTRA (Prithvi Astra)",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Earth",
+        "counters": [
+            "Wind",
+            "Thunder",
+            "anchors enemies"
+        ],
+        "counteredBy": [
+            "Water (erosion)",
+            "Plant growth"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Immobilize - opponent cannot play fast weapons"
+        },
+        "description": "Earth weapon of Prithvi"
+    },
+    {
+        "id": 70,
+        "name": "PARVATA SHAKTI",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Earth/Mountain",
+        "counters": [
+            "Wind",
+            "unstoppable force"
+        ],
+        "counteredBy": [
+            "Water erosion",
+            "time"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Unmovable - cannot be countered by Wind"
+        },
+        "description": "Mountain spear of unbreakable stone"
+    },
+    {
+        "id": 71,
+        "name": "BHUMI ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Earth",
+        "counters": [
+            "Thunder",
+            "Wind"
+        ],
+        "counteredBy": [
+            "Water",
+            "Plants"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Ground - nullify one Thunder weapon"
+        },
+        "description": "Ground weapon absorbing energy"
+    },
+    {
+        "id": 72,
+        "name": "SHILA BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Earth/Stone",
+        "counters": [
+            "Physical defenses"
+        ],
+        "counteredBy": [
+            "Water",
+            "shattering"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Heavy - pierces light shields"
+        },
+        "description": "Stone arrow of crushing weight"
+    },
+    {
+        "id": 73,
+        "name": "MRITYU BHUMI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Earth/Death",
+        "counters": [
+            "Life",
+            "Growth"
+        ],
+        "counteredBy": [
+            "Life weapons"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Decay - prevent healing for 1 turn"
+        },
+        "description": "Barren earth consuming life"
+    },
+    {
+        "id": 74,
+        "name": "VAJRA SHILA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Earth/Diamond",
+        "counters": [
+            "All physical weapons"
+        ],
+        "counteredBy": [
+            "Divine weapons only"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Indestructible - take 3 less damage"
+        },
+        "description": "Diamond-hard stone weapon"
+    },
+    {
+        "id": 75,
+        "name": "GIRI MALA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Earth",
+        "counters": [
+            "Creates barriers"
+        ],
+        "counteredBy": [
+            "Climbing",
+            "Flying"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - block 6 damage from ground attacks"
+        },
+        "description": "Mountain range barrier"
+    },
+    {
+        "id": 76,
+        "name": "PRITHVI KAVACH",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Earth/Defense",
+        "counters": [
+            "Thunder",
+            "Wind"
+        ],
+        "counteredBy": [
+            "Water"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - absorb 5 damage, gain 1 Mantra"
+        },
+        "description": "Earth armor grounding power"
+    },
+    {
+        "id": 77,
+        "name": "KHANDA PRAHAR",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Earth",
+        "counters": [
+            "Creates fissures"
+        ],
+        "counteredBy": [
+            "Jumping",
+            "Flying"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Shake - opponent loses 1 Mantra"
+        },
+        "description": "Earthquake strike splitting ground"
+    },
+    {
+        "id": 78,
+        "name": "DHATU BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 1,
+        "element": "Earth/Metal",
+        "counters": [
+            "Flesh",
+            "Wood"
+        ],
+        "counteredBy": [
+            "Fire (melting)"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Cheap and reliable"
+        },
+        "description": "Metal arrow, simple but effective"
+    },
+    {
+        "id": 79,
+        "name": "NAAGASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Serpent",
+        "counters": [
+            "Wind",
+            "Human warriors"
+        ],
+        "counteredBy": [
+            "Garudastra"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Poison - deal 2 damage per turn for 2 turns"
+        },
+        "description": "Serpent weapon with deadly venom"
+    },
+    {
+        "id": 80,
+        "name": "TAKSHAKA SHAKTI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Serpent/King",
+        "counters": [
+            "Royalty",
+            "proud warriors"
+        ],
+        "counteredBy": [
+            "Garuda",
+            "Divine"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Venom King - poison cannot be cured"
+        },
+        "description": "King of serpents' bite"
+    },
+    {
+        "id": 81,
+        "name": "VASUKI PASHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Serpent/Binding",
+        "counters": [
+            "Multiple enemies"
+        ],
+        "counteredBy": [
+            "Sharp cutting"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Coil - bind 2 targets"
+        },
+        "description": "Serpent king's binding coils"
+    },
+    {
+        "id": 82,
+        "name": "SHESHA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Serpent/Divine",
+        "counters": [
+            "Supports universe",
+            "multiple targets"
+        ],
+        "counteredBy": [
+            "Garuda",
+            "End of time"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Eternal - returns to hand if destroyed"
+        },
+        "description": "Infinite serpent holding cosmos"
+    },
+    {
+        "id": 83,
+        "name": "KARKOTAKA VISHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Serpent/Poison",
+        "counters": [
+            "Living beings"
+        ],
+        "counteredBy": [
+            "Antidote",
+            "Garuda"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Curse - reduce target's max Life Points by 2"
+        },
+        "description": "Cursed serpent's transforming poison"
+    },
+    {
+        "id": 83,
+        "name": "KARKOTAKA VISHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Serpent/Poison",
+        "counters": [
+            "Living beings"
+        ],
+        "counteredBy": [
+            "Antidote",
+            "Garuda"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Curse - reduce target's max Life Points by 2"
+        },
+        "description": "Cursed serpent's transforming poison"
+    },
+    {
+        "id": 84,
+        "name": "KALIYA MARDANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Serpent/Water",
+        "counters": [
+            "Water creatures"
+        ],
+        "counteredBy": [
+            "Divine play",
+            "Garuda"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Aquatic poison"
+        },
+        "description": "Black serpent of Yamuna's venom"
+    },
+    {
+        "id": 84,
+        "name": "KALIYA MARDANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Serpent/Water",
+        "counters": [
+            "Water creatures"
+        ],
+        "counteredBy": [
+            "Divine play",
+            "Garuda"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Aquatic poison"
+        },
+        "description": "Black serpent of Yamuna's venom"
+    },
+    {
+        "id": 85,
+        "name": "NAGA RAJA HASTA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Serpent",
+        "counters": [
+            "Ground forces"
+        ],
+        "counteredBy": [
+            "Garuda",
+            "Air attacks"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Summon - bring 1 serpent card from deck"
+        },
+        "description": "Serpent king's hand reaching from underworld"
+    },
+    {
+        "id": 85,
+        "name": "NAGA RAJA HASTA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Serpent",
+        "counters": [
+            "Ground forces"
+        ],
+        "counteredBy": [
+            "Garuda",
+            "Air attacks"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Summon - bring 1 serpent card from deck"
+        },
+        "description": "Serpent king's hand reaching from underworld"
+    },
+    {
+        "id": 86,
+        "name": "ANANTA PHANA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Serpent/Hood",
+        "counters": [
+            "Creates shield of hoods"
+        ],
+        "counteredBy": [
+            "Garuda"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense + Offense - block 4 damage and deal 3"
+        },
+        "description": "Thousand-hooded serpent's protection"
+    },
+    {
+        "id": 86,
+        "name": "ANANTA PHANA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Serpent/Hood",
+        "counters": [
+            "Creates shield of hoods"
+        ],
+        "counteredBy": [
+            "Garuda"
+        ],
+        "rarity": "Epic",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense + Offense - block 4 damage and deal 3"
+        },
+        "description": "Thousand-hooded serpent's protection"
+    },
+    {
+        "id": 87,
+        "name": "DHANUSHA (Standard Bow)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Unarmored enemies"
+        ],
+        "counteredBy": [
+            "Shields",
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Ranged - strike from safety"
+        },
+        "description": "Traditional war bow"
+    },
+    {
+        "id": 87,
+        "name": "DHANUSHA (Standard Bow)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Unarmored enemies"
+        ],
+        "counteredBy": [
+            "Shields",
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Ranged - strike from safety"
+        },
+        "description": "Traditional war bow"
+    },
+    {
+        "id": 88,
+        "name": "KHADGA (Sword)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Close combat"
+        ],
+        "counteredBy": [
+            "Longer weapons"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Quick strike"
+        },
+        "description": "Standard warrior's sword"
+    },
+    {
+        "id": 88,
+        "name": "KHADGA (Sword)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Close combat"
+        ],
+        "counteredBy": [
+            "Longer weapons"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Quick strike"
+        },
+        "description": "Standard warrior's sword"
+    },
+    {
+        "id": 89,
+        "name": "BHALA (Spear)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Cavalry",
+            "reach"
+        ],
+        "counteredBy": [
+            "Swords in close"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Thrust - pierce light armor"
+        },
+        "description": "Infantry spear weapon"
+    },
+    {
+        "id": 89,
+        "name": "BHALA (Spear)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Cavalry",
+            "reach"
+        ],
+        "counteredBy": [
+            "Swords in close"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Thrust - pierce light armor"
+        },
+        "description": "Infantry spear weapon"
+    },
+    {
+        "id": 90,
+        "name": "TOMARA (Javelin)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Distant targets"
+        ],
+        "counteredBy": [
+            "Shields"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Thrown - use and discard for +2 damage"
+        },
+        "description": "Throwing spear"
+    },
+    {
+        "id": 90,
+        "name": "TOMARA (Javelin)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Distant targets"
+        ],
+        "counteredBy": [
+            "Shields"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Thrown - use and discard for +2 damage"
+        },
+        "description": "Throwing spear"
+    },
+    {
+        "id": 91,
+        "name": "SHATAGHNI (Anti-personnel)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Physical/Multiple",
+        "counters": [
+            "Infantry formations"
+        ],
+        "counteredBy": [
+            "Scattered forces"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Spread - deal 3 damage to 2 targets"
+        },
+        "description": "Hundred-killer scattering projectiles"
+    },
+    {
+        "id": 91,
+        "name": "SHATAGHNI (Anti-personnel)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Physical/Multiple",
+        "counters": [
+            "Infantry formations"
+        ],
+        "counteredBy": [
+            "Scattered forces"
+        ],
+        "rarity": "Rare",
+        "ability": {
+            "name": "Special",
+            "effect": "Spread - deal 3 damage to 2 targets"
+        },
+        "description": "Hundred-killer scattering projectiles"
+    },
+    {
+        "id": 92,
+        "name": "PARIGHA (Iron Club)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Physical/Force",
+        "counters": [
+            "Armor",
+            "shields"
+        ],
+        "counteredBy": [
+            "Speed",
+            "dodging"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Crush - ignore 2 defense"
+        },
+        "description": "Heavy iron bar weapon"
+    },
+    {
+        "id": 92,
+        "name": "PARIGHA (Iron Club)",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 2,
+        "element": "Physical/Force",
+        "counters": [
+            "Armor",
+            "shields"
+        ],
+        "counteredBy": [
+            "Speed",
+            "dodging"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Crush - ignore 2 defense"
+        },
+        "description": "Heavy iron bar weapon"
+    },
+    {
+        "id": 93,
+        "name": "PATTISHA (Axe)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Shields",
+            "wood"
+        ],
+        "counteredBy": [
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Cleave - bonus vs shields"
+        },
+        "description": "Battle axe splitting defenses"
+    },
+    {
+        "id": 93,
+        "name": "PATTISHA (Axe)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Shields",
+            "wood"
+        ],
+        "counteredBy": [
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Cleave - bonus vs shields"
+        },
+        "description": "Battle axe splitting defenses"
+    },
+    {
+        "id": 94,
+        "name": "MUDGARA (Hammer)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical/Blunt",
+        "counters": [
+            "Armor"
+        ],
+        "counteredBy": [
+            "Ranged"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Stun light enemies"
+        },
+        "description": "War hammer crushing bones"
+    },
+    {
+        "id": 94,
+        "name": "MUDGARA (Hammer)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical/Blunt",
+        "counters": [
+            "Armor"
+        ],
+        "counteredBy": [
+            "Ranged"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Stun light enemies"
+        },
+        "description": "War hammer crushing bones"
+    },
+    {
+        "id": 95,
+        "name": "ANKUSHA (Goad)",
+        "tier": "Conventional",
+        "power": 3,
+        "mantraCost": 1,
+        "element": "Physical/Control",
+        "counters": [
+            "Beasts",
+            "elephants"
+        ],
+        "counteredBy": [
+            "Human tactics"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Tame - control beast cards"
+        },
+        "description": "Elephant goad for war beasts"
+    },
+    {
+        "id": 95,
+        "name": "ANKUSHA (Goad)",
+        "tier": "Conventional",
+        "power": 3,
+        "mantraCost": 1,
+        "element": "Physical/Control",
+        "counters": [
+            "Beasts",
+            "elephants"
+        ],
+        "counteredBy": [
+            "Human tactics"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Tame - control beast cards"
+        },
+        "description": "Elephant goad for war beasts"
+    },
+    {
+        "id": 96,
+        "name": "CHAKRAM (Throwing Disc)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Multiple enemies"
+        ],
+        "counteredBy": [
+            "Shields"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Multi-target - hit 2 enemies for half"
+        },
+        "description": "Spinning throwing disc"
+    },
+    {
+        "id": 96,
+        "name": "CHAKRAM (Throwing Disc)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Multiple enemies"
+        ],
+        "counteredBy": [
+            "Shields"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Multi-target - hit 2 enemies for half"
+        },
+        "description": "Spinning throwing disc"
+    },
+    {
+        "id": 97,
+        "name": "CARMAKARA (Leather Shield)",
+        "tier": "Conventional",
+        "power": 3,
+        "mantraCost": 1,
+        "element": "Defense",
+        "counters": [
+            "Physical attacks"
+        ],
+        "counteredBy": [
+            "Piercing"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - block 4 physical damage"
+        },
+        "description": "Leather shield for protection"
+    },
+    {
+        "id": 97,
+        "name": "CARMAKARA (Leather Shield)",
+        "tier": "Conventional",
+        "power": 3,
+        "mantraCost": 1,
+        "element": "Defense",
+        "counters": [
+            "Physical attacks"
+        ],
+        "counteredBy": [
+            "Piercing"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Defense - block 4 physical damage"
+        },
+        "description": "Leather shield for protection"
+    },
+    {
+        "id": 98,
+        "name": "DHANUSH BANA (Arrow Volley)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Groups"
+        ],
+        "counteredBy": [
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Volley - deal 2 damage to all opponents"
+        },
+        "description": "Multiple arrows fired together"
+    },
+    {
+        "id": 98,
+        "name": "DHANUSH BANA (Arrow Volley)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Groups"
+        ],
+        "counteredBy": [
+            "Armor"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Volley - deal 2 damage to all opponents"
+        },
+        "description": "Multiple arrows fired together"
+    },
+    {
+        "id": 99,
+        "name": "SHAKTI (Common Spear)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Standard combat"
+        ],
+        "counteredBy": [
+            "Superior weapons"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Reliable damage"
+        },
+        "description": "Warrior's throwing spear"
+    },
+    {
+        "id": 99,
+        "name": "SHAKTI (Common Spear)",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Physical",
+        "counters": [
+            "Standard combat"
+        ],
+        "counteredBy": [
+            "Superior weapons"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Reliable damage"
+        },
+        "description": "Warrior's throwing spear"
+    },
+    {
+        "id": 100,
+        "name": "KATAR (Punch Dagger)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Close quarters"
+        ],
+        "counteredBy": [
+            "Range"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Surprise - +2 damage if played first"
+        },
+        "description": "Assassin's punch blade"
+    },
+    {
+        "id": 100,
+        "name": "KATAR (Punch Dagger)",
+        "tier": "Conventional",
+        "power": 4,
+        "mantraCost": 1,
+        "element": "Physical",
+        "counters": [
+            "Close quarters"
+        ],
+        "counteredBy": [
+            "Range"
+        ],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Surprise - +2 damage if played first"
+        },
+        "description": "Assassin's punch blade"
+    },
+    {
+        "id": 101,
+        "name": "INDRASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Thunder/Divine",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
         },
         "description": "Indra's main weapon controlling storms"
     },
     {
+        "id": 101,
+        "name": "KAVACH (Divine Armor)",
+        "tier": "Conventional",
+        "power": 0,
+        "mantraCost": 2,
+        "element": "Defense",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Grant 5 shield points (absorb damage)"
+        },
+        "description": "Protective armor blessed by gods"
+    },
+    {
+        "id": 102,
+        "name": "VAJRAYUDHA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Thunder",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Alternative name for Vajra, thunderbolt weapon"
+    },
+    {
+        "id": 103,
+        "name": "VIDYUT SHAKTI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Lightning",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Pure lightning spear striking instantly"
+    },
+    {
+        "id": 103,
+        "name": "GURU'S BLESSING",
+        "tier": "Conventional",
+        "power": 0,
+        "mantraCost": 1,
+        "element": "Support",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Draw 3 cards"
+        },
+        "description": "Teacher's wisdom granting knowledge"
+    },
+    {
+        "id": 104,
+        "name": "STANAYITNU ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Thunder/Sound",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon of deafening thunder"
+    },
+    {
+        "id": 104,
+        "name": "ASTRAL PLANE",
+        "tier": "Conventional",
+        "power": 0,
+        "mantraCost": 3,
+        "element": "Support",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "Special",
+            "effect": "Search deck for any weapon, add to hand"
+        },
+        "description": "Journey to divine realm for weapons"
+    },
+    {
+        "id": 105,
+        "name": "MEGHAVATA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Storm Cloud",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Storm weapon with rain and thunder"
+    },
+    {
+        "id": 106,
+        "name": "ANTARIKSHA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Space/Sky",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon controlling the space between earth and heaven"
+    },
+    {
+        "id": 107,
+        "name": "NAKSHASTRA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Stellar",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Star weapon using constellation power"
+    },
+    {
+        "id": 108,
+        "name": "TARA SHAKTI",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Star",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Individual star's power as weapon"
+    },
+    {
+        "id": 109,
+        "name": "CHANDRA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Moon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Lunar weapon with cooling power"
+    },
+    {
+        "id": 110,
+        "name": "SOMA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Moon/Nectar",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Moon god's nectar weapon"
+    },
+    {
+        "id": 111,
+        "name": "RAHU ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Eclipse/Shadow",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Eclipse demon's shadow weapon"
+    },
+    {
+        "id": 112,
+        "name": "KETU ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Comet/Tail",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Comet weapon causing chaos"
+    },
+    {
         "id": 113,
-        "name": "Mohanastra",
-        "tier": "Unique",
+        "name": "MOHANASTRA",
+        "tier": "Conventional",
         "power": 6,
         "mantraCost": 3,
         "element": "Illusion",
-        "counters": [
-            "Analysis"
-        ],
-        "counteredBy": [
-            "Wisdom"
-        ],
-        "rarity": "Rare",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
         "ability": {
-            "name": "Confuse",
-            "effect": "Opponent attacks a random target (50% chance)"
+            "name": "None",
+            "effect": "None"
         },
         "description": "Weapon creating delusions and confusion"
     },
     {
-        "id": 139,
-        "name": "Durga Trishul",
-        "tier": "Supreme",
+        "id": 114,
+        "name": "SAMMOHANA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Hypnosis",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Complete hypnosis and enchantment weapon"
+    },
+    {
+        "id": 115,
+        "name": "MADANASTRA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 3,
+        "element": "Desire",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon invoking uncontrollable desire"
+    },
+    {
+        "id": 116,
+        "name": "NIDRA ASTRA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Sleep",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon inducing deep sleep"
+    },
+    {
+        "id": 117,
+        "name": "PRAJNA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Wisdom",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon of enlightening knowledge"
+    },
+    {
+        "id": 118,
+        "name": "MAYA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Illusion/Creation",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Creates complete illusory realities"
+    },
+    {
+        "id": 119,
+        "name": "SAMVARTA ASTRA",
+        "tier": "Conventional",
         "power": 9,
         "mantraCost": 5,
-        "element": "Divine",
-        "counters": [
-            "Demons"
-        ],
-        "counteredBy": [
-            "None"
-        ],
-        "rarity": "Legendary",
+        "element": "Dissolution",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
         "ability": {
-            "name": "Slayer",
-            "effect": "+4 Damage against Demon/Asura types"
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon of cosmic dissolution at end of time"
+    },
+    {
+        "id": 120,
+        "name": "PRALAYA ASTRA",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Apocalypse",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Apocalyptic weapon ending epochs"
+    },
+    {
+        "id": 121,
+        "name": "KALA ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Time",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon controlling time itself"
+    },
+    {
+        "id": 122,
+        "name": "YAMA ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Death",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Death god's life-taking weapon"
+    },
+    {
+        "id": 123,
+        "name": "KALA CHAKRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Time Wheel",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Wheel of time crushing all"
+    },
+    {
+        "id": 124,
+        "name": "MRITYU ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Death",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Instant death weapon"
+    },
+    {
+        "id": 125,
+        "name": "PRASVAPANA ASTRA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Sleep/Nature",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Natural sleep-inducing weapon"
+    },
+    {
+        "id": 126,
+        "name": "VAJRASHILA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Diamond/Earth",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Indestructible stone weapon"
+    },
+    {
+        "id": 127,
+        "name": "SHABDA BRAMHASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Sound/Divine",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon of cosmic vibration OM"
+    },
+    {
+        "id": 128,
+        "name": "MADHU ASTRA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Honey/Sweet",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Pacifying sweet weapon"
+    },
+    {
+        "id": 129,
+        "name": "MANAVA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Human",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon empowered by human will"
+    },
+    {
+        "id": 130,
+        "name": "BHARGAVA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Parashurama's weapon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Warrior saint's devastating weapon"
+    },
+    {
+        "id": 131,
+        "name": "GARUDA CHAKRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Divine Bird",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Spinning Garuda disc"
+    },
+    {
+        "id": 132,
+        "name": "HANUMAD GADA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Monkey God",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Hanuman's mighty mace"
+    },
+    {
+        "id": 133,
+        "name": "JAMBAVAT NAKHA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Bear",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Bear king's claw strikes"
+    },
+    {
+        "id": 134,
+        "name": "SIMHA NAKHA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Lion",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Lion claw weapon"
+    },
+    {
+        "id": 135,
+        "name": "AIRAVATA DANTA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Divine Elephant",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Indra's elephant tusk weapon"
+    },
+    {
+        "id": 136,
+        "name": "NANDI SHRINGA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Bull",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Shiva's bull horn weapon"
+    },
+    {
+        "id": 137,
+        "name": "MAKARA DANTA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Sea Creature",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Crocodile/sea monster tooth"
+    },
+    {
+        "id": 138,
+        "name": "CHAMUNDA KHADGA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Fierce Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Chamunda's demon-slaying sword"
+    },
+    {
+        "id": 139,
+        "name": "DURGA TRISHUL",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Mother Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
         },
         "description": "Durga's trident slaying Mahishasura"
+    },
+    {
+        "id": 140,
+        "name": "KALI KHADGA",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Dark Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Kali's skull-adorned sword"
+    },
+    {
+        "id": 141,
+        "name": "SARASWATI VEENA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Knowledge/Music",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Instrument creating harmony"
+    },
+    {
+        "id": 142,
+        "name": "LAKSHMI PADMA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Prosperity",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Lotus blessing bringing fortune"
+    },
+    {
+        "id": 143,
+        "name": "PARVATI SHAKTI",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Mountain Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Consort of Shiva's power"
+    },
+    {
+        "id": 144,
+        "name": "SATI AGNI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Self-sacrifice Fire",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Fire of self-immolation and rebirth"
+    },
+    {
+        "id": 145,
+        "name": "AMBA TRISULA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Mother",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Universal mother's trident"
+    },
+    {
+        "id": 146,
+        "name": "BHAIRAVI DAMARU",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Tantric Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Drum creating destructive sound"
+    },
+    {
+        "id": 147,
+        "name": "KATYAYANI ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Warrior Goddess",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Goddess born to fight demons"
+    },
+    {
+        "id": 148,
+        "name": "RAVANA CHANDRAHASA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Demon King",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Ravana's moon-blade sword"
+    },
+    {
+        "id": 149,
+        "name": "KUMBHAKARNA GADA",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Giant Demon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Sleeping giant's massive club"
+    },
+    {
+        "id": 150,
+        "name": "MEGHANADA SHAKTI",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Indrajit's weapon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Conqueror of Indra's spear"
+    },
+    {
+        "id": 151,
+        "name": "HIRANYAKASHIPU NAKHA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Golden Demon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Golden demon king's claws"
+    },
+    {
+        "id": 152,
+        "name": "MAHISHASURA TRISHUL",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Buffalo Demon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Buffalo demon's trident"
+    },
+    {
+        "id": 153,
+        "name": "BHASMASURA HASTA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Ash Touch",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Hand turning everything to ash"
+    },
+    {
+        "id": 154,
+        "name": "TARAKASURA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Star Demon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Demon of stars weapon"
+    },
+    {
+        "id": 155,
+        "name": "JALANDHARA CHAKRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Water Demon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Oceanic demon's disc"
+    },
+    {
+        "id": 156,
+        "name": "VASISHTHA DANDA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Sage Staff",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Sage Vasishtha's staff of truth"
+    },
+    {
+        "id": 157,
+        "name": "VISHWAMITRA ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Royal Sage",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "King-turned-sage's powerful weapon"
+    },
+    {
+        "id": 158,
+        "name": "AGASTYA KAMANDALU",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Sacred Vessel",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Water pot containing ocean"
+    },
+    {
+        "id": 159,
+        "name": "BHRIGU SHAKTI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Curse",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Sage's cursing power"
+    },
+    {
+        "id": 160,
+        "name": "DURVASA SHAPA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Curse",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Short-tempered sage's curse"
+    },
+    {
+        "id": 161,
+        "name": "ATRI TEJAS",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Radiance",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Sage Atri's spiritual fire"
+    },
+    {
+        "id": 162,
+        "name": "GAUTAMA BRAHMA DANDA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Punishment Staff",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Staff of divine punishment"
+    },
+    {
+        "id": 163,
+        "name": "DANDAPAASHA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Binding Rod",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Staff that binds enemies"
+    },
+    {
+        "id": 164,
+        "name": "SATAGHNI CHAKRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Hundred-killer Disc",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Disc killing hundreds"
+    },
+    {
+        "id": 165,
+        "name": "SHARABHA ASTRA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Lion-Bird Beast",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Shiva's Sharabha form weapon"
+    },
+    {
+        "id": 166,
+        "name": "BHUPARISHKA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Earth Touch",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon touching earth for power"
+    },
+    {
+        "id": 167,
+        "name": "GIRIJA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Mountain Born",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Himalayan weapon of Parvati"
+    },
+    {
+        "id": 168,
+        "name": "GANGA DHARA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "River Holder",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Shiva holding Ganga's power"
+    },
+    {
+        "id": 169,
+        "name": "KARNA KUNDALA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Divine Earrings/Armor",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Karna's protective earrings"
+    },
+    {
+        "id": 170,
+        "name": "KARNA KAVACHA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Divine Armor",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Karna's invincible armor"
+    },
+    {
+        "id": 171,
+        "name": "BHIMA GADA (Named)",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Mace",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Bhima's specific mace"
+    },
+    {
+        "id": 172,
+        "name": "ARJUNA DIVYA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Divine Collection",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Arjuna's collected divine weapons"
+    },
+    {
+        "id": 173,
+        "name": "DRONA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Teacher's Weapon",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Dronacharya's teaching weapon"
+    },
+    {
+        "id": 174,
+        "name": "ASHWATTHAMA NARAYANA ASTRA",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Divine/Forbidden",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Drona's son's one-time supreme weapon"
+    },
+    {
+        "id": 175,
+        "name": "SATYAKI CHAKRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Warrior Disc",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Yadava warrior's disc"
+    },
+    {
+        "id": 176,
+        "name": "ABHIMANYU CHAKRAVYUHA ASTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Formation Breaker",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon to break circular formations"
+    },
+    {
+        "id": 178,
+        "name": "BARBARIKA TEEN BAAN",
+        "tier": "Conventional",
+        "power": 10,
+        "mantraCost": 6,
+        "element": "Three Arrows",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Three arrows marking all targets"
+    },
+    {
+        "id": 179,
+        "name": "RAMA DIVYASTRA",
+        "tier": "Conventional",
+        "power": 9,
+        "mantraCost": 5,
+        "element": "Rama's Arsenal",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Rama's complete divine collection"
+    },
+    {
+        "id": 180,
+        "name": "LAKSHMANA SHAKTI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Brother's Spear",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Lakshmana's devoted spear"
+    },
+    {
+        "id": 181,
+        "name": "ANGADA MUSHTI",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Monkey Fist",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Angada's powerful punch"
+    },
+    {
+        "id": 182,
+        "name": "SUGRIVA ASTRA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Monkey King",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Vanara king's weapon"
+    },
+    {
+        "id": 183,
+        "name": "VIBHISHANA TRIDENT",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Righteous Rakshasa",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Good demon's trident"
+    },
+    {
+        "id": 184,
+        "name": "JATAYU PAKSHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Vulture Wings",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Divine vulture's wing strike"
+    },
+    {
+        "id": 185,
+        "name": "SAMPATI DRISHTI",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Far Sight",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Eagle's all-seeing vision"
+    },
+    {
+        "id": 186,
+        "name": "MATSYA SHRINGA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Fish Horn",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Fish avatar's horn"
+    },
+    {
+        "id": 187,
+        "name": "KURMA PRASHTHA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 3,
+        "element": "Tortoise Shell",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Tortoise back supporting universe"
+    },
+    {
+        "id": 188,
+        "name": "VARAHA DAMSHTRA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Boar Tusks",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Boar avatar's tusks"
+    },
+    {
+        "id": 189,
+        "name": "VAMANA PADA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Dwarf Step",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Three steps covering universe"
+    },
+    {
+        "id": 190,
+        "name": "PARASHURAMA PARASHU",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Axe",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Warrior saint's axe (already covered)"
+    },
+    {
+        "id": 191,
+        "name": "BUDDHA KARUNA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Compassion",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Weapon of non-violence and peace"
+    },
+    {
+        "id": 192,
+        "name": "KALKI RATNAMARU",
+        "tier": "Conventional",
+        "power": 10,
+        "mantraCost": 6,
+        "element": "Future Sword",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Future avatar's world-ending sword"
+    },
+    {
+        "id": 193,
+        "name": "BALARAMA HALA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Plough",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Plow weapon of Balarama"
+    },
+    {
+        "id": 194,
+        "name": "BALARAMA MUSALA",
+        "tier": "Conventional",
+        "power": 7,
+        "mantraCost": 4,
+        "element": "Pestle",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Grinding weapon of Balarama"
+    },
+    {
+        "id": 195,
+        "name": "KUBERA GADA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Wealth God",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "God of wealth's mace"
+    },
+    {
+        "id": 196,
+        "name": "KARTIKEYA VEL",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Divine Spear",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "War god's divine lance"
+    },
+    {
+        "id": 197,
+        "name": "GANESHA ANKUSHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Elephant Goad",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Remover of obstacles' goad"
+    },
+    {
+        "id": 198,
+        "name": "GANESHA PASHA",
+        "tier": "Conventional",
+        "power": 6,
+        "mantraCost": 3,
+        "element": "Noose",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Ganesha's binding rope"
+    },
+    {
+        "id": 199,
+        "name": "KAMADEVA PUSHPA BANA",
+        "tier": "Conventional",
+        "power": 5,
+        "mantraCost": 2,
+        "element": "Flower Arrows",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Five flower arrows of desire"
+    },
+    {
+        "id": 200,
+        "name": "YAMA KALA DANDA",
+        "tier": "Conventional",
+        "power": 8,
+        "mantraCost": 4,
+        "element": "Time Staff",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Death's time-measuring staff"
+    },
+    {
+        "id": 177,
+        "name": "JAYADRATHA ASTRA",
+        "tier": "Elemental",
+        "power": 6,
+        "mantraCost": 0,
+        "element": "Delaying",
+        "counters": [],
+        "counteredBy": [],
+        "rarity": "Common",
+        "ability": {
+            "name": "None",
+            "effect": "None"
+        },
+        "description": "Sindhu king's blocking weapon"
     }
 ]

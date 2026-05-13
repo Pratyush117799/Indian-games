@@ -1,6 +1,11 @@
 import os
+import sys
+import io
 from dotenv import load_dotenv
 from sarvamai import SarvamAI
+
+# Force UTF-8 encoding for printing to terminal
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # 1. Load the API Key from .env
 load_dotenv()

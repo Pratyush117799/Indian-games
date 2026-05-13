@@ -52,6 +52,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ playerDeck, onExit }) => {
         setPlayerHand(prev => prev.filter((_, i) => i !== handIdx));
         setSelectedHandIndex(null);
         addLog(`Invoked ${card.name} to Slot ${fieldIdx + 1}`);
+
+        if (card.id === 4 || card.name.includes("Narayanastra")) {
+            addLog("!! NARAYANASTRA: Respect the surrender or face destruction !!");
+        }
     };
 
     const aiTurn = () => {
@@ -151,6 +155,31 @@ export const GameBoard: React.FC<GameBoardProps> = ({ playerDeck, onExit }) => {
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20 pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-red-900/10 pointer-events-none" />
+
+            {/* Game Over Overlay */}
+            {(playerLife <= 0 || enemyLife <= 0) && (
+                <div className="absolute inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center backdrop-blur-xl">
+                    <motion.div 
+                        initial={{ scale: 0.5, opacity: 0 }} 
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-center"
+                    >
+                        <h1 className={twMerge(
+                            "text-8xl font-black italic tracking-tighter mb-4 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]",
+                            playerLife <= 0 ? "text-red-500" : "text-yellow-500"
+                        )}>
+                            {playerLife <= 0 ? "BATTLE LOST" : "BATTLE WON"}
+                        </h1>
+                        <p className="text-gray-400 uppercase tracking-[1em] mb-12">The wheel of Karma turns...</p>
+                        <button 
+                            onClick={onExit}
+                            className="bg-white text-black px-12 py-4 rounded-full font-black hover:scale-110 transition-transform active:scale-95"
+                        >
+                            RETURN TO HUB
+                        </button>
+                    </motion.div>
+                </div>
+            )}
 
             {/* Header: Life Points */}
             <div className="relative h-16 bg-black/60 backdrop-blur border-b border-white/10 flex justify-between items-center px-10 z-30">

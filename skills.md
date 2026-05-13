@@ -20,3 +20,17 @@ client = SarvamAI(api_subscription_key=os.getenv("SARVAM_API_KEY"))
 * Tamil: 'ta-IN'
 * Marathi: 'mr-IN'
 * Gujarati: 'gu-IN'
+
+## Chat & Code Generation Pattern
+Use the `chat.completions` callable for generating text or code:
+
+```python
+# To generate code or chat with Sarvam's models:
+response = client.chat.completions(
+    model="sarvam-m", # Options: sarvam-m, sarvam-30b, sarvam-105b
+    messages=[
+        {"role": "user", "content": "Write a python script to calculate Fibonacci."}
+    ]
+)
+print(response.choices[0].message.content)
+```

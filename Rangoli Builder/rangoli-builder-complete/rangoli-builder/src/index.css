@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { background: #0F0A1E; color: white; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1A1035; }
+  ::-webkit-scrollbar-thumb { background: #E85D04; border-radius: 3px; }
+}
+
+@keyframes tilePop {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes glowRing {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}
+
+.canvas-glow { filter: drop-shadow(0 0 40px rgba(232, 93, 4, 0.2)); }
+.tile-placed { animation: tilePop 0.28s cubic-bezier(0.34,1.56,0.64,1) forwards; }

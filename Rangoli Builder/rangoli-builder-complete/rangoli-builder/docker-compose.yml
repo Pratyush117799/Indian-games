@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: rangoli_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: rangoli-builder
+
+  # ── Redis (optional caching) ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: rangoli_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  # ── Backend ──────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rangoli_backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/rangoli-builder
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./backend/src:/app/src  # hot reload in dev
+
+  # ── Frontend (Vite dev server) ────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: rangoli_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src          # hot reload in dev
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:

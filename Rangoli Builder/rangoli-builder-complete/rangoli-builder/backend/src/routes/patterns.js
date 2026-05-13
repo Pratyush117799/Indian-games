@@ -1,0 +1,11 @@
+const express = require("express");
+const { listPatterns, getPattern, createPattern, updatePattern, deletePattern, toggleLike } = require("../controllers/patternController");
+const { protect } = require("../middleware/authMiddleware");
+const router = express.Router();
+router.get("/",          listPatterns);
+router.get("/:id",       getPattern);
+router.post("/",         protect, createPattern);
+router.put("/:id",       protect, updatePattern);
+router.delete("/:id",    protect, deletePattern);
+router.post("/:id/like", protect, toggleLike);
+module.exports = router;

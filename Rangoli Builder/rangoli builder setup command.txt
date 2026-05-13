@@ -1,0 +1,22 @@
+git clone <repo> && cd rangoli-builder
+npm install && cd backend && npm install && cd ..
+cp backend/.env.example backend/.env   # fill in MONGO_URI + JWT secrets
+npm run dev &  cd backend && npm run dev &
+cd backend && npm run seed             # seeds 50 patterns
+
+
+
+
+What's fully implemented and wired end-to-end:
+5 Game modes — Free Build (sandbox + SVG export + save to gallery), Festival Timed (timer + score + XP + API submit), Puzzle Mode (accuracy validator + hidden tiles + API submit), Symmetry Challenge (5-min timed + milestone XP + API submit), Part-Build (sequential memorise → build → repeat).
+Full auth flow — register, login, JWT access + refresh tokens, httpOnly cookie, auto-refresh interceptor in Axios, profile page with XP bar, badge shelf, and game history.
+Multiplayer — Socket.IO lobby (create/join/leave/ready/auto-start), live tile sync between players, server-authoritative timer, head-to-head/score-attack/co-op modes, in-room emoji chat, end-game results modal.
+Backend — 5 Mongoose models, 5 REST route groups, server-side score recalculation (anti-cheat), leaderboard aggregation pipeline, daily challenge cron (midnight IST), 50 seeded official patterns across 8 festivals.
+UI — Framer Motion spring tile animations, XP toast with particle burst, save-to-gallery modal, daily challenge banner with live countdown, festival badge end-screen with stars.
+Deploy-ready — Dockerfile (backend, non-root Alpine), Dockerfile.frontend (Vite → nginx), nginx.conf with SPA fallback + asset caching, vercel.json, railway.toml, GitHub Actions CI.
+
+The 3 gaps the audit caught and fixed this session:
+
+FestivalMode was not calling gameAPI.submit or showing XP toast after game ended — fixed
+app.js was not starting the daily challenge cron scheduler — fixed
+FestivalMode had no "Finish Early" button — added

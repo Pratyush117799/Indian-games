@@ -1,0 +1,4 @@
+unzip agent-quest.zip
+cd agent-quest
+npm install
+npm run dev
